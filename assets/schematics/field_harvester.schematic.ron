@@ -1,0 +1,28 @@
+// The field harvester (ticket 0009, step 6): two hull plates, a drive coil,
+// a cell core and a seal set. The rate line is the coil's flux and the
+// core's charge, the hopper line the plates' rigidity. Taught by Materials 4
+// of the Fabricator. Read by `strata_registry::schematic`; in no world
+// version and no handshake.
+(
+    id: "veyra:schematic.field_harvester",
+    makes: "veyra:station.field_harvester",
+    complexity: 2,
+    profession: Some("fabricator.materials.4"),
+    licence: None,
+    fixture: None,
+    slots: [
+        (id: "plates", name: "Hull plates", takes: Component("veyra:component.hull_plate"), count: 2),
+        (id: "coil", name: "Drive coil", takes: Component("veyra:component.drive_coil"), count: 1),
+        (id: "core", name: "Cell core", takes: Component("veyra:component.cell_core"), count: 1),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "rate", from: [
+            (slot: "coil", stat: Line("flux"), weight: 0.6),
+            (slot: "core", stat: Line("charge_density"), weight: 0.4),
+        ]),
+        (line: "hopper", from: [
+            (slot: "plates", stat: Line("rigidity"), weight: 1.0),
+        ]),
+    ],
+)

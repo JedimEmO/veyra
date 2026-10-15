@@ -1,0 +1,37 @@
+{
+  "schema": 2,
+  "kind": "sfx",
+  "name": "blade_hit_shield_1",
+  "prompt": "a powered blade striking a force shield: harsh electric crackle and a shimmering buzz as the field flares, short, dry",
+  "tags": [],
+  "created": "2026-10-01",
+  "created_by": "agent:claude",
+  "provenance": "recorded",
+  "rig": null,
+  "generator": {
+    "tool": "moss_sound_effect",
+    "model": "OpenMOSS-Team/MOSS-SoundEffect-v2.0",
+    "seed": 9227813,
+    "duration_s": 0.7,
+    "steps": 100,
+    "cfg": 4.0
+  },
+  "source": {
+    "path": null,
+    "sha256": null,
+    "skeleton": null
+  },
+  "recipe": null,
+  "measured": {
+    "frames": null,
+    "fps": null,
+    "duration_s": 0.7,
+    "avg_speed_mps": null,
+    "root_motion": null,
+    "mesh": null
+  },
+  "body": null,
+  "events": null,
+  "content_hash": "sha256:eb773711c5e518ac1b0919d0c72b820f5f919b1bee04e7faa359e07e8017f979",
+  "note": "Game ships this levelled copy. Reproduce with python3 tools/combat_audio.py; recipe and hashes: assets/audio/combat/levelling.json. Original render and generator record: assets-src/combat/forge/assets-src/sfx/takes/blade_hit_shield_1.wav."
+}

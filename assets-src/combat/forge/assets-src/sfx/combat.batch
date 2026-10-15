@@ -1,0 +1,61 @@
+# name|seconds|prompt. Takes are separate names so each gets its own seed.
+blaster_shot_1|1.0|a compact sci-fi energy carbine firing one shot: sharp electric crack with a short plasma zip and a tight dry tail, close perspective, no reverb
+blaster_shot_2|1.0|a compact sci-fi energy carbine firing one shot: sharp electric crack with a short plasma zip and a tight dry tail, close perspective, no reverb
+blaster_shot_3|1.0|a compact sci-fi energy carbine firing one shot: sharp electric crack with a short plasma zip and a tight dry tail, close perspective, no reverb
+sentry_shot_1|1.2|a heavy automated sci-fi turret firing one slow energy bolt: deep electric thump with a low plasma hum release, medium distance, dry
+sentry_shot_2|1.2|a heavy automated sci-fi turret firing one slow energy bolt: deep electric thump with a low plasma hum release, medium distance, dry
+impact_stone_1|0.5|an energy bolt striking concrete and stone: short hot sizzle with a crack of chipped rock and grit falling, dry, close
+impact_stone_2|0.5|an energy bolt striking concrete and stone: short hot sizzle with a crack of chipped rock and grit falling, dry, close
+impact_stone_3|0.5|an energy bolt striking concrete and stone: short hot sizzle with a crack of chipped rock and grit falling, dry, close
+impact_metal_1|0.5|an energy bolt striking a steel plate: sharp metallic clang with an electric sizzle and a short ring, dry
+impact_metal_2|0.5|an energy bolt striking a steel plate: sharp metallic clang with an electric sizzle and a short ring, dry
+impact_shield_1|0.6|an energy bolt absorbed by a personal force shield: bright electric crackle with a resonant shimmering buzz that fades quickly, dry
+impact_shield_2|0.6|an energy bolt absorbed by a personal force shield: bright electric crackle with a resonant shimmering buzz that fades quickly, dry
+impact_shield_3|0.6|an energy bolt absorbed by a personal force shield: bright electric crackle with a resonant shimmering buzz that fades quickly, dry
+impact_flesh_1|0.5|a projectile hitting an armoured body: dull heavy thud with a short crunch of composite armour, close, dry, no scream
+impact_flesh_2|0.5|a projectile hitting an armoured body: dull heavy thud with a short crunch of composite armour, close, dry, no scream
+impact_flesh_3|0.5|a projectile hitting an armoured body: dull heavy thud with a short crunch of composite armour, close, dry, no scream
+swing_light_1|0.5|a quick swing of a humming powered blade through air: short energetic whoosh with a faint electric hum, close, dry
+swing_light_2|0.5|a quick swing of a humming powered blade through air: short energetic whoosh with a faint electric hum, close, dry
+swing_light_3|0.5|a quick swing of a humming powered blade through air: short energetic whoosh with a faint electric hum, close, dry
+swing_heavy_1|0.8|a slow heavy overhead swing of a large powered blade: deep wide whoosh with an electric hum rising then cutting off, close, dry
+swing_heavy_2|0.8|a slow heavy overhead swing of a large powered blade: deep wide whoosh with an electric hum rising then cutting off, close, dry
+blade_hit_armor_1|0.6|a powered energy blade striking composite armour plate: sharp crunching impact with a sizzling electric cut and a brief metallic scrape
+blade_hit_armor_2|0.6|a powered energy blade striking composite armour plate: sharp crunching impact with a sizzling electric cut and a brief metallic scrape
+blade_hit_armor_3|0.6|a powered energy blade striking composite armour plate: sharp crunching impact with a sizzling electric cut and a brief metallic scrape
+blade_hit_shield_1|0.7|a powered blade striking a force shield: harsh electric crackle and a shimmering buzz as the field flares, short, dry
+blade_hit_shield_2|0.7|a powered blade striking a force shield: harsh electric crackle and a shimmering buzz as the field flares, short, dry
+dodge_roll_1|0.8|a person in a combat suit with gear doing a fast dodge roll on gravel: cloth rustle, equipment clatter, a scuff on grit, short
+dodge_roll_2|0.8|a person in a combat suit with gear doing a fast dodge roll on gravel: cloth rustle, equipment clatter, a scuff on grit, short
+reload_1|1.4|reloading a sci-fi energy carbine: magazine release click, a cartridge sliding out, a new one seated with a firm clack and a rising electric charge whine
+reload_2|1.4|reloading a sci-fi energy carbine: magazine release click, a cartridge sliding out, a new one seated with a firm clack and a rising electric charge whine
+foot_stone_1|0.5|one single footstep of a boot on a stone pavement, soft, close, dry
+foot_stone_2|0.5|one single footstep of a boot on a stone pavement, soft, close, dry
+foot_stone_3|0.5|one single footstep of a boot on a stone pavement, soft, close, dry
+foot_stone_4|0.5|one single footstep of a boot on a stone pavement, soft, close, dry
+foot_gravel_1|0.5|one single footstep of a boot on loose gravel, soft, close, dry
+foot_gravel_2|0.5|one single footstep of a boot on loose gravel, soft, close, dry
+foot_gravel_3|0.5|one single footstep of a boot on loose gravel, soft, close, dry
+foot_gravel_4|0.5|one single footstep of a boot on loose gravel, soft, close, dry
+foot_metal_1|0.5|one single footstep of a boot on a hollow steel deck, soft, close, dry
+foot_metal_2|0.5|one single footstep of a boot on a hollow steel deck, soft, close, dry
+foot_metal_3|0.5|one single footstep of a boot on a hollow steel deck, soft, close, dry
+foot_metal_4|0.5|one single footstep of a boot on a hollow steel deck, soft, close, dry
+jump_1|0.5|a person in a combat suit pushing off into a jump: a quick scuff and cloth and gear rustle, short, dry
+jump_2|0.5|a person in a combat suit pushing off into a jump: a quick scuff and cloth and gear rustle, short, dry
+land_1|0.6|a person in boots landing from a jump on hard ground: a firm double thump with gear rattle, short, dry
+land_2|0.6|a person in boots landing from a jump on hard ground: a firm double thump with gear rattle, short, dry
+sentry_charge_1|1.0|a sci-fi turret charging its weapon: an electric whine rising in pitch for under one second, ending abruptly, dry
+sentry_charge_2|1.0|a sci-fi turret charging its weapon: an electric whine rising in pitch for under one second, ending abruptly, dry
+rusher_windup_1|0.8|an armoured attacker winding up a melee strike: a short aggressive grunt through a helmet with a servo whirr, dry
+rusher_windup_2|0.8|an armoured attacker winding up a melee strike: a short aggressive grunt through a helmet with a servo whirr, dry
+enemy_death_1|1.8|an armoured sci-fi soldier collapsing dead: a strained groan cut short, a heavy body thud, and gear settling on the ground, dry
+enemy_death_2|1.8|an armoured sci-fi soldier collapsing dead: a strained groan cut short, a heavy body thud, and gear settling on the ground, dry
+player_hurt_1|0.6|a short pained grunt of a person inside a helmet, breath forced out by a hit, dry, close
+player_hurt_2|0.6|a short pained grunt of a person inside a helmet, breath forced out by a hit, dry, close
+player_hurt_3|0.6|a short pained grunt of a person inside a helmet, breath forced out by a hit, dry, close
+hit_marker_1|0.5|a tiny crisp digital confirmation tick from a helmet display, very short, dry
+hit_marker_2|0.5|a tiny crisp digital confirmation tick from a helmet display, very short, dry
+low_health_1|4.0|a tense low heartbeat pulse with a quiet distorted electronic warning tone, steady rhythm, loopable, no melody
+shield_recharge_1|1.2|a personal force shield powering back up: a rising clean electronic tone with a soft shimmering settle, dry
+shield_recharge_2|1.2|a personal force shield powering back up: a rising clean electronic tone with a soft shimmering settle, dry

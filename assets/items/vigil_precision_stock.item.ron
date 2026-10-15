@@ -1,0 +1,30 @@
+// The Vigil supported stock of `crates/veyra-weapons` (`vigil_precision_stock`).
+// There it also fits the breacher; the patrol carbine and the marksman rifle
+// are the items (ticket 0010, step 4). Its lines are the module's two
+// properties, aim spread and equip time, with the factors there. Its picture
+// is the carbine's, the first weapon it names.
+(
+    id: "veyra:module.vigil_precision_stock",
+    name: "Vigil supported stock",
+    maker: "Vigil",
+    kind: Module(
+        slot: "stock",
+        fits: ["veyra:weapon.patrol_carbine", "veyra:weapon.marksman_rifle"],
+        part: "vigil_precision_stock",
+        effects: [
+            (property: AimSpread, factor: 0.97, line: "aim_spread"),
+            (property: EquipTime, factor: 1.04, line: "equip_time"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "aim_spread", name: "Spread"),
+        (id: "equip_time", name: "Draw"),
+    ],
+    icon: (
+        shape: Gem,
+        color: "#7FD1FF",
+        picture: Some("patrol_carbine/stock.vigil_precision_stock.png"),
+        symbol: Some("veyra:icon.module.stock"),
+    ),
+)

@@ -1,0 +1,22 @@
+// Decorative understory, streamed only near the viewer.
+(
+    id: "strata:woodland_shrub",
+    name: "Woodland shrub",
+    kind: "bush",
+    biomes: [(biome: "strata:forest", weight: 0.65), (biome: "strata:plains", weight: 0.2), (biome: "strata:highlands", weight: 0.3)],
+    spacing_m: 7,
+    slope_max: 0.6,
+    sea_clearance_m: 1.0,
+    moisture: (min: 0.25, max: 1.0),
+    cover_floor: 0.15,
+    size: (min: 0.8, max: 1.2),
+    exclusion_m: 0.9,
+    tint_dry: (0.12, 0.28, 0.055),
+    tint_lush: (0.12, 0.28, 0.055),
+    tree: (
+        form: "shrub",
+        height_m: (min: 0.7, max: 1.4),
+        bark: "shrub",
+        variants: 6,
+    ),
+)

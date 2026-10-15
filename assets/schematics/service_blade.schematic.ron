@@ -1,0 +1,31 @@
+// The `service_blade` (ticket 0010, step 3): a one-hand blade: 40 units of structural metal and a seal set.
+// The edge is the metal's hardness and stability; durability its toughness and
+// strength; moddability is read as the patrol carbine's is, from hardness
+// and strength, so a platform metal opens the extra mounts. Read by
+// `strata_registry::schematic`; in no world version and no handshake.
+(
+    id: "veyra:schematic.service_blade",
+    makes: "veyra:weapon.service_blade",
+    complexity: 3,
+    profession: Some("weaponsmith.edges.1"),
+    licence: Some("veyra:maker.morrow"),
+    fixture: None,
+    slots: [
+        (id: "frame", name: "Frame", takes: Class("strata:structural_metal"), units: 40),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "edge", from: [
+            (slot: "frame", stat: Attribute(Hardness), weight: 0.5),
+            (slot: "frame", stat: Attribute(Stability), weight: 0.5),
+        ]),
+        (line: "durability", from: [
+            (slot: "frame", stat: Attribute(Toughness), weight: 0.6),
+            (slot: "frame", stat: Attribute(Strength), weight: 0.4),
+        ]),
+        (line: "moddability", from: [
+            (slot: "frame", stat: Attribute(Hardness), weight: 0.6),
+            (slot: "frame", stat: Attribute(Strength), weight: 0.4),
+        ]),
+    ],
+)

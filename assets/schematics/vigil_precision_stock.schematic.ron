@@ -1,0 +1,26 @@
+// The Vigil supported stock (ticket 0010, step 4): 30 units of any structural
+// metal and a seal set. Aim spread is the metal's stability and strength; the
+// draw is slower the denser it is. It fits the patrol carbine as well as the
+// marksman rifle. Taught by Fittings 3 of the Weaponsmith. Read by
+// `strata_registry::schematic`; in no world version and no handshake.
+(
+    id: "veyra:schematic.vigil_precision_stock",
+    makes: "veyra:module.vigil_precision_stock",
+    complexity: 2,
+    profession: Some("weaponsmith.fittings.3"),
+    licence: None,
+    fixture: None,
+    slots: [
+        (id: "metal", name: "Metal", takes: Class("strata:structural_metal"), units: 30),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "aim_spread", from: [
+            (slot: "metal", stat: Attribute(Stability), weight: 0.6),
+            (slot: "metal", stat: Attribute(Strength), weight: 0.4),
+        ]),
+        (line: "equip_time", from: [
+            (slot: "metal", stat: Attribute(Density), weight: 1.0),
+        ]),
+    ],
+)

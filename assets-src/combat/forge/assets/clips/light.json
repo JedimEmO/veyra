@@ -1,0 +1,128 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "light",
+  "prompt": "A boxer throws a single fast straight punch with the right hand at an opponent in front, then pulls the right fist back into guard, feet planted.",
+  "tags": [],
+  "created": "2026-10-01",
+  "created_by": "agent:codex",
+  "provenance": "reconstructed",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": null,
+    "commit": null,
+    "model": null,
+    "seed": null,
+    "duration_s": null,
+    "cfg": null,
+    "sample": null,
+    "sweep_take": "ruin_explorer_attack.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/light.npz",
+    "sha256": "sha256:d7d190c95f2cfbbbdb7712b94ea1810f42eb261e92449351544e920750cc4960",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 0.25,
+    "trim_end_s": 2.85,
+    "auto_trim": null,
+    "in_place": "strip",
+    "y_mode": "off",
+    "loop": false,
+    "loop_blend_s": 0.0,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": "0:0,0.2:0.13,0.4:0.22,0.65:0.35,0.85:0.40",
+    "clip": "light"
+  },
+  "measured": {
+    "frames": 9,
+    "fps": 20.0,
+    "duration_s": 0.4,
+    "avg_speed_mps": 0.53358793,
+    "root_motion": {
+      "net_m": [
+        -0.003,
+        -0.021
+      ],
+      "direction_deg": null,
+      "peak_speed_mps": 0.853,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          0.006,
+          -0.002
+        ],
+        [
+          0.02,
+          -0.002
+        ],
+        [
+          0.056,
+          0.005
+        ],
+        [
+          0.095,
+          0.008
+        ],
+        [
+          0.099,
+          -0.005
+        ],
+        [
+          0.077,
+          -0.014
+        ],
+        [
+          0.039,
+          -0.018
+        ],
+        [
+          -0.003,
+          -0.021
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [
+    {
+      "t": 0.13,
+      "t_src": 0.45,
+      "name": "contact_start",
+      "origin": "agent:codex",
+      "audio": null
+    },
+    {
+      "t": 0.152,
+      "t_src": 0.5,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 0.22,
+      "t_src": 0.65,
+      "name": "contact_end",
+      "origin": "agent:codex",
+      "audio": null
+    },
+    {
+      "t": 0.363,
+      "t_src": 0.95,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    }
+  ],
+  "content_hash": "sha256:303c8833ea8ff139c80fea61dcebe1739c82d2e375e0cccba003187566539005",
+  "note": "Re-baked existing ARDY take; upstream receipt in assets-src/imported/ruin_explorer_attack.upstream.json. Timing study, 2026-10-01."
+}

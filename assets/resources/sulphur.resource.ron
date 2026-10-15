@@ -1,0 +1,21 @@
+// Sulphur: the reactive of volcanic ground. Stronger than any salt and far
+// less stable, so the two of one class are two different answers.
+(
+    id: "strata:sulphur",
+    name: "Sulphur",
+    short: "sulphur",
+    class: "strata:reactive",
+    grounds: ["vents", "fume"],
+    ranges: {
+        Purity: (floor: 250, cap: 800),
+        Potency: (floor: 550, cap: 1000),
+        Stability: (floor: 100, cap: 450),
+    },
+    occurs: (
+        anywhere: 0.3,
+        provinces: [
+            (id: "strata:basalt", weight: 1.4),
+            (id: "strata:badlands", weight: 0.3),
+        ],
+    ),
+)

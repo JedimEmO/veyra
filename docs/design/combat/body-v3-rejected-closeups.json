@@ -1,0 +1,80 @@
+{
+  "purpose": "Inspection only; source mesh, skin, normals and materials unchanged",
+  "source": "./assets-src/combat/forge/out/lifts/frontier_ranger_v3_s42_v100k.glb",
+  "source_sha256": "cdd0f43842a685e7b5ecf319995c263f684e61520f3e2768534872c98d3a09c7",
+  "renderer": "Blender 5.2.2 LTS CPU Cycles",
+  "samples": 24,
+  "script_sha256": "c0aa180ea302c8f7d584c7eb0d2774fd71c798cef75009742e3b51f1f8b77f2b",
+  "framing_height_m": 1.8,
+  "views": [
+    {
+      "name": "rear-three-quarter",
+      "location": [
+        2.4,
+        4,
+        2
+      ],
+      "focus": [
+        0,
+        0,
+        0.92
+      ],
+      "span_m": 2.1,
+      "image": "rear-three-quarter.png",
+      "sha256": "7ea5e7ff6e4079d3caa7bf70769def6a75e2f9fc8489cb1a1e62fd344a5648c2"
+    },
+    {
+      "name": "overhead-shoulders",
+      "location": [
+        0.7,
+        2.3,
+        3.8
+      ],
+      "focus": [
+        0,
+        0,
+        1.47
+      ],
+      "span_m": 0.95,
+      "image": "overhead-shoulders.png",
+      "sha256": "6735067dec10293c4c03a4a5265726d02270688d3e51ef409c9a5e8d9aa928ab"
+    },
+    {
+      "name": "rear-seat",
+      "location": [
+        0.3,
+        4,
+        1.5
+      ],
+      "focus": [
+        0,
+        0,
+        0.94
+      ],
+      "span_m": 0.7,
+      "image": "rear-seat.png",
+      "sha256": "478e18496f1ac84e33316db9e65f52e08783d1955999c7325390bf0c2e90e1a7"
+    },
+    {
+      "name": "rear-neck",
+      "location": [
+        0,
+        4,
+        2.2
+      ],
+      "focus": [
+        0,
+        0,
+        1.5
+      ],
+      "span_m": 0.9,
+      "image": "rear-neck.png",
+      "sha256": "26d1980849eb7c1f212040704070c0b7be79b15dfcb7ba991e97788465f882aa"
+    }
+  ],
+  "sheet": "body-v3-rejected-closeups.png",
+  "sheet_sha256": "d59261a1645876b4b26c6cc5eae15c0a885a3afc6c4e749c340d76fd6ad6f259",
+  "sheet_source": "out/review/v3_s42_v100k_strip.png",
+  "sheet_source_sha256": "fd1677663114d626b5e61e7e4d9c1bc41cd8ad61bef860997e907c9bdb16a7e4",
+  "sheet_resize": "cargo run -p xtask -- shrink <sheet_source> <sheet> --width 1024"
+}

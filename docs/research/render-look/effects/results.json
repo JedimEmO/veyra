@@ -1,0 +1,541 @@
+[
+  {
+    "case": "woodland-0.32-grading",
+    "command": [
+      "./target/release/game",
+      "--study-scene",
+      "woodland",
+      "--render-look-file",
+      "/tmp/strata-effects-final/grading.ron",
+      "--visual-time",
+      "0.32",
+      "--flycam",
+      "--lock-camera",
+      "--camera-altitude",
+      "1.8",
+      "--camera-pitch=-0.05",
+      "--look=-1.25",
+      "--aa",
+      "taa",
+      "--wind",
+      "0",
+      "--frames",
+      "2700",
+      "--window",
+      "2560x1440",
+      "--screenshot",
+      "/tmp/strata-effects-final/woodland-0.32-grading.png",
+      "--fullscreen"
+    ],
+    "environment": {
+      "XDG_CONFIG_HOME": "/tmp/strata-effects-final/config"
+    },
+    "fov_degrees": 45.0,
+    "foliage_distance_percent": 100.0,
+    "exit_code": 0,
+    "image_dimensions": [
+      2560,
+      1440
+    ],
+    "last_windows": [
+      [
+        126.0,
+        7.9,
+        6.6,
+        17.2,
+        35.4,
+        39.3,
+        4.1
+      ],
+      [
+        136.0,
+        7.4,
+        6.5,
+        15.8,
+        19.6,
+        20.2,
+        4.2
+      ],
+      [
+        140.0,
+        7.1,
+        6.5,
+        15.0,
+        18.5,
+        20.0,
+        4.3
+      ]
+    ],
+    "gpu_mean_ms": 4.2,
+    "errors": [],
+    "foliage_final": {
+      "cells": 323,
+      "blades": 1163508,
+      "plants": 195809,
+      "entities": 55662,
+      "in_flight": 0
+    }
+  },
+  {
+    "case": "woodland-0.32-contact",
+    "command": [
+      "./target/release/game",
+      "--study-scene",
+      "woodland",
+      "--render-look-file",
+      "/tmp/strata-effects-final/contact.ron",
+      "--visual-time",
+      "0.32",
+      "--flycam",
+      "--lock-camera",
+      "--camera-altitude",
+      "1.8",
+      "--camera-pitch=-0.05",
+      "--look=-1.25",
+      "--aa",
+      "taa",
+      "--wind",
+      "0",
+      "--frames",
+      "2700",
+      "--window",
+      "2560x1440",
+      "--screenshot",
+      "/tmp/strata-effects-final/woodland-0.32-contact.png",
+      "--fullscreen"
+    ],
+    "environment": {
+      "XDG_CONFIG_HOME": "/tmp/strata-effects-final/config"
+    },
+    "fov_degrees": 45.0,
+    "foliage_distance_percent": 100.0,
+    "exit_code": 0,
+    "image_dimensions": [
+      2560,
+      1440
+    ],
+    "last_windows": [
+      [
+        149.0,
+        6.7,
+        6.0,
+        15.1,
+        16.6,
+        20.0,
+        4.4
+      ],
+      [
+        150.0,
+        6.7,
+        5.9,
+        14.3,
+        17.1,
+        19.3,
+        4.3
+      ],
+      [
+        149.0,
+        6.7,
+        6.0,
+        15.1,
+        16.9,
+        18.4,
+        4.3
+      ]
+    ],
+    "gpu_mean_ms": 4.333333333333333,
+    "errors": [],
+    "foliage_final": {
+      "cells": 323,
+      "blades": 1163508,
+      "plants": 195809,
+      "entities": 55662,
+      "in_flight": 0
+    }
+  },
+  {
+    "case": "woodland-0.32-ssao",
+    "command": [
+      "./target/release/game",
+      "--study-scene",
+      "woodland",
+      "--render-look-file",
+      "/tmp/strata-effects-final/ssao.ron",
+      "--visual-time",
+      "0.32",
+      "--flycam",
+      "--lock-camera",
+      "--camera-altitude",
+      "1.8",
+      "--camera-pitch=-0.05",
+      "--look=-1.25",
+      "--aa",
+      "taa",
+      "--wind",
+      "0",
+      "--frames",
+      "2700",
+      "--window",
+      "2560x1440",
+      "--screenshot",
+      "/tmp/strata-effects-final/woodland-0.32-ssao.png",
+      "--fullscreen"
+    ],
+    "environment": {
+      "XDG_CONFIG_HOME": "/tmp/strata-effects-final/config"
+    },
+    "fov_degrees": 45.0,
+    "foliage_distance_percent": 100.0,
+    "exit_code": 0,
+    "image_dimensions": [
+      2560,
+      1440
+    ],
+    "last_windows": [
+      [
+        149.0,
+        6.7,
+        5.9,
+        15.9,
+        20.5,
+        20.8,
+        4.6
+      ],
+      [
+        144.0,
+        6.9,
+        6.1,
+        15.6,
+        20.2,
+        20.3,
+        4.4
+      ],
+      [
+        143.0,
+        7.0,
+        6.1,
+        15.7,
+        19.7,
+        20.4,
+        4.5
+      ]
+    ],
+    "gpu_mean_ms": 4.5,
+    "errors": [],
+    "foliage_final": {
+      "cells": 323,
+      "blades": 1163508,
+      "plants": 195809,
+      "entities": 55662,
+      "in_flight": 0
+    }
+  },
+  {
+    "case": "woodland-0.32-bloom",
+    "command": [
+      "./target/release/game",
+      "--study-scene",
+      "woodland",
+      "--render-look-file",
+      "/tmp/strata-effects-final/bloom.ron",
+      "--visual-time",
+      "0.32",
+      "--flycam",
+      "--lock-camera",
+      "--camera-altitude",
+      "1.8",
+      "--camera-pitch=-0.05",
+      "--look=-1.25",
+      "--aa",
+      "taa",
+      "--wind",
+      "0",
+      "--frames",
+      "2700",
+      "--window",
+      "2560x1440",
+      "--screenshot",
+      "/tmp/strata-effects-final/woodland-0.32-bloom.png",
+      "--fullscreen"
+    ],
+    "environment": {
+      "XDG_CONFIG_HOME": "/tmp/strata-effects-final/config"
+    },
+    "fov_degrees": 45.0,
+    "foliage_distance_percent": 100.0,
+    "exit_code": 0,
+    "image_dimensions": [
+      2560,
+      1440
+    ],
+    "last_windows": [
+      [
+        145.0,
+        6.9,
+        6.1,
+        15.3,
+        19.2,
+        19.3,
+        4.4
+      ],
+      [
+        143.0,
+        7.0,
+        6.2,
+        16.0,
+        18.5,
+        20.6,
+        4.5
+      ],
+      [
+        144.0,
+        6.9,
+        6.2,
+        15.1,
+        18.8,
+        19.4,
+        4.4
+      ]
+    ],
+    "gpu_mean_ms": 4.433333333333334,
+    "errors": [],
+    "foliage_final": {
+      "cells": 323,
+      "blades": 1163508,
+      "plants": 195809,
+      "entities": 55662,
+      "in_flight": 0
+    }
+  },
+  {
+    "case": "woodland-0.32-fog",
+    "command": [
+      "./target/release/game",
+      "--study-scene",
+      "woodland",
+      "--render-look-file",
+      "/tmp/strata-effects-final/fog.ron",
+      "--visual-time",
+      "0.32",
+      "--flycam",
+      "--lock-camera",
+      "--camera-altitude",
+      "1.8",
+      "--camera-pitch=-0.05",
+      "--look=-1.25",
+      "--aa",
+      "taa",
+      "--wind",
+      "0",
+      "--frames",
+      "2700",
+      "--window",
+      "2560x1440",
+      "--screenshot",
+      "/tmp/strata-effects-final/woodland-0.32-fog.png",
+      "--fullscreen"
+    ],
+    "environment": {
+      "XDG_CONFIG_HOME": "/tmp/strata-effects-final/config"
+    },
+    "fov_degrees": 45.0,
+    "foliage_distance_percent": 100.0,
+    "exit_code": 0,
+    "image_dimensions": [
+      2560,
+      1440
+    ],
+    "last_windows": [
+      [
+        141.0,
+        7.1,
+        6.3,
+        18.4,
+        19.4,
+        19.8,
+        4.9
+      ],
+      [
+        140.0,
+        7.1,
+        6.4,
+        17.6,
+        18.9,
+        19.1,
+        4.9
+      ],
+      [
+        140.0,
+        7.1,
+        6.3,
+        17.7,
+        19.5,
+        19.7,
+        4.9
+      ]
+    ],
+    "gpu_mean_ms": 4.9,
+    "errors": [],
+    "foliage_final": {
+      "cells": 323,
+      "blades": 1163508,
+      "plants": 195809,
+      "entities": 55662,
+      "in_flight": 0
+    }
+  },
+  {
+    "case": "woodland-0.32-dof",
+    "command": [
+      "./target/release/game",
+      "--study-scene",
+      "woodland",
+      "--render-look-file",
+      "/tmp/strata-effects-final/dof.ron",
+      "--visual-time",
+      "0.32",
+      "--flycam",
+      "--lock-camera",
+      "--camera-altitude",
+      "1.8",
+      "--camera-pitch=-0.05",
+      "--look=-1.25",
+      "--aa",
+      "taa",
+      "--wind",
+      "0",
+      "--frames",
+      "2700",
+      "--window",
+      "2560x1440",
+      "--screenshot",
+      "/tmp/strata-effects-final/woodland-0.32-dof.png",
+      "--fullscreen"
+    ],
+    "environment": {
+      "XDG_CONFIG_HOME": "/tmp/strata-effects-final/config"
+    },
+    "fov_degrees": 45.0,
+    "foliage_distance_percent": 100.0,
+    "exit_code": 0,
+    "image_dimensions": [
+      2560,
+      1440
+    ],
+    "last_windows": [
+      [
+        150.0,
+        6.7,
+        6.0,
+        15.0,
+        17.7,
+        18.0,
+        4.2
+      ],
+      [
+        149.0,
+        6.7,
+        5.9,
+        16.5,
+        18.2,
+        20.0,
+        4.2
+      ],
+      [
+        147.0,
+        6.8,
+        6.0,
+        16.6,
+        18.8,
+        19.7,
+        4.2
+      ]
+    ],
+    "gpu_mean_ms": 4.2,
+    "errors": [],
+    "foliage_final": {
+      "cells": 323,
+      "blades": 1163508,
+      "plants": 195809,
+      "entities": 55662,
+      "in_flight": 0
+    }
+  },
+  {
+    "case": "woodland-0.32-motion",
+    "command": [
+      "./target/release/game",
+      "--study-scene",
+      "woodland",
+      "--render-look-file",
+      "/tmp/strata-effects-final/motion.ron",
+      "--visual-time",
+      "0.32",
+      "--flycam",
+      "--lock-camera",
+      "--camera-altitude",
+      "1.8",
+      "--camera-pitch=-0.05",
+      "--look=-1.25",
+      "--aa",
+      "taa",
+      "--wind",
+      "0",
+      "--frames",
+      "2700",
+      "--window",
+      "2560x1440",
+      "--screenshot",
+      "/tmp/strata-effects-final/woodland-0.32-motion.png",
+      "--fullscreen"
+    ],
+    "environment": {
+      "XDG_CONFIG_HOME": "/tmp/strata-effects-final/config"
+    },
+    "fov_degrees": 45.0,
+    "foliage_distance_percent": 100.0,
+    "exit_code": 0,
+    "image_dimensions": [
+      2560,
+      1440
+    ],
+    "last_windows": [
+      [
+        146.0,
+        6.8,
+        6.0,
+        16.1,
+        20.0,
+        21.4,
+        4.2
+      ],
+      [
+        151.0,
+        6.6,
+        5.9,
+        16.1,
+        18.0,
+        19.9,
+        4.2
+      ],
+      [
+        149.0,
+        6.7,
+        6.0,
+        15.9,
+        19.7,
+        20.4,
+        4.2
+      ]
+    ],
+    "gpu_mean_ms": 4.2,
+    "errors": [],
+    "foliage_final": {
+      "cells": 323,
+      "blades": 1163508,
+      "plants": 195809,
+      "entities": 55662,
+      "in_flight": 0
+    }
+  }
+]

@@ -1,0 +1,43 @@
+// The encounter's opponents' character sheets, applied over the combat
+// tables the same way the player's is, so an opponent's moveset is a
+// sheet and not a special case: the rusher has learned One hand 1 and 2
+// (the follow-up and its bite; the heavy is the novice's, and One hand 3's
+// posture figure is a player's reward that the rusher does not carry) and
+// the sentry Carbine 2 (the carbine it fires).
+// Authored sheets are checked against the graph (boxes exist, chains
+// hold, the budget) but need no XP: the XP here is what they would have
+// earned. Loaded by `strata_registry::progression`.
+(
+    version: 1,
+    sheets: {
+        "rusher": (
+            learned: ["blade.novice", "blade.cuts.1", "blade.cuts.2"],
+            xp: {Blade: 400},
+        ),
+        // The marksman fires a rifle: Long shots 1 certifies it, over the
+        // Ranger's prerequisites.
+        "marksman": (
+            learned: [
+                "marksman.novice", "marksman.carbine.1", "surveyor.novice",
+                "surveyor.routes.1", "surveyor.reading.1", "ranger.novice",
+                "ranger.long_shots.1",
+            ],
+            xp: {Ranged: 150, Survey: 400, Wilderness: 400},
+        ),
+        // The duelist cuts a light, its follow up and a heavy and nothing else.
+        "duelist": (
+            learned: ["blade.novice", "blade.cuts.1"],
+            xp: {Blade: 150},
+        ),
+        // The bulwark cuts a light and its follow up and nothing else; the
+        // heavy is the novice's, which its brain never presses.
+        "bulwark": (
+            learned: ["blade.novice", "blade.cuts.1"],
+            xp: {Blade: 150},
+        ),
+        "sentry": (
+            learned: ["marksman.novice", "marksman.carbine.1", "marksman.carbine.2"],
+            xp: {Ranged: 400},
+        ),
+    },
+)

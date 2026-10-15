@@ -1,0 +1,29 @@
+// The time of day's colour grade (lighting plan phase 4a), four keys blended
+// by the sun's height: `strata_atmosphere::grade` reads it at startup from
+// the asset root (a copy is compiled in), adds it to the observer's biome
+// grade (`assets/biomes/*.biome.ron`, `grade:`) as an offset from neutral,
+// scales the sum by the look's `grade` strength and writes the camera's
+// colour grading. The fields and their units are `strata_registry::Grade`'s
+// (Bevy's `ColorGrading`): temperature and tint are white point shifts of a
+// few thousandths, saturation, contrast and gain factors around 1, lift a
+// few thousandths of exposed linear light added to the shadows.
+//
+// Dawn weighs most with the sun just over the horizon in the morning and
+// dusk the same in the evening, both gone by about 30 degrees up; night
+// takes over as the sun sinks (the same easing as exposure's night), and
+// day is the rest.
+(
+    // A cooler, pinker warmth than dusk, the shade opened a little.
+    dawn: (temperature: 0.008, tint: 0.002, saturation: 1.04, lift: 0.003),
+    // Neutral: midday is the light the materials were judged under.
+    day: (),
+    // The golden hour: warm and rich, the long shade lifted a little so it
+    // does not go black. Bevy's lift is grey, so the shade's blue is the
+    // sky's light and this warmth takes some of it (2026-10-03: the dusk
+    // street's shaded paving from 0.15 to 0.11 of saturation).
+    dusk: (temperature: 0.02, saturation: 1.08, lift: 0.003),
+    // Moonlight: blue, the colour crushed as the eye loses it. The tint
+    // turns Bevy's cool axis from cyan towards blue; no lift, which greyed
+    // the blue away.
+    night: (temperature: -0.014, tint: 0.014, saturation: 0.8),
+)

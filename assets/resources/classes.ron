@@ -1,0 +1,50 @@
+// The class tree of what the ground holds (docs/design/crafting.md, 3.1
+// and 3.2): family, class, and under each class its types, one a
+// `*.resource.ron` file beside this one. A class names the attributes it
+// carries, in the order a card lists them; an attribute a class does not
+// carry is absent from its lots, not nought. A family gives a lot's cell
+// its shape and a class its colour, so two classes tell apart by both.
+// Read by `strata_registry::resource`; in no world version and no
+// handshake. The first content: enough for the worked example of 5.5 and
+// for two types in a class. The rest of 3.1's table is later content.
+(
+    version: 1,
+    families: [
+        (id: "strata:mineral", name: "Mineral", shape: Ingot),
+        (id: "strata:fluid", name: "Fluid", shape: Sphere),
+    ],
+    classes: [
+        (
+            id: "strata:reactive",
+            name: "Reactive",
+            family: "strata:mineral",
+            color: "#F4F6F8",
+            symbol: Some("veyra:icon.material.reactive"),
+            carries: [Purity, Potency, Stability],
+        ),
+        (
+            id: "strata:brine",
+            name: "Brine",
+            family: "strata:fluid",
+            color: "#5FD0C5",
+            symbol: Some("veyra:icon.material.liquid"),
+            carries: [Purity, Potency, Conductivity],
+        ),
+        (
+            id: "strata:structural_metal",
+            name: "Structural metal",
+            family: "strata:mineral",
+            color: "#9FB3C8",
+            symbol: Some("veyra:icon.material.ore"),
+            carries: [Purity, Strength, Toughness, Hardness, HeatTolerance, Stability, Density, Workability],
+        ),
+        (
+            id: "strata:conductor",
+            name: "Conductor",
+            family: "strata:mineral",
+            color: "#E08A5B",
+            symbol: Some("veyra:icon.material.conductor"),
+            carries: [Purity, Conductivity, HeatTolerance, Stability, Density, Workability],
+        ),
+    ],
+)

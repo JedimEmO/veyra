@@ -1,0 +1,80 @@
+// Per weapon: what one shot does, how a press becomes rounds, how the cone
+// grows as it fires, and how far a bolt flies and how its damage fades.
+// The pistol is the accurate single shot with the longer reach; the carbine
+// a burst weapon whose damage is best up close.
+//
+// mode: Single (a round a press), Burst(count, gap) (a press commits to
+// count rounds gap seconds apart) or Auto (a round every interval while
+// held). interval is the least time between shots, or between a burst's
+// last round and the next burst's first.
+// hold: with it, a trigger still down when a burst's last round has left
+// keeps firing a round every gap seconds, each adding bloom degrees to the
+// cone on top of the row's own.
+// spread and aim_spread are the half angle, in degrees, of the cone a bolt
+// leaves in from the hip and while aiming. bloom: degrees a round adds, the
+// most the added cone may reach, seconds before it settles, degrees a
+// second it settles by. move_spread: degrees added at a full run.
+// range: metres a bolt flies. falloff: all damage up to full metres, a line
+// down to share of it at far, share from there to the range.
+// aim_time: seconds the cone takes to close from spread to aim_spread once
+// aim is held, and to open again once it is dropped (nought steps at once).
+// zoom: how many times the aimed view magnifies (the client reads it alone).
+// The rifle is the long gun: one slow hard shot, tight only when aimed and
+// still, and the only row that owns the range past 50 m.
+(
+    version: 7,
+    weapons: {
+        Carbine: (
+            interval: 0.42,
+            bolt_speed: 45.0,
+            damage: 24.0,
+            posture: 15.0,
+            magazine: 24,
+            reload: 1.35,
+            spread: 4.0,
+            aim_spread: 2.0,
+            mode: Burst(count: 3, gap: 0.09),
+            hold: Some((gap: 0.12, bloom: 0.4)),
+            bloom: (shot: 0.25, cap: 4.0, wait: 0.15, settle: 6.0),
+            move_spread: 1.0,
+            range: 70.0,
+            falloff: (full: 25.0, far: 50.0, share: 0.55),
+            aim_time: 0.0,
+            zoom: 1.0,
+        ),
+        Pistol: (
+            interval: 0.32,
+            bolt_speed: 60.0,
+            damage: 24.0,
+            posture: 16.0,
+            magazine: 10,
+            reload: 0.9,
+            spread: 2.4,
+            aim_spread: 1.0,
+            mode: Single,
+            bloom: (shot: 0.6, cap: 2.5, wait: 0.20, settle: 4.0),
+            move_spread: 0.3,
+            range: 90.0,
+            falloff: (full: 30.0, far: 60.0, share: 0.6),
+            aim_time: 0.0,
+            zoom: 1.0,
+        ),
+        Rifle: (
+            interval: 1.8,
+            bolt_speed: 140.0,
+            damage: 85.0,
+            posture: 55.0,
+            magazine: 4,
+            reload: 2.4,
+            spread: 7.0,
+            aim_spread: 0.25,
+            mode: Single,
+            bloom: (shot: 2.5, cap: 3.0, wait: 0.5, settle: 4.0),
+            move_spread: 3.0,
+            range: 260.0,
+            falloff: (full: 150.0, far: 260.0, share: 0.7),
+            aim_time: 0.875,
+            zoom: 3.5,
+        ),
+    },
+)

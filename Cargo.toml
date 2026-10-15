@@ -1,0 +1,189 @@
+[workspace]
+resolver = "3"
+members = ["crates/*", "apps/*", "tools/*"]
+# A Python tool imported from tools/ leaves tools/__pycache__, which the glob
+# would read as a member and fail every build on.
+exclude = ["tools/__pycache__"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.96"
+license = "MIT OR Apache-2.0"
+authors = ["Mathias Myrland <jedimemo@gmail.com>"]
+
+[workspace.dependencies]
+# Members enable the Bevy features they need; the workspace pins the version.
+# `default-features = false` here is what makes `just server-check` meaningful:
+# a crate below the render layer that wants `bevy_render` has to say so in its
+# own Cargo.toml, where the layering rule can be reviewed.
+bevy = { version = "0.19.1", default-features = false }
+# The exact glam bevy_math 0.19.1 depends on. `strata-core` and
+# `strata-worldgen` have no Bevy, but their `DVec3` has to be the same type
+# `bevy_math` re-exports, or every crate above them converts at the boundary.
+glam = { version = "0.32.0", features = ["serde"] }
+
+serde = { version = "1.0.229", features = ["derive"] }
+ron = "0.12.2"
+thiserror = "2.0.20"
+anyhow = "1.0.104"
+tracing = "0.1.44"
+noise = "0.9.0"
+# The worldmap tool writes PNGs and nothing else; every other codec is size.
+image = { version = "0.25.10", default-features = false, features = ["png"] }
+clap = { version = "4.6.6", features = ["derive"] }
+rayon = "1.12.0"
+
+proptest = "1.11.0"
+insta = { version = "1.48.0", features = ["ron"] }
+pretty_assertions = "1.4.1"
+# strata-worldgen: platform-independent sin and cos.
+libm = "0.2.16"
+# strata-registry: the icon catalogue is JSON, written by the art tools.
+serde_json = { version = "1.0.151", default-features = false, features = ["std"] }
+# strata-physics: colliders, spatial queries and the character's move and
+# slide. Default features off because they include the debug renderer, which
+# would pull bevy_render below the render layer; each crate names the
+# features it needs (`3d`, `f32`, `parry-f32`).
+avian3d = { version = "0.7.0", default-features = false }
+# strata-net-replicon: server-authoritative replication and the renet UDP
+# transport. Default features off so the dedicated server graph carries no
+# renderer; the adapter names `client`, `server` and `renet_netcode`.
+bevy_replicon = { version = "0.44.0", default-features = false }
+bevy_replicon_renet = { version = "0.20.0", default-features = false }
+
+# Pinned to a rev so a clean clone builds. `.cargo/config.toml` patches it to
+# the sibling checkout for day-to-day work; Bevy versions must match exactly.
+slotted-registry = { git = "https://github.com/JedimEmO/bevy-slotted", rev = "dfe0c6e416a12b35b3ac29593f69fa55d573e7fd", default-features = false }
+# `Namespaced` ids come from here; slotted-registry does not re-export them.
+slotted-model = { git = "https://github.com/JedimEmO/bevy-slotted", rev = "dfe0c6e416a12b35b3ac29593f69fa55d573e7fd" }
+# strata-client: the slotted UI facade (screens, themes, HUD layers, the
+# menu templates) behind its `ui` feature. Default features off: the Lua
+# runtime, the packs loader, the item browser and the GPU icon bake are
+# not part of the slice, and each would be compile time for nothing. The
+# same rev as the registry crate, patched to the same checkout.
+slotted = { git = "https://github.com/JedimEmO/bevy-slotted", rev = "dfe0c6e416a12b35b3ac29593f69fa55d573e7fd", default-features = false }
+# The headless UI harness the client's screen tests drive (no window, no
+# GPU, virtual time).
+slotted-test = { git = "https://github.com/JedimEmO/bevy-slotted", rev = "dfe0c6e416a12b35b3ac29593f69fa55d573e7fd", default-features = false }
+# strata-client: the platform's configuration directory, where the
+# settings file lives.
+dirs = "6.0.0"
+
+strata-core = { path = "crates/strata-core", version = "0.1.0" }
+strata-registry = { path = "crates/strata-registry", version = "0.1.0" }
+strata-worldgen = { path = "crates/strata-worldgen", version = "0.1.0" }
+strata-flora = { path = "crates/strata-flora", version = "0.1.0" }
+strata-sim = { path = "crates/strata-sim", version = "0.1.0" }
+strata-stream = { path = "crates/strata-stream", version = "0.1.0" }
+strata-physics = { path = "crates/strata-physics", version = "0.1.0" }
+strata-terrain = { path = "crates/strata-terrain", version = "0.1.0" }
+strata-atmosphere = { path = "crates/strata-atmosphere", version = "0.1.0" }
+strata-foliage = { path = "crates/strata-foliage", version = "0.1.0" }
+# Defaults off so the facade decides: `client` alone is a renderer with no
+# screens, and its `ui` feature is what turns the slotted UI on.
+strata-client = { path = "crates/strata-client", version = "0.1.0", default-features = false }
+strata-net = { path = "crates/strata-net", version = "0.1.0" }
+strata-net-replicon = { path = "crates/strata-net-replicon", version = "0.1.0" }
+strata = { path = "crates/strata", version = "0.1.0", default-features = false }
+
+veyra-buildings = { path = "crates/veyra-buildings", version = "0.1.0" }
+
+# The building authoring system, extracted into its own workspace next door.
+# These become git dependencies on https://github.com/JedimEmO/ashlar, pinned
+# to a rev and patched to the sibling checkout the way the slotted entries are,
+# once that repository is pushed: cargo resolves a `[patch]` only after it has
+# fetched the source it patches, so a rev in a repository that does not exist
+# yet fails before the patch is ever consulted. Bevy versions must match
+# exactly (0.19.1), and so must glam, or a `DVec3` in a recipe is a different
+# type from the one `bevy_math` re-exports. `ashlar` is Bevy-free and may sit
+# below the render layer; `ashlar-bevy` is a render crate; `ashlar-manifold`
+# carries the native Manifold kernel and belongs to the authoring tools alone,
+# never to the server or the headless facade, which `just server-check`
+# asserts. The pinned rev these will carry is
+# 2b463d0367d329a6236b2fa06b0cf4bbd995b09f.
+ashlar = { git = "https://github.com/JedimEmO/ashlar", rev = "b6148290f272075f099605173969b71ce1ebc793" }
+ashlar-manifold = { git = "https://github.com/JedimEmO/ashlar", rev = "b6148290f272075f099605173969b71ce1ebc793" }
+ashlar-bevy = { git = "https://github.com/JedimEmO/ashlar", rev = "b6148290f272075f099605173969b71ce1ebc793" }
+# Defaults off: the preview library's `showcase` feature pulls ashlar's own
+# example content, and the game previews its own.
+ashlar-preview = { git = "https://github.com/JedimEmO/ashlar", rev = "b6148290f272075f099605173969b71ce1ebc793", default-features = false }
+# The content step's half of ashlar: the baker and the material graph engine.
+# Tools only, like `ashlar-manifold`: `just server-check` keeps them out of the
+# server, and `game` loads what they write.
+ashlar-content = { git = "https://github.com/JedimEmO/ashlar", rev = "b6148290f272075f099605173969b71ce1ebc793" }
+ashlar-material = { git = "https://github.com/JedimEmO/ashlar", rev = "b6148290f272075f099605173969b71ce1ebc793" }
+veyra-materials = { path = "crates/veyra-materials", version = "0.1.0" }
+# Scratch directories in tests, such as a baked `generated/` for the grounding fixture.
+tempfile = "3.27.0"
+veyra-flora = { path = "crates/veyra-flora", version = "0.1.0" }
+veyra-rocks = { path = "crates/veyra-rocks", version = "0.1.0" }
+veyra-settlements = { path = "crates/veyra-settlements", version = "0.1.0" }
+# Where the weather is: the fog field over the ground, no Bevy, above
+# strata-worldgen and below strata-sim, linked by the server too.
+strata-weather = { path = "crates/strata-weather", version = "0.1.0" }
+# The shader compiler wgpu uses, for a test that validates a WGSL file;
+# the version already in the graph.
+naga = { version = "29.0.4", default-features = false }
+# The preprocessor Bevy composes its shaders with, for a test that composes
+# and validates the terrain's (their imports and `#ifdef`s are naga_oil's);
+# the version Bevy already pulls in.
+naga_oil = { version = "0.22.0", default-features = false }
+
+# Reusable, renderer-free procedural weapon recipes and fitting rules.
+veyra-weapons = { path = "crates/veyra-weapons", version = "0.1.0" }
+
+# `std::time::Instant` panics in a browser: strata-core re-exports this one
+# on wasm32 (ticket 0013).
+web-time = { version = "1.1.0", default-features = false }
+# The browser's `localStorage`, behind the sim's `Store` port (ticket 0013,
+# step 3); the member names the features it needs.
+web-sys = { version = "0.3", default-features = false }
+# The web entry's glue (ticket 0013, step 3).
+wasm-bindgen = { version = "0.2", default-features = false }
+js-sys = { version = "0.3", default-features = false }
+
+# Bevy is slow in a plain dev profile; optimise dependencies as slotted does.
+# Keep dev builds fast to run but small on disk: dependencies optimised, and
+# debuginfo limited to line tables.
+[profile.dev]
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+opt-level = 3
+debug = false
+
+# The world's own arithmetic is the one workspace code that a plain dev
+# build cannot afford: unoptimised, the river bake behind every test and
+# every debug run that enters the world takes a minute where the optimised
+# one takes seconds, and three such tests were 272 of the sim suite's 274
+# seconds. Overflow checks and debug assertions stay on, and the results
+# are the same bits at any level (no fast-math). These crates change
+# rarely, so the slower compile is paid seldom.
+[profile.dev.package.strata-core]
+opt-level = 3
+
+[profile.dev.package.strata-worldgen]
+opt-level = 3
+
+[profile.dev.package.strata-flora]
+opt-level = 3
+
+[profile.dev.package.strata-weather]
+opt-level = 3
+
+[profile.test]
+debug = "line-tables-only"
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+module_name_repetitions = "allow"
+must_use_candidate = "allow"
+needless_pass_by_value = "allow"
+type_complexity = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+unwrap_used = "warn"

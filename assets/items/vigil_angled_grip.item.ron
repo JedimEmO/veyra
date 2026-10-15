@@ -1,0 +1,30 @@
+// The Vigil angled grip of `crates/veyra-weapons` (`vigil_angled_grip`).
+// There it also fits the combat pistol and the breacher; only the patrol
+// carbine is an item yet. Its lines are the module's two properties, equip
+// time and recoil recovery, and the effects its factors there. The sim
+// has no recoil, so only the quicker draw reaches a fight.
+(
+    id: "veyra:module.vigil_angled_grip",
+    name: "Vigil angled grip",
+    maker: "Vigil",
+    kind: Module(
+        slot: "grip",
+        fits: ["veyra:weapon.patrol_carbine"],
+        part: "vigil_angled_grip",
+        effects: [
+            (property: EquipTime, factor: 0.95, line: "equip_time"),
+            (property: RecoilRecovery, factor: 1.05, line: "recoil_recovery"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "equip_time", name: "Draw"),
+        (id: "recoil_recovery", name: "Recoil"),
+    ],
+    icon: (
+        shape: Ingot,
+        color: "#7FD1FF",
+        picture: Some("patrol_carbine/grip.vigil_angled_grip.png"),
+        symbol: Some("veyra:icon.module.grip"),
+    ),
+)

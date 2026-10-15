@@ -1,0 +1,37 @@
+{
+  "schema": 2,
+  "kind": "sfx",
+  "name": "impact_stone_1",
+  "prompt": "an energy bolt striking concrete and stone: short hot sizzle with a crack of chipped rock and grit falling, dry, close",
+  "tags": [],
+  "created": "2026-10-01",
+  "created_by": "agent:claude",
+  "provenance": "recorded",
+  "rig": null,
+  "generator": {
+    "tool": "moss_sound_effect",
+    "model": "OpenMOSS-Team/MOSS-SoundEffect-v2.0",
+    "seed": 6183104,
+    "duration_s": 0.5,
+    "steps": 100,
+    "cfg": 4.0
+  },
+  "source": {
+    "path": null,
+    "sha256": null,
+    "skeleton": null
+  },
+  "recipe": null,
+  "measured": {
+    "frames": null,
+    "fps": null,
+    "duration_s": 0.5,
+    "avg_speed_mps": null,
+    "root_motion": null,
+    "mesh": null
+  },
+  "body": null,
+  "events": null,
+  "content_hash": "sha256:d1c0a031f2ebc6fb749e1c7ca1f49d0f6276d607f15b86317ea6eea2739684b1",
+  "note": "Game ships this levelled copy. Reproduce with python3 tools/combat_audio.py; recipe and hashes: assets/audio/combat/levelling.json. Original render and generator record: assets-src/combat/forge/assets-src/sfx/takes/impact_stone_1.wav."
+}

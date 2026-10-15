@@ -1,0 +1,47 @@
+cargo run --release -p content -- 
+   Compiling veyra-settlements v0.1.0 (./crates/veyra-settlements)
+   Compiling content v0.1.0 (./tools/content)
+    Finished `release` profile [optimized] target(s) in 6.41s
+     Running `target/release/content`
+materials: 0 sets baked, 82 from the cache, 110 definitions, 210.2 MB
+buildings/outpost.ashlar: triangles by level [3088, 1428, 1880], 0.5 MB, from the cache
+buildings/corporate.ashlar: triangles by level [2352, 1208, 6432], 0.8 MB, from the cache
+settlements/port_serein/terminal.ashlar: triangles by level [5130, 3808, 976], 0.5 MB, from the cache
+settlements/port_serein/beacon.ashlar: triangles by level [1348, 724, 524], 0.2 MB, from the cache
+settlements/port_serein/warehouse-2.ashlar: triangles by level [920, 344, 180], 0.1 MB, from the cache
+settlements/port_serein/warehouse-3.ashlar: triangles by level [1208, 468, 244], 0.1 MB, from the cache
+settlements/port_serein/warehouse-4.ashlar: triangles by level [920, 344, 180], 0.1 MB, from the cache
+settlements/port_serein/warehouse-5.ashlar: triangles by level [920, 344, 180], 0.1 MB, from the cache
+settlements/port_serein/warehouse-6.ashlar: triangles by level [920, 344, 180], 0.1 MB, from the cache
+settlements/port_serein/warehouse-7.ashlar: triangles by level [920, 344, 180], 0.1 MB, from the cache
+settlements/port_serein/warehouse-8.ashlar: triangles by level [908, 332, 180], 0.1 MB, from the cache
+settlements/port_serein/warehouse-9.ashlar: triangles by level [908, 344, 180], 0.1 MB, from the cache
+settlements/port_serein/processor.ashlar: triangles by level [25870, 16704, 8584], 3.8 MB, from the cache
+settlements/port_serein/headquarters.ashlar: triangles by level [4464, 4444, 292], 0.4 MB, from the cache
+settlements/port_serein/slab-0.ashlar: triangles by level [15842, 9510, 2156], 1.2 MB, from the cache
+settlements/port_serein/slab-1.ashlar: triangles by level [12180, 7316, 1696], 1.0 MB, from the cache
+settlements/port_serein/slab-2.ashlar: triangles by level [8988, 5396, 1288], 0.7 MB, from the cache
+settlements/port_serein/slab-3.ashlar: triangles by level [12180, 7316, 1696], 1.0 MB, from the cache
+settlements/port_serein/slab-4.ashlar: triangles by level [14760, 8844, 2028], 1.2 MB, from the cache
+settlements/port_serein/slab-5.ashlar: triangles by level [10296, 6184, 1448], 0.8 MB, from the cache
+settlements/port_serein/exchange-dressing.ashlar: triangles by level [200, 124, 180], 0.0 MB, meshed in 848.12µs
+settlements/port_serein/exchange-market.ashlar: triangles by level [140328, 43516, 15398], 14.7 MB, from the cache
+settlements/port_serein/landing-infill.ashlar: triangles by level [8700, 2600, 2736], 0.8 MB, from the cache
+settlements/port_serein/port-fittings.ashlar: triangles by level [2398, 1112, 3376], 0.6 MB, meshed in 9.22ms
+settlements/port_serein/quay-cargo.ashlar: triangles by level [4224, 384, 528], 0.3 MB, from the cache
+settlements/port_serein/quay-cranes.ashlar: triangles by level [7392, 7072, 4464], 0.8 MB, from the cache
+settlements/port_serein/street.ashlar: triangles by level [212, 124, 1584], 0.2 MB, from the cache
+settlements/port_serein/terrace-houses.ashlar: triangles by level [272236, 70448, 268480], 46.4 MB, from the cache
+settlements/port_serein/blockout-gate.ashlar: triangles by level [48, 48, 48], 0.0 MB, from the cache
+settlements/port_serein/blockout-lanes.ashlar: triangles by level [96140, 28740, 27740], 7.4 MB, from the cache
+settlements/port_serein/blockout-pelagic.ashlar: triangles by level [12, 12, 12], 0.0 MB, from the cache
+settlements/port_serein/blockout-processor.ashlar: triangles by level [2588, 1756, 1756], 0.4 MB, from the cache
+settlements/port_serein/blockout-quay.ashlar: triangles by level [6032, 3536, 1248], 0.4 MB, from the cache
+settlements/port_serein/blockout-stair.ashlar: triangles by level [9288, 2316, 2316], 0.5 MB, from the cache
+settlements/port_serein/blockout-starport.ashlar: triangles by level [1052, 716, 316], 0.1 MB, from the cache
+settlements/port_serein/blockout-terraces.ashlar: triangles by level [828, 396, 252], 0.1 MB, from the cache
+settlements/port_serein/blockout-transit.ashlar: triangles by level [4372, 2644, 1508], 0.6 MB, from the cache
+settlements/port_serein/blockout-walls.ashlar: triangles by level [122789, 70345, 36279], 16.0 MB, from the cache
+strata:port_serein: 36 buildings, layout in settlements/port_serein.ron, skyline 38 pieces and 156185 triangles, 14.2 MB, meshed in 240.31ms
+plants and rocks: 16 species, 108 variants, 627915 near triangles in all, 129.9 MB, library version 30ed6faf68b74a97
+wrote ./tools/content/../../generated in 3.9s

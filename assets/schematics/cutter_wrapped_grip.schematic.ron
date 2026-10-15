@@ -1,0 +1,23 @@
+// The `cutter_wrapped_grip` part (ticket 0010, step 3). Taught by Edges 4 of the Weaponsmith.
+// Read by `strata_registry::schematic`; in no world version and no handshake.
+(
+    id: "veyra:schematic.cutter_wrapped_grip",
+    makes: "veyra:module.cutter_wrapped_grip",
+    complexity: 2,
+    profession: Some("weaponsmith.edges.4"),
+    licence: Some("veyra:maker.bracken"),
+    fixture: None,
+    slots: [
+        (id: "metal", name: "Metal", takes: Class("strata:structural_metal"), units: 10),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "attack_stamina", from: [
+            (slot: "metal", stat: Light(Density), weight: 0.5),
+            (slot: "metal", stat: Attribute(Toughness), weight: 0.5),
+        ]),
+        (line: "equip_time", from: [
+            (slot: "metal", stat: Light(Density), weight: 1.0),
+        ]),
+    ],
+)

@@ -1,0 +1,16 @@
+// The hull plate (ticket 0009, step 5): the pressed plate a courier bike's
+// frame is built from. Sold at store grade (rigidity 500) and made from
+// structural metal by `veyra:schematic.hull_plate`; the price is what a
+// bench buys one for when a slot wants it and the stock has none.
+(
+    id: "veyra:component.hull_plate",
+    name: "Hull plate",
+    maker: "the dealer",
+    kind: Component,
+    stack: 20,
+    price: Some(60),
+    lines: [
+        (id: "rigidity", name: "Rigidity"),
+    ],
+    icon: (shape: Slab, color: "#8FA3B5", symbol: Some("veyra:icon.material.ingot")),
+)

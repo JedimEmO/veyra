@@ -1,0 +1,29 @@
+// A two-hand blade on the Greatblade class: slower, harder, wider than the blade's, and hard to stagger mid swing.
+// Its edge line scales the damage of its cuts (the signature): a bought one,
+// at 500, cuts at 0.95 of the class's figure, as a bought carbine fires
+// slower than the table. Its chassis in `crates/veyra-weapons` gives it mounts
+// and its baked picture and model (ticket 0010, step 3): head and grip open, power opens at 600, so a bought one (500) has two of its three.
+// Sold at Pelagic's board, and made by its schematic.
+(
+    id: "veyra:weapon.yard_greatblade",
+    name: "Yard greatblade",
+    maker: "Pelagic Works",
+    kind: Weapon(
+        family: "Greatblade",
+        chassis: "heavy_cutter",
+        mounts: [
+            (slot: "head"),
+            (slot: "grip"),
+            (slot: "power", opens_at: Some(600)),
+        ],
+        signature: Some((line: "edge", property: HitDamage, worst: 0.80, best: 1.10)),
+    ),
+    stack: 1,
+    price: Some(260),
+    lines: [
+        (id: "edge", name: "Edge"),
+        (id: "durability", name: "Durability"),
+        (id: "moddability", name: "Moddability"),
+    ],
+    icon: (shape: Rod, color: "#A9B1BA", picture: Some("heavy_cutter/whole.png"), symbol: Some("veyra:icon.weapon.heavy-tool")),
+)

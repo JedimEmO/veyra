@@ -1,0 +1,44 @@
+// Limestone karst: pale cliffs, dry valleys, sinks and gorges, water that
+// goes under. Rain dissolves the rock along its joints into closed hollows a
+// few hundred metres apart; streams sink and rise again in gorges. Bare
+// faces are the shared `rock` layer: pale slabs with bedding and lichen.
+(
+    id: "strata:karst",
+    name: "Limestone karst",
+    tint: (0.96, 0.93, 0.55),
+    deal_order: 2,
+    rock: (
+        face: "strata:rock",
+        bare_slope: 0.8,
+        far_tint: (1.1, 1.1, 1.05),
+        // 0.8 in the design. 1 for now, as its order of work has it for
+        // step 3b, so that bare badlands are that step's one visible change;
+        // 0.8 waits for a step that judges it on screen.
+        cover: 1.0,
+    ),
+    // Step 4 (ticket 0004): closed hollows, a cellular field of bowls about
+    // 600 m apart on the plains (the Guilin spacing), 3 times the plains'
+    // amplitude (2 in the design); the hills' at 0.45 and 0.3 (1.1 and 0.25
+    // in the design), since on the highlands' 450 m those made walls, 86 %
+    // of the ground over 20 degrees, and lifted the foothills' plateau over
+    // the plains' 400 m bound. 1.98 hollows a square kilometre (0.53
+    // before).
+    relief: [
+        (class: "plains", shape: "cells", amplitude: 3.0, wavelength: 0.5, erosion: 0.3),
+        (class: "hills", shape: "cells", amplitude: 0.45, wavelength: 0.3, erosion: 0.4),
+        (class: "mountains", shape: "ridged", amplitude: 1.0, wavelength: 1.0, erosion: 0.5),
+        (class: "ridges", shape: "cells", amplitude: 1.5, wavelength: 0.4, erosion: 0.3),
+    ],
+    beds: (
+        thickness_m: (min: 2.0, max: 12.0),
+        hard_share: 0.6,
+        strength: 0.6,
+        dip_deg: (min: 0.0, max: 8.0),
+    ),
+    water: (section: "slot", keep_pits_m: 4.0, sink: 0.6, hang: 0.8),
+    kit: [
+        (species: "strata:granite_cliff", weight: 0.8),
+        (species: "strata:granite_boulder", weight: 0.6),
+        (species: "strata:granite_stone", weight: 0.8),
+    ],
+)

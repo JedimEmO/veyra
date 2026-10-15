@@ -1,0 +1,91 @@
+{
+  "date": "2026-09-13",
+  "tool": "built-in image_gen",
+  "revision": "scenes-v5",
+  "prompts": "prompts-scenes-v5.json",
+  "style_reference": "concepts/woodland-borough-gritty-v4.png",
+  "previous_source_captures": "captures.json",
+  "outputs": [
+    {
+      "name": "port-serein-working-waterfront-v5",
+      "edit_target": "sources/coast.png",
+      "output": "concepts/port-serein-working-waterfront-v5.png",
+      "dimensions": [
+        1712,
+        919
+      ],
+      "sha256": "2b77effc5886a0ef1947700c4213337e4eaee4185fca2ebadcbf3aa4d96e084b",
+      "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-ddd344e0-8401-4f63-a7e0-ccce575f0328.png"
+    },
+    {
+      "name": "terraforming-service-yard-v5",
+      "edit_target": "sources/valley.png",
+      "output": "concepts/terraforming-service-yard-v5.png",
+      "dimensions": [
+        1701,
+        924
+      ],
+      "sha256": "8fa48d78a6897a1177038b678e1a4ff24b9116d60b51a4b40ecebe3b16e7ab07",
+      "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-11ad24af-30ef-4340-a371-8ba9359aab8a.png"
+    },
+    {
+      "name": "roadside-freight-stop-v5",
+      "edit_target": "sources/freight-stop.png",
+      "output": "concepts/roadside-freight-stop-v5.png",
+      "dimensions": [
+        1701,
+        924
+      ],
+      "sha256": "e4ebe643f421865d07804984b9227e13d8ed1b545d3377bdd8baeffa4325d9b6",
+      "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-bb8675aa-2d73-4817-ac62-5743f458aac1.png"
+    }
+  ],
+  "new_capture": {
+    "source": "sources/freight-stop.png",
+    "log": "sources/freight-stop.log",
+    "exit_code": 0,
+    "dimensions": [
+      1920,
+      1043
+    ],
+    "sha256": "7989d17076e3ada40132bd4abf0984b0218dfd0ab8970e6f1562b03eff730279",
+    "command": [
+      "target/release/game",
+      "--study-scene",
+      "valley",
+      "--render-look",
+      "clear-contrast",
+      "--visual-time",
+      "0.42",
+      "--flycam",
+      "--lock-camera",
+      "--camera-altitude",
+      "2.2",
+      "--camera-pitch=-0.035",
+      "--look=0.8",
+      "--aa",
+      "taa",
+      "--wind",
+      "0",
+      "--frames",
+      "1200",
+      "--window",
+      "1920x1080",
+      "--screenshot",
+      "docs/research/veyra-style/sources/freight-stop.png"
+    ],
+    "environment": {
+      "XDG_CONFIG_HOME": "/tmp/veyra-style-config"
+    },
+    "settings": "(values: {\"settings.fov\": 60.0, \"settings.foliage_distance\": 100.0, \"settings.show_hud\": false})",
+    "notes": [
+      "Display access required an unsandboxed game launch.",
+      "A grove candidate was captured first but rejected because nearby branches obscured the scene; unused capture removed."
+    ]
+  },
+  "notes": [
+    "Concept paintovers, not renders of implemented game assets.",
+    "Natural layout follows source screenshots, with some generated detail drift.",
+    "The waterfront edit reinterprets water, shoreline and mountain detail; it does not prescribe renderer changes."
+  ]
+}

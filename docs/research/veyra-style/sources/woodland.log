@@ -1,0 +1,40 @@
+2026-09-13T07:15:01.787551Z  INFO bevy_diagnostic::system_information_diagnostics_plugin::internal: SystemInfo { os: "Linux (Ubuntu 24.04)", kernel: "6.8.0-139-generic", cpu: "13th Gen Intel(R) Core(TM) i9-13900KF", core_count: "24", memory: "62.6 GiB" }
+2026-09-13T07:15:01.842313Z  INFO bevy_render::renderer: AdapterInfo { name: "NVIDIA GeForce RTX 4090", vendor: 4318, device: 9860, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "595.84", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+2026-09-13T07:15:02.452609Z  INFO gilrs_core::platform::platform::gamepad: Gamepad /dev/input/event4 (Thustmaster Joystick - HOTAS Warthog) connected.
+2026-09-13T07:15:02.452773Z  INFO gilrs_core::platform::platform::gamepad: Gamepad /dev/input/event12 (Microsoft X-Box 360 pad) connected.
+2026-09-13T07:15:02.452918Z  WARN gilrs::gamepad: No mapping found for UUID 03000000-4f04-0000-0204-000011010000
+	Default mapping will be used.
+2026-09-13T07:15:02.456185Z  INFO strata_client::ui: settings file path=/tmp/veyra-style-config/sci-fi-scrolls/settings.ron
+2026-09-13T07:15:02.462775Z  INFO bevy_pbr::cluster: GPU clustering is supported on this device.
+2026-09-13T07:15:02.462795Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-09-13T07:15:02.463168Z  INFO bevy_winit::system: Creating new window sci-fi-scrolls (70v0)
+2026-09-13T07:15:02.467655Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
+2026-09-13T07:15:02.479307Z  INFO bevy_input::gamepad: Gamepad 666v0 connected.
+2026-09-13T07:15:02.479334Z  INFO bevy_input::gamepad: Gamepad 667v0 connected.
+2026-09-13T07:15:02.519032Z  INFO strata_sim::load: loading the world root=./apps/game/../../assets seed=42
+2026-09-13T07:15:03.121862Z  WARN bevy_render::view::window: Couldn't get swap chain texture after configuring. Cause: 'Outdated'
+2026-09-13T07:15:03.149605Z  INFO strata_sim::load: world ready biomes=9 materials=6
+2026-09-13T07:15:03.187861Z  INFO strata_atmosphere::study: installed study fog x=-2518.0 y=140.62753295898438 z=-37078.0 density=0.017999999225139618
+2026-09-13T07:15:03.188430Z  INFO strata_terrain::material: terrain layer 0: strata:forest_floor (forest_floor)
+2026-09-13T07:15:03.188455Z  INFO strata_terrain::material: terrain layer 1: strata:grass (grass)
+2026-09-13T07:15:03.188462Z  INFO strata_terrain::material: terrain layer 2: strata:gravel (gravel)
+2026-09-13T07:15:03.188468Z  INFO strata_terrain::material: terrain layer 3: strata:rock (rock)
+2026-09-13T07:15:03.188477Z  INFO strata_terrain::material: terrain layer 4: strata:sand (sand)
+2026-09-13T07:15:03.188483Z  INFO strata_terrain::material: terrain layer 5: strata:snow (snow)
+2026-09-13T07:15:03.191258Z  INFO game: flycam at (-2518, 143, -37078)
+2026-09-13T07:15:03.191807Z  INFO strata_foliage: foliage cells=0 blades=0 plants=0 entities=0 in_flight=0 placed=0 last_place_ms=0.0 collect_ms=0.0017559999832883477 apply_ms=0.043616000562906265 upload_ms=0.0 uploaded_bytes=0 spawned=0 despawned=0 cache_hits=0 resident_cpu_bytes=0 resident_grass_bytes=0 retiring_grass_bytes=0
+2026-09-13T07:15:03.640572Z  INFO strata_terrain::material: terrain material ready: 6 layers
+2026-09-13T07:15:04.282733Z  WARN bevy_pbr::prepass: The default normal prepass expects the mesh to have vertex normal attributes.
+2026-09-13T07:15:05.317252Z  INFO strata_foliage: foliage cells=146 blades=541814 plants=0 entities=438 in_flight=4 placed=146 last_place_ms=11.25245189666748 collect_ms=0.945372998714447 apply_ms=0.05334499850869179 upload_ms=0.7920230031013489 uploaded_bytes=191472 spawned=12 despawned=0 cache_hits=0 resident_cpu_bytes=14204928 resident_grass_bytes=8669024 retiring_grass_bytes=0
+2026-09-13T07:15:05.494197Z  INFO strata_client::stats: 31 fps, avg 32.0 ms, p50 20.5 ms, p95 86.2 ms, p99 359.0 ms, worst 359.0 ms, gpu 3.4 ms, hitches 8 | regions 576 (72 pending, 64 meshing, 512 built) | cam (-2518, 143, -37078) origin (-2518, 143, -37078)
+2026-09-13T07:15:07.437397Z  INFO strata_foliage: foliage cells=323 blades=1163508 plants=2475 entities=7884 in_flight=7 placed=653 last_place_ms=8.836299896240234 collect_ms=0.390716016292572 apply_ms=0.6829230189323425 upload_ms=0.0 uploaded_bytes=0 spawned=600 despawned=0 cache_hits=0 resident_cpu_bytes=33035264 resident_grass_bytes=18616128 retiring_grass_bytes=0
+2026-09-13T07:15:07.505401Z  INFO strata_client::stats: 98 fps, avg 10.2 ms, p50 6.4 ms, p95 21.1 ms, p99 34.5 ms, worst 130.9 ms, gpu 4.3 ms, hitches 9 | regions 798 (0 pending, 0 meshing, 798 built) | cam (-2518, 143, -37078) origin (-2518, 143, -37078)
+2026-09-13T07:15:09.436695Z  INFO strata_foliage: foliage cells=323 blades=1163508 plants=106282 entities=35885 in_flight=7 placed=1226 last_place_ms=9.41180419921875 collect_ms=0.7656529545783997 apply_ms=0.050953999161720276 upload_ms=0.0 uploaded_bytes=0 spawned=29 despawned=0 cache_hits=0 resident_cpu_bytes=37480448 resident_grass_bytes=18616128 retiring_grass_bytes=0
+2026-09-13T07:15:09.528097Z  INFO strata_client::stats: 117 fps, avg 8.5 ms, p50 7.8 ms, p95 17.5 ms, p99 21.5 ms, worst 21.7 ms, gpu 5.3 ms, hitches 9 | regions 798 (0 pending, 0 meshing, 798 built) | cam (-2518, 143, -37078) origin (-2518, 143, -37078)
+2026-09-13T07:15:11.441921Z  INFO strata_foliage: foliage cells=323 blades=1163508 plants=155881 entities=46697 in_flight=5 placed=1872 last_place_ms=9.485873222351074 collect_ms=0.5184240341186523 apply_ms=0.04538000002503395 upload_ms=0.0 uploaded_bytes=0 spawned=40 despawned=0 cache_hits=0 resident_cpu_bytes=41943040 resident_grass_bytes=18616128 retiring_grass_bytes=0
+2026-09-13T07:15:11.543452Z  INFO strata_client::stats: 118 fps, avg 8.5 ms, p50 7.8 ms, p95 16.7 ms, p99 19.9 ms, worst 21.6 ms, gpu 4.9 ms, hitches 9 | regions 798 (0 pending, 0 meshing, 798 built) | cam (-2518, 143, -37078) origin (-2518, 143, -37078)
+2026-09-13T07:15:13.447988Z  INFO strata_foliage: foliage cells=323 blades=1163508 plants=195809 entities=55662 in_flight=0 placed=2403 last_place_ms=8.87265396118164 collect_ms=0.5840780138969421 apply_ms=0.016739999875426292 upload_ms=0.0 uploaded_bytes=0 spawned=0 despawned=0 cache_hits=0 resident_cpu_bytes=45595648 resident_grass_bytes=18616128 retiring_grass_bytes=0
+2026-09-13T07:15:13.574236Z  INFO strata_client::stats: 118 fps, avg 8.5 ms, p50 7.9 ms, p95 15.8 ms, p99 20.4 ms, worst 23.6 ms, gpu 5.2 ms, hitches 9 | regions 798 (0 pending, 0 meshing, 798 built) | cam (-2518, 143, -37078) origin (-2518, 143, -37078)
+2026-09-13T07:15:15.181611Z  INFO game: capturing frame 1200 to docs/research/veyra-style/sources/woodland.png
+2026-09-13T07:15:15.233474Z  INFO bevy_render::view::window::screenshot: Screenshot saved to docs/research/veyra-style/sources/woodland.png
+2026-09-13T07:15:15.237928Z  INFO game: done after 1206 frames with 798 regions loaded, exiting

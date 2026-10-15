@@ -1,0 +1,11 @@
+// A small bag. In one of a pack's bag slots it opens six cells; it cannot
+// be taken out again while any of them holds a stack. No maker of
+// equipment makes bags, so the card reads the dealer's.
+(
+    id: "veyra:bag.field_satchel",
+    name: "Field satchel",
+    maker: "the dealer",
+    kind: Bag(cells: 6),
+    stack: 1,
+    icon: (shape: Cube, color: "#FFB454", symbol: Some("veyra:icon.equipment.pack")),
+)

@@ -1,0 +1,18 @@
+[package]
+name = "prop-capacity"
+description = "The world slice plan's Phase 8 capacity test: baked 15k-triangle trees at forest density."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+bevy = { workspace = true, features = ["default", "png"] }
+ashlar-bevy.workspace = true
+veyra-flora.workspace = true
+clap.workspace = true
+
+[lints]
+workspace = true

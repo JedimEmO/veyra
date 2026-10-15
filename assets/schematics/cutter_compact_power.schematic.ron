@@ -1,0 +1,23 @@
+// The `cutter_compact_power` part (ticket 0010, step 3). Taught by Edges 4 of the Weaponsmith.
+// Read by `strata_registry::schematic`; in no world version and no handshake.
+(
+    id: "veyra:schematic.cutter_compact_power",
+    makes: "veyra:module.cutter_compact_power",
+    complexity: 2,
+    profession: Some("weaponsmith.edges.4"),
+    licence: Some("veyra:maker.bracken"),
+    fixture: None,
+    slots: [
+        (id: "conductor", name: "Conductor", takes: Class("strata:conductor"), units: 10),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "capacity", from: [
+            (slot: "conductor", stat: Attribute(Conductivity), weight: 0.6),
+            (slot: "conductor", stat: Attribute(Purity), weight: 0.4),
+        ]),
+        (line: "equip_time", from: [
+            (slot: "conductor", stat: Light(Density), weight: 1.0),
+        ]),
+    ],
+)

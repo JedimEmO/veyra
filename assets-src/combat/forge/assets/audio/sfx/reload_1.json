@@ -1,0 +1,37 @@
+{
+  "schema": 2,
+  "kind": "sfx",
+  "name": "reload_1",
+  "prompt": "reloading a sci-fi energy carbine: magazine release click, a cartridge sliding out, a new one seated with a firm clack and a rising electric charge whine",
+  "tags": [],
+  "created": "2026-10-01",
+  "created_by": "agent:claude",
+  "provenance": "recorded",
+  "rig": null,
+  "generator": {
+    "tool": "moss_sound_effect",
+    "model": "OpenMOSS-Team/MOSS-SoundEffect-v2.0",
+    "seed": 15279409,
+    "duration_s": 1.4,
+    "steps": 100,
+    "cfg": 4.0
+  },
+  "source": {
+    "path": null,
+    "sha256": null,
+    "skeleton": null
+  },
+  "recipe": null,
+  "measured": {
+    "frames": null,
+    "fps": null,
+    "duration_s": 1.1154791,
+    "avg_speed_mps": null,
+    "root_motion": null,
+    "mesh": null
+  },
+  "body": null,
+  "events": null,
+  "content_hash": "sha256:ac5afcfd028948ee947666eb5557f614bbbc38cacc32f6b53fe3ee39bf721c68",
+  "note": "Game ships this levelled copy. Reproduce with python3 tools/combat_audio.py; recipe and hashes: assets/audio/combat/levelling.json. Original render and generator record: assets-src/combat/forge/assets-src/sfx/takes/reload_1.wav."
+}

@@ -1,0 +1,28 @@
+// What deeds weigh and what a stance does (ticket 0012, step 3). A deed's
+// weight is signed: against a faction negative, for it positive. The sum,
+// halved every `half_life_h` played hours, plus where the household started
+// with the faction, is read against the bands. None of it is ever shown.
+(
+    weights: (
+        // A unit a cycle of sampling on a concession without a lease.
+        worked_concession: -0.5,
+        worked_reserve: -1.0,
+        took_past_share: -0.25,
+        // A harvester planted without leave.
+        planted: -5.0,
+        // A credit paid at its board: a thousand credits is one point.
+        sold_per_credit: 0.001,
+        cleared_camp: 5.0,
+        // A posting collected at its holder's board (ticket 0012, step 4b).
+        job_done: 4.0,
+        // Its people: for the step that gives it people.
+        hurt: -2.0,
+        killed: -8.0,
+    ),
+    // A camp within this of a holding of a faction is a camp near its ground.
+    camp_reach_m: 6000.0,
+    half_life_h: 24.0,
+    bands: (welcoming_at: 5.0, hostile_at: -10.0),
+    welcoming: (pays: 1.05, sells: 0.95),
+    wary: (pays: 1.0, sells: 1.0),
+)

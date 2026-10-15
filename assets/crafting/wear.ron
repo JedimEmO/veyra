@@ -1,0 +1,34 @@
+// How things wear and what a repair kit restores (docs/design/crafting.md,
+// 4.6). Read by `strata_registry::wear` (`WearRules`); in no world version
+// and no handshake. Condition is whole points, costs are thousandths of a
+// point, so the sim's arithmetic is integer.
+(
+    version: 1,
+    // Condition runs from 0 to this.
+    full: 1000,
+    // At or above this an item performs as made; below it its lines slide.
+    slide_below: 250,
+    // The HUD shows the weapon's bar only below this.
+    show_below: 500,
+    // What one shot and one cut cost the weapon in hand, in thousandths of
+    // a point, at durability 500.
+    shot: 2000,
+    cut: 3000,
+    // Points off everything carried that has a condition when its bearer
+    // goes down.
+    down: 150,
+    // A cost is multiplied by (durability_at_zero - line) / 1000 with line
+    // the item's durability line: 1.5 at 0, 1.0 at 500, 0.5 at 1000. An
+    // item with no durability line reads 500.
+    durability_at_zero: 1500,
+    // The record's condition moves in whole steps of this many points, so a
+    // save is not written a shot.
+    step: 25,
+    // What the weapon's own row is multiplied by at condition 0. Only
+    // properties the fight has a number for. HitDamage is a melee weapon's
+    // cuts only; a gun's bolts do not soften with wear.
+    worst: { RepeatInterval: 1.25, ReloadTime: 1.25, HitDamage: 0.8 },
+    // What one kit restores away from a workbench: at_zero + per_quality *
+    // restore_line / 1000. At a workbench one kit restores everything.
+    field: (at_zero: 400, per_quality: 600),
+)

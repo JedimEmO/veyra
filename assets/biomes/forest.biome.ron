@@ -1,0 +1,19 @@
+// Wet temperate hills. Rolls more than the plains so the canopy has
+// something to sit on.
+(
+    id: "strata:forest",
+    name: "Forest",
+    climate: (
+        temperature: (min: 0.25, max: 0.75),
+        moisture: (min: 0.5, max: 1.0),
+        elevation: (min: 0.55, max: 0.7),
+    ),
+    relief: (kind: "hills", amplitude_m: 70.0, wavelength_m: 1600.0, octaves: 4, erosion: 0.4),
+    surface: (material: "strata:forest_floor", slope_material: "strata:rock"),
+    tint: (0.16, 0.42, 0.18),
+    // The ground's palette colour (ticket 0006): moss over litter, a soft olive green.
+    ground: (0.34, 0.46, 0.22),
+    // The woodland's green-gold: warm light, green leaves and shade
+    // opened a little so the canopy does not go to mud.
+    grade: (temperature: 0.004, tint: -0.012, saturation: 1.06, lift: 0.002),
+)

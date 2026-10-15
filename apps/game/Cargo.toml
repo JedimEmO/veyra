@@ -1,0 +1,79 @@
+[package]
+name = "game"
+description = "The sci-fi-scrolls slice: a window over the world, or `--headless` for the simulation alone."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+# The client defaults; the replication adapter for `--connect` is the `net`
+# feature, which a browser build leaves out.
+strata = { workspace = true, features = ["client", "dev", "ui"] }
+# Named here as well as in the target tables below because Bevy's derives look
+# for the crate in `[dependencies]` alone. `png` is for the screenshot writer.
+bevy = { workspace = true, features = ["png"] }
+clap = { workspace = true }
+tracing = { workspace = true }
+# The household file.
+serde = { workspace = true }
+ron = { workspace = true }
+
+veyra-buildings.workspace = true
+# The tree library, read before the app runs for the handshake.
+strata-flora.workspace = true
+# Buildings arrive baked from `just content`; the game reads their proxies with
+# plain `ashlar` and draws them through `ashlar-bevy`, and links no kernel.
+ashlar.workspace = true
+ashlar-bevy.workspace = true
+anyhow.workspace = true
+# The stock's click and its menu, which the scripted walk sends the sim as
+# the stores screen does. No Bevy in it, and already in the graph under the
+# sim.
+slotted-model = { workspace = true }
+
+# A windowed 3D app needs the renderer, winit and PBR, so this is the one
+# place that takes Bevy's default features: `default` is an ordinary
+# feature name, which is how a member gets them back through the workspace
+# entry.
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+bevy = { workspace = true, features = ["default"] }
+
+# The browser's Bevy is `default` less what a tab has no use for: WebGPU in
+# place of WebGL2 (the terrain's storage buffers need it), no worker threads
+# (`multi_threaded`), no gilrs, X11 or Wayland.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+bevy = { workspace = true, features = [
+    "default_app", "2d_bevy_render", "3d_bevy_render", "ui_bevy_render",
+    "scene", "picking", "bevy_ui_widgets", "std", "bevy_winit", "default_font",
+    "custom_cursor", "gamepad", "audio", "webgpu", "web",
+] }
+wasm-bindgen = { workspace = true }
+js-sys = { workspace = true }
+web-sys = { workspace = true, features = ["Window", "Location", "console"] }
+
+# The grounding tests bake the two study buildings themselves, so they need the
+# kernel; the binary never does, which `just server-check` asserts.
+[dev-dependencies]
+ashlar-manifold.workspace = true
+tempfile.workspace = true
+
+[lints]
+workspace = true
+
+[features]
+# `--connect`: the renet and replicon adapter. On by default; a wasm build
+# turns defaults off, so no socket crate is in its graph.
+default = ["net", "pcss"]
+net = ["strata/net-replicon"]
+# Soft shadows from the sun, which the browser's shader compiler rejects.
+pcss = ["strata/pcss"]
+# The feature set the wasm build names (`--no-default-features --features
+# web`): no socket crate, no soft shadows. The entry itself is gated on the
+# target alone.
+web = []
+# `cargo run --release -p game --features trace` writes a Chrome trace of
+# every system and render phase to `trace-*.json`, for finding a frame's cost.
+trace = ["bevy/trace_chrome"]

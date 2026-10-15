@@ -1,0 +1,29 @@
+// The `blade_balanced_grip` part of `crates/veyra-weapons` (ticket 0010, step 3): inset weights: a cut costs less stamina and lands a little softer. A lighter metal makes the stamina, a harder one the posture.
+// Its effects are the module's factors there, each driven by the line of its
+// name; a part is made at a bench, never sold. `part` is the module's key,
+// which its baked picture is filed under.
+(
+    id: "veyra:module.blade_balanced_grip",
+    name: "Blade balanced grip",
+    maker: "Morrow",
+    kind: Module(
+        slot: "grip",
+        fits: ["veyra:weapon.service_blade"],
+        part: "blade_balanced_grip",
+        effects: [
+            (property: AttackStamina, factor: 0.9, line: "attack_stamina"),
+            (property: HitPosture, factor: 0.94, line: "hit_posture"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "attack_stamina", name: "Stamina"),
+        (id: "hit_posture", name: "Posture"),
+    ],
+    icon: (
+        shape: Ingot,
+        color: "#B9C4CF",
+        picture: Some("field_blade/grip.blade_balanced_grip.png"),
+        symbol: Some("veyra:icon.module.grip"),
+    ),
+)

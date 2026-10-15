@@ -1,0 +1,32 @@
+[package]
+name = "strata-worldgen"
+description = "Noise stack, climate fields, biome classification and the height sampler for sci-fi-scrolls. No Bevy."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+strata-core = { workspace = true }
+strata-registry = { workspace = true }
+noise = { workspace = true }
+serde = { workspace = true }
+# Pure-Rust sin and cos for the one transcendental in the stack, so the
+# world is the same bits on every platform (crate docs).
+libm = { workspace = true }
+# The world's version hashes its parameters and registries as RON text, as
+# the tree library's does, so it is the same on every platform and build.
+ron = { workspace = true }
+# One warning, once a world: a sample that met a land mass no one had baked
+# (ADR 0010; the game and the server prepare the water before they sample).
+tracing = { workspace = true }
+
+[dev-dependencies]
+proptest = { workspace = true }
+insta = { workspace = true }
+rayon = { workspace = true }
+pretty_assertions = { workspace = true }
+
+[lints]
+workspace = true

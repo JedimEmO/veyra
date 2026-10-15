@@ -1,0 +1,19 @@
+// Temperate lowland. The default land biome: a wide climate window so it
+// wins wherever nothing more specific fits.
+(
+    id: "strata:plains",
+    name: "Plains",
+    climate: (
+        temperature: (min: 0.28, max: 0.7),
+        moisture: (min: 0.1, max: 0.55),
+        elevation: (min: 0.55, max: 0.7),
+    ),
+    relief: (kind: "plains", amplitude_m: 18.0, wavelength_m: 1200.0, octaves: 3),
+    surface: (material: "strata:grass", slope_material: "strata:gravel"),
+    tint: (0.48, 0.66, 0.30),
+    // The ground's palette colour (ticket 0006): a soft meadow green warmed towards gold.
+    ground: (0.56, 0.66, 0.33),
+    // Serene open land: gold in the light and a touch of green in the
+    // grass, a little more colour than neutral.
+    grade: (temperature: 0.005, tint: -0.004, saturation: 1.05),
+)

@@ -1,0 +1,29 @@
+// The `glaive_broad_edge` part of `crates/veyra-weapons` (ticket 0010, step 3): a wider head: harder cuts that cost more stamina. A harder metal makes the damage, a lighter one the stamina.
+// Its effects are the module's factors there, each driven by the line of its
+// name; a part is made at a bench, never sold. `part` is the module's key,
+// which its baked picture is filed under.
+(
+    id: "veyra:module.glaive_broad_edge",
+    name: "Glaive broad edge",
+    maker: "Morrow",
+    kind: Module(
+        slot: "edge",
+        fits: ["veyra:weapon.pier_glaive"],
+        part: "glaive_broad_edge",
+        effects: [
+            (property: HitDamage, factor: 1.08, line: "hit_damage"),
+            (property: AttackStamina, factor: 1.08, line: "attack_stamina"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "hit_damage", name: "Damage"),
+        (id: "attack_stamina", name: "Stamina"),
+    ],
+    icon: (
+        shape: Slab,
+        color: "#B4BFB0",
+        picture: Some("reach_glaive/edge.glaive_broad_edge.png"),
+        symbol: Some("veyra:icon.crafting.component"),
+    ),
+)

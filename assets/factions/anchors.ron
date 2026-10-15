@@ -1,0 +1,21 @@
+// Authored holders: a settlement that keeps its holder in every world.
+// Port Serein is Pelagic's company town, and its board, makers and trees
+// say so already.
+(
+    anchors: [
+        (
+            settlement: "strata:port_serein",
+            kind: "strata:corporate",
+            name: "Pelagic Works",
+            colour: "#E8365D",
+            reach_m: 9000.0,
+            // Krot Station, two kilometres out, is the company's too.
+            core_m: 3500.0,
+            // The board in Port Serein is the company's, and the company
+            // employs the household: it starts welcoming (a score over the
+            // deed bands' welcoming line).
+            buyer: Some("veyra:buyer.pelagic_works"),
+            start: 8.0,
+        ),
+    ],
+)

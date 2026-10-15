@@ -1,0 +1,41 @@
+// The carbine a character holds. Its name and maker are the patrol
+// carbine's in `crates/veyra-weapons` (key `patrol_carbine`, Vigil), and
+// its family is the row of `assets/combat/weapons.ron` it fights by: the
+// item is which carbine, the family is how any carbine shoots. The lines
+// are the qualities a crafted one will vary by; a bought one reads 500 on
+// each. Read by `strata_registry::item`.
+//
+// The mounts are the six the chassis has there (`Weapon::slots`), and
+// `chassis` is its key, which the baked pictures are filed under. Sight,
+// feed and grip are open on every example; the rest open at a threshold on
+// the moddability line (docs/design/crafting.md, 4.2), so a bought carbine,
+// at 500, has the stock as well and four open in all. A shut mount keeps
+// the part it was built with.
+(
+    id: "veyra:weapon.patrol_carbine",
+    name: "Vigil patrol carbine",
+    maker: "Vigil",
+    kind: Weapon(
+        family: "Carbine",
+        chassis: "patrol_carbine",
+        mounts: [
+            (slot: "sight"),
+            (slot: "feed"),
+            (slot: "grip"),
+            (slot: "stock", opens_at: Some(400)),
+            (slot: "muzzle", opens_at: Some(600)),
+            (slot: "fore_end", opens_at: Some(800)),
+        ],
+        // The action line moves the carbine's own interval: a bought one
+        // (500) fires at 1.10 of the table's, one made to 750 matches it,
+        // and the best is a tenth quicker.
+        signature: Some((line: "interval", property: RepeatInterval, worst: 1.30, best: 0.90)),
+    ),
+    stack: 1,
+    lines: [
+        (id: "interval", name: "Action"),
+        (id: "durability", name: "Durability"),
+        (id: "moddability", name: "Moddability"),
+    ],
+    icon: (shape: Rod, color: "#C6D0DD", picture: Some("patrol_carbine/whole.png"), symbol: Some("veyra:icon.weapon.carbine")),
+)

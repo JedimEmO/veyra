@@ -1,0 +1,56 @@
+[package]
+name = "strata"
+description = "Facade for sci-fi-scrolls: StrataPlugins::{headless, client}, prelude and feature flags."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[features]
+default = ["client", "dev", "ui"]
+# The simulation, streaming, physics and the net port, with no renderer. This is the
+# base every build has; the flag exists so `--no-default-features --features
+# headless` reads as what it is, and `just server-check` names it.
+headless = []
+# Terrain, atmosphere, cameras and input: everything that needs a window and
+# a GPU. Off for a dedicated server, and `just server-check` asserts that
+# turning it off drops `bevy_render` and friends from the graph.
+client = ["dep:strata-terrain", "dep:strata-atmosphere", "dep:strata-foliage", "dep:strata-client"]
+# Wireframe toggle, time-of-day scrub, the frame statistics log. Client-side
+# by nature.
+dev = ["client", "strata-client?/dev"]
+# The slotted UI: the glass theme, the pause and settings screens and the
+# HUD layers (the debug statistics, the reticle, the hotbar). Passed through
+# to `strata-client`, whose own default it is; the facade turns the
+# client's defaults off so `client` alone is a renderer with no screens.
+ui = ["client", "strata-client?/ui"]
+# The bevy_replicon adapter for the net port: a renet UDP server and
+# client. Off by default so the port stays the only network dependency of a
+# build that does not serve or connect; the dedicated server and
+# `game --connect` turn it on. No renderer in it.
+net-replicon = ["dep:strata-net-replicon"]
+# Soft shadows from the sun; the browser build leaves them out.
+pcss = ["client", "strata-atmosphere?/pcss"]
+
+[dependencies]
+strata-core = { workspace = true }
+strata-registry = { workspace = true }
+strata-worldgen = { workspace = true }
+# Where fog lies: Bevy-free, so the headless build and the server have it.
+strata-weather = { workspace = true }
+strata-sim = { workspace = true }
+strata-stream = { workspace = true }
+strata-physics = { workspace = true }
+strata-net = { workspace = true }
+strata-net-replicon = { workspace = true, optional = true }
+strata-terrain = { workspace = true, optional = true }
+strata-atmosphere = { workspace = true, optional = true }
+strata-foliage = { workspace = true, optional = true }
+strata-client = { workspace = true, optional = true }
+# Only what the headless group needs. The render crates bring their own
+# Bevy features in through the `client` feature's optional dependencies.
+bevy = { workspace = true, features = ["std", "bevy_state"] }
+
+[lints]
+workspace = true

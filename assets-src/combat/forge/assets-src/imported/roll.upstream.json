@@ -1,0 +1,195 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "roll",
+  "prompt": "A person does a fast combat forward roll over their shoulder, tucking tight, and comes up quickly into a low ready fighting stance.",
+  "tags": [
+    "sample"
+  ],
+  "created": "2026-08-23",
+  "created_by": "human",
+  "provenance": "reconstructed",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": null,
+    "commit": null,
+    "model": null,
+    "seed": null,
+    "duration_s": null,
+    "cfg": null,
+    "sample": null,
+    "sweep_take": "gen_roll.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/roll.npz",
+    "sha256": "sha256:d668e874a620f8e89ecbda90c8a7f8bad3434bfacf75a4129b8748e04e2fb766",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 0.4,
+    "trim_end_s": 0.25,
+    "auto_trim": null,
+    "in_place": "detrend",
+    "y_mode": "off",
+    "loop": false,
+    "loop_blend_s": 0.0,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": null,
+    "clip": "roll"
+  },
+  "measured": {
+    "frames": 27,
+    "fps": 20.0,
+    "duration_s": 1.3,
+    "avg_speed_mps": 1.6608754,
+    "root_motion": {
+      "net_m": [
+        1.367,
+        -1.64
+      ],
+      "direction_deg": 19.275,
+      "peak_speed_mps": 2.713,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          0.013,
+          -0.006
+        ],
+        [
+          0.033,
+          -0.017
+        ],
+        [
+          0.06,
+          -0.033
+        ],
+        [
+          0.095,
+          -0.058
+        ],
+        [
+          0.141,
+          -0.096
+        ],
+        [
+          0.191,
+          -0.15
+        ],
+        [
+          0.24,
+          -0.222
+        ],
+        [
+          0.289,
+          -0.311
+        ],
+        [
+          0.345,
+          -0.411
+        ],
+        [
+          0.411,
+          -0.519
+        ],
+        [
+          0.485,
+          -0.631
+        ],
+        [
+          0.566,
+          -0.74
+        ],
+        [
+          0.646,
+          -0.849
+        ],
+        [
+          0.729,
+          -0.954
+        ],
+        [
+          0.805,
+          -1.046
+        ],
+        [
+          0.861,
+          -1.122
+        ],
+        [
+          0.897,
+          -1.178
+        ],
+        [
+          0.933,
+          -1.228
+        ],
+        [
+          0.982,
+          -1.279
+        ],
+        [
+          1.039,
+          -1.331
+        ],
+        [
+          1.095,
+          -1.375
+        ],
+        [
+          1.153,
+          -1.418
+        ],
+        [
+          1.215,
+          -1.464
+        ],
+        [
+          1.276,
+          -1.515
+        ],
+        [
+          1.328,
+          -1.574
+        ],
+        [
+          1.367,
+          -1.64
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [
+    {
+      "t": 0.2,
+      "t_src": 0.6,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 1.3,
+      "t_src": 1.7,
+      "name": "footstep_l",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 1.3,
+      "t_src": 1.7,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    }
+  ],
+  "content_hash": "sha256:874106d4e81dc8fedf9bee9a21f877b41e4c35c9b509a6a40a8f683e552312c4",
+  "note": "migrated from the old repository's gen_roll (sweep file a_person_does_a_fast_combat__d2_c2_s0_6.npz; no take record survives, so seed, cfg and duration are unknown); trimmed to the tuck-roll-rise core; detrend keeps the roll's surge and removes the net drift"
+}

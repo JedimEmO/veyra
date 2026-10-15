@@ -1,0 +1,32 @@
+// The patrol carbine's extended magazine (crafting.md, 5.1 and 5.5): a cell
+// core, a harness, 40 units of light alloy ore for the casing and a seal
+// set. Capacity is mostly the core's charge density; handling is how light
+// and how strong the casing is, so a dense alloy makes a slow reload. The
+// seal set is flat and weighs nothing. What the lines then do on a carbine
+// is the module's own effects (`assets/items/patrol_extended_feed.item.ron`)
+// under the bands of `assets/crafting/fitting.ron`.
+(
+    id: "veyra:schematic.patrol_extended_feed",
+    makes: "veyra:module.patrol_extended_feed",
+    complexity: 2,
+    profession: Some("weaponsmith.fittings.2"),
+    licence: Some("veyra:maker.vigil"),
+    fixture: Some("cells"),
+    slots: [
+        (id: "core", name: "Cell core", takes: Component("veyra:component.cell_core"), count: 1),
+        (id: "harness", name: "Harness", takes: Component("veyra:component.harness"), count: 1),
+        (id: "casing", name: "Casing", takes: Type("strata:light_alloy_ore"), units: 40),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "capacity", from: [
+            (slot: "core", stat: Line("charge_density"), weight: 0.60),
+            (slot: "harness", stat: Line("conductance"), weight: 0.25),
+            (slot: "casing", stat: Attribute(Purity), weight: 0.15),
+        ]),
+        (line: "reload_time", from: [
+            (slot: "casing", stat: Light(Density), weight: 0.60),
+            (slot: "casing", stat: Attribute(Strength), weight: 0.40),
+        ]),
+    ],
+)

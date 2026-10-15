@@ -1,0 +1,70 @@
+// The starting household: the arrival, who the player plays first and
+// who speaks for everyone, and the characters that can join the bench in
+// this slice. A recruit joins free at a bench place (a terminal); the
+// design's ways in (the rescue, the partner, the hire) are future work.
+//
+// The sheets are checked against the graph like any authored sheet
+// (boxes exist, chains hold, under budget); the XP is what the boxes
+// imply they earned. Tints are indices into the view's palette, one per
+// member, so a swap is visible on the body. Loaded by
+// `strata_registry::progression`; the game writes the household it
+// builds from this to `--household` (default `scratch/household.ron`)
+// and reads that back, so this file is only the first day.
+(
+    version: 1,
+    arrival: (
+        name: "Frontier ranger",
+        tint: 0,
+        sheet: (
+            learned: ["blade.novice", "marksman.novice", "marksman.carbine.1"],
+            xp: {Ranged: 150},
+        ),
+    ),
+    recruits: [
+        // A blade-leaning fighter who is also the household's smith: the
+        // boxes below the Weaponsmith's are the ones its prerequisites name,
+        // so he also certifies for the pistol and the carbine and shoots
+        // both (and reloads the carbine quicker).
+        // The chain and the quicker dodge cancel.
+        (
+            name: "Tovan Reyes",
+            tint: 1,
+            sheet: (
+                learned: [
+                    "blade.novice", "blade.cuts.1", "blade.cuts.2", "blade.footwork.1",
+                    "marksman.novice", "marksman.carbine.1", "marksman.carbine.2",
+                    "fabricator.novice", "fabricator.fixtures.1", "fabricator.fixtures.2", "fabricator.fixtures.3",
+                    "fabricator.materials.1",
+                    "weaponsmith.novice", "weaponsmith.frames.1", "weaponsmith.frames.2", "weaponsmith.fittings.1",
+                    "weaponsmith.fittings.2", "weaponsmith.tuning.1",
+                ],
+                xp: {Blade: 400, Ranged: 400, Fabrication: 900},
+            ),
+        ),
+        // A pistol marksman: certified on the pistol, with a bigger magazine.
+        // She is also the household's surveyor: the novice, a longer ping and
+        // bands on a deposit's lines.
+        (
+            name: "Ilse Marrow",
+            tint: 2,
+            sheet: (
+                learned: [
+                    "marksman.novice", "marksman.pistol.1", "marksman.pistol.2",
+                    "surveyor.novice", "surveyor.deposits.1", "surveyor.reading.1", "surveyor.stations.1",
+                ],
+                xp: {Ranged: 400, Survey: 150},
+            ),
+        ),
+        // A medic with nothing usable yet: no activity earns medical XP and
+        // the Medic tree is a placeholder, so the bench can show a benched
+        // placeholder tree.
+        (
+            name: "Dr. Anneke Faal",
+            tint: 3,
+            sheet: (
+                learned: ["medic.novice"],
+                xp: {},
+            ),
+        ),
+    ],
+)

@@ -1,0 +1,37 @@
+{
+  "schema": 2,
+  "kind": "sfx",
+  "name": "foot_gravel_2",
+  "prompt": "one single footstep of a boot on loose gravel, soft, close, dry",
+  "tags": [],
+  "created": "2026-10-01",
+  "created_by": "agent:claude",
+  "provenance": "recorded",
+  "rig": null,
+  "generator": {
+    "tool": "moss_sound_effect",
+    "model": "OpenMOSS-Team/MOSS-SoundEffect-v2.0",
+    "seed": 16838,
+    "duration_s": 0.5,
+    "steps": 100,
+    "cfg": 4.0
+  },
+  "source": {
+    "path": null,
+    "sha256": null,
+    "skeleton": null
+  },
+  "recipe": null,
+  "measured": {
+    "frames": null,
+    "fps": null,
+    "duration_s": 0.4931875,
+    "avg_speed_mps": null,
+    "root_motion": null,
+    "mesh": null
+  },
+  "body": null,
+  "events": null,
+  "content_hash": "sha256:00e59e69ba69eda79127da615a2bd33119bcb12bf8500578ca3751a7111dce6e",
+  "note": "Game ships this levelled copy. Reproduce with python3 tools/combat_audio.py; recipe and hashes: assets/audio/combat/levelling.json. Original render and generator record: assets-src/combat/forge/assets-src/sfx/takes/foot_gravel_2.wav."
+}

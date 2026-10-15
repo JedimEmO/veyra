@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "status": "design_proposal_not_runtime",
+  "loadouts": [
+    {
+      "id": "veyra:loadout.rifle_stock",
+      "weapon": "veyra:weapon.burst_rifle",
+      "modules": [],
+      "implants": [],
+      "supplies": [],
+      "purpose": "Unmodified ranged baseline with no implant or supply; all weapon indices are one."
+    },
+    {
+      "id": "veyra:loadout.rifle_patrol",
+      "weapon": "veyra:weapon.burst_rifle",
+      "modules": [
+        "veyra:module.compact_optic"
+      ],
+      "implants": [
+        "veyra:implant.motor_governor"
+      ],
+      "supplies": [
+        {
+          "item": "veyra:supply.field_dressing",
+          "count": 2
+        },
+        {
+          "item": "veyra:supply.shield_reserve_cell",
+          "count": 2
+        }
+      ],
+      "purpose": "Clearer aimed fire and quicker recoil recovery at a readying and sprint cost."
+    },
+    {
+      "id": "veyra:loadout.rifle_sustained",
+      "weapon": "veyra:weapon.burst_rifle",
+      "modules": [
+        "veyra:module.rifle_extended_cell",
+        "veyra:module.rifle_cooled_fore_end"
+      ],
+      "implants": [
+        "veyra:implant.recovery_regulator"
+      ],
+      "supplies": [
+        {
+          "item": "veyra:supply.field_dressing",
+          "count": 2
+        },
+        {
+          "item": "veyra:supply.recovery_ampoule",
+          "count": 2
+        }
+      ],
+      "purpose": "Longer firing run and shorter burst repeat interval; slower reload and aimed movement."
+    },
+    {
+      "id": "veyra:loadout.rifle_workshop",
+      "weapon": "veyra:weapon.burst_rifle",
+      "modules": [
+        "veyra:module.adapted_morrow_optic"
+      ],
+      "implants": [],
+      "supplies": [
+        {
+          "item": "veyra:supply.shield_reserve_cell",
+          "count": 2
+        }
+      ],
+      "purpose": "Cross-maker optic via a visible adapter; preserves burst identity and its receiver."
+    },
+    {
+      "id": "veyra:loadout.pistol_mobile",
+      "weapon": "veyra:weapon.service_pistol",
+      "modules": [
+        "veyra:module.pistol_stable_grip"
+      ],
+      "implants": [
+        "veyra:implant.motor_governor"
+      ],
+      "supplies": [
+        {
+          "item": "veyra:supply.field_dressing",
+          "count": 2
+        },
+        {
+          "item": "veyra:supply.recovery_ampoule",
+          "count": 2
+        }
+      ],
+      "purpose": "A pistol specialist with recoil support; no assumption of weaker sidearm progression."
+    },
+    {
+      "id": "veyra:loadout.precision_scout",
+      "weapon": "veyra:weapon.precision_rifle",
+      "modules": [
+        "veyra:module.precision_long_optic",
+        "veyra:module.precision_compact_feed"
+      ],
+      "implants": [
+        "veyra:implant.motor_governor"
+      ],
+      "supplies": [
+        {
+          "item": "veyra:supply.field_dressing",
+          "count": 2
+        }
+      ],
+      "purpose": "Aimed precision and shorter reload commitment with fewer loaded shots."
+    },
+    {
+      "id": "veyra:loadout.scatter_close",
+      "weapon": "veyra:weapon.scattergun",
+      "modules": [
+        "veyra:module.scatter_extended_feed"
+      ],
+      "implants": [
+        "veyra:implant.recovery_regulator"
+      ],
+      "supplies": [
+        {
+          "item": "veyra:supply.field_dressing",
+          "count": 2
+        },
+        {
+          "item": "veyra:supply.recovery_ampoule",
+          "count": 2
+        }
+      ],
+      "purpose": "A larger close-range reserve at the cost of a longer reload opening."
+    },
+    {
+      "id": "veyra:loadout.commando_lane",
+      "weapon": "veyra:weapon.support_projector",
+      "modules": [
+        "veyra:module.support_cooling_jacket",
+        "veyra:module.support_stable_rest"
+      ],
+      "implants": [
+        "veyra:implant.motor_governor"
+      ],
+      "supplies": [
+        {
+          "item": "veyra:supply.shield_reserve_cell",
+          "count": 2
+        },
+        {
+          "item": "veyra:supply.recovery_ampoule",
+          "count": 2
+        }
+      ],
+      "purpose": "Sustained direct fire with longer setup and slower sprint; no area damage or encounter win claimed."
+    },
+    {
+      "id": "veyra:loadout.blade_runner",
+      "weapon": "veyra:weapon.field_blade",
+      "modules": [
+        "veyra:module.blade_balanced_grip"
+      ],
+      "implants": [
+        "veyra:implant.tendon_assist"
+      ],
+      "supplies": [
+        {
+          "item": "veyra:supply.field_dressing",
+          "count": 2
+        },
+        {
+          "item": "veyra:supply.recovery_ampoule",
+          "count": 2
+        }
+      ],
+      "purpose": "Melee attack stamina is conserved while dodge costs more and each hit has less posture pressure."
+    },
+    {
+      "id": "veyra:loadout.cutter_breaker",
+      "weapon": "veyra:weapon.heavy_cutter",
+      "modules": [
+        "veyra:module.cutter_reinforced_head"
+      ],
+      "implants": [
+        "veyra:implant.tendon_assist",
+        "veyra:implant.recovery_regulator"
+      ],
+      "supplies": [
+        {
+          "item": "veyra:supply.field_dressing",
+          "count": 2
+        },
+        {
+          "item": "veyra:supply.shield_reserve_cell",
+          "count": 2
+        }
+      ],
+      "purpose": "Posture commitment with expensive evasions, longer recovery and reduced stamina capacity."
+    },
+    {
+      "id": "veyra:loadout.baton_control",
+      "weapon": "veyra:weapon.impact_baton",
+      "modules": [
+        "veyra:module.baton_weighted_head"
+      ],
+      "implants": [
+        "veyra:implant.tendon_assist"
+      ],
+      "supplies": [
+        {
+          "item": "veyra:supply.shield_reserve_cell",
+          "count": 2
+        },
+        {
+          "item": "veyra:supply.recovery_ampoule",
+          "count": 2
+        }
+      ],
+      "purpose": "Posture pressure sacrifices damage and reach; not an automatic stun lock."
+    },
+    {
+      "id": "veyra:loadout.blade_stock",
+      "weapon": "veyra:weapon.field_blade",
+      "modules": [],
+      "implants": [],
+      "supplies": [],
+      "purpose": "Unmodified melee baseline with no implant or supply; must be viable without recovery items."
+    },
+    {
+      "id": "veyra:loadout.support_stock",
+      "weapon": "veyra:weapon.support_projector",
+      "modules": [],
+      "implants": [],
+      "supplies": [],
+      "purpose": "Unmodified Commando baseline with no implant, supply or secondary weapon; requires a viable unbraced defensive response."
+    }
+  ]
+}

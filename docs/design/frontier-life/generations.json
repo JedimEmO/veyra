@@ -1,0 +1,108 @@
+{
+  "date": "2026-09-29",
+  "tool": "built-in image_gen",
+  "status": "exploratory proposals for review",
+  "prompts": "prompts.json",
+  "revisions": "revisions.json",
+  "outputs": [
+    {
+      "name": "01-characters",
+      "output": "concepts/01-characters.png",
+      "generated_original": "~/.codex/generated_images/01a0ee84-648c-7cf1-bab0-385d1be49a28/exec-ae009f56-286d-45b8-8c78-9c0e852dda44.png",
+      "mode": "new image",
+      "prompt_name": "01-characters",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "PNG",
+      "sha256": "dd82bc239126df24689a75adce222c3d09bbc71f3de1969084891d840d54f74c",
+      "status": "selected review reference"
+    },
+    {
+      "name": "02-equipment",
+      "output": "concepts/02-equipment.png",
+      "generated_original": "~/.codex/generated_images/01a0ee84-648c-7cf1-bab0-385d1be49a28/exec-464b5b5d-582f-49ff-8e97-40f1edf191b1.png",
+      "mode": "new image",
+      "prompt_name": "02-equipment",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "PNG",
+      "sha256": "eda09dc2aa5df9b7c715ffeaf4afd536c95a1747a71a8902679621583ed4c484",
+      "status": "selected review reference"
+    },
+    {
+      "name": "03-creatures",
+      "output": "concepts/03-creatures.png",
+      "generated_original": "~/.codex/generated_images/01a0ee84-648c-7cf1-bab0-385d1be49a28/exec-93ea97c5-5342-4df9-8145-7cd86a55ab7f.png",
+      "mode": "new image",
+      "prompt_name": "03-creatures",
+      "status": "superseded anatomy draft",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "PNG",
+      "sha256": "380f9e5763f841944fc3bea56c8bf3f048f7fdd73e811896814aedc04461f68c"
+    },
+    {
+      "name": "04-building-families",
+      "output": "concepts/04-building-families.png",
+      "generated_original": "~/.codex/generated_images/01a0ee84-648c-7cf1-bab0-385d1be49a28/exec-1d7dc4f8-d9eb-4f61-8d28-e51571515f04.png",
+      "mode": "new image",
+      "prompt_name": "04-building-families",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "PNG",
+      "sha256": "ca38db982daacc2ab61ded567bebec9ab07fe9e84c028c26b33380f2d1c351fa",
+      "status": "selected review reference"
+    },
+    {
+      "name": "05-production-and-freight",
+      "output": "concepts/05-production-and-freight.png",
+      "generated_original": "~/.codex/generated_images/01a0ee84-648c-7cf1-bab0-385d1be49a28/exec-e03d0718-dd60-4c40-9722-b86170e05b47.png",
+      "mode": "new image",
+      "prompt_name": "05-production-and-freight",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "PNG",
+      "sha256": "0dda725b77a4e484ef39223d2a0ddf8ae7102f37d523e24f2fa4992beb1488c1",
+      "status": "selected review reference"
+    },
+    {
+      "name": "06-frontier-workyard",
+      "output": "concepts/06-frontier-workyard.png",
+      "generated_original": "~/.codex/generated_images/01a0ee84-648c-7cf1-bab0-385d1be49a28/exec-03a5d4b3-ecd1-4494-9c50-41b5ff267c61.png",
+      "mode": "new image",
+      "prompt_name": "06-frontier-workyard",
+      "dimensions": [
+        1774,
+        887
+      ],
+      "format": "PNG",
+      "sha256": "ef8b38b19cf15f7d0d071dd6d6388f3b0bf14ffd0c3354c2f372cbc867760d87",
+      "status": "selected review reference"
+    },
+    {
+      "name": "03-creatures-v2",
+      "output": "concepts/03-creatures-v2.png",
+      "generated_original": "~/.codex/generated_images/01a0ee84-648c-7cf1-bab0-385d1be49a28/exec-fe30b452-ac48-4e7d-b077-694288cf5615.png",
+      "mode": "edit",
+      "edit_target": "concepts/03-creatures.png",
+      "prompt_name": "03-creatures-v2",
+      "status": "selected review reference",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "PNG",
+      "sha256": "9232539efbf867c24d92bf746953a96d107ae0f8cb0a4d692eeb20df14a2ed2f"
+    }
+  ]
+}

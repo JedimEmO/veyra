@@ -1,0 +1,64 @@
+// Port Serein: Pelagic's company town and the settlement's hub, on the
+// hillside west of the bay the spawn looks out on (docs/design/port-serein.md).
+// The frame's +z runs downhill to the water and +x along the shore.
+//
+// The city brings its own ground: the landform below is blended over
+// whatever the world's generator made here, so the generator can change
+// without moving a building. Only the ground past the extent is the world's.
+(
+    id: "strata:port_serein",
+    name: "Port Serein",
+    at: (-400.0, -500.0),
+    // Down the slope towards the north-east, onto the bay.
+    downhill_deg: 50.0,
+    extent: (half_width_m: 320.0, uphill_m: 460.0, downhill_m: 250.0, falloff_m: 140.0),
+    landform: (
+        // The ridge, the processor's shelf, the hillside at about a sixth,
+        // easing to the waterfront, then the bay's floor.
+        profile: [
+            (-600.0, 132.0),
+            (-470.0, 112.0),
+            (-420.0, 104.0),
+            (-340.0, 98.0),
+            (-280.0, 84.0),
+            (0.0, 37.0),
+            (110.0, 16.0),
+            (170.0, 4.0),
+            (200.0, -5.0),
+            (260.0, -14.0),
+            (400.0, -18.0),
+        ],
+        // The bay: the waterfront curves out to headlands at the sides.
+        bay_m: 10.0,
+        spurs: [
+            // The headland the starport and the Exchange stand on.
+            (x_m: 0.0, half_width_m: 160.0, rise_m: 7.0),
+            // The gully the pipelines come down, and the one west of the
+            // Terraces a stream once cut.
+            (x_m: 150.0, half_width_m: 40.0, rise_m: -6.0),
+            (x_m: -215.0, half_width_m: 45.0, rise_m: -5.0),
+        ],
+        relief_m: 4.0,
+        relief_wavelength_m: 130.0,
+        seed: 1,
+    ),
+    terraces: (quay_m: 4.0, step_m: 4.5, step_jitter: 0.3, wall: 0.15),
+    platforms: [
+        // The starport's pads and terminal, a level above the Exchange.
+        (id: "starport", at: (70.0, -10.0), half_size: (65.0, 62.0), corner_m: 20.0, falloff_m: 20.0, level_m: Some(44.0)),
+        // The Exchange's square, below the terminal, looking over the bay.
+        (id: "exchange", at: (-60.0, 20.0), half_size: (58.0, 48.0), corner_m: 20.0, falloff_m: 20.0, level_m: Some(38.0)),
+        // Pelagic's headquarters on its own terrace in the Heights, east of
+        // the pipelines' gully, a storey over the lanes around it.
+        (id: "headquarters", at: (235.0, 20.0), half_size: (36.0, 20.0), corner_m: 8.0, falloff_m: 16.0, level_m: Some(33.0)),
+        // The processor's intake hall and towers, on the ridge above the city.
+        (id: "processor", at: (0.0, -390.0), half_size: (100.0, 70.0), corner_m: 30.0, falloff_m: 40.0),
+    ],
+    // The road leaves over the ridge beside the processor, inland: coming in,
+    // the first view is the city falling to the bay below the towers.
+    road: (exit: (165.0, -460.0), length_m: 1200.0, width_m: 7.0),
+    layout: "settlements/port_serein.ron",
+    // The terraces' lanes in setts, the quay and the platforms in flagstones,
+    // the banks between levels (behind their walls) in gravel.
+    ground: Some((lanes: "strata:setts", aprons: "strata:flagstones", banks: "strata:gravel")),
+)

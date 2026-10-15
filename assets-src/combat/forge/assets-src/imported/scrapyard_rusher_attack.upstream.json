@@ -1,0 +1,167 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "scrapyard_rusher_attack",
+  "prompt": "A person steps forward and strikes a target directly in front with a heavy right-handed downward hammer fist, then pulls the fist back and returns to guard.",
+  "tags": [
+    "scrapyard",
+    "combat"
+  ],
+  "created": "2026-09-04",
+  "created_by": "agent:codex",
+  "provenance": "recorded",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": "https://github.com/nv-tlabs/ardy",
+    "commit": "693f74d13b3d04a0a22ce127ee79c929dd89756b",
+    "model": "core",
+    "seed": 23,
+    "duration_s": 5.0,
+    "cfg": 2.0,
+    "sample": 1,
+    "sweep_take": "rusher_attack__d5_c2_s23_1.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/scrapyard_rusher_attack.npz",
+    "sha256": "sha256:b9e207cf59e57a9b47708cdf2a7e9857f1bc3b6cbc335fe51475cedc05a23825",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 0.7,
+    "trim_end_s": 2.65,
+    "auto_trim": null,
+    "in_place": "detrend",
+    "y_mode": "off",
+    "loop": false,
+    "loop_blend_s": 0.0,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": "0:0,0.55:0.3,0.9:0.42,1.6:0.85",
+    "clip": "scrapyard_rusher_attack"
+  },
+  "measured": {
+    "frames": 18,
+    "fps": 20.0,
+    "duration_s": 0.85,
+    "avg_speed_mps": 0.8203133,
+    "root_motion": {
+      "net_m": [
+        -0.376,
+        -0.329
+      ],
+      "direction_deg": -41.177,
+      "peak_speed_mps": 3.302,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.022,
+          -0.01
+        ],
+        [
+          -0.04,
+          -0.025
+        ],
+        [
+          -0.052,
+          -0.049
+        ],
+        [
+          -0.08,
+          -0.078
+        ],
+        [
+          -0.127,
+          -0.113
+        ],
+        [
+          -0.186,
+          -0.16
+        ],
+        [
+          -0.31,
+          -0.27
+        ],
+        [
+          -0.364,
+          -0.321
+        ],
+        [
+          -0.393,
+          -0.354
+        ],
+        [
+          -0.417,
+          -0.389
+        ],
+        [
+          -0.432,
+          -0.399
+        ],
+        [
+          -0.441,
+          -0.387
+        ],
+        [
+          -0.436,
+          -0.374
+        ],
+        [
+          -0.421,
+          -0.362
+        ],
+        [
+          -0.404,
+          -0.35
+        ],
+        [
+          -0.388,
+          -0.339
+        ],
+        [
+          -0.376,
+          -0.329
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [
+    {
+      "t": 0.317,
+      "t_src": 1.3,
+      "name": "footstep_l",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 0.403,
+      "t_src": 1.55,
+      "name": "attack_contact",
+      "origin": "agent:codex",
+      "audio": null
+    },
+    {
+      "t": 0.512,
+      "t_src": 1.75,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 0.635,
+      "t_src": 1.95,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    }
+  ],
+  "content_hash": "sha256:a5e8287f281066a3e921c9a366dd541881b68a13ed3c6a01aacbfae513e0a6b3",
+  "note": null
+}

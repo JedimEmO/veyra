@@ -1,0 +1,18 @@
+// Coastal brine: pumped from wells behind the shore. The conductive brine,
+// and the one a household beside Port Serein reaches first. It occurs in
+// the coast biome and nowhere else.
+(
+    id: "strata:coastal_brine",
+    name: "Coastal brine",
+    short: "brine",
+    class: "strata:brine",
+    grounds: ["wells", "sump"],
+    ranges: {
+        Purity: (floor: 250, cap: 850),
+        Potency: (floor: 300, cap: 800),
+        Conductivity: (floor: 400, cap: 900),
+    },
+    occurs: (
+        biomes: [(id: "strata:coast", weight: 1.6)],
+    ),
+)

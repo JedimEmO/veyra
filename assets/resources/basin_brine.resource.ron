@@ -1,0 +1,24 @@
+// Basin brine: the stronger, dirtier brine of dry country and of lake
+// beds. Where the water record at the point is a lake's it is the likely
+// find; beside a river it is a little likelier than on open ground.
+(
+    id: "strata:basin_brine",
+    name: "Basin brine",
+    short: "brine",
+    class: "strata:brine",
+    grounds: ["sink", "bottoms"],
+    ranges: {
+        Purity: (floor: 200, cap: 700),
+        Potency: (floor: 450, cap: 950),
+        Conductivity: (floor: 300, cap: 750),
+    },
+    occurs: (
+        anywhere: 0.3,
+        biomes: [
+            (id: "strata:desert", weight: 0.8),
+            (id: "strata:savanna", weight: 0.4),
+            (id: "strata:plains", weight: 0.2),
+        ],
+        water: (lake: 1.5, river: 0.3),
+    ),
+)

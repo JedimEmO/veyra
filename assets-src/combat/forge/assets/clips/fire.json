@@ -1,0 +1,87 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "fire",
+  "prompt": "A person fires a powerful shotgun held with both hands once, the strong recoil pushes the shoulder backward, then the person brings the gun back up to aim.",
+  "tags": [],
+  "created": "2026-10-01",
+  "created_by": "agent:codex",
+  "provenance": "reconstructed",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": null,
+    "commit": null,
+    "model": null,
+    "seed": null,
+    "duration_s": null,
+    "cfg": null,
+    "sample": null,
+    "sweep_take": "scrapyard_rifle_fire.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/fire.npz",
+    "sha256": "sha256:24094ce3798d6f86e8d9691b30c6f32deb366586eb64aee4f35a50d9d2073e54",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 0.45,
+    "trim_end_s": 2.15,
+    "auto_trim": null,
+    "in_place": "strip",
+    "y_mode": "off",
+    "loop": false,
+    "loop_blend_s": 0.0,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": "0:0,0.2:0.035,0.65:0.08,1.35:0.15",
+    "clip": "fire"
+  },
+  "measured": {
+    "frames": 4,
+    "fps": 20.0,
+    "duration_s": 0.15,
+    "avg_speed_mps": 0.9252999,
+    "root_motion": {
+      "net_m": [
+        -0.023,
+        0.01
+      ],
+      "direction_deg": null,
+      "peak_speed_mps": 1.238,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.018,
+          -0.026
+        ],
+        [
+          -0.061,
+          -0.039
+        ],
+        [
+          -0.023,
+          0.01
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [
+    {
+      "t": 0.035,
+      "t_src": 0.65,
+      "name": "shot",
+      "origin": "agent:codex",
+      "audio": null
+    }
+  ],
+  "content_hash": "sha256:ae34b5fce938489477c691fcf2162b8f31cb643435a9bf8f6448a1eaa8a189d8",
+  "note": "Re-baked existing ARDY take; upstream receipt in assets-src/imported/scrapyard_rifle_fire.upstream.json. Timing study, 2026-10-01."
+}

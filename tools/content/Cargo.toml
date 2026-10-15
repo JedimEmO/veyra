@@ -1,0 +1,47 @@
+[package]
+name = "content"
+description = "The content step: bakes Veyra's buildings and materials into generated/."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+# The one binary that links the geometry kernel and the material graph engine
+# on purpose. `game` and `server` load what it writes and link neither.
+[dependencies]
+ashlar.workspace = true
+ashlar-content.workspace = true
+ashlar-material.workspace = true
+veyra-buildings.workspace = true
+veyra-materials.workspace = true
+veyra-flora.workspace = true
+veyra-rocks.workspace = true
+veyra-settlements.workspace = true
+# The settlement layout it writes is the type the game and the server read.
+strata-worldgen.workspace = true
+# The tree library it writes is the type the game and the server read.
+strata-flora.workspace = true
+# A settlement's blockout is fitted to the city's own ground, which the
+# shipped registry entry describes.
+strata-registry.workspace = true
+anyhow.workspace = true
+clap.workspace = true
+ron.workspace = true
+serde.workspace = true
+# The weapon pictures (ticket 0008): the recipes and their rasteriser, the
+# kernel that meshes them (already in this tree through `ashlar-content`),
+# and the PNG encoder the pictures and their contact sheets are written with.
+veyra-weapons.workspace = true
+ashlar-manifold.workspace = true
+image.workspace = true
+
+# The stats tests bake the buildings in-process and snapshot what they cost;
+# the terrain test reads the game's own terrain registry.
+[dev-dependencies]
+insta.workspace = true
+strata-core.workspace = true
+
+[lints]
+workspace = true

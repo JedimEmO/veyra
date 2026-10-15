@@ -1,0 +1,27 @@
+[package]
+name = "veyra-settlements"
+description = "Veyra's settlements: the city plans the content step bakes and the world clears ground for."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+# No Bevy. The material crates carry the graph engine, so this
+# belongs to `tools/content` and tests, never to `game` or `server`, which read
+# what the content step bakes from it.
+[dependencies]
+ashlar.workspace = true
+ashlar-material.workspace = true
+veyra-materials.workspace = true
+anyhow.workspace = true
+glam.workspace = true
+veyra-buildings.workspace = true
+
+# The kits' own tests measure their meshed levels, which needs the kernel.
+[dev-dependencies]
+ashlar-manifold.workspace = true
+
+[lints]
+workspace = true

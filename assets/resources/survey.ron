@@ -1,0 +1,27 @@
+// Surveying by hand (ticket 0009, step 3): the ping, the sample and what a
+// reading tells. Read by `strata_registry::resource`; in no world version
+// and no handshake. Every number the survey tool and a sampling hand use is
+// here; the Surveyor's boxes scale them (assets/progression/trees.ron).
+(
+    version: 1,
+    // A ping: the player stands still for `channel_s`, then the ground is
+    // read at `grid` by `grid` points (odd, so one is the player's own
+    // place) spread over `range_m` to each side of the player, at store
+    // grade of the tool's range line. A reading under `min_pm` per-mille is
+    // nothing. Water over `swim_m` metres deep is swimming, from which
+    // nothing is pinged or sampled (the walker's wade depth). The HUD's lead
+    // marker (the strongest point of the last ping) goes when the household
+    // stands within `lead_clear_m` metres of it.
+    ping: (channel_s: 2.5, range_m: 128.0, grid: 5, min_pm: 20, swim_m: 0.85, lead_clear_m: 10.0),
+    // Sampling: every `cycle_s` the hand gives `units` at a concentration of
+    // 1000 per-mille, in proportion at less (at least one where there is
+    // any reading). Moving `stops_at_m` from where it began stops it.
+    sample: (cycle_s: 4.0, units: 8, stops_at_m: 1.5),
+    // How much of a deposit's quality a ping tells with no skill in reading:
+    // Type (its type and concentration only), Bands (each line as a word) or
+    // Exact (the figures). A deposit that has been sampled is known Exact.
+    reading: (untrained: Type),
+    // Where the words poor, fair, good and fine end and begin, as per-mille
+    // of the range a type has for the line.
+    bands: (250, 500, 750),
+)

@@ -1,0 +1,80 @@
+name: Pages
+
+# Bakes the generated content, builds the web game (`just web`) and publishes
+# dist/ as the repository's GitHub Pages site.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  # The binaryen release whose wasm-opt the recipe was proven with.
+  BINARYEN: version_119
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      # The content step links ashlar's native mesher (Manifold, C++), and
+      # the workspace's native crates want Bevy's Linux libraries.
+      - name: System dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev pkg-config cmake clang rsync
+
+      - name: Free disk space
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+
+      - uses: extractions/setup-just@v2
+
+      - name: wasm-opt
+        run: |
+          curl -sSL "https://github.com/WebAssembly/binaryen/releases/download/$BINARYEN/binaryen-$BINARYEN-x86_64-linux.tar.gz" | tar xz -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/binaryen-$BINARYEN/bin" >> "$GITHUB_PATH"
+
+      # The CLI must be the exact version of the wasm-bindgen crate in the lock.
+      - name: wasm-bindgen
+        run: |
+          version=$(cargo metadata --format-version 1 --locked | python3 -c 'import json,sys; print(next(p["version"] for p in json.load(sys.stdin)["packages"] if p["name"]=="wasm-bindgen"))')
+          cargo install wasm-bindgen-cli --locked --version "$version"
+
+      - name: Bake the content
+        run: just content
+
+      - name: Build the web game
+        run: just web
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

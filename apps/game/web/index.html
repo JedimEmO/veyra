@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Veyra</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html, body { margin: 0; height: 100%; background: #0b0d10; overflow: hidden; }
+  #frame { position: fixed; inset: 0; }
+  #veyra { width: 100%; height: 100%; display: block; outline: none; }
+  #loading { position: fixed; inset: 0; display: flex; align-items: center;
+    justify-content: center; color: #aab4c0; font: 18px/1.4 system-ui, sans-serif;
+    text-align: center; padding: 2em; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="frame"><canvas id="veyra" tabindex="0"></canvas></div>
+<div id="loading">Veyra is loading its data.</div>
+<script type="module">
+  const loading = document.getElementById("loading");
+  const say = (text) => { loading.textContent = text; };
+  // The wasm calls this on its first drawn frame.
+  window.veyraReady = () => loading.remove();
+  // The wasm calls this with an error that ended its start-up.
+  window.veyraFailed = (text) => { if (loading.isConnected) say("Veyra could not start: " + text); };
+  try {
+    // The game draws with WebGPU alone; say so before 120 MB are fetched.
+    if (!navigator.gpu) {
+      throw new Error("this browser has no WebGPU; a current Chrome or Edge has it");
+    }
+    const response = await fetch("data.bundle.gz");
+    if (!response.ok) throw new Error("data.bundle.gz: " + response.status);
+    let bytes = new Uint8Array(await response.arrayBuffer());
+    // A server that already unzipped it on the way needs no second pass.
+    if (bytes[0] === 0x1f && bytes[1] === 0x8b) {
+      const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+      bytes = new Uint8Array(await new Response(stream).arrayBuffer());
+    }
+    window.VEYRA_BUNDLE = bytes;
+    say("Veyra is baking its world, this takes a minute or two.");
+    // Let the line paint before the wasm takes the thread for the bake.
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    const { default: init } = await import("./veyra.js");
+    await init();
+  } catch (error) {
+    // Winit ends its start-up with an exception on purpose.
+    if (!String(error).includes("Using exceptions for control flow")) {
+      say("Veyra could not start: " + error);
+      throw error;
+    }
+  }
+</script>
+</body>
+</html>

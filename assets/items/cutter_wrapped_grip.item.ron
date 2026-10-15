@@ -1,0 +1,29 @@
+// The `cutter_wrapped_grip` part of `crates/veyra-weapons` (ticket 0010, step 3): fine bands on the long handle: a cut costs a little less. A lighter metal makes both lines.
+// Its effects are the module's factors there, each driven by the line of its
+// name; a part is made at a bench, never sold. `part` is the module's key,
+// which its baked picture is filed under.
+(
+    id: "veyra:module.cutter_wrapped_grip",
+    name: "Cutter wrapped grip",
+    maker: "Bracken",
+    kind: Module(
+        slot: "grip",
+        fits: ["veyra:weapon.yard_greatblade"],
+        part: "cutter_wrapped_grip",
+        effects: [
+            (property: AttackStamina, factor: 0.96, line: "attack_stamina"),
+            (property: EquipTime, factor: 1.03, line: "equip_time"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "attack_stamina", name: "Stamina"),
+        (id: "equip_time", name: "Draw"),
+    ],
+    icon: (
+        shape: Ingot,
+        color: "#A9B1BA",
+        picture: Some("heavy_cutter/grip.cutter_wrapped_grip.png"),
+        symbol: Some("veyra:icon.module.grip"),
+    ),
+)

@@ -1,0 +1,38 @@
+// The rifle a character holds (ticket 0010, step 4): the marksman rifle of
+// `crates/veyra-weapons` (key `marksman_rifle`, Vigil), on the Rifle row of
+// `assets/combat/weapons.ron`: one slow hard shot, tight only when aimed and
+// still, with a scope. The Ranger's Long shots certify it.
+//
+// Its five mounts are the chassis's (`Weapon::slots`). Sight and feed are
+// open on every example; the stock opens at 400, the muzzle at 600 and the
+// support at 800 on the moddability line, so a bought rifle (500) has the
+// stock as well and three open in all.
+//
+// The bore line moves the rifle's own aimed cone: a bought one (500) aims at
+// 1.20 of the table's, one made to 750 matches it, and the best is a fifth
+// tighter. Sold at Pelagic's board, and made by its schematic.
+(
+    id: "veyra:weapon.marksman_rifle",
+    name: "Vigil marksman rifle",
+    maker: "Vigil",
+    kind: Weapon(
+        family: "Rifle",
+        chassis: "marksman_rifle",
+        mounts: [
+            (slot: "sight"),
+            (slot: "feed"),
+            (slot: "stock", opens_at: Some(400)),
+            (slot: "muzzle", opens_at: Some(600)),
+            (slot: "support", opens_at: Some(800)),
+        ],
+        signature: Some((line: "bore", property: AimSpread, worst: 1.60, best: 0.80)),
+    ),
+    stack: 1,
+    price: Some(520),
+    lines: [
+        (id: "bore", name: "Bore"),
+        (id: "durability", name: "Durability"),
+        (id: "moddability", name: "Moddability"),
+    ],
+    icon: (shape: Rod, color: "#C6D0DD", picture: Some("marksman_rifle/whole.png"), symbol: Some("veyra:icon.weapon.rifle")),
+)

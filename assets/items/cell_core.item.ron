@@ -1,0 +1,17 @@
+// The cell core: the component a feed's capacity is made of (crafting.md,
+// 5.2). Never sold: it is made at a bench from a reactive and a brine
+// (`assets/schematics/cell_core.schematic.ron`), and its two lines are what
+// a schematic's slot reads of it, as a slot reads a lot's attributes. It
+// stacks to a hundred, so a blueprint's whole run of them is one stack.
+(
+    id: "veyra:component.cell_core",
+    name: "Cell core",
+    maker: "the dealer",
+    kind: Component,
+    stack: 100,
+    lines: [
+        (id: "charge_density", name: "Charge density"),
+        (id: "stability", name: "Stability"),
+    ],
+    icon: (shape: Gem, color: "#5FD0C5", symbol: Some("veyra:icon.module.cell")),
+)

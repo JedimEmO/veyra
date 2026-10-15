@@ -1,0 +1,43 @@
+---
+source: crates/strata-worldgen/tests/snapshots.rs
+expression: "(continent, climate, class, world.biome_id(class.best), provinces)"
+---
+(
+    Continent {
+        land: 0.5100260762661795,
+        range: 0.0,
+        elevation: 0.652005215253236,
+        base_m: 273.60938745582473,
+        range_m: 0.0,
+        flank: 0.0,
+        warped: (
+            21132.94253715823,
+            -3375.746055088901,
+        ),
+    },
+    Climate {
+        temperature: 0.43088533890400216,
+        moisture: 0.34788654354412346,
+        elevation: 0.652005215253236,
+    },
+    Classification {
+        best: 6,
+        second: 3,
+        weight: 0.6349431711834039,
+    },
+    BiomeId(
+        6,
+    ),
+    Some(
+        ProvinceMix(
+            [
+                (
+                    ProvinceId(
+                        5,
+                    ),
+                    1.0,
+                ),
+            ],
+        ),
+    ),
+)

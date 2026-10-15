@@ -1,0 +1,35 @@
+// The foothills between the lowland biomes and the mountains, so the ranges
+// rise out of hills rather than out of a flat plain. The window runs up
+// under the mountains' (ticket 0004, step 2): with the ranges tens of
+// kilometres apart (35 km in that step, 47.5 km and long lines since its
+// step 2b) the band where a range's flank climbs is a few kilometres wide,
+// and all of it is foothills rather than a thin ring round a range. It
+// starts no lower than 0.64 because hot, wet lowland fits no lowland biome
+// and falls to the coast, whose only rival there is this window: from 0.62
+// the foothills' hills bled into that coast, Port Serein's included, by a
+// fifth. The relief is taller and closer-set than a lowland's so that the
+// foothills are hills of their own (a mean relief slope of 11 degrees); at
+// 500 m it lifted plains on the foothills' edge over the 400 m the plains
+// are held to (`tests/coverage.rs`). The top of the window, 0.82, is where
+// the mountains take over: with theirs from 0.80 the two part at 0.81, and
+// the mountains stand alone from 0.85; their relief starts to rise from
+// 0.79 (`WorldParams::mountain_rise_lead`). Up a range's flank this relief
+// lies down (`WorldParams::flank_damping`), and a province may give it
+// another shape (`assets/geology/`, ticket 0004, step 4).
+(
+    id: "strata:highlands",
+    name: "Highlands",
+    climate: (
+        temperature: (min: 0.0, max: 1.0),
+        moisture: (min: 0.0, max: 1.0),
+        elevation: (min: 0.64, max: 0.82),
+    ),
+    relief: (kind: "hills", amplitude_m: 450.0, wavelength_m: 2000.0, octaves: 4, lift_m: 60.0, erosion: 0.8),
+    surface: (material: "strata:grass", slope_material: "strata:rock", slope_threshold: 0.45),
+    tint: (0.40, 0.50, 0.28),
+    // The ground's palette colour (ticket 0006): a cooler, bluer green than the lowland's.
+    ground: (0.42, 0.52, 0.40),
+    // Between the plains and the peaks: a little of the plains' green
+    // and clearer brights, no warmth.
+    grade: (tint: -0.003, gain: 1.02),
+)

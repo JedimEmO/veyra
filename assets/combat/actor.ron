@@ -1,0 +1,31 @@
+// What every combatant shares: pools, regeneration and the scheduler's
+// windows. Seconds, per-second rates and points.
+(
+    version: 3,
+    // Pools a fresh actor starts with; stamina and posture also cap there.
+    health: 100.0,
+    shield: 40.0,
+    stamina: 100.0,
+    posture: 100.0,
+    // Per second, while Ready and past the recovery wait.
+    stamina_regen: 24.0,
+    // Per second, once the hurt wait has passed.
+    shield_regen: 8.0,
+    posture_regen: 35.0,
+    // Seconds after an accepted action before stamina regenerates.
+    recovery_wait: 0.55,
+    // Seconds after a confirmed hit before shield and posture regenerate.
+    hurt_wait: 3.0,
+    // One queued action survives this long.
+    buffer: 0.15,
+    // After a Light ends, a queued Light becomes a Followup within this.
+    combo_window: 0.25,
+    // Locomotion multiplier while aiming, reloading or swapping.
+    aim_speed_scale: 0.65,
+    // The player's motor while fighting (`game --combat` and the duel
+    // harness): metres per second, and gravity in metres per second squared.
+    walk_speed: 5.5,
+    sprint_speed: 8.5,
+    jump_speed: 5.2,
+    gravity: 18.0,
+)

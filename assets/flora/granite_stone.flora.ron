@@ -1,0 +1,31 @@
+// Loose granite stones: scree below the steep ground and scatter on the
+// high ground. Granite country's own; karst, folded rock and basalt borrow
+// them until they have a kit of their own.
+(
+    id: "strata:granite_stone",
+    name: "Granite stone",
+    kind: "rock",
+    // How rocky each climate and height is; which rock stands there is the
+    // province's, by its kit (assets/geology), so a granite and a sandstone
+    // species list the same biomes (ticket 0004, step 3e).
+    biomes: [
+        (biome: "strata:mountains", weight: 0.2),
+        (biome: "strata:highlands", weight: 0.12),
+        (biome: "strata:desert", weight: 0.1),
+        (biome: "strata:tundra", weight: 0.1),
+        (biome: "strata:savanna", weight: 0.06),
+        (biome: "strata:coast", weight: 0.05),
+        (biome: "strata:forest", weight: 0.04),
+        (biome: "strata:plains", weight: 0.02),
+    ],
+    spacing_m: 8.0,
+    slope_max: 1.4,
+    sea_clearance_m: 0.5,
+    size: (min: 0.7, max: 1.3),
+    exclusion_m: 1.0,
+    tint_dry: (0.5, 0.5, 0.5),
+    tint_lush: (0.5, 0.5, 0.5),
+    // Stones lie in scree patches and strings, not as a sprinkle.
+    cluster: (radius_m: 10.0, clumps_per_ha: 3.0, patch_m: 60.0, patch_cover: 0.5),
+    ground: (hollow: 0.3),
+)

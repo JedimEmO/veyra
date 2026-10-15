@@ -1,0 +1,32 @@
+// The Kestrel service pistol (ticket 0009, step 5): 40 units of structural
+// metal, a harness and a seal set, the carbine's lines by the carbine's
+// weights on a smaller frame. Taught by Frames 1 of the Weaponsmith, who
+// learns the pistol with the carbine. Read by `strata_registry::schematic`;
+// in no world version and no handshake.
+(
+    id: "veyra:schematic.service_pistol",
+    makes: "veyra:weapon.service_pistol",
+    complexity: 2,
+    profession: Some("weaponsmith.frames.1"),
+    licence: None,
+    fixture: None,
+    slots: [
+        (id: "frame", name: "Frame", takes: Class("strata:structural_metal"), units: 40),
+        (id: "action", name: "Action", takes: Component("veyra:component.harness"), count: 1),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "interval", from: [
+            (slot: "action", stat: Line("conductance"), weight: 0.5),
+            (slot: "frame", stat: Attribute(Stability), weight: 0.5),
+        ]),
+        (line: "durability", from: [
+            (slot: "frame", stat: Attribute(Toughness), weight: 0.6),
+            (slot: "frame", stat: Attribute(Strength), weight: 0.4),
+        ]),
+        (line: "moddability", from: [
+            (slot: "frame", stat: Attribute(Hardness), weight: 0.6),
+            (slot: "frame", stat: Attribute(Strength), weight: 0.4),
+        ]),
+    ],
+)

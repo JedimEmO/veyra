@@ -1,0 +1,24 @@
+// Reworking a weapon's mounts (docs/design/crafting.md, 4.2). Read by
+// `strata_registry::rework` (`ReworkRules`); in no world version and no
+// handshake. A smith at a bench spends one blank and rolls once; the
+// moddability moves toward the blank's temper by the share the outcome closes.
+(
+    version: 1,
+    // The component spent, and the line of it that is worth something.
+    blank: "veyra:component.mount_blank",
+    blank_line: "temper",
+    // The line of the weapon that is raised.
+    weapon_line: "moddability",
+    // The skill box that teaches it.
+    box: "weaponsmith.frames.2",
+    // The share of the gap between the weapon's moddability and the blank's
+    // temper that each outcome closes, in thousandths. Never rises from
+    // Exceptional to Setback.
+    closes: (
+        exceptional: 1000,
+        good: 750,
+        fair: 500,
+        poor: 250,
+        setback: 0,
+    ),
+)

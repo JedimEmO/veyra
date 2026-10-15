@@ -1,0 +1,160 @@
+{
+  "captured_on": "2026-09-13",
+  "git_head": "004dd456c0e1b54ef6abc32ba46f63a3b479c65a",
+  "build": "cargo build --release -p game",
+  "binary_sha256": "7710c4e97a1393b3e9dbd76b1595e2093b634e82f6ead14e30195a1789e58b46",
+  "seed": 42,
+  "settings": "(values: {\"settings.fov\": 60.0, \"settings.foliage_distance\": 100.0, \"settings.show_hud\": false})",
+  "notes": [
+    "Screenshots captured from the local release build; edits are generated concepts, not implemented game content.",
+    "Display access required an unsandboxed game launch.",
+    "Window manager chose actual screenshot dimensions despite the requested 1920x1080 window.",
+    "Original debug HUD retained in source screenshots; removed by image generation."
+  ],
+  "captures": [
+    {
+      "scene": "coast",
+      "concept": "port-serein",
+      "command": [
+        "target/release/game",
+        "--study-scene",
+        "coast",
+        "--render-look",
+        "clear-contrast",
+        "--visual-time",
+        "0.42",
+        "--flycam",
+        "--lock-camera",
+        "--camera-altitude",
+        "28",
+        "--camera-pitch=-0.10",
+        "--look=-1.25",
+        "--aa",
+        "taa",
+        "--wind",
+        "0",
+        "--frames",
+        "900",
+        "--window",
+        "1920x1080",
+        "--screenshot",
+        "docs/research/veyra-style/sources/coast.png"
+      ],
+      "environment": {
+        "XDG_CONFIG_HOME": "/tmp/veyra-style-config"
+      },
+      "exit_code": 0,
+      "source": "sources/coast.png",
+      "source_dimensions": [
+        2560,
+        1374
+      ],
+      "source_sha256": "ce84be600e25ff08ce3315b694979995d9605a7a11b38abc8146bc18d2a68fb8",
+      "log": "sources/coast.log",
+      "edited": "concepts/port-serein.png",
+      "edited_dimensions": [
+        1712,
+        919
+      ],
+      "edited_sha256": "af1c3ed5decc2366b024bb08e6aeacbdd2d7ae5e812d806cc13d08405de6b7de",
+      "generation_tool": "built-in image_gen",
+      "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-5f139f60-e0a3-4f9e-aad1-9ccc427ef39c.png"
+    },
+    {
+      "scene": "valley",
+      "concept": "atmospheric-processor",
+      "command": [
+        "target/release/game",
+        "--study-scene",
+        "valley",
+        "--render-look",
+        "clear-contrast",
+        "--visual-time",
+        "0.42",
+        "--flycam",
+        "--lock-camera",
+        "--camera-altitude",
+        "18",
+        "--camera-pitch=-0.08",
+        "--look=-1.25",
+        "--aa",
+        "taa",
+        "--wind",
+        "0",
+        "--frames",
+        "1200",
+        "--window",
+        "1920x1080",
+        "--screenshot",
+        "docs/research/veyra-style/sources/valley.png"
+      ],
+      "environment": {
+        "XDG_CONFIG_HOME": "/tmp/veyra-style-config"
+      },
+      "exit_code": 0,
+      "source": "sources/valley.png",
+      "source_dimensions": [
+        1920,
+        1043
+      ],
+      "source_sha256": "6fbd03227b34fe18a2d9ac18e006118852f16a4ecd6ce683336c78b2ba75c111",
+      "log": "sources/valley.log",
+      "edited": "concepts/atmospheric-processor.png",
+      "edited_dimensions": [
+        1701,
+        924
+      ],
+      "edited_sha256": "054f816ba50f81e282aeac857abfe14fe60f7cf02bace3dc846ed1f9cf088683",
+      "generation_tool": "built-in image_gen",
+      "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-9c4f19cc-4123-4651-aca8-9c452d166448.png"
+    },
+    {
+      "scene": "woodland",
+      "concept": "woodland-borough",
+      "command": [
+        "target/release/game",
+        "--study-scene",
+        "woodland",
+        "--render-look",
+        "sunlit-mist",
+        "--visual-time",
+        "0.42",
+        "--flycam",
+        "--lock-camera",
+        "--camera-altitude",
+        "2.5",
+        "--camera-pitch=-0.05",
+        "--look=-1.25",
+        "--aa",
+        "taa",
+        "--wind",
+        "0",
+        "--frames",
+        "1200",
+        "--window",
+        "1920x1080",
+        "--screenshot",
+        "docs/research/veyra-style/sources/woodland.png"
+      ],
+      "environment": {
+        "XDG_CONFIG_HOME": "/tmp/veyra-style-config"
+      },
+      "exit_code": 0,
+      "source": "sources/woodland.png",
+      "source_dimensions": [
+        1920,
+        1043
+      ],
+      "source_sha256": "f9e006376e8600a4ea5f92441d0a997cdf202a0b28d9e97743096ee282a83126",
+      "log": "sources/woodland.log",
+      "edited": "concepts/woodland-borough.png",
+      "edited_dimensions": [
+        1701,
+        925
+      ],
+      "edited_sha256": "3365c6b4a4cdd90fc8aa5d297ed542714534db86fe2a14982e8ba712d48c88aa",
+      "generation_tool": "built-in image_gen",
+      "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-15473e82-deea-4107-8333-f927f949cf1b.png"
+    }
+  ]
+}

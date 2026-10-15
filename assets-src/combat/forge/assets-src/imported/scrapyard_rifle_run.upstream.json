@@ -1,0 +1,150 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "scrapyard_rifle_run",
+  "prompt": "A person runs forward steadily while carrying a rifle with both hands, keeping the rifle pointed forward and taking quick even running steps.",
+  "tags": [
+    "scrapyard",
+    "locomotion",
+    "loop"
+  ],
+  "created": "2026-09-04",
+  "created_by": "agent:codex",
+  "provenance": "recorded",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": "https://github.com/nv-tlabs/ardy",
+    "commit": "693f74d13b3d04a0a22ce127ee79c929dd89756b",
+    "model": "core",
+    "seed": 21,
+    "duration_s": 5.0,
+    "cfg": 2.0,
+    "sample": 7,
+    "sweep_take": "rifle_run__d5_c2_s21_7.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/scrapyard_rifle_run.npz",
+    "sha256": "sha256:815a1049bd7a5a9d48571a8cac5d4ce4a39176858d6d672ea875ffd4d628a9e7",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 1.55,
+    "trim_end_s": 2.6,
+    "auto_trim": null,
+    "in_place": "strip",
+    "y_mode": "off",
+    "loop": true,
+    "loop_blend_s": 0.1,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": null,
+    "clip": "scrapyard_rifle_run-loop"
+  },
+  "measured": {
+    "frames": 17,
+    "fps": 20.0,
+    "duration_s": 0.8,
+    "avg_speed_mps": 2.5583997,
+    "root_motion": {
+      "net_m": [
+        0.294,
+        -2.023
+      ],
+      "direction_deg": 3.622,
+      "peak_speed_mps": 2.797,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          0.011,
+          -0.139
+        ],
+        [
+          0.021,
+          -0.275
+        ],
+        [
+          0.029,
+          -0.405
+        ],
+        [
+          0.039,
+          -0.525
+        ],
+        [
+          0.052,
+          -0.637
+        ],
+        [
+          0.066,
+          -0.748
+        ],
+        [
+          0.083,
+          -0.862
+        ],
+        [
+          0.105,
+          -0.992
+        ],
+        [
+          0.129,
+          -1.129
+        ],
+        [
+          0.155,
+          -1.266
+        ],
+        [
+          0.184,
+          -1.396
+        ],
+        [
+          0.212,
+          -1.52
+        ],
+        [
+          0.235,
+          -1.639
+        ],
+        [
+          0.255,
+          -1.758
+        ],
+        [
+          0.273,
+          -1.885
+        ],
+        [
+          0.294,
+          -2.023
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [
+    {
+      "t": 0.15,
+      "t_src": 1.7,
+      "name": "footstep_l",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 0.55,
+      "t_src": 2.1,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    }
+  ],
+  "content_hash": "sha256:6a558b40f664ac75df272c20a884bd7414dfe9c024b9022d7f017d94e7d7e697",
+  "note": null
+}

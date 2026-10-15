@@ -1,0 +1,38 @@
+// The courier bike (ticket 0009, step 5): two hull plates, two drive coils,
+// a cell core, 60 units of structural metal and a seal set. A slot with a
+// count of two is one pick of one kind of stack, two pieces taken from it,
+// so both plates read as the one figure of the stack picked. Speed is the
+// coil's flux and the core's charge, handling the plate's rigidity and the
+// metal's stability, durability the metal's toughness and the plate's
+// rigidity. Taught by Materials 3 of the Fabricator. The bike is whole when
+// made, like a carbine (`made_condition`). Read by
+// `strata_registry::schematic`; in no world version and no handshake.
+(
+    id: "veyra:schematic.courier_bike",
+    makes: "veyra:vehicle.courier_bike",
+    complexity: 3,
+    profession: Some("fabricator.materials.3"),
+    licence: None,
+    fixture: None,
+    slots: [
+        (id: "plates", name: "Hull plates", takes: Component("veyra:component.hull_plate"), count: 2),
+        (id: "coils", name: "Drive coils", takes: Component("veyra:component.drive_coil"), count: 2),
+        (id: "core", name: "Cell core", takes: Component("veyra:component.cell_core"), count: 1),
+        (id: "metal", name: "Frame metal", takes: Class("strata:structural_metal"), units: 60),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "speed", from: [
+            (slot: "coils", stat: Line("flux"), weight: 0.6),
+            (slot: "core", stat: Line("charge_density"), weight: 0.4),
+        ]),
+        (line: "handling", from: [
+            (slot: "plates", stat: Line("rigidity"), weight: 0.5),
+            (slot: "metal", stat: Attribute(Stability), weight: 0.5),
+        ]),
+        (line: "durability", from: [
+            (slot: "metal", stat: Attribute(Toughness), weight: 0.6),
+            (slot: "plates", stat: Line("rigidity"), weight: 0.4),
+        ]),
+    ],
+)

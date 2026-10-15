@@ -1,0 +1,20 @@
+// The field harvester (ticket 0009, step 6): planted on a found deposit by
+// a surveyor with a Stations box, it fills over played time into its own
+// hopper and is emptied by hand. Bought at store grade (both lines 500,
+// reading exactly as `assets/resources/harvest.ron`) at the board, or made.
+// The rate line scales how fast it fills and the hopper line how much it
+// holds, from the worst factor at nought through one at store grade to the
+// best at the top, fixed at the planting.
+(
+    id: "veyra:station.field_harvester",
+    name: "Field harvester",
+    maker: "Pelagic Works",
+    kind: Harvester(rate: (800, 1250), hopper: (800, 1500)),
+    stack: 1,
+    price: Some(300),
+    lines: [
+        (id: "rate", name: "Rate"),
+        (id: "hopper", name: "Hopper"),
+    ],
+    icon: (shape: Slab, color: "#C9A25B", symbol: Some("veyra:icon.ability.extract-core")),
+)

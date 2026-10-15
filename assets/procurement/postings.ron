@@ -1,0 +1,20 @@
+// What a holder's board posts about the camps near it (ticket 0012, step 4b).
+// The board shows `open` postings at once, each to clear a named outlaw camp
+// within `reach_m` of its holder's seat; the set stands a `window_h` of played
+// hours and then the next is drawn. Pay is credits by tier, tier 1 first,
+// near what that tier's cache is worth again, so a posted camp pays twice.
+// A taken job marks the camp on the map as heard of: a disc of `heard_m`
+// whose centre sits off the camp by up to `heard_offset` of it. A camp the
+// member comes within `seen_m` of is found. In no world version and no
+// handshake.
+(
+    version: 1,
+    open: 3,
+    reach_m: 20000.0,
+    window_h: 24.0,
+    pay: [400, 900, 1800],
+    taken_max: 3,
+    heard_m: 900.0,
+    heard_offset: 0.6,
+    seen_m: 250.0,
+)

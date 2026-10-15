@@ -1,0 +1,22 @@
+// Decorative understory, streamed only near the viewer.
+(
+    id: "strata:wildflower_amber",
+    name: "Amber wildflowers",
+    kind: "bush",
+    biomes: [(biome: "strata:plains", weight: 0.65), (biome: "strata:forest", weight: 0.3), (biome: "strata:savanna", weight: 0.3)],
+    spacing_m: 3.8,
+    slope_max: 0.5,
+    sea_clearance_m: 1.0,
+    moisture: (min: 0.2, max: 1.0),
+    cover_floor: 0.15,
+    size: (min: 0.8, max: 1.2),
+    exclusion_m: 0.3,
+    tint_dry: (0.65, 0.34, 0.035),
+    tint_lush: (0.65, 0.34, 0.035),
+    tree: (
+        form: "flower",
+        height_m: (min: 0.3, max: 0.6),
+        bark: "plain",
+        variants: 6,
+    ),
+)

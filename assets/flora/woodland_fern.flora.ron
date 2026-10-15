@@ -1,0 +1,22 @@
+// Decorative understory, streamed only near the viewer.
+(
+    id: "strata:woodland_fern",
+    name: "Woodland fern",
+    kind: "bush",
+    biomes: [(biome: "strata:forest", weight: 0.8), (biome: "strata:highlands", weight: 0.25), (biome: "strata:coast", weight: 0.2)],
+    spacing_m: 4.3,
+    slope_max: 0.6,
+    sea_clearance_m: 1.0,
+    moisture: (min: 0.35, max: 1.0),
+    cover_floor: 0.15,
+    size: (min: 0.8, max: 1.2),
+    exclusion_m: 0.5,
+    tint_dry: (0.08, 0.25, 0.045),
+    tint_lush: (0.08, 0.25, 0.045),
+    tree: (
+        form: "fern",
+        height_m: (min: 0.45, max: 0.85),
+        bark: "shrub",
+        variants: 6,
+    ),
+)

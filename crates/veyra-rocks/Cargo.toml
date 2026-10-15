@@ -1,0 +1,21 @@
+[package]
+name = "veyra-rocks"
+description = "Veyra's boulders, stones and cliff kits as ashlar props: what the content step bakes for the geology."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+# No Bevy and no kernel: the content step builds props from this, and the
+# server may read the hulls it describes.
+[dependencies]
+ashlar.workspace = true
+
+# The review test writes its contact sheets as PNGs.
+[dev-dependencies]
+image.workspace = true
+
+[lints]
+workspace = true

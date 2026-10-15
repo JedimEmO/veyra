@@ -1,0 +1,103 @@
+// The first hour of a new household (ticket 0009, step 7), read by
+// `tools/balance/src/field.rs` (`balance field`) and held by
+// `tools/balance/tests/first_hour.rs`. It holds only what no rule already
+// says: how the walk is made of the straight line, what finding a deposit
+// costs once the rider is in its area, how long a screen takes, the path a
+// sensible new player walks and the minute each milestone must come by. Every
+// other figure (the bike's speed, a ping's channel, a cycle's units, a
+// session's results, a sale's pay, a box's XP) is the sim's own function on
+// the shipped data. Not in a world version and not in a handshake.
+(
+    version: 1,
+    // The world's seed: the default one the game starts with.
+    seed: 42,
+    // The ridden or walked way is the straight line times `detour`, an
+    // assumption for the bends and climbs of open ground (the scripted ride
+    // follows Port Serein's road, which is straighter). The bike's mean speed
+    // is its off-road top speed times `bike_mean`: `--script-ride` measured a
+    // mean of 26.9 m/s against a road top of 30.0 (0.90), less off the road.
+    // On foot it is the mix of walk and sprint (assets/combat/actor.ron: 5.5
+    // and 8.5). `search_m` is how far the model looks for a deposit before it
+    // says there is none.
+    travel: (detour: 1.25, bike_mean: 0.85, sprint_share: 0.5, search_m: 12000.0),
+    // What finding one deposit costs once the rider is in its area, as
+    // `--script-survey conductor` measured at the base range: five pings and
+    // about 400 m of walking after them (at the walking pace, 5.5 m/s). A
+    // longer ping scales both.
+    find: (pings: 5, walked_m: 400.0),
+    // The concentration, per-mille, a player who walked the ping's lead
+    // samples at: the script sampled a conductor at about this.
+    sample_at_pm: 550,
+    // Played seconds a crafting session takes a player who knows the screen
+    // (the roll, the pick, the finish), and a visit to a board, a trainer, a
+    // terminal or a locker.
+    bench: (session_s: 45.0, screen_s: 20.0),
+    // The minute each milestone must come by. A band that only a change the
+    // step may not make could close is `waived: "why"` and is reported, not
+    // failed.
+    bands: [
+        (id: "bike", by_min: 3.0),
+        (id: "first_find", by_min: 8.0),
+        (id: "first_made_carbine", by_min: 25.0),
+        (id: "muzzle_carbine", by_min: 45.0, opens: Some(5)),
+        (id: "fore_end_carbine", by_min: 75.0, opens: Some(6)),
+        (id: "surveyor_second_box", by_min: 20.0),
+        (id: "fabricator_first_box", by_min: 30.0),
+        (id: "first_sale", by_min: 30.0),
+        (id: "first_harvest", by_min: 60.0),
+    ],
+    // The purse never goes under this on the path.
+    purse_floor: 0,
+    // An hour of one store grade harvester standing at `sample_at_pm` gives
+    // what between these minutes of an untrained hand sampling the same
+    // ground gives (so it is worth the trip and does not replace
+    // surveying), and its hopper takes at least `hopper_hours_min` hours to
+    // fill there.
+    harvest: (hour_worth_min: (10.0, 25.0), hopper_hours_min: 1.5),
+    // The order a bench session's points are spent on a product's lines
+    // (the rest follow in the item's order). An assumption: the bench lets
+    // the crafter choose, and a made carbine's first want is its mounts.
+    // Each point is taken at the mean of a steady hand on the base row.
+    spend: ["moddability", "interval", "durability"],
+    // The first hour as a sensible new player plays it. `mark` names the
+    // band the step reaches. A refused step stops the clock on its row. A
+    // buy, a sale, a switch of member, a session and a lesson are at the
+    // city's bench place (home), by the member who is out.
+    path: [
+        (what: Take("Ilse Marrow")),
+        (what: Buy("veyra:vehicle.courier_bike"), mark: Some("bike")),
+        (what: Ride(Nearest("strata:conductor"))),
+        (what: Find, mark: Some("first_find")),
+        (what: Sample(45)),
+        (what: Ride(Nearest("strata:structural_metal"))),
+        (what: Find),
+        (what: Sample(80)),
+        (what: Home),
+        (what: Take("Tovan Reyes")),
+        (what: Craft(schematic: "veyra:schematic.harness", by: "Tovan Reyes")),
+        (what: Craft(schematic: "veyra:schematic.patrol_carbine", by: "Tovan Reyes"), mark: Some("first_made_carbine")),
+        (what: Craft(schematic: "veyra:schematic.cell_core", by: "Tovan Reyes", times: 5)),
+        (what: Sell(item: "veyra:component.cell_core", count: 5), mark: Some("first_sale")),
+        (what: Learn(id: "fabricator.batches.1", member: "Tovan Reyes"), mark: Some("fabricator_first_box")),
+        (what: Take("Ilse Marrow")),
+        (what: Learn(id: "surveyor.deposits.2", member: "Ilse Marrow"), mark: Some("surveyor_second_box")),
+        (what: Buy("veyra:station.field_harvester")),
+        (what: Ride(Best(class: "strata:structural_metal", schematic: "veyra:schematic.patrol_carbine", line: "moddability", at_least: 600))),
+        (what: Find),
+        (what: Sample(80)),
+        (what: Plant),
+        (what: Home),
+        (what: Take("Tovan Reyes")),
+        (what: Craft(schematic: "veyra:schematic.harness", by: "Tovan Reyes")),
+        (what: Craft(schematic: "veyra:schematic.patrol_carbine", by: "Tovan Reyes"), mark: Some("muzzle_carbine")),
+        (what: Take("Ilse Marrow")),
+        (what: Ride(Best(class: "strata:structural_metal", schematic: "veyra:schematic.patrol_carbine", line: "moddability", at_least: 800))),
+        (what: Find),
+        (what: Sample(80)),
+        (what: Collect, mark: Some("first_harvest")),
+        (what: Home),
+        (what: Take("Tovan Reyes")),
+        (what: Craft(schematic: "veyra:schematic.harness", by: "Tovan Reyes")),
+        (what: Craft(schematic: "veyra:schematic.patrol_carbine", by: "Tovan Reyes"), mark: Some("fore_end_carbine")),
+    ],
+)

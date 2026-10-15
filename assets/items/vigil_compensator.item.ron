@@ -1,0 +1,30 @@
+// The Vigil vented muzzle of `crates/veyra-weapons` (`vigil_compensator`).
+// There it also fits the pistol, the rifle and the breacher; the patrol
+// carbine and the marksman rifle are the items. Its lines are the module's two properties, recoil
+// recovery and aim move speed, with the factors there. It is the first thing
+// a carbine's muzzle takes, a mount that opens only at moddability 600.
+(
+    id: "veyra:module.vigil_compensator",
+    name: "Vigil vented muzzle",
+    maker: "Vigil",
+    kind: Module(
+        slot: "muzzle",
+        fits: ["veyra:weapon.patrol_carbine", "veyra:weapon.marksman_rifle"],
+        part: "vigil_compensator",
+        effects: [
+            (property: RecoilRecovery, factor: 0.94, line: "recoil_recovery"),
+            (property: AimMoveSpeed, factor: 0.97, line: "aim_move_speed"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "recoil_recovery", name: "Recoil"),
+        (id: "aim_move_speed", name: "Aim move"),
+    ],
+    icon: (
+        shape: Gem,
+        color: "#7FD1FF",
+        picture: Some("patrol_carbine/muzzle.vigil_compensator.png"),
+        symbol: Some("veyra:icon.module.muzzle"),
+    ),
+)

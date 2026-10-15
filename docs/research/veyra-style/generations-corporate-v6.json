@@ -1,0 +1,37 @@
+{
+  "date": "2026-09-13",
+  "tool": "built-in image_gen",
+  "revision": "corporate-v6",
+  "status": "references for review",
+  "prompts": "prompts-corporate-v6.json",
+  "source_captures": "captures.json",
+  "outputs": [
+    {
+      "name": "pelagic-coastal-district-v6",
+      "edit_target": "sources/coast.png",
+      "output": "concepts/pelagic-coastal-district-v6.png",
+      "dimensions": [
+        1712,
+        919
+      ],
+      "sha256": "393dae4eb4f6b3fc0a06440cc24ffa11f1feea4ba61e84613fc767137a964dbb",
+      "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-e0f51e51-d2ef-4ca0-a6b9-396af1dce724.png"
+    },
+    {
+      "name": "pelagic-frontier-compound-v6",
+      "edit_target": "sources/valley.png",
+      "output": "concepts/pelagic-frontier-compound-v6.png",
+      "dimensions": [
+        1701,
+        924
+      ],
+      "sha256": "aa971d6d8f781df865c591570574bd78b8af7d27950a40de785fbce155119dfe",
+      "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-67fa126d-637e-433b-9cee-60772bd75d46.png"
+    }
+  ],
+  "notes": [
+    "Corporate architecture explored through dark concrete, massing, repetition and controlled access in daylight.",
+    "Concept image edits only; no scene geometry or engine rendering changes.",
+    "Generated edits reinterpret some surrounding terrain detail, shoreline and perspective; source captures remain the engine reference."
+  ]
+}

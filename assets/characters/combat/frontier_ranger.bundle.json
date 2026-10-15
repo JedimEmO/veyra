@@ -1,0 +1,68 @@
+{
+  "forge_bundle": 2,
+  "created": "2026-10-01",
+  "created_by": "agent:claude",
+  "body": {
+    "path": "assets/bodies/frontier_ranger.glb",
+    "sha256": "sha256:b73ae901314305b9682b5e87f75d469c1f987df2f30855111fadcef09813a841"
+  },
+  "clips": [
+    {
+      "name": "run",
+      "path": "assets/clips/run.glb",
+      "sha256": "sha256:972cad0e8902081de93833174a6cbef89f927fe7222f69aa260a5a4b49c43cf6"
+    },
+    {
+      "name": "aim",
+      "path": "assets/clips/aim.glb",
+      "sha256": "sha256:4a50db7ce01afc42f6af298555423d42fae1729a91449ab6fb1dd08b01c2648d"
+    },
+    {
+      "name": "fire",
+      "path": "assets/clips/fire.glb",
+      "sha256": "sha256:ae34b5fce938489477c691fcf2162b8f31cb643435a9bf8f6448a1eaa8a189d8"
+    },
+    {
+      "name": "light",
+      "path": "assets/clips/light.glb",
+      "sha256": "sha256:303c8833ea8ff139c80fea61dcebe1739c82d2e375e0cccba003187566539005"
+    },
+    {
+      "name": "followup",
+      "path": "assets/clips/followup.glb",
+      "sha256": "sha256:e2cc2897e01ffe0992d1798dd48ad59a91e5628a489a5309f9022c6221cbf022"
+    },
+    {
+      "name": "heavy",
+      "path": "assets/clips/heavy.glb",
+      "sha256": "sha256:4b5136dd9b5b4eaa561c3952f37ed9ba51801f99dd03fc8a96c81c739eae7a7c"
+    },
+    {
+      "name": "dodge",
+      "path": "assets/clips/dodge.glb",
+      "sha256": "sha256:3ef8756ee1015075168f10eeeffad5b0b9fc5b727d0650f7a6d84beb24966d21"
+    },
+    {
+      "name": "death",
+      "path": "assets/clips/death.glb",
+      "sha256": "sha256:13d3b5bdbd09b86eb88d13a1222625306c5ed478d499ae98a7812bc00ab9fc09"
+    }
+  ],
+  "motion_scale": 1.0,
+  "motion_scale_source": "the body's own record, assets/bodies/frontier_ranger.json",
+  "output": {
+    "path": "./assets/characters/combat/frontier_ranger.glb",
+    "sha256": "sha256:d3888fd6995469015edc04c468e5b0ed930a6d53f75b0f2d90ae12c9c3f7971b",
+    "bytes": 3316288,
+    "animations": [
+      "run-loop",
+      "aim-loop",
+      "fire",
+      "light",
+      "followup",
+      "heavy",
+      "dodge",
+      "death"
+    ]
+  }
+}

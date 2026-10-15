@@ -1,0 +1,18 @@
+// The field harvester (ticket 0009, step 6): a machine a surveyor plants on
+// found ground. Read by `strata_registry::resource`; in no world version
+// and no handshake. The item's lines and the planter's Stations boxes scale
+// `rate` and `hopper` once, at the planting.
+(
+    version: 1,
+    // Units a played hour at a concentration of 1000 per-mille, in
+    // proportion at less.
+    rate: 1200,
+    // Units it holds before it stops.
+    hopper: 1000,
+    // The least concentration, per-mille, it can be planted on.
+    min_pm: 150,
+    // No two stand nearer than this, metres.
+    apart_m: 30.0,
+    // How near a character must stand to collect it or pick it up, metres.
+    reach_m: 3.0,
+)

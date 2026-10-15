@@ -1,0 +1,22 @@
+// A settlers' assembly: hamlets and towns governing themselves. Its names
+// are soft and open, set in a word of common cause.
+(
+    id: "strata:assembly",
+    name: "Settlers' assembly",
+    nature: Assembly,
+    holds: [
+        (kind: "strata:hamlet", weight: 3.0, reach_m: 2000.0),
+        (kind: "strata:town", weight: 3.0, reach_m: 4000.0),
+        (kind: "strata:pass_shelter", weight: 1.0, reach_m: 1500.0),
+    ],
+    per_mass: (sites_each: 25.0, least: 1, most: 500),
+    palette: ["#3A4FA8", "#4F8FE8", "#A9C4FF", "#7A4FD0", "#D2B8FF", "#5C3FA0"],
+    symbol: "veyra:icon.map.home",
+    names: (
+        onsets: ["c", "f", "g", "l", "m", "n", "p", "s", "w", "th", "gl"],
+        vowels: ["a", "e", "i", "o", "ou", "ai", "a", "e"],
+        codas: ["", "", "n", "l", "s", "m", "th", "nd"],
+        syllables: (1, 2),
+        patterns: ["the {root} Commons", "{root} Assembly", "the {root} Compact", "{root} Cooperative"],
+    ),
+)

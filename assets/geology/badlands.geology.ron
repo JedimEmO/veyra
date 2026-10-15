@@ -1,0 +1,44 @@
+// Badlands: soft banded clay cut into a maze of gullies, nothing growing.
+// Mudstone and ash wear back an inch a year, too fast for soil to hold; the
+// odd sandstone channel caps a butte. Where a range rises through it, the
+// range is folded rock.
+(
+    id: "strata:badlands",
+    name: "Badlands",
+    tint: (0.72, 0.38, 0.62),
+    deal_order: 5,
+    in_ranges: Some("strata:folded"),
+    rock: (
+        // Its own layer (soft banded grey, ochre and rust), baked by `just content`.
+        face: "strata:clay",
+        bare_slope: 0.35,
+        far_tint: (1.2, 1.05, 0.95),
+        cover: 0.15,
+    ),
+    // Step 4 (ticket 0004): the design's numbers, with a tundra rule
+    // (`ridges`, a quarter of the land nearby is tundra), and the hills at
+    // 0.3 of the amplitude, 0.16 of the wavelength and 1.5 times the erosion
+    // (0.6, 0.12 and 2 in the design). Steeper than 8 m in a metre is over
+    // what `tests/continuity.rs` holds the world to: the design's numbers
+    // stood 9 m in a metre; step 4's 0.45, 0.16 and 2 did too, 10.9 at worst
+    // in 1.6 million land points, the gullies half of it (the review of step
+    // 4, which found it; the continuity test's 4 000 points never reached
+    // them); these stand 7.6 at worst in 3.2 million. A maze: 39 % of its
+    // own ground over 20 degrees.
+    relief: [
+        (class: "plains", shape: "ridged", amplitude: 3.0, wavelength: 0.2, erosion: 2.0),
+        (class: "hills", shape: "ridged", amplitude: 0.3, wavelength: 0.16, erosion: 1.5),
+        (class: "ridges", shape: "ridged", amplitude: 2.0, wavelength: 0.2, erosion: 2.0),
+    ],
+    beds: (
+        thickness_m: (min: 0.5, max: 4.0),
+        hard_share: 0.12,
+        strength: 0.5,
+        dip_deg: (min: 0.0, max: 1.0),
+        slope_gate: (min: 0.05, max: 0.2),
+    ),
+    water: (section: "gully", keep_pits_m: 60.0, hang: 1.0),
+    kit: [
+        (species: "strata:sandstone_stone", weight: 0.3),
+    ],
+)

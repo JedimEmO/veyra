@@ -1,0 +1,35 @@
+// How a fitted module's quality moves its factor, and which way each
+// property is better (docs/design/crafting.md, 4.3). Read by
+// `strata_registry::item` (`FittingRules`); in no world version and no
+// handshake.
+(
+    version: 1,
+    // factor = 1 + (authored - 1) * (at_zero + per_quality * q), q = line / 1000.
+    // A benefit grows with quality and a drawback shrinks; both bands give
+    // 1 at q 0.5, so a bought module (every line 500) has the authored
+    // factor of its item file exactly. The poorest part does four tenths
+    // of its good and half again its harm; the best does 1.6 of its good
+    // and half its harm (step 11: a part's quality has to be felt).
+    benefit: (at_zero: 0.4, per_quality: 1.2),
+    drawback: (at_zero: 1.5, per_quality: -1.0),
+    // How a count becomes whole rounds: Nearest or Floor.
+    count: Nearest,
+    // Whether a property is a benefit when it rises or when it falls. An
+    // effect is a benefit when its authored factor moves the property the
+    // better way, a drawback when it moves it the other.
+    better: {
+        Capacity: Higher,
+        ReloadTime: Lower,
+        RepeatInterval: Lower,
+        EquipTime: Lower,
+        AimMoveSpeed: Higher,
+        HitDamage: Higher,
+        HitPosture: Higher,
+        AttackStamina: Lower,
+        AimSpread: Lower,
+        RecoilRecovery: Lower,
+        CoolingRate: Higher,
+        BraceTime: Lower,
+        RecoveryTime: Lower,
+    },
+)

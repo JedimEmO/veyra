@@ -1,0 +1,70 @@
+// What a cleared wreck leaves in its cache (ticket 0012, step 5b): a
+// freighter's cargo, so more credits than a camp of the tier and more and
+// larger component picks, with lots rarer (the wreck is cargo, not ground)
+// and the rare modules at a camp's chance. Same shape as the camp's table.
+//
+// Worth at Pelagic's board, a clearing's average over 600 seeds (the sim's
+// `loot` test holds the bands): tier 1 about 325 credits, tier 2 about 825,
+// tier 3 about 1740, counted as the camp's table is.
+(
+    version: 1,
+    encounter: "strata:wreck_scavengers",
+    lots_within_m: 4000.0,
+    tiers: [
+        // Tier 1.
+        (
+            credits: (120, 260),
+            picks: [
+                (item: "veyra:component.cell_core", count: (2, 4), chance: 750, lines: Some((150, 650))),
+                (item: "veyra:component.hull_plate", count: (2, 4), chance: 650, lines: Some((150, 650))),
+                (item: "veyra:component.drive_coil", count: (1, 2), chance: 400, lines: Some((150, 650))),
+                (item: "veyra:commodity.seal_set", count: (2, 5), chance: 650),
+            ],
+            lots: [
+                (class: "strata:structural_metal", units: (20, 50), chance: 300),
+            ],
+            rare: [
+                (item: "veyra:module.patrol_extended_feed", count: (1, 1), chance: 20, lines: Some((150, 650))),
+            ],
+        ),
+        // Tier 2.
+        (
+            credits: (300, 640),
+            picks: [
+                (item: "veyra:component.cell_core", count: (3, 6), chance: 800, lines: Some((200, 780))),
+                (item: "veyra:component.hull_plate", count: (3, 6), chance: 700, lines: Some((200, 780))),
+                (item: "veyra:component.drive_coil", count: (2, 3), chance: 550, lines: Some((200, 780))),
+                (item: "veyra:component.mount_blank", count: (1, 1), chance: 150, lines: Some((200, 780))),
+                (item: "veyra:commodity.seal_set", count: (4, 8), chance: 700),
+            ],
+            lots: [
+                (class: "strata:structural_metal", units: (40, 100), chance: 400),
+                (class: "strata:brine", units: (30, 70), chance: 250),
+            ],
+            rare: [
+                (item: "veyra:module.patrol_extended_feed", count: (1, 1), chance: 50, lines: Some((200, 780))),
+                (item: "veyra:module.vigil_reflex", count: (1, 1), chance: 40, lines: Some((200, 780))),
+            ],
+        ),
+        // Tier 3.
+        (
+            credits: (600, 1300),
+            picks: [
+                (item: "veyra:component.cell_core", count: (4, 8), chance: 850, lines: Some((300, 900))),
+                (item: "veyra:component.hull_plate", count: (4, 8), chance: 800, lines: Some((300, 900))),
+                (item: "veyra:component.drive_coil", count: (2, 4), chance: 700, lines: Some((300, 900))),
+                (item: "veyra:component.mount_blank", count: (1, 2), chance: 250, lines: Some((300, 900))),
+                (item: "veyra:commodity.seal_set", count: (6, 12), chance: 800),
+            ],
+            lots: [
+                (class: "strata:structural_metal", units: (80, 180), chance: 500),
+                (class: "strata:brine", units: (60, 140), chance: 350),
+            ],
+            rare: [
+                (item: "veyra:module.patrol_extended_feed", count: (1, 1), chance: 90, lines: Some((300, 900))),
+                (item: "veyra:module.vigil_reflex", count: (1, 1), chance: 80, lines: Some((300, 900))),
+                (item: "veyra:module.vigil_precision_stock", count: (1, 1), chance: 60, lines: Some((300, 900))),
+            ],
+        ),
+    ],
+)

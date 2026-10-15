@@ -1,0 +1,31 @@
+// The Vigil reflex sight of `crates/veyra-weapons` (`vigil_reflex`). There
+// it also fits the combat pistol, the marksman rifle and the breacher; the
+// patrol carbine and the marksman rifle are the items. Its lines
+// are the module's two properties, aim spread and equip time, and the
+// effects its factors there. Both reach a fight: the aim spread narrows the
+// aimed cone (0.70 at store grade, step 11) and the draw is a little slower.
+(
+    id: "veyra:module.vigil_reflex",
+    name: "Vigil reflex sight",
+    maker: "Vigil",
+    kind: Module(
+        slot: "sight",
+        fits: ["veyra:weapon.patrol_carbine", "veyra:weapon.marksman_rifle"],
+        part: "vigil_reflex",
+        effects: [
+            (property: AimSpread, factor: 0.70, line: "aim_spread"),
+            (property: EquipTime, factor: 1.03, line: "equip_time"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "aim_spread", name: "Spread"),
+        (id: "equip_time", name: "Draw"),
+    ],
+    icon: (
+        shape: Gem,
+        color: "#7FD1FF",
+        picture: Some("patrol_carbine/sight.vigil_reflex.png"),
+        symbol: Some("veyra:icon.module.optic"),
+    ),
+)

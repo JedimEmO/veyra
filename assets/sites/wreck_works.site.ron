@@ -1,0 +1,53 @@
+// A derelict machine: what an old terraforming project left standing where
+// its job was, a pump on a large river's bank or a processor's broken mast
+// on a high shoulder, far from the living towns. It ranks after every other
+// kind so the places already there keep theirs (ticket 0012, step 5). The
+// id is only a key; the player's word is "Derelict machine". A track leads
+// in.
+(
+    id: "strata:wreck_works",
+    name: "Derelict machine",
+    rank: 8,
+    per_1000_km2: 1.5,
+    footprint_m: 30.0,
+    blend_m: 30.0,
+    crown: 0.0,
+    max_cut_m: 5.0,
+    spacing: (own_m: 16000.0, others_m: 2000.0, settlements_m: 6000.0),
+    ground: (
+        slope_max: 0.14,
+        height_m: (min: 8.0, max: 2400.0),
+        biomes: [(id: "strata:ocean", weight: 0.0)],
+    ),
+    wants: [
+        // Never in water.
+        (any: [(feature: "sea", beyond_m: 200.0, fade_m: 200.0)], weight: 1.0, required: true),
+        // Far from the living.
+        (any: [(feature: "kind", kind: "strata:town", beyond_m: 6000.0, fade_m: 1500.0)], weight: 1.0, required: true),
+        (any: [(feature: "settlement", beyond_m: 6000.0, fade_m: 1500.0)], weight: 1.0, required: true),
+        (any: [(feature: "kind", kind: "strata:hamlet", beyond_m: 3500.0, fade_m: 1000.0)], weight: 1.0, required: true),
+        // What its job needed: a large river at hand, or a high shoulder
+        // with a view.
+        (any: [
+            (feature: "river", size_m: 8.0, within_m: 300.0, fade_m: 300.0),
+            (feature: "view", at_least: 0.5, full: 0.9),
+            (feature: "summit", at_least: 60.0, full: 160.0),
+        ], weight: 3.0, required: true),
+        // Still within a long walk of a settlement.
+        (any: [(feature: "settlement", within_m: 25000.0, fade_m: 20000.0)], weight: 1.0),
+    ],
+    facing: "view",
+    road: "track",
+    group: "veyra:derelict_machine",
+    names: (
+        onsets: ["a", "b", "d", "g", "k", "m", "n", "r", "s", "t", "v", "z", "ar", "kr"],
+        vowels: ["a", "e", "i", "o", "u", "a", "o"],
+        codas: ["", "n", "r", "l", "s", "x", "k", "t"],
+        syllables: [1, 2],
+        patterns: ["Pump Station {root}", "{root} Processor", "{root} Works", "Ardent {root}", "{root} Relay"],
+        by_feature: [
+            (feature: "river", patterns: ["Pump Station {root}", "{root} Pump"]),
+            (feature: "view", patterns: ["{root} Processor", "{root} Relay"]),
+        ],
+    ),
+)

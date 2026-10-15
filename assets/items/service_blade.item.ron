@@ -1,0 +1,28 @@
+// A one-hand blade on the Blade class of `assets/combat/melee.ron`: the figures the cuts always had.
+// Its edge line scales the damage of its cuts (the signature): a bought one,
+// at 500, cuts at 0.95 of the class's figure, as a bought carbine fires
+// slower than the table. Its chassis in `crates/veyra-weapons` gives it mounts
+// and its baked picture and model (ticket 0010, step 3): edge open, grip opens at 400 on the moddability line, so a bought one (500) has both.
+// Sold at Pelagic's board, and made by its schematic.
+(
+    id: "veyra:weapon.service_blade",
+    name: "Service blade",
+    maker: "Pelagic Works",
+    kind: Weapon(
+        family: "Blade",
+        chassis: "field_blade",
+        mounts: [
+            (slot: "edge"),
+            (slot: "grip", opens_at: Some(400)),
+        ],
+        signature: Some((line: "edge", property: HitDamage, worst: 0.80, best: 1.10)),
+    ),
+    stack: 1,
+    price: Some(180),
+    lines: [
+        (id: "edge", name: "Edge"),
+        (id: "durability", name: "Durability"),
+        (id: "moddability", name: "Moddability"),
+    ],
+    icon: (shape: Rod, color: "#B9C4CF", picture: Some("field_blade/whole.png"), symbol: Some("veyra:icon.weapon.blade")),
+)

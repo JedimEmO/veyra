@@ -1,0 +1,29 @@
+// The people of an outlaw camp (ticket 0012, step 2): who stands up when a
+// member comes near, by tier. A tier is the camp's distance from Port
+// Serein, read by `assets/combat/tiers.ron`.
+(
+    version: 1,
+    id: "strata:outlaw_camp",
+    // The site kind whose camps these are.
+    at: Site("strata:wild_camp"),
+    // An observer inside this stands the people up.
+    stand_m: 260.0,
+    // Beyond this, with nobody fighting, they fold away.
+    fold_m: 420.0,
+    // Played hours a cleared camp stays quiet.
+    returns_h: 3.0,
+    // Where a person stands on the pad: shares of its radius tried in order,
+    // the turns of an angle tried when a building is in the way, and how
+    // far a person keeps from a wall, metres.
+    ring: [0.55, 0.4, 0.7, 0.25],
+    nudges: [0.0, 0.35, -0.35, 0.7, -0.7],
+    clear_m: 1.5,
+    tiers: [
+        // Tier 1.
+        [(kind: Rusher, count: 1), (kind: Sentry, count: 1)],
+        // Tier 2.
+        [(kind: Duelist, count: 2), (kind: Rusher, count: 3), (kind: Marksman, count: 2)],
+        // Tier 3.
+        [(kind: Duelist, count: 2), (kind: Rusher, count: 3), (kind: Marksman, count: 2), (kind: Bulwark, count: 1)],
+    ],
+)

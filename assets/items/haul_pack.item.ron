@@ -1,0 +1,10 @@
+// The large bag: twelve cells, which is every cell a bag slot has
+// (`carry.ron`, `bag_cells`).
+(
+    id: "veyra:bag.haul_pack",
+    name: "Haul pack",
+    maker: "the dealer",
+    kind: Bag(cells: 12),
+    stack: 1,
+    icon: (shape: Cube, color: "#E0703C", symbol: Some("veyra:icon.equipment.pack")),
+)

@@ -1,0 +1,104 @@
+// Per action: the contact interval, the commitment, what it costs and
+// what it does. Seconds and metres, independent of any clip's frame rate.
+// Loaded by `strata_sim::combat_tables`; every row must be present.
+(
+    version: 1,
+    actions: {
+        // Opening cut.
+        Light: (
+            contact_start: 0.13,
+            contact_end: 0.22,
+            duration: 0.40,
+            dodge_cancel: 0.31,
+            stamina: 18.0,
+            damage: 28.0,
+            posture: 34.0,
+            travel: 0.50,
+        ),
+        // Buffered return cut.
+        Followup: (
+            contact_start: 0.12,
+            contact_end: 0.22,
+            duration: 0.40,
+            dodge_cancel: 0.31,
+            stamina: 18.0,
+            damage: 34.0,
+            posture: 42.0,
+            travel: 0.60,
+        ),
+        // Slow posture-breaking cut.
+        Heavy: (
+            contact_start: 0.32,
+            contact_end: 0.45,
+            duration: 0.85,
+            dodge_cancel: 0.69,
+            stamina: 32.0,
+            damage: 55.0,
+            posture: 80.0,
+            travel: 0.85,
+        ),
+        // Direction locked when it begins; its contact interval is the
+        // invulnerable window, since a dodge sweeps nothing.
+        Dodge: (
+            contact_start: 0.06,
+            contact_end: 0.24,
+            duration: 0.48,
+            dodge_cancel: 0.48,
+            stamina: 26.0,
+            damage: 0.0,
+            posture: 0.0,
+            travel: 3.4,
+        ),
+        // Its real length is the weapon's reload time; this row is the fallback.
+        Reload: (
+            contact_start: 0.0,
+            contact_end: 0.0,
+            duration: 1.35,
+            dodge_cancel: 0.0,
+            stamina: 0.0,
+            damage: 0.0,
+            posture: 0.0,
+            travel: 0.0,
+        ),
+        Swap: (
+            contact_start: 0.0,
+            contact_end: 0.0,
+            duration: 0.45,
+            dodge_cancel: 0.45,
+            stamina: 0.0,
+            damage: 0.0,
+            posture: 0.0,
+            travel: 0.0,
+        ),
+        Stagger: (
+            contact_start: 0.0,
+            contact_end: 0.0,
+            duration: 0.42,
+            dodge_cancel: 0.42,
+            stamina: 0.0,
+            damage: 0.0,
+            posture: 0.0,
+            travel: 0.0,
+        ),
+        Ready: (
+            contact_start: 0.0,
+            contact_end: 0.0,
+            duration: 0.0,
+            dodge_cancel: 0.0,
+            stamina: 0.0,
+            damage: 0.0,
+            posture: 0.0,
+            travel: 0.0,
+        ),
+        Dead: (
+            contact_start: 0.0,
+            contact_end: 0.0,
+            duration: 0.0,
+            dodge_cancel: 0.0,
+            stamina: 0.0,
+            damage: 0.0,
+            posture: 0.0,
+            travel: 0.0,
+        ),
+    },
+)

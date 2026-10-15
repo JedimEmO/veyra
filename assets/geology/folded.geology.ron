@@ -1,0 +1,45 @@
+// Folded shale and slate: steeply dipping beds, long parallel ridges, dark
+// scree. Hard sandstones stand as ridges, shales and limestones between them
+// wear down to valleys; the main rivers run along the grain and cut through
+// the ridges in gaps. The grain is the ranges' own axis.
+(
+    id: "strata:folded",
+    name: "Folded shale and slate",
+    tint: (0.32, 0.50, 0.74),
+    deal_order: 4,
+    rock: (
+        // Its own layer (blue-grey plates on a steep cleavage), baked by `just content`.
+        face: "strata:slate",
+        bare_slope: 1.0,
+        far_tint: (0.85, 0.88, 0.95),
+    ),
+    // Step 4 (ticket 0004): ridged relief stretched four times along the
+    // range axis, the design's, with the plains' amplitude at 5 (3 in the
+    // design) and a tundra rule: the grain's elongation 2.48 (1.02 before).
+    // The hills' amplitude is 1.0 (1.2 in the design) since the review of
+    // step 4: stretched, their valleys and the gullies in them cut a trench
+    // 300 m long under the sea inland at 1.2, at a base of 240 m.
+    relief: [
+        (class: "plains", shape: "ridged", amplitude: 5.0, wavelength: 1.0, erosion: 1.0, stretch: 4.0),
+        (class: "hills", shape: "ridged", amplitude: 1.0, wavelength: 0.8, erosion: 1.2, stretch: 4.0),
+        (class: "mountains", shape: "ridged", amplitude: 1.0, wavelength: 1.0, erosion: 1.2, stretch: 2.0),
+        (class: "ridges", shape: "ridged", amplitude: 3.0, wavelength: 1.0, erosion: 1.0, stretch: 4.0),
+    ],
+    // Step 5 (ticket 0004): dips of 25 to 50 degrees (35 to 80 in the
+    // design): a bed's dip slope stands at `strength` times the dip's
+    // tangent, so dips over 60 degrees stood walls where a hogback wants a
+    // walkable dip slope and a scarp, and the beds fade out on ground that
+    // steep anyway.
+    beds: (
+        thickness_m: (min: 5.0, max: 30.0),
+        hard_share: 0.4,
+        strength: 0.7,
+        dip_deg: (min: 25.0, max: 50.0),
+    ),
+    water: (section: "v", keep_pits_m: 12.0, hang: 0.9, along_grain: 0.7),
+    kit: [
+        (species: "strata:granite_cliff", weight: 0.6),
+        (species: "strata:granite_boulder", weight: 0.4),
+        (species: "strata:granite_stone", weight: 1.0),
+    ],
+)

@@ -1,0 +1,69 @@
+{
+  "schema": 2,
+  "kind": "model",
+  "name": "scrapyard_rifle",
+  "prompt": null,
+  "tags": [
+    "scrapyard",
+    "weapon"
+  ],
+  "created": "2026-09-04",
+  "created_by": "agent:codex",
+  "provenance": "recorded",
+  "rig": null,
+  "generator": {
+    "tool": "trellis2",
+    "model": "microsoft/TRELLIS.2-4B",
+    "trellis_commit": "75fbf0183001ed9876c8dbb35de6b68552ee08bd",
+    "resolution": 1024,
+    "pipeline_type": "1024_cascade",
+    "seed": 42,
+    "decimation_target_vertices": 6000,
+    "texture_size": 1024,
+    "remesh": true,
+    "texture_baker": "nvdiffrast (NVIDIA Source Code License, non-commercial)",
+    "image": "assets-src/refs/props/scrapyard_rifle.png",
+    "image_sha256": "sha256:ceddb717ffa5fb99673a1da13c115fa1bfa596e1fad9c3d7305e4f7ae917e619",
+    "lift_sha256": "sha256:abd97f1a8190082cc5995e9d025882fc75a177c17bafdf7e316a771c8609d832",
+    "post": {
+      "tool": "blender",
+      "script": "prop",
+      "version": "Khronos glTF Blender I/O v5.2.40"
+    }
+  },
+  "source": {
+    "path": null,
+    "sha256": null,
+    "skeleton": null
+  },
+  "recipe": null,
+  "measured": {
+    "frames": null,
+    "fps": null,
+    "duration_s": null,
+    "avg_speed_mps": null,
+    "root_motion": null,
+    "mesh": {
+      "vertices": 5136,
+      "triangles": 5808,
+      "bones_skinned": 0,
+      "lowest_y": -0.28,
+      "bounds": [
+        [
+          -0.06488586,
+          -0.28,
+          -0.21957687
+        ],
+        [
+          0.06488586,
+          0.57,
+          0.21957687
+        ]
+      ]
+    }
+  },
+  "body": null,
+  "events": null,
+  "content_hash": "sha256:6591511b688286ad5d076e8f296f30647ce57c3ae32c5f965b3cd699b2fa784f",
+  "note": "85 cm rifle; hand_r axial grip at 28 cm from stock; final hand seating needs consumer attachment check. Non-commercial texture baker."
+}

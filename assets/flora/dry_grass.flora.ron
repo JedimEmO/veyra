@@ -1,0 +1,23 @@
+// Sparse tufts where the meadow gives up.
+(
+    id: "strata:dry_grass",
+    name: "Dry grass",
+    kind: "grass",
+    biomes: [
+        (biome: "strata:savanna", weight: 0.8),
+        (biome: "strata:desert", weight: 0.08),
+        (biome: "strata:tundra", weight: 0.35),
+        (biome: "strata:plains", weight: 0.3),
+    ],
+    density_per_m2: 2.5,
+    grass_shape: (0.022, 0.14, 0.08, 0.42),
+    slope_max: 0.8,
+    altitude_m: (min: 0.3, max: 2500.0),
+    sea_clearance_m: 0.5,
+    moisture: (min: 0.0, max: 0.55),
+    cover_floor: 0.5,
+    size: (min: 0.2, max: 0.5),
+    exclusion_m: 0.0,
+    tint_dry: (0.62, 0.55, 0.28),
+    tint_lush: (0.45, 0.50, 0.20),
+)

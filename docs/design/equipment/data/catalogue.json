@@ -1,0 +1,1213 @@
+{
+  "schema_version": 1,
+  "status": "design_proposal_not_runtime",
+  "date": "2026-10-04",
+  "rules": {
+    "module_factor_bounds": [
+      0.65,
+      1.35
+    ],
+    "composed_index_bounds": [
+      0.65,
+      1.35
+    ],
+    "implant_capacity": 4,
+    "ready_supply_limit": 6,
+    "actor_stock_indices": {
+      "sprint_speed": 1.0,
+      "dodge_stamina": 1.0,
+      "shield_recharge_delay": 1.0,
+      "stamina_capacity": 1.0
+    },
+    "fitting": "workshop_out_of_combat",
+    "stock_part_policy": "integral_retained_with_weapon",
+    "pool_rebuild": "min(old_current,new_capacity)",
+    "supply_walk_factor": 0.35,
+    "supply_interruptions": [
+      "attack",
+      "fire",
+      "sprint",
+      "dodge",
+      "damaging_hit"
+    ],
+    "supply_consumption": "atomic_on_successful_completion",
+    "cooldown_clock": "played_simulation_seconds_persisted"
+  },
+  "metrics": {
+    "shot_damage": {
+      "scope": "weapon",
+      "benefit_direction": "higher",
+      "meaning": "Damage of one plasma pulse or precision bullet; shotgun value is one complete discharge before pellet distribution. Three-pulse bursts emit three separately resolved pulses."
+    },
+    "shot_posture": {
+      "scope": "weapon",
+      "benefit_direction": "higher",
+      "meaning": "Posture pressure of one plasma pulse or precision bullet; shotgun value is one complete discharge distributed over pellets, never multiplied by pellet count."
+    },
+    "repeat_interval": {
+      "scope": "weapon",
+      "benefit_direction": "lower",
+      "meaning": "Interval between allowed discharges, or between start times of bursts. Burst size and intra-burst timing are separate future fields."
+    },
+    "capacity": {
+      "scope": "weapon",
+      "benefit_direction": "higher",
+      "meaning": "Loaded ammunition units: one per plasma pulse or precision bullet, one shell per complete shotgun discharge. A three-pulse burst needs three units. Floor final absolute capacity once, minimum one; absolute burst capacity must also fit a full burst."
+    },
+    "reload_time": {
+      "scope": "weapon",
+      "benefit_direction": "lower",
+      "meaning": "Seconds committed to a complete reload; no automatic ammunition creation."
+    },
+    "aim_spread": {
+      "scope": "weapon",
+      "benefit_direction": "lower",
+      "meaning": "Angular dispersion while aimed. A future absolute positive cone is required."
+    },
+    "equip_time": {
+      "scope": "weapon",
+      "benefit_direction": "lower",
+      "meaning": "Seconds committed to readying this weapon."
+    },
+    "aim_move_speed": {
+      "scope": "weapon",
+      "benefit_direction": "higher",
+      "meaning": "Movement speed while aiming, capped by future absolute motor constraints."
+    },
+    "recoil_recovery": {
+      "scope": "weapon",
+      "benefit_direction": "lower",
+      "meaning": "Seconds for recoil displacement to settle; not raw damage or guaranteed accuracy."
+    },
+    "heat_per_shot": {
+      "scope": "weapon",
+      "benefit_direction": "lower",
+      "meaning": "Heat added by a support-projector discharge."
+    },
+    "cooling_rate": {
+      "scope": "weapon",
+      "benefit_direction": "higher",
+      "meaning": "Heat removed per second while permitted to cool."
+    },
+    "brace_time": {
+      "scope": "weapon",
+      "benefit_direction": "lower",
+      "meaning": "Seconds required to enter support-projector braced handling."
+    },
+    "hit_damage": {
+      "scope": "weapon",
+      "benefit_direction": "higher",
+      "meaning": "Damage of a connected melee action; eventually applied to its own action rows."
+    },
+    "hit_posture": {
+      "scope": "weapon",
+      "benefit_direction": "higher",
+      "meaning": "Posture pressure of a connected melee action."
+    },
+    "attack_stamina": {
+      "scope": "weapon",
+      "benefit_direction": "lower",
+      "meaning": "Stamina cost of melee attacks only; excludes dodge."
+    },
+    "recovery_time": {
+      "scope": "weapon",
+      "benefit_direction": "lower",
+      "meaning": "Post-contact melee commitment; does not scale contact windows or animation wholesale."
+    },
+    "sprint_speed": {
+      "scope": "actor",
+      "benefit_direction": "higher",
+      "meaning": "Actor sprint speed; no change to walking speed."
+    },
+    "dodge_stamina": {
+      "scope": "actor",
+      "benefit_direction": "lower",
+      "meaning": "Actor stamina cost of Dodge."
+    },
+    "shield_recharge_delay": {
+      "scope": "actor",
+      "benefit_direction": "lower",
+      "meaning": "Seconds since last damaging hit before shield recovery; requires separating current shared hurt timer."
+    },
+    "stamina_capacity": {
+      "scope": "actor",
+      "benefit_direction": "higher",
+      "meaning": "Maximum stamina; increasing it does not restore current stamina."
+    }
+  },
+  "makers": [
+    {
+      "id": "veyra:maker.kestrel",
+      "name": "Kestrel",
+      "status": "proposed",
+      "identity": "Institutional service equipment"
+    },
+    {
+      "id": "veyra:maker.morrow",
+      "name": "Morrow",
+      "status": "proposed",
+      "identity": "Precision and controlled handling"
+    },
+    {
+      "id": "veyra:maker.bracken",
+      "name": "Bracken",
+      "status": "proposed",
+      "identity": "Repairable frontier industrial equipment"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "veyra:interface.kestrel_service_sight",
+      "revision": 1,
+      "slot": "sight",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.service_pistol_feed",
+      "revision": 1,
+      "slot": "feed",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.service_pistol_grip",
+      "revision": 1,
+      "slot": "grip",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.burst_rifle_feed",
+      "revision": 1,
+      "slot": "feed",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.burst_rifle_fore_end",
+      "revision": 1,
+      "slot": "fore_end",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.precision_rifle_sight",
+      "revision": 1,
+      "slot": "sight",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.precision_rifle_feed",
+      "revision": 1,
+      "slot": "feed",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.precision_rifle_stock",
+      "revision": 1,
+      "slot": "stock",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.scattergun_muzzle",
+      "revision": 1,
+      "slot": "muzzle",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.scattergun_feed",
+      "revision": 1,
+      "slot": "feed",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.scattergun_grip",
+      "revision": 1,
+      "slot": "grip",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.support_projector_cooling",
+      "revision": 1,
+      "slot": "cooling",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.support_projector_feed",
+      "revision": 1,
+      "slot": "feed",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.support_projector_support",
+      "revision": 1,
+      "slot": "support",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.field_blade_edge",
+      "revision": 1,
+      "slot": "edge",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.field_blade_grip",
+      "revision": 1,
+      "slot": "grip",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.heavy_cutter_head",
+      "revision": 1,
+      "slot": "head",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.heavy_cutter_power",
+      "revision": 1,
+      "slot": "power",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.heavy_cutter_grip",
+      "revision": 1,
+      "slot": "grip",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.impact_baton_head",
+      "revision": 1,
+      "slot": "head",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    },
+    {
+      "id": "veyra:interface.impact_baton_grip",
+      "revision": 1,
+      "slot": "grip",
+      "mate_facing": "opposed",
+      "geometry_status": "frame_and_clearance_measurements_pending"
+    }
+  ],
+  "certifications": [
+    {
+      "id": "veyra:cert.service_pistol",
+      "name": "Service pistol certification",
+      "existing_box": null,
+      "proposed_route": "marksman_specialization"
+    },
+    {
+      "id": "veyra:cert.burst_rifle",
+      "name": "Burst rifle certification",
+      "existing_box": null,
+      "proposed_route": "marksman_specialization"
+    },
+    {
+      "id": "veyra:cert.precision_rifle",
+      "name": "Precision rifle certification",
+      "existing_box": null,
+      "proposed_route": "marksman_specialization"
+    },
+    {
+      "id": "veyra:cert.scattergun",
+      "name": "Scattergun certification",
+      "existing_box": null,
+      "proposed_route": "marksman_specialization"
+    },
+    {
+      "id": "veyra:cert.support_projector",
+      "name": "Support projector certification",
+      "existing_box": null,
+      "proposed_route": "commando"
+    },
+    {
+      "id": "veyra:cert.field_blade",
+      "name": "Field blade certification",
+      "existing_box": null,
+      "proposed_route": "melee_specialization"
+    },
+    {
+      "id": "veyra:cert.heavy_cutter",
+      "name": "Heavy cutter certification",
+      "existing_box": null,
+      "proposed_route": "melee_specialization"
+    },
+    {
+      "id": "veyra:cert.impact_baton",
+      "name": "Impact baton certification",
+      "existing_box": null,
+      "proposed_route": "melee_specialization"
+    }
+  ],
+  "weapons": [
+    {
+      "id": "veyra:weapon.service_pistol",
+      "name": "Service pistol",
+      "status": "proposed",
+      "maker": "veyra:maker.kestrel",
+      "family": "ranged",
+      "role": "pistol",
+      "technology": "plasma",
+      "purpose": "Mobile pressure with a complete primary-weapon specialization, not a mandatory weak backup.",
+      "nominal_length_m": 0.24,
+      "certification": "veyra:cert.service_pistol",
+      "slots": {
+        "sight": {
+          "interface": "veyra:interface.kestrel_service_sight",
+          "stock_part": "veyra:stock.service_pistol_sight",
+          "socket": "mount_sight"
+        },
+        "feed": {
+          "interface": "veyra:interface.service_pistol_feed",
+          "stock_part": "veyra:stock.service_pistol_feed",
+          "socket": "mount_feed"
+        },
+        "grip": {
+          "interface": "veyra:interface.service_pistol_grip",
+          "stock_part": "veyra:stock.service_pistol_grip",
+          "socket": "mount_grip"
+        }
+      },
+      "stock_indices": {
+        "shot_damage": 1.0,
+        "shot_posture": 1.0,
+        "repeat_interval": 1.0,
+        "capacity": 1.0,
+        "reload_time": 1.0,
+        "aim_spread": 1.0,
+        "equip_time": 1.0,
+        "aim_move_speed": 1.0,
+        "recoil_recovery": 1.0
+      },
+      "absolute_profile": null,
+      "geometry_recipe": null,
+      "art_brief": "../manufacturers-and-art.md",
+      "acquisition": [
+        "purchase",
+        "commission",
+        "authored_recovery"
+      ],
+      "salvage_rule": "return_installed_modules_once_no_free_stock_parts"
+    },
+    {
+      "id": "veyra:weapon.burst_rifle",
+      "name": "Burst rifle",
+      "status": "proposed",
+      "maker": "veyra:maker.kestrel",
+      "family": "ranged",
+      "role": "burst",
+      "technology": "plasma",
+      "purpose": "Deliberate three-pulse medium-range pressure; full burst required to start, un-emitted ammunition retained on interruption, repeat timer persists across interruption or swap.",
+      "nominal_length_m": 0.76,
+      "certification": "veyra:cert.burst_rifle",
+      "slots": {
+        "sight": {
+          "interface": "veyra:interface.kestrel_service_sight",
+          "stock_part": "veyra:stock.burst_rifle_sight",
+          "socket": "mount_sight"
+        },
+        "feed": {
+          "interface": "veyra:interface.burst_rifle_feed",
+          "stock_part": "veyra:stock.burst_rifle_feed",
+          "socket": "mount_feed"
+        },
+        "fore_end": {
+          "interface": "veyra:interface.burst_rifle_fore_end",
+          "stock_part": "veyra:stock.burst_rifle_fore_end",
+          "socket": "mount_fore_end"
+        }
+      },
+      "stock_indices": {
+        "shot_damage": 1.0,
+        "shot_posture": 1.0,
+        "repeat_interval": 1.0,
+        "capacity": 1.0,
+        "reload_time": 1.0,
+        "aim_spread": 1.0,
+        "equip_time": 1.0,
+        "aim_move_speed": 1.0,
+        "recoil_recovery": 1.0
+      },
+      "absolute_profile": null,
+      "geometry_recipe": null,
+      "art_brief": "../manufacturers-and-art.md",
+      "acquisition": [
+        "purchase",
+        "commission",
+        "authored_recovery"
+      ],
+      "salvage_rule": "return_installed_modules_once_no_free_stock_parts"
+    },
+    {
+      "id": "veyra:weapon.precision_rifle",
+      "name": "Precision rifle",
+      "status": "proposed",
+      "maker": "veyra:maker.morrow",
+      "family": "ranged",
+      "role": "precision",
+      "technology": "projectile",
+      "purpose": "Long-range deliberate shots with commitment and poor close handling.",
+      "nominal_length_m": 1.05,
+      "certification": "veyra:cert.precision_rifle",
+      "slots": {
+        "sight": {
+          "interface": "veyra:interface.precision_rifle_sight",
+          "stock_part": "veyra:stock.precision_rifle_sight",
+          "socket": "mount_sight"
+        },
+        "feed": {
+          "interface": "veyra:interface.precision_rifle_feed",
+          "stock_part": "veyra:stock.precision_rifle_feed",
+          "socket": "mount_feed"
+        },
+        "stock": {
+          "interface": "veyra:interface.precision_rifle_stock",
+          "stock_part": "veyra:stock.precision_rifle_stock",
+          "socket": "mount_stock"
+        }
+      },
+      "stock_indices": {
+        "shot_damage": 1.0,
+        "shot_posture": 1.0,
+        "repeat_interval": 1.0,
+        "capacity": 1.0,
+        "reload_time": 1.0,
+        "aim_spread": 1.0,
+        "equip_time": 1.0,
+        "aim_move_speed": 1.0,
+        "recoil_recovery": 1.0
+      },
+      "absolute_profile": null,
+      "geometry_recipe": null,
+      "art_brief": "../manufacturers-and-art.md",
+      "acquisition": [
+        "purchase",
+        "commission",
+        "authored_recovery"
+      ],
+      "salvage_rule": "return_installed_modules_once_no_free_stock_parts"
+    },
+    {
+      "id": "veyra:weapon.scattergun",
+      "name": "Scattergun",
+      "status": "proposed",
+      "maker": "veyra:maker.bracken",
+      "family": "ranged",
+      "role": "scatter",
+      "technology": "projectile",
+      "purpose": "Close-range spread and front-loaded damage, limited posture and costly reload openings.",
+      "nominal_length_m": 0.69,
+      "certification": "veyra:cert.scattergun",
+      "slots": {
+        "muzzle": {
+          "interface": "veyra:interface.scattergun_muzzle",
+          "stock_part": "veyra:stock.scattergun_muzzle",
+          "socket": "mount_muzzle"
+        },
+        "feed": {
+          "interface": "veyra:interface.scattergun_feed",
+          "stock_part": "veyra:stock.scattergun_feed",
+          "socket": "mount_feed"
+        },
+        "grip": {
+          "interface": "veyra:interface.scattergun_grip",
+          "stock_part": "veyra:stock.scattergun_grip",
+          "socket": "mount_grip"
+        }
+      },
+      "stock_indices": {
+        "shot_damage": 1.0,
+        "shot_posture": 1.0,
+        "repeat_interval": 1.0,
+        "capacity": 1.0,
+        "reload_time": 1.0,
+        "aim_spread": 1.0,
+        "equip_time": 1.0,
+        "aim_move_speed": 1.0,
+        "recoil_recovery": 1.0
+      },
+      "absolute_profile": null,
+      "geometry_recipe": null,
+      "art_brief": "../manufacturers-and-art.md",
+      "acquisition": [
+        "purchase",
+        "commission",
+        "authored_recovery"
+      ],
+      "salvage_rule": "return_installed_modules_once_no_free_stock_parts"
+    },
+    {
+      "id": "veyra:weapon.support_projector",
+      "name": "Support projector",
+      "status": "proposed",
+      "maker": "veyra:maker.kestrel",
+      "family": "ranged",
+      "role": "support",
+      "technology": "plasma",
+      "purpose": "Direct-fire lane pressure; heat and bracing create a commando playstyle without splash.",
+      "nominal_length_m": 0.98,
+      "certification": "veyra:cert.support_projector",
+      "slots": {
+        "cooling": {
+          "interface": "veyra:interface.support_projector_cooling",
+          "stock_part": "veyra:stock.support_projector_cooling",
+          "socket": "mount_cooling"
+        },
+        "feed": {
+          "interface": "veyra:interface.support_projector_feed",
+          "stock_part": "veyra:stock.support_projector_feed",
+          "socket": "mount_feed"
+        },
+        "support": {
+          "interface": "veyra:interface.support_projector_support",
+          "stock_part": "veyra:stock.support_projector_support",
+          "socket": "mount_support"
+        }
+      },
+      "stock_indices": {
+        "shot_damage": 1.0,
+        "shot_posture": 1.0,
+        "repeat_interval": 1.0,
+        "capacity": 1.0,
+        "reload_time": 1.0,
+        "aim_spread": 1.0,
+        "equip_time": 1.0,
+        "aim_move_speed": 1.0,
+        "recoil_recovery": 1.0,
+        "heat_per_shot": 1.0,
+        "cooling_rate": 1.0,
+        "brace_time": 1.0
+      },
+      "absolute_profile": null,
+      "geometry_recipe": null,
+      "art_brief": "../manufacturers-and-art.md",
+      "acquisition": [
+        "purchase",
+        "commission",
+        "authored_recovery"
+      ],
+      "salvage_rule": "return_installed_modules_once_no_free_stock_parts"
+    },
+    {
+      "id": "veyra:weapon.field_blade",
+      "name": "Field blade",
+      "status": "proposed",
+      "maker": "veyra:maker.morrow",
+      "family": "melee",
+      "role": "fast_melee",
+      "technology": "physical",
+      "purpose": "Stamina-efficient close pressure, limited reach and modest posture per contact.",
+      "nominal_length_m": 0.72,
+      "certification": "veyra:cert.field_blade",
+      "slots": {
+        "edge": {
+          "interface": "veyra:interface.field_blade_edge",
+          "stock_part": "veyra:stock.field_blade_edge",
+          "socket": "mount_edge"
+        },
+        "grip": {
+          "interface": "veyra:interface.field_blade_grip",
+          "stock_part": "veyra:stock.field_blade_grip",
+          "socket": "mount_grip"
+        }
+      },
+      "stock_indices": {
+        "hit_damage": 1.0,
+        "hit_posture": 1.0,
+        "attack_stamina": 1.0,
+        "recovery_time": 1.0,
+        "equip_time": 1.0
+      },
+      "absolute_profile": null,
+      "geometry_recipe": null,
+      "art_brief": "../manufacturers-and-art.md",
+      "acquisition": [
+        "purchase",
+        "commission",
+        "authored_recovery"
+      ],
+      "salvage_rule": "return_installed_modules_once_no_free_stock_parts"
+    },
+    {
+      "id": "veyra:weapon.heavy_cutter",
+      "name": "Heavy cutter",
+      "status": "proposed",
+      "maker": "veyra:maker.bracken",
+      "family": "melee",
+      "role": "heavy_melee",
+      "technology": "powered_physical",
+      "purpose": "Committed posture-breaking cut with costly misses.",
+      "nominal_length_m": 1.02,
+      "certification": "veyra:cert.heavy_cutter",
+      "slots": {
+        "head": {
+          "interface": "veyra:interface.heavy_cutter_head",
+          "stock_part": "veyra:stock.heavy_cutter_head",
+          "socket": "mount_head"
+        },
+        "power": {
+          "interface": "veyra:interface.heavy_cutter_power",
+          "stock_part": "veyra:stock.heavy_cutter_power",
+          "socket": "mount_power"
+        },
+        "grip": {
+          "interface": "veyra:interface.heavy_cutter_grip",
+          "stock_part": "veyra:stock.heavy_cutter_grip",
+          "socket": "mount_grip"
+        }
+      },
+      "stock_indices": {
+        "hit_damage": 1.0,
+        "hit_posture": 1.0,
+        "attack_stamina": 1.0,
+        "recovery_time": 1.0,
+        "equip_time": 1.0
+      },
+      "absolute_profile": null,
+      "geometry_recipe": null,
+      "art_brief": "../manufacturers-and-art.md",
+      "acquisition": [
+        "purchase",
+        "commission",
+        "authored_recovery"
+      ],
+      "salvage_rule": "return_installed_modules_once_no_free_stock_parts"
+    },
+    {
+      "id": "veyra:weapon.impact_baton",
+      "name": "Impact baton",
+      "status": "proposed",
+      "maker": "veyra:maker.bracken",
+      "family": "melee",
+      "role": "control_melee",
+      "technology": "physical",
+      "purpose": "Short-reach posture pressure; no guaranteed stun loop or nonlethal outcome.",
+      "nominal_length_m": 0.52,
+      "certification": "veyra:cert.impact_baton",
+      "slots": {
+        "head": {
+          "interface": "veyra:interface.impact_baton_head",
+          "stock_part": "veyra:stock.impact_baton_head",
+          "socket": "mount_head"
+        },
+        "grip": {
+          "interface": "veyra:interface.impact_baton_grip",
+          "stock_part": "veyra:stock.impact_baton_grip",
+          "socket": "mount_grip"
+        }
+      },
+      "stock_indices": {
+        "hit_damage": 1.0,
+        "hit_posture": 1.0,
+        "attack_stamina": 1.0,
+        "recovery_time": 1.0,
+        "equip_time": 1.0
+      },
+      "absolute_profile": null,
+      "geometry_recipe": null,
+      "art_brief": "../manufacturers-and-art.md",
+      "acquisition": [
+        "purchase",
+        "commission",
+        "authored_recovery"
+      ],
+      "salvage_rule": "return_installed_modules_once_no_free_stock_parts"
+    }
+  ],
+  "modules": [
+    {
+      "id": "veyra:module.compact_optic",
+      "name": "Service compact optic",
+      "status": "proposed",
+      "maker": "veyra:maker.kestrel",
+      "slot": "sight",
+      "interface": "veyra:interface.kestrel_service_sight",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.service_pistol",
+        "veyra:weapon.burst_rifle"
+      ],
+      "factors": {
+        "aim_spread": 0.9,
+        "equip_time": 1.06
+      },
+      "appearance": "Low enclosed optical hood on the shared service sight interface.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.pistol_extended_cell",
+      "name": "Pistol extended cell",
+      "status": "proposed",
+      "maker": "veyra:maker.kestrel",
+      "slot": "feed",
+      "interface": "veyra:interface.service_pistol_feed",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.service_pistol"
+      ],
+      "factors": {
+        "capacity": 1.25,
+        "reload_time": 1.15
+      },
+      "appearance": "Deeper cell heel with unchanged key and withdrawal axis.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.pistol_stable_grip",
+      "name": "Pistol stability grip",
+      "status": "proposed",
+      "maker": "veyra:maker.kestrel",
+      "slot": "grip",
+      "interface": "veyra:interface.service_pistol_grip",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.service_pistol"
+      ],
+      "factors": {
+        "recoil_recovery": 0.9,
+        "equip_time": 1.08
+      },
+      "appearance": "Broader rear grip panel contained inside the original hand envelope.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.rifle_extended_cell",
+      "name": "Rifle extended cell",
+      "status": "proposed",
+      "maker": "veyra:maker.kestrel",
+      "slot": "feed",
+      "interface": "veyra:interface.burst_rifle_feed",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.burst_rifle"
+      ],
+      "factors": {
+        "capacity": 1.25,
+        "reload_time": 1.15
+      },
+      "appearance": "Downward extension of the stock power pack, with enlarged reload clearance.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.rifle_cooled_fore_end",
+      "name": "Rifle cooled fore-end",
+      "status": "proposed",
+      "maker": "veyra:maker.kestrel",
+      "slot": "fore_end",
+      "interface": "veyra:interface.burst_rifle_fore_end",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.burst_rifle"
+      ],
+      "factors": {
+        "repeat_interval": 0.92,
+        "aim_move_speed": 0.92
+      },
+      "appearance": "Longer ribbed outer cooling sleeve; support hand position unchanged.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.adapted_morrow_optic",
+      "name": "Workshop adapted Morrow optic",
+      "status": "proposed",
+      "maker": "veyra:maker.morrow",
+      "slot": "sight",
+      "interface": "veyra:interface.kestrel_service_sight",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.burst_rifle"
+      ],
+      "factors": {
+        "aim_spread": 0.82,
+        "equip_time": 1.15,
+        "aim_move_speed": 0.95
+      },
+      "appearance": "Morrow narrow optic on a visible workshop adapter shoe; one assembled sight module.",
+      "adapter": true,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "schematic_recovery"
+      ]
+    },
+    {
+      "id": "veyra:module.precision_long_optic",
+      "name": "Precision long optic",
+      "status": "proposed",
+      "maker": "veyra:maker.morrow",
+      "slot": "sight",
+      "interface": "veyra:interface.precision_rifle_sight",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.precision_rifle"
+      ],
+      "factors": {
+        "aim_spread": 0.85,
+        "equip_time": 1.12
+      },
+      "appearance": "Long protected optic aligned with the stock sight centreline.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.precision_compact_feed",
+      "name": "Precision compact magazine",
+      "status": "proposed",
+      "maker": "veyra:maker.morrow",
+      "slot": "feed",
+      "interface": "veyra:interface.precision_rifle_feed",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.precision_rifle"
+      ],
+      "factors": {
+        "capacity": 0.8,
+        "reload_time": 0.9
+      },
+      "appearance": "Shorter box with identical top interface and latch.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.scatter_wide_muzzle",
+      "name": "Scatter spread muzzle",
+      "status": "proposed",
+      "maker": "veyra:maker.bracken",
+      "slot": "muzzle",
+      "interface": "veyra:interface.scattergun_muzzle",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.scattergun"
+      ],
+      "factors": {
+        "aim_spread": 1.15,
+        "repeat_interval": 0.94
+      },
+      "appearance": "Wide vented muzzle assembly; wider pellet pattern buys faster discharge recovery.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.scatter_extended_feed",
+      "name": "Scatter extended magazine",
+      "status": "proposed",
+      "maker": "veyra:maker.bracken",
+      "slot": "feed",
+      "interface": "veyra:interface.scattergun_feed",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.scattergun"
+      ],
+      "factors": {
+        "capacity": 1.25,
+        "reload_time": 1.15
+      },
+      "appearance": "Deeper detachable box; tube-fed and per-shell reloads are outside this first chassis.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.support_cooling_jacket",
+      "name": "Support cooling jacket",
+      "status": "proposed",
+      "maker": "veyra:maker.kestrel",
+      "slot": "cooling",
+      "interface": "veyra:interface.support_projector_cooling",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.support_projector"
+      ],
+      "factors": {
+        "cooling_rate": 1.15,
+        "brace_time": 1.1
+      },
+      "appearance": "Larger finned jacket contained away from support grip and exhaust path.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.support_stable_rest",
+      "name": "Support stabilizing rest",
+      "status": "proposed",
+      "maker": "veyra:maker.kestrel",
+      "slot": "support",
+      "interface": "veyra:interface.support_projector_support",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.support_projector"
+      ],
+      "factors": {
+        "recoil_recovery": 0.9,
+        "brace_time": 1.15
+      },
+      "appearance": "Broad fixed underside rest, no folding bipod or terrain lock in the first proof.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.blade_balanced_grip",
+      "name": "Blade balanced grip",
+      "status": "proposed",
+      "maker": "veyra:maker.morrow",
+      "slot": "grip",
+      "interface": "veyra:interface.field_blade_grip",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.field_blade"
+      ],
+      "factors": {
+        "attack_stamina": 0.9,
+        "hit_posture": 0.94
+      },
+      "appearance": "Inset grip weights and restrained end-cap change; blade profile and palm frame stay fixed.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.cutter_reinforced_head",
+      "name": "Cutter reinforced head",
+      "status": "proposed",
+      "maker": "veyra:maker.bracken",
+      "slot": "head",
+      "interface": "veyra:interface.heavy_cutter_head",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.heavy_cutter"
+      ],
+      "factors": {
+        "hit_posture": 1.12,
+        "recovery_time": 1.1
+      },
+      "appearance": "Thicker rear head spine; cutting edge endpoints remain fixed.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    },
+    {
+      "id": "veyra:module.baton_weighted_head",
+      "name": "Baton weighted head",
+      "status": "proposed",
+      "maker": "veyra:maker.bracken",
+      "slot": "head",
+      "interface": "veyra:interface.impact_baton_head",
+      "interface_revision": 1,
+      "compatible_chassis": [
+        "veyra:weapon.impact_baton"
+      ],
+      "factors": {
+        "hit_posture": 1.1,
+        "hit_damage": 0.9
+      },
+      "appearance": "Replaceable blunt head collar inside the approved reach envelope.",
+      "adapter": false,
+      "geometry_recipe": null,
+      "acquisition": [
+        "commission",
+        "purchase"
+      ]
+    }
+  ],
+  "implants": [
+    {
+      "id": "veyra:implant.motor_governor",
+      "name": "Motor governor",
+      "maker": "veyra:maker.morrow",
+      "kind": "neural",
+      "capacity_cost": 2,
+      "weapon_scope": "ranged",
+      "weapon_factors": {
+        "recoil_recovery": 0.85
+      },
+      "actor_factors": {
+        "sprint_speed": 0.95
+      },
+      "appearance": "Flat keyed cartridge with shielded contact edge.",
+      "status": "proposed",
+      "installation": "clinic_out_of_combat",
+      "unique_per_character": true,
+      "geometry_recipe": null,
+      "acquisition": [
+        "clinic_purchase",
+        "clinic_commission"
+      ]
+    },
+    {
+      "id": "veyra:implant.tendon_assist",
+      "name": "Tendon assist controller",
+      "maker": "veyra:maker.bracken",
+      "kind": "motor",
+      "capacity_cost": 2,
+      "weapon_scope": "melee",
+      "weapon_factors": {
+        "attack_stamina": 0.9
+      },
+      "actor_factors": {
+        "dodge_stamina": 1.1
+      },
+      "appearance": "Ribbed motor-control capsule with paired service contacts.",
+      "status": "proposed",
+      "installation": "clinic_out_of_combat",
+      "unique_per_character": true,
+      "geometry_recipe": null,
+      "acquisition": [
+        "clinic_purchase",
+        "clinic_commission"
+      ]
+    },
+    {
+      "id": "veyra:implant.recovery_regulator",
+      "name": "Recovery regulator",
+      "maker": "veyra:maker.kestrel",
+      "kind": "autonomic",
+      "capacity_cost": 2,
+      "weapon_scope": "all",
+      "weapon_factors": {},
+      "actor_factors": {
+        "shield_recharge_delay": 0.85,
+        "stamina_capacity": 0.9
+      },
+      "appearance": "Ceramic-ended short regulator with recessed status window.",
+      "status": "proposed",
+      "installation": "clinic_out_of_combat",
+      "unique_per_character": true,
+      "geometry_recipe": null,
+      "acquisition": [
+        "clinic_purchase",
+        "clinic_commission"
+      ]
+    }
+  ],
+  "supplies": [
+    {
+      "id": "veyra:supply.field_dressing",
+      "name": "Field dressing",
+      "status": "proposed",
+      "maker": "veyra:maker.bracken",
+      "restore": {
+        "pool": "health",
+        "amount": 25
+      },
+      "use_seconds": 3.0,
+      "cooldown_group": "recovery_supply",
+      "cooldown_seconds": 45.0,
+      "stack_limit": 5,
+      "appearance": "Broad sterile pad in a flat peel-open rigid packet.",
+      "geometry_recipe": null,
+      "acquisition": [
+        "purchase",
+        "commission"
+      ]
+    },
+    {
+      "id": "veyra:supply.shield_reserve_cell",
+      "name": "Shield reserve cell",
+      "status": "proposed",
+      "maker": "veyra:maker.kestrel",
+      "restore": {
+        "pool": "shield",
+        "amount": 20
+      },
+      "use_seconds": 2.5,
+      "cooldown_group": "recovery_supply",
+      "cooldown_seconds": 45.0,
+      "stack_limit": 5,
+      "appearance": "Short keyed cell with insulated grip; physically incompatible with weapon feed wells.",
+      "geometry_recipe": null,
+      "acquisition": [
+        "purchase",
+        "commission"
+      ]
+    },
+    {
+      "id": "veyra:supply.recovery_ampoule",
+      "name": "Recovery ampoule",
+      "status": "proposed",
+      "maker": "veyra:maker.morrow",
+      "restore": {
+        "pool": "stamina",
+        "amount": 30
+      },
+      "use_seconds": 2.0,
+      "cooldown_group": "recovery_supply",
+      "cooldown_seconds": 45.0,
+      "stack_limit": 5,
+      "appearance": "Capped single-dose applicator in a protective sleeve.",
+      "geometry_recipe": null,
+      "acquisition": [
+        "purchase",
+        "commission"
+      ]
+    }
+  ]
+}

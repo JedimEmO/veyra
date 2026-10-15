@@ -1,0 +1,36 @@
+// The cell core (crafting.md, 5.1 and 5.5): 20 units of any reactive and 30
+// of any brine. A slot takes a resource by family, class or type with a
+// number of units, or an item with a count; a line of the product is a
+// weighted sum of what is in the slots, each weight a slot and one of its
+// stats, read straight or as Light (1000 less the figure), and a line's
+// weights sum to one. Charge density is the worked example's; stability is
+// in the same spirit, the salt's own and how clean the brine is.
+//
+// `profession`, `licence` and `fixture` are the box that teaches it, the
+// maker whose licence it needs and the workshop fixture it is made at.
+// Only the profession is read, and this one has none: the cell core is the
+// Fabricator's trade, open to everyone until that tree is real. Read by
+// `strata_registry::schematic`; in no world version and no handshake.
+(
+    id: "veyra:schematic.cell_core",
+    makes: "veyra:component.cell_core",
+    complexity: 1,
+    profession: None,
+    licence: None,
+    fixture: Some("cells"),
+    slots: [
+        (id: "salt", name: "Reactive", takes: Class("strata:reactive"), units: 20),
+        (id: "brine", name: "Brine", takes: Class("strata:brine"), units: 30),
+    ],
+    lines: [
+        (line: "charge_density", from: [
+            (slot: "salt", stat: Attribute(Potency), weight: 0.5),
+            (slot: "brine", stat: Attribute(Potency), weight: 0.3),
+            (slot: "brine", stat: Attribute(Conductivity), weight: 0.2),
+        ]),
+        (line: "stability", from: [
+            (slot: "salt", stat: Attribute(Stability), weight: 0.6),
+            (slot: "brine", stat: Attribute(Purity), weight: 0.4),
+        ]),
+    ],
+)

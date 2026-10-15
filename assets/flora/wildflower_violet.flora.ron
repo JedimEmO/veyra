@@ -1,0 +1,22 @@
+// Decorative understory, streamed only near the viewer.
+(
+    id: "strata:wildflower_violet",
+    name: "Violet wildflowers",
+    kind: "bush",
+    biomes: [(biome: "strata:forest", weight: 0.55), (biome: "strata:plains", weight: 0.4), (biome: "strata:highlands", weight: 0.25)],
+    spacing_m: 4.5,
+    slope_max: 0.55,
+    sea_clearance_m: 1.0,
+    moisture: (min: 0.25, max: 1.0),
+    cover_floor: 0.15,
+    size: (min: 0.8, max: 1.2),
+    exclusion_m: 0.35,
+    tint_dry: (0.32, 0.1, 0.5),
+    tint_lush: (0.32, 0.1, 0.5),
+    tree: (
+        form: "flower",
+        height_m: (min: 0.35, max: 0.7),
+        bark: "plain",
+        variants: 6,
+    ),
+)

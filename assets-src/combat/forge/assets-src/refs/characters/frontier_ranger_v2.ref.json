@@ -1,0 +1,63 @@
+{
+  "forge_record": 2,
+  "kind": "ref",
+  "tool": "imported",
+  "created": "2026-10-01",
+  "created_by": "unknown",
+  "backend": {
+    "name": null,
+    "commit": null,
+    "python": null,
+    "torch": null,
+    "model": null,
+    "model_revision": null,
+    "executor": null,
+    "comfyui_commit": null,
+    "workflow_sha256": null,
+    "packs": null
+  },
+  "inputs": [
+    {
+      "role": "image",
+      "path": "./docs/design/combat/ranger-reference-v2.png",
+      "sha256": "sha256:9aef4cdd486454f482b1fedbbb8f366e98ce825cee28c8036065d4727d5b179a",
+      "source": "OpenAI Imagegen, original Veyra frontier ranger revision with enclosed helmet, 2026-10-01",
+      "prompt": null
+    }
+  ],
+  "params": {
+    "kind": "character",
+    "long_side_px": 1254,
+    "stated_source": "OpenAI Imagegen, original Veyra frontier ranger revision with enclosed helmet, 2026-10-01"
+  },
+  "outputs": [
+    {
+      "path": "assets-src/refs/characters/frontier_ranger_v2.png",
+      "sha256": "sha256:9aef4cdd486454f482b1fedbbb8f366e98ce825cee28c8036065d4727d5b179a",
+      "bytes": 1359281
+    }
+  ],
+  "measured": {
+    "alpha_fraction": 0.192,
+    "arm_line_fraction": 0.1586,
+    "backdrop_rgb": [
+      205,
+      204,
+      204
+    ],
+    "contact_shadow_px": 0,
+    "floor_band": 0.0,
+    "foot_width_px": 407,
+    "heads": 6.3,
+    "height": 1254,
+    "interior_hole_fraction": 0.0,
+    "islands": 1,
+    "islands_all": 8,
+    "keyer_tolerance": 28,
+    "span_over_height": 1.003,
+    "subject_fill": 0.96,
+    "width": 1254
+  },
+  "fake": false,
+  "note": null
+}

@@ -1,0 +1,41 @@
+// A monitoring station: an environmental mast and a hut on a hilltop or a
+// ridge shoulder with a wide view, within reach of somewhere people live.
+// The kind of place the first job sends a player to (docs/SETTING.md).
+(
+    id: "strata:station",
+    name: "Monitoring station",
+    rank: 2,
+    per_1000_km2: 18.0,
+    footprint_m: 28.0,
+    blend_m: 35.0,
+    crown: 0.02,
+    max_cut_m: 4.0,
+    spacing: (own_m: 3500.0, others_m: 1000.0, settlements_m: 1500.0),
+    ground: (
+        slope_max: 0.2,
+        height_m: (min: 25.0, max: 2600.0),
+        biomes: [(id: "strata:ocean", weight: 0.0)],
+    ),
+    wants: [
+        // It sees far: the horizon below it most of the way round.
+        (any: [(feature: "view", at_least: 0.45, full: 0.9)], weight: 3.0, required: true),
+        // And stands over its ground.
+        (any: [(feature: "summit", at_least: 35.0, full: 130.0)], weight: 2.0, required: true),
+        // Somebody services it.
+        (any: [
+            (feature: "kind", kind: "strata:hamlet", within_m: 3000.0, fade_m: 3000.0),
+            (feature: "kind", kind: "strata:town", within_m: 5000.0, fade_m: 4000.0),
+            (feature: "settlement", within_m: 6000.0, fade_m: 4000.0),
+        ], weight: 1.0),
+    ],
+    facing: "view",
+    road: "track",
+    group: "veyra:monitoring_station",
+    names: (
+        onsets: ["c", "d", "h", "k", "l", "m", "n", "r", "s", "t", "v", "z", "kr", "st", "tr"],
+        vowels: ["a", "e", "i", "o", "u", "y"],
+        codas: ["", "n", "r", "l", "s", "x", "k", "t"],
+        syllables: [1, 2],
+        patterns: ["{root} Station", "{root} Monitor", "Station {root}", "{root} Mast", "{root} Watch"],
+    ),
+)

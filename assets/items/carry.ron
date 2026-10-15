@@ -1,0 +1,12 @@
+// How much a character carries and the household stores. The pack is its
+// own grid plus up to two bag slots; under each bag slot is a grid of
+// `bag_cells`, of which the bag put there opens its own count. The store
+// is the household's, one for everyone, reached at a locker. Read by
+// `strata_registry::item`; in no world version and no handshake.
+(
+    version: 1,
+    pack: (cols: 6, rows: 3),
+    bag_slots: 2,
+    bag_cells: 12,
+    store: (cols: 9, rows: 6),
+)

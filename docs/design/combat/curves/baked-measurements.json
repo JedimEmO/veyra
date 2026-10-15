@@ -1,0 +1,51 @@
+{
+  "bundle_sha256": "d3888fd6995469015edc04c468e5b0ed930a6d53f75b0f2d90ae12c9c3f7971b",
+  "curves_sha256": "2c3973ab8c4376c03047e5e46f4611ccdd3825226c19a1f1fce7a8b77bf331ee",
+  "clips": [
+    {
+      "name": "light",
+      "clip": "light",
+      "clip_duration_s": 0.4000000059604645,
+      "action_duration_s": 0.4,
+      "sampled_interpolation_hz": 120.0,
+      "peak_speed_mps": 24.331217724318286,
+      "peak_time_s": 0.15833333333333333,
+      "contact_peak_mps": 24.331217724318286,
+      "contact_tip_forward_m": [
+        0.8768625864131009,
+        1.5586441540269336
+      ],
+      "kind": "evaluated_shipped_glTF_rig_actual_0.78m_blade"
+    },
+    {
+      "name": "followup",
+      "clip": "followup",
+      "clip_duration_s": 0.4000000059604645,
+      "action_duration_s": 0.4,
+      "sampled_interpolation_hz": 120.0,
+      "peak_speed_mps": 49.133586368362394,
+      "peak_time_s": 0.14166666666666666,
+      "contact_peak_mps": 49.133586368362394,
+      "contact_tip_forward_m": [
+        0.03022412930938139,
+        1.3281130998069848
+      ],
+      "kind": "evaluated_shipped_glTF_rig_actual_0.78m_blade"
+    },
+    {
+      "name": "heavy",
+      "clip": "heavy",
+      "clip_duration_s": 0.8500000238418579,
+      "action_duration_s": 0.85,
+      "sampled_interpolation_hz": 120.0,
+      "peak_speed_mps": 39.58168426788836,
+      "peak_time_s": 0.35833333333333334,
+      "contact_peak_mps": 39.58168426788836,
+      "contact_tip_forward_m": [
+        0.008395956696715183,
+        1.3277536193761441
+      ],
+      "kind": "evaluated_shipped_glTF_rig_actual_0.78m_blade"
+    }
+  ]
+}

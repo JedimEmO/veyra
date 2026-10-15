@@ -1,0 +1,35 @@
+[package]
+name = "strata-foliage"
+description = "Foliage rendering for sci-fi-scrolls: grass from per-cell buffers and trees as shared meshes, placed by strata-flora, bent by the wind. Bevy render."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+strata-core = { workspace = true }
+strata-registry = { workspace = true }
+strata-worldgen = { workspace = true }
+strata-flora = { workspace = true }
+strata-sim = { workspace = true }
+strata-stream = { workspace = true }
+strata-terrain = { workspace = true }
+# Baked trees: props, the material library and impostor atlases. Featureless,
+# so no graph engine and no kernel.
+ashlar-bevy = { workspace = true }
+bevy = { workspace = true, features = [
+    "std",
+    "bevy_state",
+    "bevy_asset",
+    "bevy_mesh",
+    "bevy_render",
+    "bevy_pbr",
+    "bevy_camera",
+    "bevy_core_pipeline",
+    "bevy_image",
+] }
+tracing = { workspace = true }
+
+[lints]
+workspace = true

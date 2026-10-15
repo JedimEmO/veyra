@@ -1,0 +1,81 @@
+// What a cleared outlaw camp leaves in its cache (ticket 0012, step 4a), a
+// table a tier like the camp's people. Read by `strata_registry::loot`
+// (`LootSet`); in no world version and no handshake. Salvage is existing
+// components with lines drawn low and wide (maker "salvage"), which feed the
+// same schematics and the smith's rework at once. A line range is in
+// per-mille of the line's scale, the same for each line of the item.
+//
+// Worth at Pelagic's board, a clearing's average over 600 seeds (the sim's
+// `loot` test holds the bands): tier 1 about 235 credits, tier 2 about 640,
+// tier 3 about 1360, counting the credits and every record a board line buys
+// at or above its minimum (cores, magazines, structural metal at a mid-range
+// deposit); parts the board does not buy are extra, at their bench price.
+(
+    version: 1,
+    encounter: "strata:outlaw_camp",
+    // How far from the camp the nearest deposit of a lot's class is looked
+    // for. Under half the register's 8 km, so the list the survey keeps round
+    // the member at the camp holds every candidate and a clearing samples
+    // nothing.
+    lots_within_m: 4000.0,
+    tiers: [
+        // Tier 1.
+        (
+            credits: (60, 140),
+            picks: [
+                (item: "veyra:component.cell_core", count: (1, 2), chance: 600, lines: Some((150, 650))),
+                (item: "veyra:component.hull_plate", count: (1, 2), chance: 400, lines: Some((150, 650))),
+                (item: "veyra:component.drive_coil", count: (1, 1), chance: 300, lines: Some((150, 650))),
+                (item: "veyra:commodity.seal_set", count: (1, 3), chance: 500),
+            ],
+            lots: [
+                (class: "strata:structural_metal", units: (20, 60), chance: 600),
+                (class: "strata:brine", units: (20, 50), chance: 400),
+            ],
+            rare: [
+                (item: "veyra:module.patrol_extended_feed", count: (1, 1), chance: 20, lines: Some((150, 650))),
+            ],
+        ),
+        // Tier 2.
+        (
+            credits: (160, 360),
+            picks: [
+                (item: "veyra:component.cell_core", count: (1, 3), chance: 700, lines: Some((200, 780))),
+                (item: "veyra:component.hull_plate", count: (1, 3), chance: 500, lines: Some((200, 780))),
+                (item: "veyra:component.drive_coil", count: (1, 2), chance: 450, lines: Some((200, 780))),
+                (item: "veyra:component.mount_blank", count: (1, 1), chance: 200, lines: Some((200, 780))),
+                (item: "veyra:commodity.seal_set", count: (2, 5), chance: 600),
+            ],
+            lots: [
+                (class: "strata:structural_metal", units: (50, 140), chance: 700),
+                (class: "strata:brine", units: (40, 100), chance: 500),
+                (class: "strata:reactive", units: (30, 80), chance: 300),
+            ],
+            rare: [
+                (item: "veyra:module.patrol_extended_feed", count: (1, 1), chance: 50, lines: Some((200, 780))),
+                (item: "veyra:module.vigil_reflex", count: (1, 1), chance: 40, lines: Some((200, 780))),
+            ],
+        ),
+        // Tier 3.
+        (
+            credits: (320, 700),
+            picks: [
+                (item: "veyra:component.cell_core", count: (2, 4), chance: 800, lines: Some((300, 900))),
+                (item: "veyra:component.hull_plate", count: (2, 4), chance: 600, lines: Some((300, 900))),
+                (item: "veyra:component.drive_coil", count: (1, 3), chance: 600, lines: Some((300, 900))),
+                (item: "veyra:component.mount_blank", count: (1, 2), chance: 350, lines: Some((300, 900))),
+                (item: "veyra:commodity.seal_set", count: (3, 8), chance: 700),
+            ],
+            lots: [
+                (class: "strata:structural_metal", units: (100, 260), chance: 800),
+                (class: "strata:brine", units: (80, 200), chance: 600),
+                (class: "strata:reactive", units: (60, 160), chance: 450),
+            ],
+            rare: [
+                (item: "veyra:module.patrol_extended_feed", count: (1, 1), chance: 90, lines: Some((300, 900))),
+                (item: "veyra:module.vigil_reflex", count: (1, 1), chance: 80, lines: Some((300, 900))),
+                (item: "veyra:module.vigil_precision_stock", count: (1, 1), chance: 60, lines: Some((300, 900))),
+            ],
+        ),
+    ],
+)

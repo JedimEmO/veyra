@@ -1,0 +1,1864 @@
+{
+  "schema": 2,
+  "forge_version": "0.1.0",
+  "library_version": "0.1.2",
+  "generated": "2026-10-01",
+  "rig": {
+    "profile": "humanoid",
+    "version": 1,
+    "bone_count": 55,
+    "glb_sha256": "sha256:0387ec13c06130cd0984569d0cf1a509249df783a4f1fe14c191001e13ea7970",
+    "bones": [
+      {
+        "name": "LeftToeBase",
+        "parent": 1,
+        "driven": true
+      },
+      {
+        "name": "LeftFoot",
+        "parent": 2,
+        "driven": true
+      },
+      {
+        "name": "LeftLeg",
+        "parent": 3,
+        "driven": true
+      },
+      {
+        "name": "LeftUpLeg",
+        "parent": 54,
+        "driven": true
+      },
+      {
+        "name": "RightToeBase",
+        "parent": 5,
+        "driven": true
+      },
+      {
+        "name": "RightFoot",
+        "parent": 6,
+        "driven": true
+      },
+      {
+        "name": "RightLeg",
+        "parent": 7,
+        "driven": true
+      },
+      {
+        "name": "RightUpLeg",
+        "parent": 54,
+        "driven": true
+      },
+      {
+        "name": "LeftHandEnd",
+        "parent": 24,
+        "driven": true
+      },
+      {
+        "name": "LeftHandIndex3",
+        "parent": 10,
+        "driven": false
+      },
+      {
+        "name": "LeftHandIndex2",
+        "parent": 11,
+        "driven": false
+      },
+      {
+        "name": "LeftHandIndex1",
+        "parent": 24,
+        "driven": false
+      },
+      {
+        "name": "LeftHandMiddle3",
+        "parent": 13,
+        "driven": false
+      },
+      {
+        "name": "LeftHandMiddle2",
+        "parent": 14,
+        "driven": false
+      },
+      {
+        "name": "LeftHandMiddle1",
+        "parent": 24,
+        "driven": false
+      },
+      {
+        "name": "LeftHandPinky3",
+        "parent": 16,
+        "driven": false
+      },
+      {
+        "name": "LeftHandPinky2",
+        "parent": 17,
+        "driven": false
+      },
+      {
+        "name": "LeftHandPinky1",
+        "parent": 24,
+        "driven": false
+      },
+      {
+        "name": "LeftHandRing3",
+        "parent": 19,
+        "driven": false
+      },
+      {
+        "name": "LeftHandRing2",
+        "parent": 20,
+        "driven": false
+      },
+      {
+        "name": "LeftHandRing1",
+        "parent": 24,
+        "driven": false
+      },
+      {
+        "name": "LeftHandThumb3",
+        "parent": 22,
+        "driven": false
+      },
+      {
+        "name": "LeftHandThumb2",
+        "parent": 23,
+        "driven": false
+      },
+      {
+        "name": "LeftHandThumb1",
+        "parent": 24,
+        "driven": true
+      },
+      {
+        "name": "LeftHand",
+        "parent": 25,
+        "driven": true
+      },
+      {
+        "name": "LeftForeArm",
+        "parent": 26,
+        "driven": true
+      },
+      {
+        "name": "LeftArm",
+        "parent": 27,
+        "driven": true
+      },
+      {
+        "name": "LeftShoulder",
+        "parent": 50,
+        "driven": true
+      },
+      {
+        "name": "Head",
+        "parent": 29,
+        "driven": true
+      },
+      {
+        "name": "Neck",
+        "parent": 50,
+        "driven": true
+      },
+      {
+        "name": "RightHandEnd",
+        "parent": 46,
+        "driven": true
+      },
+      {
+        "name": "RightHandIndex3",
+        "parent": 32,
+        "driven": false
+      },
+      {
+        "name": "RightHandIndex2",
+        "parent": 33,
+        "driven": false
+      },
+      {
+        "name": "RightHandIndex1",
+        "parent": 46,
+        "driven": false
+      },
+      {
+        "name": "RightHandMiddle3",
+        "parent": 35,
+        "driven": false
+      },
+      {
+        "name": "RightHandMiddle2",
+        "parent": 36,
+        "driven": false
+      },
+      {
+        "name": "RightHandMiddle1",
+        "parent": 46,
+        "driven": false
+      },
+      {
+        "name": "RightHandPinky3",
+        "parent": 38,
+        "driven": false
+      },
+      {
+        "name": "RightHandPinky2",
+        "parent": 39,
+        "driven": false
+      },
+      {
+        "name": "RightHandPinky1",
+        "parent": 46,
+        "driven": false
+      },
+      {
+        "name": "RightHandRing3",
+        "parent": 41,
+        "driven": false
+      },
+      {
+        "name": "RightHandRing2",
+        "parent": 42,
+        "driven": false
+      },
+      {
+        "name": "RightHandRing1",
+        "parent": 46,
+        "driven": false
+      },
+      {
+        "name": "RightHandThumb3",
+        "parent": 44,
+        "driven": false
+      },
+      {
+        "name": "RightHandThumb2",
+        "parent": 45,
+        "driven": false
+      },
+      {
+        "name": "RightHandThumb1",
+        "parent": 46,
+        "driven": true
+      },
+      {
+        "name": "RightHand",
+        "parent": 47,
+        "driven": true
+      },
+      {
+        "name": "RightForeArm",
+        "parent": 48,
+        "driven": true
+      },
+      {
+        "name": "RightArm",
+        "parent": 49,
+        "driven": true
+      },
+      {
+        "name": "RightShoulder",
+        "parent": 50,
+        "driven": true
+      },
+      {
+        "name": "Spine3",
+        "parent": 51,
+        "driven": true
+      },
+      {
+        "name": "Spine2",
+        "parent": 52,
+        "driven": true
+      },
+      {
+        "name": "Spine1",
+        "parent": 53,
+        "driven": true
+      },
+      {
+        "name": "Spine",
+        "parent": 54,
+        "driven": true
+      },
+      {
+        "name": "Hips",
+        "parent": null,
+        "driven": true
+      }
+    ],
+    "sockets": [
+      {
+        "name": "back",
+        "bone": "Spine3",
+        "translation": [
+          -0.055,
+          0.12,
+          -0.115
+        ],
+        "rotation": [
+          0.6903455,
+          0.1530459,
+          -0.6903455,
+          0.1530459
+        ]
+      },
+      {
+        "name": "hand_l",
+        "bone": "LeftHand",
+        "translation": [
+          0.0,
+          0.055,
+          0.005
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "hand_r",
+        "bone": "RightHand",
+        "translation": [
+          0.0,
+          0.055,
+          0.005
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "head",
+        "bone": "Head",
+        "translation": [
+          0.0,
+          0.12,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "name": "hip_l",
+        "bone": "Hips",
+        "translation": [
+          0.14,
+          -0.03,
+          -0.02
+        ],
+        "rotation": [
+          -0.7263839,
+          0.0,
+          0.0,
+          0.6872892
+        ]
+      }
+    ]
+  },
+  "bodies": [
+    {
+      "name": "frontier_ranger",
+      "path": "bodies/frontier_ranger.glb",
+      "sha256": "sha256:b73ae901314305b9682b5e87f75d469c1f987df2f30855111fadcef09813a841",
+      "motion_scale": 1.0,
+      "tags": []
+    }
+  ],
+  "models": [],
+  "clips": [
+    {
+      "name": "aim",
+      "path": "clips/aim.glb",
+      "sha256": "sha256:4a50db7ce01afc42f6af298555423d42fae1729a91449ab6fb1dd08b01c2648d",
+      "duration_s": 1.0,
+      "fps": 20.0,
+      "frames": 21,
+      "looped": true,
+      "tags": [
+        "loop"
+      ],
+      "root_motion": {
+        "mode": "strip",
+        "avg_speed_mps": 0.02266749,
+        "fps": 20.0,
+        "track_xz_m": [
+          [
+            -0.0,
+            -0.0
+          ],
+          [
+            -0.003,
+            -0.001
+          ],
+          [
+            -0.005,
+            -0.003
+          ],
+          [
+            -0.007,
+            -0.003
+          ],
+          [
+            -0.009,
+            -0.005
+          ],
+          [
+            -0.01,
+            -0.005
+          ],
+          [
+            -0.012,
+            -0.006
+          ],
+          [
+            -0.013,
+            -0.006
+          ],
+          [
+            -0.014,
+            -0.007
+          ],
+          [
+            -0.015,
+            -0.006
+          ],
+          [
+            -0.016,
+            -0.006
+          ],
+          [
+            -0.016,
+            -0.006
+          ],
+          [
+            -0.017,
+            -0.006
+          ],
+          [
+            -0.017,
+            -0.006
+          ],
+          [
+            -0.017,
+            -0.006
+          ],
+          [
+            -0.017,
+            -0.005
+          ],
+          [
+            -0.016,
+            -0.006
+          ],
+          [
+            -0.016,
+            -0.005
+          ],
+          [
+            -0.015,
+            -0.005
+          ],
+          [
+            -0.015,
+            -0.005
+          ],
+          [
+            -0.014,
+            -0.005
+          ]
+        ]
+      },
+      "events": []
+    },
+    {
+      "name": "death",
+      "path": "clips/death.glb",
+      "sha256": "sha256:13d3b5bdbd09b86eb88d13a1222625306c5ed478d499ae98a7812bc00ab9fc09",
+      "duration_s": 1.9,
+      "fps": 20.0,
+      "frames": 39,
+      "looped": false,
+      "tags": [],
+      "root_motion": {
+        "mode": "strip",
+        "avg_speed_mps": 0.5594071,
+        "fps": 20.0,
+        "track_xz_m": [
+          [
+            -0.0,
+            -0.0
+          ],
+          [
+            -0.001,
+            -0.007
+          ],
+          [
+            -0.0,
+            -0.018
+          ],
+          [
+            0.002,
+            -0.031
+          ],
+          [
+            0.004,
+            -0.048
+          ],
+          [
+            0.005,
+            -0.069
+          ],
+          [
+            0.005,
+            -0.094
+          ],
+          [
+            0.006,
+            -0.12
+          ],
+          [
+            0.006,
+            -0.149
+          ],
+          [
+            0.008,
+            -0.181
+          ],
+          [
+            0.009,
+            -0.215
+          ],
+          [
+            0.011,
+            -0.249
+          ],
+          [
+            0.015,
+            -0.277
+          ],
+          [
+            0.021,
+            -0.292
+          ],
+          [
+            0.027,
+            -0.291
+          ],
+          [
+            0.031,
+            -0.28
+          ],
+          [
+            0.032,
+            -0.278
+          ],
+          [
+            0.032,
+            -0.292
+          ],
+          [
+            0.03,
+            -0.321
+          ],
+          [
+            0.024,
+            -0.357
+          ],
+          [
+            0.016,
+            -0.399
+          ],
+          [
+            0.004,
+            -0.451
+          ],
+          [
+            -0.012,
+            -0.514
+          ],
+          [
+            -0.031,
+            -0.591
+          ],
+          [
+            -0.049,
+            -0.669
+          ],
+          [
+            -0.068,
+            -0.743
+          ],
+          [
+            -0.086,
+            -0.808
+          ],
+          [
+            -0.1,
+            -0.859
+          ],
+          [
+            -0.109,
+            -0.889
+          ],
+          [
+            -0.112,
+            -0.9
+          ],
+          [
+            -0.122,
+            -0.919
+          ],
+          [
+            -0.135,
+            -0.932
+          ],
+          [
+            -0.15,
+            -0.941
+          ],
+          [
+            -0.164,
+            -0.948
+          ],
+          [
+            -0.177,
+            -0.95
+          ],
+          [
+            -0.185,
+            -0.949
+          ],
+          [
+            -0.19,
+            -0.946
+          ],
+          [
+            -0.192,
+            -0.943
+          ],
+          [
+            -0.191,
+            -0.939
+          ]
+        ]
+      },
+      "events": [
+        {
+          "name": "footstep_l",
+          "time_s": 1.65,
+          "audio": null
+        },
+        {
+          "name": "footstep_l",
+          "time_s": 1.8,
+          "audio": null
+        }
+      ]
+    },
+    {
+      "name": "dodge",
+      "path": "clips/dodge.glb",
+      "sha256": "sha256:3ef8756ee1015075168f10eeeffad5b0b9fc5b727d0650f7a6d84beb24966d21",
+      "duration_s": 0.5,
+      "fps": 20.0,
+      "frames": 11,
+      "looped": false,
+      "tags": [],
+      "root_motion": {
+        "mode": "strip",
+        "avg_speed_mps": 4.781356,
+        "fps": 20.0,
+        "track_xz_m": [
+          [
+            -0.0,
+            -0.0
+          ],
+          [
+            0.013,
+            -0.025
+          ],
+          [
+            0.121,
+            -0.094
+          ],
+          [
+            0.292,
+            -0.32
+          ],
+          [
+            0.488,
+            -0.642
+          ],
+          [
+            0.735,
+            -0.972
+          ],
+          [
+            0.908,
+            -1.202
+          ],
+          [
+            1.099,
+            -1.394
+          ],
+          [
+            1.328,
+            -1.585
+          ],
+          [
+            1.422,
+            -1.81
+          ],
+          [
+            1.438,
+            -1.869
+          ]
+        ]
+      },
+      "events": [
+        {
+          "name": "footstep_r",
+          "time_s": 0.096,
+          "audio": null
+        },
+        {
+          "name": "footstep_l",
+          "time_s": 0.416,
+          "audio": null
+        },
+        {
+          "name": "footstep_r",
+          "time_s": 0.416,
+          "audio": null
+        }
+      ]
+    },
+    {
+      "name": "fire",
+      "path": "clips/fire.glb",
+      "sha256": "sha256:ae34b5fce938489477c691fcf2162b8f31cb643435a9bf8f6448a1eaa8a189d8",
+      "duration_s": 0.15,
+      "fps": 20.0,
+      "frames": 4,
+      "looped": false,
+      "tags": [],
+      "root_motion": {
+        "mode": "strip",
+        "avg_speed_mps": 0.9252999,
+        "fps": 20.0,
+        "track_xz_m": [
+          [
+            -0.0,
+            -0.0
+          ],
+          [
+            -0.018,
+            -0.026
+          ],
+          [
+            -0.061,
+            -0.039
+          ],
+          [
+            -0.023,
+            0.01
+          ]
+        ]
+      },
+      "events": [
+        {
+          "name": "shot",
+          "time_s": 0.035,
+          "audio": null
+        }
+      ]
+    },
+    {
+      "name": "followup",
+      "path": "clips/followup.glb",
+      "sha256": "sha256:e2cc2897e01ffe0992d1798dd48ad59a91e5628a489a5309f9022c6221cbf022",
+      "duration_s": 0.4,
+      "fps": 20.0,
+      "frames": 9,
+      "looped": false,
+      "tags": [],
+      "root_motion": {
+        "mode": "strip",
+        "avg_speed_mps": 1.8712547,
+        "fps": 20.0,
+        "track_xz_m": [
+          [
+            -0.0,
+            -0.0
+          ],
+          [
+            0.044,
+            -0.045
+          ],
+          [
+            0.24,
+            -0.168
+          ],
+          [
+            0.461,
+            -0.25
+          ],
+          [
+            0.567,
+            -0.278
+          ],
+          [
+            0.6,
+            -0.287
+          ],
+          [
+            0.578,
+            -0.283
+          ],
+          [
+            0.545,
+            -0.278
+          ],
+          [
+            0.529,
+            -0.271
+          ]
+        ]
+      },
+      "events": [
+        {
+          "name": "footstep_r",
+          "time_s": 0.12,
+          "audio": null
+        },
+        {
+          "name": "contact_start",
+          "time_s": 0.12,
+          "audio": null
+        },
+        {
+          "name": "footstep_l",
+          "time_s": 0.206,
+          "audio": null
+        },
+        {
+          "name": "contact_end",
+          "time_s": 0.22,
+          "audio": null
+        }
+      ]
+    },
+    {
+      "name": "heavy",
+      "path": "clips/heavy.glb",
+      "sha256": "sha256:4b5136dd9b5b4eaa561c3952f37ed9ba51801f99dd03fc8a96c81c739eae7a7c",
+      "duration_s": 0.85,
+      "fps": 20.0,
+      "frames": 18,
+      "looped": false,
+      "tags": [],
+      "root_motion": {
+        "mode": "strip",
+        "avg_speed_mps": 0.88782865,
+        "fps": 20.0,
+        "track_xz_m": [
+          [
+            -0.0,
+            -0.0
+          ],
+          [
+            -0.002,
+            -0.003
+          ],
+          [
+            0.001,
+            -0.015
+          ],
+          [
+            0.024,
+            -0.037
+          ],
+          [
+            0.076,
+            -0.074
+          ],
+          [
+            0.167,
+            -0.135
+          ],
+          [
+            0.303,
+            -0.202
+          ],
+          [
+            0.438,
+            -0.249
+          ],
+          [
+            0.534,
+            -0.274
+          ],
+          [
+            0.586,
+            -0.291
+          ],
+          [
+            0.597,
+            -0.293
+          ],
+          [
+            0.595,
+            -0.291
+          ],
+          [
+            0.584,
+            -0.29
+          ],
+          [
+            0.568,
+            -0.287
+          ],
+          [
+            0.553,
+            -0.285
+          ],
+          [
+            0.54,
+            -0.282
+          ],
+          [
+            0.532,
+            -0.279
+          ],
+          [
+            0.526,
+            -0.276
+          ]
+        ]
+      },
+      "events": [
+        {
+          "name": "footstep_r",
+          "time_s": 0.32,
+          "audio": null
+        },
+        {
+          "name": "contact_start",
+          "time_s": 0.32,
+          "audio": null
+        },
+        {
+          "name": "footstep_l",
+          "time_s": 0.431,
+          "audio": null
+        },
+        {
+          "name": "contact_end",
+          "time_s": 0.45,
+          "audio": null
+        }
+      ]
+    },
+    {
+      "name": "light",
+      "path": "clips/light.glb",
+      "sha256": "sha256:303c8833ea8ff139c80fea61dcebe1739c82d2e375e0cccba003187566539005",
+      "duration_s": 0.4,
+      "fps": 20.0,
+      "frames": 9,
+      "looped": false,
+      "tags": [],
+      "root_motion": {
+        "mode": "strip",
+        "avg_speed_mps": 0.53358793,
+        "fps": 20.0,
+        "track_xz_m": [
+          [
+            -0.0,
+            -0.0
+          ],
+          [
+            0.006,
+            -0.002
+          ],
+          [
+            0.02,
+            -0.002
+          ],
+          [
+            0.056,
+            0.005
+          ],
+          [
+            0.095,
+            0.008
+          ],
+          [
+            0.099,
+            -0.005
+          ],
+          [
+            0.077,
+            -0.014
+          ],
+          [
+            0.039,
+            -0.018
+          ],
+          [
+            -0.003,
+            -0.021
+          ]
+        ]
+      },
+      "events": [
+        {
+          "name": "contact_start",
+          "time_s": 0.13,
+          "audio": null
+        },
+        {
+          "name": "footstep_r",
+          "time_s": 0.152,
+          "audio": null
+        },
+        {
+          "name": "contact_end",
+          "time_s": 0.22,
+          "audio": null
+        },
+        {
+          "name": "footstep_r",
+          "time_s": 0.363,
+          "audio": null
+        }
+      ]
+    },
+    {
+      "name": "run",
+      "path": "clips/run.glb",
+      "sha256": "sha256:972cad0e8902081de93833174a6cbef89f927fe7222f69aa260a5a4b49c43cf6",
+      "duration_s": 0.8,
+      "fps": 20.0,
+      "frames": 17,
+      "looped": true,
+      "tags": [
+        "loop"
+      ],
+      "root_motion": {
+        "mode": "strip",
+        "avg_speed_mps": 2.5583997,
+        "fps": 20.0,
+        "track_xz_m": [
+          [
+            -0.0,
+            -0.0
+          ],
+          [
+            0.011,
+            -0.139
+          ],
+          [
+            0.021,
+            -0.275
+          ],
+          [
+            0.029,
+            -0.405
+          ],
+          [
+            0.039,
+            -0.525
+          ],
+          [
+            0.052,
+            -0.637
+          ],
+          [
+            0.066,
+            -0.748
+          ],
+          [
+            0.083,
+            -0.862
+          ],
+          [
+            0.105,
+            -0.992
+          ],
+          [
+            0.129,
+            -1.129
+          ],
+          [
+            0.155,
+            -1.266
+          ],
+          [
+            0.184,
+            -1.396
+          ],
+          [
+            0.212,
+            -1.52
+          ],
+          [
+            0.235,
+            -1.639
+          ],
+          [
+            0.255,
+            -1.758
+          ],
+          [
+            0.273,
+            -1.885
+          ],
+          [
+            0.294,
+            -2.023
+          ]
+        ]
+      },
+      "events": [
+        {
+          "name": "footstep_l",
+          "time_s": 0.15,
+          "audio": null
+        },
+        {
+          "name": "footstep_r",
+          "time_s": 0.55,
+          "audio": null
+        }
+      ]
+    },
+    {
+      "name": "walk",
+      "path": "clips/walk.glb",
+      "sha256": "sha256:7fcb0a6adf36ff7837a80bfc16ab417f97e8351609485485b6ad235622e96a20",
+      "duration_s": 2.6,
+      "fps": 20.0,
+      "frames": 53,
+      "looped": true,
+      "tags": [
+        "loop"
+      ],
+      "root_motion": {
+        "mode": "strip",
+        "avg_speed_mps": 1.0448737,
+        "fps": 20.0,
+        "track_xz_m": [
+          [
+            -0.0,
+            -0.0
+          ],
+          [
+            -0.007,
+            -0.053
+          ],
+          [
+            -0.011,
+            -0.103
+          ],
+          [
+            -0.013,
+            -0.151
+          ],
+          [
+            -0.013,
+            -0.197
+          ],
+          [
+            -0.012,
+            -0.241
+          ],
+          [
+            -0.011,
+            -0.284
+          ],
+          [
+            -0.008,
+            -0.33
+          ],
+          [
+            -0.005,
+            -0.379
+          ],
+          [
+            0.002,
+            -0.431
+          ],
+          [
+            0.013,
+            -0.488
+          ],
+          [
+            0.029,
+            -0.549
+          ],
+          [
+            0.046,
+            -0.614
+          ],
+          [
+            0.062,
+            -0.675
+          ],
+          [
+            0.076,
+            -0.731
+          ],
+          [
+            0.086,
+            -0.784
+          ],
+          [
+            0.093,
+            -0.835
+          ],
+          [
+            0.098,
+            -0.884
+          ],
+          [
+            0.103,
+            -0.93
+          ],
+          [
+            0.106,
+            -0.976
+          ],
+          [
+            0.109,
+            -1.022
+          ],
+          [
+            0.111,
+            -1.071
+          ],
+          [
+            0.111,
+            -1.123
+          ],
+          [
+            0.109,
+            -1.18
+          ],
+          [
+            0.104,
+            -1.241
+          ],
+          [
+            0.099,
+            -1.305
+          ],
+          [
+            0.093,
+            -1.366
+          ],
+          [
+            0.089,
+            -1.421
+          ],
+          [
+            0.087,
+            -1.473
+          ],
+          [
+            0.089,
+            -1.523
+          ],
+          [
+            0.091,
+            -1.57
+          ],
+          [
+            0.094,
+            -1.615
+          ],
+          [
+            0.098,
+            -1.66
+          ],
+          [
+            0.101,
+            -1.706
+          ],
+          [
+            0.106,
+            -1.754
+          ],
+          [
+            0.113,
+            -1.805
+          ],
+          [
+            0.124,
+            -1.86
+          ],
+          [
+            0.138,
+            -1.919
+          ],
+          [
+            0.153,
+            -1.98
+          ],
+          [
+            0.167,
+            -2.04
+          ],
+          [
+            0.177,
+            -2.092
+          ],
+          [
+            0.185,
+            -2.142
+          ],
+          [
+            0.191,
+            -2.189
+          ],
+          [
+            0.196,
+            -2.234
+          ],
+          [
+            0.199,
+            -2.277
+          ],
+          [
+            0.201,
+            -2.32
+          ],
+          [
+            0.202,
+            -2.364
+          ],
+          [
+            0.202,
+            -2.411
+          ],
+          [
+            0.2,
+            -2.46
+          ],
+          [
+            0.194,
+            -2.514
+          ],
+          [
+            0.185,
+            -2.573
+          ],
+          [
+            0.175,
+            -2.635
+          ],
+          [
+            0.166,
+            -2.691
+          ]
+        ]
+      },
+      "events": [
+        {
+          "name": "footstep_r",
+          "time_s": 0.6,
+          "audio": null
+        },
+        {
+          "name": "footstep_l",
+          "time_s": 1.25,
+          "audio": null
+        },
+        {
+          "name": "footstep_r",
+          "time_s": 1.85,
+          "audio": null
+        },
+        {
+          "name": "footstep_l",
+          "time_s": 2.5,
+          "audio": null
+        }
+      ]
+    }
+  ],
+  "audio": [
+    {
+      "name": "blade_hit_armor_1",
+      "path": "audio/sfx/blade_hit_armor_1.wav",
+      "sha256": "sha256:4cc0373e0905f432d4ebaaebe51efb7a624d03daad981c5a56d622e664cd74fb",
+      "kind": "sfx",
+      "duration_s": 0.5983958,
+      "tags": []
+    },
+    {
+      "name": "blade_hit_armor_2",
+      "path": "audio/sfx/blade_hit_armor_2.wav",
+      "sha256": "sha256:0124aec06dd270ec890d832470bb3ca89d7eec12a921c826ee491059e69f7ca1",
+      "kind": "sfx",
+      "duration_s": 0.6,
+      "tags": []
+    },
+    {
+      "name": "blade_hit_armor_3",
+      "path": "audio/sfx/blade_hit_armor_3.wav",
+      "sha256": "sha256:ab05c327dc316ab57e9604514ce002f6889f3878a9dfbe77cd1e7cefdcfd70de",
+      "kind": "sfx",
+      "duration_s": 0.6,
+      "tags": []
+    },
+    {
+      "name": "blade_hit_shield_1",
+      "path": "audio/sfx/blade_hit_shield_1.wav",
+      "sha256": "sha256:eb773711c5e518ac1b0919d0c72b820f5f919b1bee04e7faa359e07e8017f979",
+      "kind": "sfx",
+      "duration_s": 0.7,
+      "tags": []
+    },
+    {
+      "name": "blade_hit_shield_2",
+      "path": "audio/sfx/blade_hit_shield_2.wav",
+      "sha256": "sha256:f92274cd76f793f037461a04fc1e57eae17544f3843c3d86eb673371d860f2a7",
+      "kind": "sfx",
+      "duration_s": 0.7,
+      "tags": []
+    },
+    {
+      "name": "blaster_shot_1",
+      "path": "audio/sfx/blaster_shot_1.wav",
+      "sha256": "sha256:6e863be86a057d23eaa01ba27c4e88c05167c111aeb114988c1de233a849e76b",
+      "kind": "sfx",
+      "duration_s": 1.0,
+      "tags": []
+    },
+    {
+      "name": "blaster_shot_2",
+      "path": "audio/sfx/blaster_shot_2.wav",
+      "sha256": "sha256:a5c7c3d27e7046d4a27d2aa7752b1b0747d41f7a8f4a82e432cdd9ab881626c7",
+      "kind": "sfx",
+      "duration_s": 1.0,
+      "tags": []
+    },
+    {
+      "name": "blaster_shot_3",
+      "path": "audio/sfx/blaster_shot_3.wav",
+      "sha256": "sha256:3cb7ad6ef8c28e4351d0ab24fb25072d47cf21082a5572840fcaf921744ffc2a",
+      "kind": "sfx",
+      "duration_s": 0.6588333,
+      "tags": []
+    },
+    {
+      "name": "dodge_roll_1",
+      "path": "audio/sfx/dodge_roll_1.wav",
+      "sha256": "sha256:aa63a352d7811c5e970c36cea25aba354e41ffda590ae66396659235e1b82df8",
+      "kind": "sfx",
+      "duration_s": 0.66241664,
+      "tags": []
+    },
+    {
+      "name": "dodge_roll_2",
+      "path": "audio/sfx/dodge_roll_2.wav",
+      "sha256": "sha256:aaa58495a67ce6fe80ea4a996731720049e085b21965b708ef1047df1dae038e",
+      "kind": "sfx",
+      "duration_s": 0.75985414,
+      "tags": []
+    },
+    {
+      "name": "enemy_death_1",
+      "path": "audio/sfx/enemy_death_1.wav",
+      "sha256": "sha256:d50dd144eca4c8d778f2c9f729acadf9bd218daed951d3e50da213185f66238f",
+      "kind": "sfx",
+      "duration_s": 1.79225,
+      "tags": []
+    },
+    {
+      "name": "enemy_death_2",
+      "path": "audio/sfx/enemy_death_2.wav",
+      "sha256": "sha256:4382c2ccdf8e7381b41d69051215fb7df55c7ac5fe0b3afe4fc13c09336290db",
+      "kind": "sfx",
+      "duration_s": 1.7914584,
+      "tags": []
+    },
+    {
+      "name": "foot_gravel_1",
+      "path": "audio/sfx/foot_gravel_1.wav",
+      "sha256": "sha256:49dffe6bf65ba7883b8e57dd7dbada340774ac04adb9cc4e5b786a9048e24296",
+      "kind": "sfx",
+      "duration_s": 0.5,
+      "tags": []
+    },
+    {
+      "name": "foot_gravel_2",
+      "path": "audio/sfx/foot_gravel_2.wav",
+      "sha256": "sha256:00e59e69ba69eda79127da615a2bd33119bcb12bf8500578ca3751a7111dce6e",
+      "kind": "sfx",
+      "duration_s": 0.4931875,
+      "tags": []
+    },
+    {
+      "name": "foot_gravel_3",
+      "path": "audio/sfx/foot_gravel_3.wav",
+      "sha256": "sha256:e0b72a6809c80473c1a32ac3aba265fc80d918f9a8897794c4483a798bd14a31",
+      "kind": "sfx",
+      "duration_s": 0.4970625,
+      "tags": []
+    },
+    {
+      "name": "foot_gravel_4",
+      "path": "audio/sfx/foot_gravel_4.wav",
+      "sha256": "sha256:a32321a15b82548a4639b7dd0fe0920b5f48faefa2c174bfe7eb30f134b08fb2",
+      "kind": "sfx",
+      "duration_s": 0.5,
+      "tags": []
+    },
+    {
+      "name": "foot_metal_1",
+      "path": "audio/sfx/foot_metal_1.wav",
+      "sha256": "sha256:e9b85b657b5e89b2af3e3e00678b48db1376d76e8246a5c0166ea57d7dc6559a",
+      "kind": "sfx",
+      "duration_s": 0.43602082,
+      "tags": []
+    },
+    {
+      "name": "foot_metal_2",
+      "path": "audio/sfx/foot_metal_2.wav",
+      "sha256": "sha256:987ad42b9760fb89d9ff3009c37b3a618e1ab29b0cb2c75e4e6fe8f85e26b370",
+      "kind": "sfx",
+      "duration_s": 0.49145833,
+      "tags": []
+    },
+    {
+      "name": "foot_metal_3",
+      "path": "audio/sfx/foot_metal_3.wav",
+      "sha256": "sha256:f712a3dd6d930e4fc36282dda67452f940114af93ba18a2c295f697589e5cb9d",
+      "kind": "sfx",
+      "duration_s": 0.5,
+      "tags": []
+    },
+    {
+      "name": "foot_metal_4",
+      "path": "audio/sfx/foot_metal_4.wav",
+      "sha256": "sha256:6375eb19137c38be8a8dc30ab7fa1ef048c048956790a429d0628fbbf07b2987",
+      "kind": "sfx",
+      "duration_s": 0.5,
+      "tags": []
+    },
+    {
+      "name": "foot_stone_1",
+      "path": "audio/sfx/foot_stone_1.wav",
+      "sha256": "sha256:55733fa602fa8e64325bb1a10e5026b51e6251c99886a85652f58aff8fcb393b",
+      "kind": "sfx",
+      "duration_s": 0.2600625,
+      "tags": []
+    },
+    {
+      "name": "foot_stone_2",
+      "path": "audio/sfx/foot_stone_2.wav",
+      "sha256": "sha256:ed55fd3099be4facf54b95ecfe792557fd40e3b42cbbc1c500801cfc709288a7",
+      "kind": "sfx",
+      "duration_s": 0.5,
+      "tags": []
+    },
+    {
+      "name": "foot_stone_3",
+      "path": "audio/sfx/foot_stone_3.wav",
+      "sha256": "sha256:0b0d7db71c3c9f7194fa14e465e2d9c8f75e11831d351bcab5bb778d5f1dbab3",
+      "kind": "sfx",
+      "duration_s": 0.43629166,
+      "tags": []
+    },
+    {
+      "name": "foot_stone_4",
+      "path": "audio/sfx/foot_stone_4.wav",
+      "sha256": "sha256:770fefdc2649e3bac0365aa004c8430e0f6e7609b0037c3f5e95b962b1054451",
+      "kind": "sfx",
+      "duration_s": 0.5,
+      "tags": []
+    },
+    {
+      "name": "hit_marker_1",
+      "path": "audio/sfx/hit_marker_1.wav",
+      "sha256": "sha256:6059a1d2cb365f31be04862b2e47a3bd2275f5660afee9ececc2d2fdcee28d84",
+      "kind": "sfx",
+      "duration_s": 0.0158125,
+      "tags": []
+    },
+    {
+      "name": "hit_marker_2",
+      "path": "audio/sfx/hit_marker_2.wav",
+      "sha256": "sha256:0d04cb8aa13d5fbb221f3c9df4919caa09d547f748ef8bbaa77ceeafac169ad1",
+      "kind": "sfx",
+      "duration_s": 0.08825,
+      "tags": []
+    },
+    {
+      "name": "impact_flesh_1",
+      "path": "audio/sfx/impact_flesh_1.wav",
+      "sha256": "sha256:46b59b67ebb322aba483f99a43b70ac6349f50cf3ab20cadd1a526bd5f5f34d7",
+      "kind": "sfx",
+      "duration_s": 0.5,
+      "tags": []
+    },
+    {
+      "name": "impact_flesh_2",
+      "path": "audio/sfx/impact_flesh_2.wav",
+      "sha256": "sha256:3db6f6cbfb382efaed6219a416ca9e8db24314689999240d3744adb2313cc545",
+      "kind": "sfx",
+      "duration_s": 0.050208334,
+      "tags": []
+    },
+    {
+      "name": "impact_metal_1",
+      "path": "audio/sfx/impact_metal_1.wav",
+      "sha256": "sha256:d3fd0a299487df1eeb0b08b67483d4096a1771e0534ffb4416c5267a247d102a",
+      "kind": "sfx",
+      "duration_s": 0.2214375,
+      "tags": []
+    },
+    {
+      "name": "impact_metal_2",
+      "path": "audio/sfx/impact_metal_2.wav",
+      "sha256": "sha256:92a354f71c8ba617459171d2a48da9f9d854139b9a35187cd7cd912555d4e2e8",
+      "kind": "sfx",
+      "duration_s": 0.5,
+      "tags": []
+    },
+    {
+      "name": "impact_shield_1",
+      "path": "audio/sfx/impact_shield_1.wav",
+      "sha256": "sha256:9b490f20d697118af98eb2775bdbed64fc7bdd85db99504800e8f73073938a9e",
+      "kind": "sfx",
+      "duration_s": 0.6,
+      "tags": []
+    },
+    {
+      "name": "impact_shield_2",
+      "path": "audio/sfx/impact_shield_2.wav",
+      "sha256": "sha256:591d182aa8b97b466102b3b7b7ddbb00994626262a82401a9037c240de7d38b8",
+      "kind": "sfx",
+      "duration_s": 0.6,
+      "tags": []
+    },
+    {
+      "name": "impact_shield_3",
+      "path": "audio/sfx/impact_shield_3.wav",
+      "sha256": "sha256:20962e2bba801bed5f780d695e5e67eabd0bdf68ec52468aedabf60d4a8861ba",
+      "kind": "sfx",
+      "duration_s": 0.43802083,
+      "tags": []
+    },
+    {
+      "name": "impact_stone_1",
+      "path": "audio/sfx/impact_stone_1.wav",
+      "sha256": "sha256:d1c0a031f2ebc6fb749e1c7ca1f49d0f6276d607f15b86317ea6eea2739684b1",
+      "kind": "sfx",
+      "duration_s": 0.5,
+      "tags": []
+    },
+    {
+      "name": "impact_stone_2",
+      "path": "audio/sfx/impact_stone_2.wav",
+      "sha256": "sha256:6e0696e02ea4247a88d344e5a89ae6106b49078b976cdf4248d8bfc345cf8e84",
+      "kind": "sfx",
+      "duration_s": 0.49660417,
+      "tags": []
+    },
+    {
+      "name": "impact_stone_3",
+      "path": "audio/sfx/impact_stone_3.wav",
+      "sha256": "sha256:8b968b5c6e7da45587507e420a6874cb42e2a31c78c50ff59d4c9fce1772ec5e",
+      "kind": "sfx",
+      "duration_s": 0.49695835,
+      "tags": []
+    },
+    {
+      "name": "jump_1",
+      "path": "audio/sfx/jump_1.wav",
+      "sha256": "sha256:162187e6d25e1f53a5fe33bfd04e5f4ac8bf404baefcb0ace40258f41a4213a7",
+      "kind": "sfx",
+      "duration_s": 0.49802083,
+      "tags": []
+    },
+    {
+      "name": "jump_2",
+      "path": "audio/sfx/jump_2.wav",
+      "sha256": "sha256:6a4beb5b0c04957c986336d3abf66f1da67221b5ef69b73494115431be51a108",
+      "kind": "sfx",
+      "duration_s": 0.49910417,
+      "tags": []
+    },
+    {
+      "name": "land_1",
+      "path": "audio/sfx/land_1.wav",
+      "sha256": "sha256:02e5af4fd7c2e515c610eec872707da3924b597810dae0ea4772fc2d2a987128",
+      "kind": "sfx",
+      "duration_s": 0.6,
+      "tags": []
+    },
+    {
+      "name": "land_2",
+      "path": "audio/sfx/land_2.wav",
+      "sha256": "sha256:32988a0f15bf2f22b7f2b190070fb2834820cff367f20ea3046507fc544281a0",
+      "kind": "sfx",
+      "duration_s": 0.49735418,
+      "tags": []
+    },
+    {
+      "name": "low_health_1",
+      "path": "audio/sfx/low_health_1.wav",
+      "sha256": "sha256:a2c7804e31d09e0e8964a934778b015cb917c259c07bef8a95c5671a36007f5b",
+      "kind": "sfx",
+      "duration_s": 3.893104,
+      "tags": []
+    },
+    {
+      "name": "player_hurt_1",
+      "path": "audio/sfx/player_hurt_1.wav",
+      "sha256": "sha256:4ecc5109d7a040512d7d15cfd468fd3dca20d4eb288abbf190fd71b8fe67ff68",
+      "kind": "sfx",
+      "duration_s": 0.41445833,
+      "tags": []
+    },
+    {
+      "name": "player_hurt_2",
+      "path": "audio/sfx/player_hurt_2.wav",
+      "sha256": "sha256:d933eb0520b3b77997e446091c43f06a6b91d777fa878c9bfd51057802391d00",
+      "kind": "sfx",
+      "duration_s": 0.18260416,
+      "tags": []
+    },
+    {
+      "name": "player_hurt_3",
+      "path": "audio/sfx/player_hurt_3.wav",
+      "sha256": "sha256:b24c7daae594fd9d16595838f00ad979f16e13dec3431a89d0a1782c1616f07e",
+      "kind": "sfx",
+      "duration_s": 0.479,
+      "tags": []
+    },
+    {
+      "name": "reload_1",
+      "path": "audio/sfx/reload_1.wav",
+      "sha256": "sha256:ac5afcfd028948ee947666eb5557f614bbbc38cacc32f6b53fe3ee39bf721c68",
+      "kind": "sfx",
+      "duration_s": 1.1154791,
+      "tags": []
+    },
+    {
+      "name": "reload_2",
+      "path": "audio/sfx/reload_2.wav",
+      "sha256": "sha256:f96c3ada1bb623301f77b560575e5c4ba4c476f0891fdf4c3e61e3a2898fe1a4",
+      "kind": "sfx",
+      "duration_s": 0.6078333,
+      "tags": []
+    },
+    {
+      "name": "rusher_windup_1",
+      "path": "audio/sfx/rusher_windup_1.wav",
+      "sha256": "sha256:6e5d2486a73c6457bf424d7e2353fde1be469833001722fe4b6d24358af2a357",
+      "kind": "sfx",
+      "duration_s": 0.7560833,
+      "tags": []
+    },
+    {
+      "name": "rusher_windup_2",
+      "path": "audio/sfx/rusher_windup_2.wav",
+      "sha256": "sha256:c0bd4ee6da44a122e01fc17dfd999ce9f79d462c89d0be0d14c6e980f673315f",
+      "kind": "sfx",
+      "duration_s": 0.2543125,
+      "tags": []
+    },
+    {
+      "name": "sentry_charge_1",
+      "path": "audio/sfx/sentry_charge_1.wav",
+      "sha256": "sha256:08a46cb41dded3fb707ddd5130e8e563f64cb35a27de2c38c7946805725bf4b4",
+      "kind": "sfx",
+      "duration_s": 0.65,
+      "tags": []
+    },
+    {
+      "name": "sentry_charge_2",
+      "path": "audio/sfx/sentry_charge_2.wav",
+      "sha256": "sha256:7e3df4f644a5dae2141e64c1eeaeae5a048157c6301d3243d3b1e04c8a66929c",
+      "kind": "sfx",
+      "duration_s": 0.65,
+      "tags": []
+    },
+    {
+      "name": "sentry_shot_1",
+      "path": "audio/sfx/sentry_shot_1.wav",
+      "sha256": "sha256:0c399773097b67dfaa48b46da22718bb0e05dfdf5178e00507c4067c1a35cc53",
+      "kind": "sfx",
+      "duration_s": 1.2,
+      "tags": []
+    },
+    {
+      "name": "sentry_shot_2",
+      "path": "audio/sfx/sentry_shot_2.wav",
+      "sha256": "sha256:de25b878d2f79fd80db626b7e44a55e38036f676dc60c583821ffd6e95c88a82",
+      "kind": "sfx",
+      "duration_s": 1.2,
+      "tags": []
+    },
+    {
+      "name": "shield_recharge_1",
+      "path": "audio/sfx/shield_recharge_1.wav",
+      "sha256": "sha256:e7778853dabd05929dc58da048745cf46afb7d53ca7cfd784f07dd0ac960c1b6",
+      "kind": "sfx",
+      "duration_s": 1.1656874,
+      "tags": []
+    },
+    {
+      "name": "shield_recharge_2",
+      "path": "audio/sfx/shield_recharge_2.wav",
+      "sha256": "sha256:8b408a98248c8a8dc375a1ba95e606ef8679c14372c79b5056a5efc8e7de5475",
+      "kind": "sfx",
+      "duration_s": 1.2,
+      "tags": []
+    },
+    {
+      "name": "swing_heavy_1",
+      "path": "audio/sfx/swing_heavy_1.wav",
+      "sha256": "sha256:71567df7a07804f37aa78c882b651cb170054fa0409299e734606e5c6c682b94",
+      "kind": "sfx",
+      "duration_s": 0.69275,
+      "tags": []
+    },
+    {
+      "name": "swing_heavy_2",
+      "path": "audio/sfx/swing_heavy_2.wav",
+      "sha256": "sha256:3b1ba211f456b70163abd4291924c6c450b420ce31223f74eeb0d7ec574436c4",
+      "kind": "sfx",
+      "duration_s": 0.46491668,
+      "tags": []
+    },
+    {
+      "name": "swing_light_1",
+      "path": "audio/sfx/swing_light_1.wav",
+      "sha256": "sha256:d7abc6b8de1ebab01800453c4e9b5d45711978fb589c691f267eab3565d374aa",
+      "kind": "sfx",
+      "duration_s": 0.477,
+      "tags": []
+    },
+    {
+      "name": "swing_light_2",
+      "path": "audio/sfx/swing_light_2.wav",
+      "sha256": "sha256:43f140a712bc9bbba140750c7f5aa5fb9c44a8157a3b86a547292f98d0d99a6c",
+      "kind": "sfx",
+      "duration_s": 0.07560416,
+      "tags": []
+    }
+  ]
+}

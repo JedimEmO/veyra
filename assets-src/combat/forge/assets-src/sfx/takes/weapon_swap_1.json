@@ -1,0 +1,52 @@
+{
+  "forge_record": 2,
+  "kind": "sfx",
+  "tool": "moss_sound_effect",
+  "created": "2026-10-14",
+  "created_by": "agent:claude",
+  "backend": {
+    "name": "moss_sfx",
+    "commit": null,
+    "python": null,
+    "torch": null,
+    "model": "OpenMOSS-Team/MOSS-SoundEffect-v2.0",
+    "model_revision": null,
+    "executor": "comfy",
+    "comfyui_commit": "169fcf35a2fc163fec31338b816503ddac0d3fcf",
+    "workflow_sha256": "sha256:ac0d90d698c9dae3ae4f5cc40980db2a79c368ddf73c164d2e6c3367c1f4191f",
+    "packs": {
+      "https://github.com/diodiogod/TTS-Audio-Suite": "fab00263fbdcdaddd4c721d1b560e1a08b6025ea"
+    }
+  },
+  "inputs": [
+    {
+      "role": "prompt",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "prompt": "holstering one weapon and drawing another: fabric, a magnetic latch click and a metallic slide, close, dry"
+    }
+  ],
+  "params": {
+    "cfg": 4.0,
+    "duration_s": 0.6,
+    "model": "OpenMOSS-Team/MOSS-SoundEffect-v2.0",
+    "seed": 8577,
+    "steps": 100,
+    "workflow": "sfx.api.json"
+  },
+  "outputs": [
+    {
+      "path": "assets-src/sfx/takes/weapon_swap_1.wav",
+      "sha256": "sha256:181537f8adecb6b992b3f1998904ac3f238237c11f63979a1c066826ca060620",
+      "bytes": 57678
+    }
+  ],
+  "measured": {
+    "channels": 1,
+    "duration_s": 0.6,
+    "sample_rate": 48000
+  },
+  "fake": false,
+  "note": null
+}

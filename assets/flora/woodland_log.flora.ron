@@ -1,0 +1,22 @@
+// Decorative understory, streamed only near the viewer.
+(
+    id: "strata:woodland_log",
+    name: "Fallen log",
+    kind: "bush",
+    biomes: [(biome: "strata:forest", weight: 0.55), (biome: "strata:highlands", weight: 0.15)],
+    spacing_m: 16,
+    slope_max: 0.08,
+    sea_clearance_m: 1.0,
+    moisture: (min: 0.25, max: 1.0),
+    cover_floor: 0.15,
+    size: (min: 0.8, max: 1.2),
+    exclusion_m: 1.7,
+    tint_dry: (0.16, 0.22, 0.07),
+    tint_lush: (0.16, 0.22, 0.07),
+    tree: (
+        form: "log",
+        height_m: (min: 2, max: 3.5),
+        bark: "oak",
+        variants: 6,
+    ),
+)

@@ -1,0 +1,26 @@
+[package]
+name = "veyra-buildings"
+description = "Reusable Veyra building study content."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+ashlar.workspace = true
+glam.workspace = true
+anyhow.workspace = true
+
+# The site search example reads the world the game generates; the content
+# itself never does. Checking that the declared collision proxies cover what
+# the old hand-typed tables covered needs an evaluated solid, and therefore the
+# kernel, which is why it is a dev dependency and not a dependency.
+[dev-dependencies]
+ashlar-manifold.workspace = true
+strata-worldgen.workspace = true
+strata-registry.workspace = true
+strata-core.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,28 @@
+[package]
+name = "strata-net-replicon"
+description = "The bevy_replicon adapter for the sci-fi-scrolls net port: a renet UDP server that owns the simulation, clients that predict their own player, interest by region."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+strata-core = { workspace = true }
+strata-sim = { workspace = true }
+strata-stream = { workspace = true }
+strata-physics = { workspace = true }
+strata-net = { workspace = true }
+strata-worldgen = { workspace = true }
+bevy_replicon = { workspace = true, features = ["client", "server"] }
+bevy_replicon_renet = { workspace = true, features = ["client", "server", "renet_netcode"] }
+bevy = { workspace = true, features = ["std", "bevy_state"] }
+serde = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+# The in-process test's synthetic world needs a biome id.
+strata-registry = { workspace = true }
+
+[lints]
+workspace = true

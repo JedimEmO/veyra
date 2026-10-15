@@ -1,0 +1,908 @@
+{
+  "schema": 1,
+  "name": "humanoid",
+  "version": 1,
+  "root": "Hips",
+  "front": "+Z",
+  "stature_m": {
+    "reference": 1.8,
+    "min": 1.4,
+    "max": 2.2
+  },
+  "foot_tolerance_m": 0.05,
+  "rest_rotation_tolerance": 0.001,
+  "rest_direction_tolerance_deg": 1.0,
+  "length_ratio_min": 0.4,
+  "length_ratio_max": 2.5,
+  "contact_foot_tolerance_m": 0.05,
+  "driven_layout": "cskel27",
+  "reference_clip": "walk",
+  "sources": {
+    "glb": "rig.glb",
+    "glb_sha256": "0387ec13c06130cd0984569d0cf1a509249df783a4f1fe14c191001e13ea7970",
+    "blend": "rig.blend",
+    "blend_sha256": "56918a644ae50670f620dec111eb44673ced450d2fc2441c63952e7c99ffda69"
+  },
+  "bones": [
+    {
+      "name": "LeftToeBase",
+      "parent": 1,
+      "driven": true,
+      "rest_translation": [
+        1.9078576e-9,
+        0.17096877,
+        -5.145644e-9
+      ],
+      "rest_rotation": [
+        -0.8191525,
+        2.3617909e-7,
+        3.0068017e-7,
+        0.57357585
+      ]
+    },
+    {
+      "name": "LeftFoot",
+      "parent": 2,
+      "driven": true,
+      "rest_translation": [
+        7.450589e-9,
+        0.45609087,
+        1.7763568e-15
+      ],
+      "rest_rotation": [
+        1.9828688e-7,
+        0.8191525,
+        0.57357585,
+        3.54796e-7
+      ]
+    },
+    {
+      "name": "LeftLeg",
+      "parent": 3,
+      "driven": true,
+      "rest_translation": [
+        1.0271446e-8,
+        0.41211802,
+        -5.7731597e-15
+      ],
+      "rest_rotation": [
+        1.4901165e-8,
+        7.967825e-8,
+        -4.4986512e-9,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftUpLeg",
+      "parent": 54,
+      "driven": true,
+      "rest_translation": [
+        0.094918,
+        -0.00864608,
+        -0.026346585
+      ],
+      "rest_rotation": [
+        4.9527743e-10,
+        0.58659726,
+        -0.8098788,
+        4.428686e-8
+      ]
+    },
+    {
+      "name": "RightToeBase",
+      "parent": 5,
+      "driven": true,
+      "rest_translation": [
+        -5.5426046e-9,
+        0.17096876,
+        -1.7446766e-8
+      ],
+      "rest_rotation": [
+        -0.81915236,
+        2.3617932e-7,
+        3.006801e-7,
+        0.57357603
+      ]
+    },
+    {
+      "name": "RightFoot",
+      "parent": 6,
+      "driven": true,
+      "rest_translation": [
+        -7.4505713e-9,
+        0.45609087,
+        0.0
+      ],
+      "rest_rotation": [
+        1.9828691e-7,
+        0.81915236,
+        0.57357603,
+        3.5479601e-7
+      ]
+    },
+    {
+      "name": "RightLeg",
+      "parent": 7,
+      "driven": true,
+      "rest_translation": [
+        -4.6297166e-9,
+        0.41211808,
+        -4.440892e-16
+      ],
+      "rest_rotation": [
+        2.9802322e-8,
+        7.967826e-8,
+        -4.498652e-9,
+        1.0
+      ]
+    },
+    {
+      "name": "RightUpLeg",
+      "parent": 54,
+      "driven": true,
+      "rest_translation": [
+        -0.094918,
+        -0.00864608,
+        -0.026346596
+      ],
+      "rest_rotation": [
+        4.9526866e-10,
+        0.58659726,
+        -0.80987877,
+        4.428686e-8
+      ]
+    },
+    {
+      "name": "LeftHandEnd",
+      "parent": 24,
+      "driven": true,
+      "rest_translation": [
+        0.00325004,
+        0.06193976,
+        -0.031600785
+      ],
+      "rest_rotation": [
+        -0.3287655,
+        1.07916456e-7,
+        0.6904026,
+        0.64440477
+      ]
+    },
+    {
+      "name": "LeftHandIndex3",
+      "parent": 10,
+      "driven": false,
+      "rest_translation": [
+        2.225861e-7,
+        0.025999982,
+        9.313226e-9
+      ],
+      "rest_rotation": [
+        -1.5832487e-7,
+        -1.0384248e-7,
+        -0.0000011231751,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandIndex2",
+      "parent": 11,
+      "driven": false,
+      "rest_translation": [
+        1.7043203e-7,
+        0.040000014,
+        -2.7939677e-9
+      ],
+      "rest_rotation": [
+        -1.7136335e-7,
+        7.543713e-8,
+        0.0000010719524,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandIndex1",
+      "parent": 24,
+      "driven": false,
+      "rest_translation": [
+        0.029999953,
+        0.074999996,
+        -1.3897079e-7
+      ],
+      "rest_rotation": [
+        1.229346e-7,
+        8.614735e-8,
+        -3.604219e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandMiddle3",
+      "parent": 13,
+      "driven": false,
+      "rest_translation": [
+        9.685755e-8,
+        0.027999949,
+        -7.450581e-9
+      ],
+      "rest_rotation": [
+        1.527369e-7,
+        7.1711845e-8,
+        -6.2957406e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandMiddle2",
+      "parent": 14,
+      "driven": false,
+      "rest_translation": [
+        -6.239861e-8,
+        0.04300005,
+        1.6763806e-8
+      ],
+      "rest_rotation": [
+        2.0675364e-7,
+        5.7276345e-8,
+        -3.2689425e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandMiddle1",
+      "parent": 24,
+      "driven": false,
+      "rest_translation": [
+        0.009999938,
+        0.07499997,
+        -1.0244548e-7
+      ],
+      "rest_rotation": [
+        1.1175871e-8,
+        -3.7252903e-9,
+        -2.9802322e-8,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandPinky3",
+      "parent": 16,
+      "driven": false,
+      "rest_translation": [
+        -5.9604645e-8,
+        0.02100001,
+        1.4901161e-8
+      ],
+      "rest_rotation": [
+        -2.0116568e-7,
+        -5.029142e-8,
+        -1.7974526e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandPinky2",
+      "parent": 17,
+      "driven": false,
+      "rest_translation": [
+        -8.754432e-8,
+        0.033000067,
+        8.940697e-8
+      ],
+      "rest_rotation": [
+        9.4994896e-8,
+        1.0663642e-7,
+        -2.9429793e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandPinky1",
+      "parent": 24,
+      "driven": false,
+      "rest_translation": [
+        -0.030000096,
+        0.07499999,
+        -1.1920929e-7
+      ],
+      "rest_rotation": [
+        2.495945e-7,
+        1.2107195e-8,
+        -7.003547e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandRing3",
+      "parent": 19,
+      "driven": false,
+      "rest_translation": [
+        -2.6077032e-8,
+        0.025999958,
+        -3.7252903e-8
+      ],
+      "rest_rotation": [
+        -7.82311e-8,
+        6.7520894e-8,
+        -0.0000010514633,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandRing2",
+      "parent": 20,
+      "driven": false,
+      "rest_translation": [
+        1.0430813e-7,
+        0.039999984,
+        7.450581e-9
+      ],
+      "rest_rotation": [
+        -2.3469332e-7,
+        3.539026e-8,
+        0.0000010412188,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandRing1",
+      "parent": 24,
+      "driven": false,
+      "rest_translation": [
+        -0.010000197,
+        0.075,
+        -1.5646219e-7
+      ],
+      "rest_rotation": [
+        1.4714898e-7,
+        9.313227e-8,
+        -3.604219e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandThumb3",
+      "parent": 22,
+      "driven": false,
+      "rest_translation": [
+        5.6657647e-8,
+        0.031999953,
+        2.1638868e-10
+      ],
+      "rest_rotation": [
+        1.1623659e-8,
+        2.2351744e-8,
+        -6.7319554e-9,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftHandThumb2",
+      "parent": 23,
+      "driven": false,
+      "rest_translation": [
+        -4.5269267e-8,
+        0.05721572,
+        -3.277087e-9
+      ],
+      "rest_rotation": [
+        1.6908208e-8,
+        -0.259474,
+        1.0886792e-8,
+        0.96575016
+      ]
+    },
+    {
+      "name": "LeftHandThumb1",
+      "parent": 24,
+      "driven": true,
+      "rest_translation": [
+        -0.0032502012,
+        0.047586374,
+        0.0316006
+      ],
+      "rest_rotation": [
+        -0.32876548,
+        1.0791646e-8,
+        0.6904026,
+        0.6444048
+      ]
+    },
+    {
+      "name": "LeftHand",
+      "parent": 25,
+      "driven": true,
+      "rest_translation": [
+        -1.4108321e-9,
+        0.23265201,
+        3.4390268e-12
+      ],
+      "rest_rotation": [
+        0.2324723,
+        0.23247233,
+        -0.03252543,
+        0.94385135
+      ]
+    },
+    {
+      "name": "LeftForeArm",
+      "parent": 26,
+      "driven": true,
+      "rest_translation": [
+        -1.4108297e-9,
+        0.295436,
+        -6.5580585e-10
+      ],
+      "rest_rotation": [
+        3.1523664e-9,
+        -6.3948846e-14,
+        -2.6993082e-16,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftArm",
+      "parent": 27,
+      "driven": true,
+      "rest_translation": [
+        6.254898e-9,
+        0.158908,
+        -1.3352262e-9
+      ],
+      "rest_rotation": [
+        -4.790281e-9,
+        -2.0911227e-7,
+        3.9194903e-10,
+        1.0
+      ]
+    },
+    {
+      "name": "LeftShoulder",
+      "parent": 50,
+      "driven": true,
+      "rest_translation": [
+        0.031995,
+        0.18043831,
+        0.011652212
+      ],
+      "rest_rotation": [
+        -0.08285182,
+        -0.08285191,
+        -0.7022361,
+        0.7022361
+      ]
+    },
+    {
+      "name": "Head",
+      "parent": 29,
+      "driven": true,
+      "rest_translation": [
+        1.5737735e-14,
+        0.13014744,
+        -6.053597e-8
+      ],
+      "rest_rotation": [
+        -0.087156385,
+        -1.4620097e-7,
+        -1.2791029e-8,
+        0.99619466
+      ]
+    },
+    {
+      "name": "Neck",
+      "parent": 50,
+      "driven": true,
+      "rest_translation": [
+        3.4726026e-9,
+        0.24990018,
+        -0.023304276
+      ],
+      "rest_rotation": [
+        -0.030168481,
+        7.2220786e-8,
+        -6.6752337e-9,
+        0.99954486
+      ]
+    },
+    {
+      "name": "RightHandEnd",
+      "parent": 46,
+      "driven": true,
+      "rest_translation": [
+        -0.0032498902,
+        0.061940677,
+        -0.031600975
+      ],
+      "rest_rotation": [
+        -0.3287627,
+        -4.3166544e-8,
+        -0.6904032,
+        0.64440554
+      ]
+    },
+    {
+      "name": "RightHandIndex3",
+      "parent": 32,
+      "driven": false,
+      "rest_translation": [
+        1.17346644e-7,
+        0.025999986,
+        5.5879354e-8
+      ],
+      "rest_rotation": [
+        4.3772158e-7,
+        -1.0430812e-7,
+        0.0000010225921,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandIndex2",
+      "parent": 33,
+      "driven": false,
+      "rest_translation": [
+        1.1827797e-7,
+        0.04000001,
+        -4.749745e-8
+      ],
+      "rest_rotation": [
+        2.0861626e-7,
+        -9.778886e-9,
+        3.0826777e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandIndex1",
+      "parent": 46,
+      "driven": false,
+      "rest_translation": [
+        -0.030000122,
+        0.07499998,
+        -3.448804e-8
+      ],
+      "rest_rotation": [
+        -3.725291e-9,
+        -4.563481e-8,
+        -1.2107193e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandMiddle3",
+      "parent": 35,
+      "driven": false,
+      "rest_translation": [
+        1.15484e-7,
+        0.027999999,
+        -5.401671e-8
+      ],
+      "rest_rotation": [
+        3.46452e-7,
+        -1.2945384e-7,
+        -3.4458935e-8,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandMiddle2",
+      "parent": 36,
+      "driven": false,
+      "rest_translation": [
+        1.1269003e-7,
+        0.04299998,
+        -2.7939677e-8
+      ],
+      "rest_rotation": [
+        -3.2782557e-7,
+        2.8871003e-8,
+        -3.455207e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandMiddle1",
+      "parent": 46,
+      "driven": false,
+      "rest_translation": [
+        -0.010000171,
+        0.07500007,
+        7.916242e-9
+      ],
+      "rest_rotation": [
+        -7.6368465e-8,
+        -6.7055225e-8,
+        -3.5203993e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandPinky3",
+      "parent": 38,
+      "driven": false,
+      "rest_translation": [
+        1.7881393e-7,
+        0.020999907,
+        -7.0780516e-8
+      ],
+      "rest_rotation": [
+        -5.4575514e-7,
+        -5.7276345e-8,
+        -3.9488083e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandPinky2",
+      "parent": 39,
+      "driven": false,
+      "rest_translation": [
+        1.2665987e-7,
+        0.033000026,
+        -1.1175871e-8
+      ],
+      "rest_rotation": [
+        1.0617077e-7,
+        -7.4040145e-8,
+        -7.282942e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandPinky1",
+      "parent": 46,
+      "driven": false,
+      "rest_translation": [
+        0.029999848,
+        0.07500003,
+        -1.8626451e-8
+      ],
+      "rest_rotation": [
+        -1.2293458e-7,
+        -1.0617079e-7,
+        -1.8626451e-9,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandRing3",
+      "parent": 41,
+      "driven": false,
+      "rest_translation": [
+        -3.9115548e-8,
+        0.025999986,
+        -3.7252903e-8
+      ],
+      "rest_rotation": [
+        4.1723249e-7,
+        -9.49949e-8,
+        0.0000010151416,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandRing2",
+      "parent": 42,
+      "driven": false,
+      "rest_translation": [
+        -3.9115548e-8,
+        0.040000014,
+        -1.8626451e-8
+      ],
+      "rest_rotation": [
+        2.4586916e-7,
+        -2.0954758e-8,
+        2.8964132e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandRing1",
+      "parent": 46,
+      "driven": false,
+      "rest_translation": [
+        0.009999903,
+        0.07499999,
+        -6.146729e-8
+      ],
+      "rest_rotation": [
+        -2.6077034e-8,
+        -3.585592e-8,
+        -1.0896475e-7,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandThumb3",
+      "parent": 44,
+      "driven": false,
+      "rest_translation": [
+        5.510028e-8,
+        0.032000087,
+        2.6292952e-8
+      ],
+      "rest_rotation": [
+        -1.9373156e-8,
+        2.9802322e-8,
+        -1.1220031e-8,
+        1.0
+      ]
+    },
+    {
+      "name": "RightHandThumb2",
+      "parent": 45,
+      "driven": false,
+      "rest_translation": [
+        8.3891585e-8,
+        0.05721572,
+        6.3677064e-10
+      ],
+      "rest_rotation": [
+        2.936577e-8,
+        0.25947157,
+        1.7499606e-10,
+        0.96575075
+      ]
+    },
+    {
+      "name": "RightHandThumb1",
+      "parent": 46,
+      "driven": true,
+      "rest_translation": [
+        0.0032500597,
+        0.047586303,
+        0.03160081
+      ],
+      "rest_rotation": [
+        -0.32876274,
+        -5.3958182e-8,
+        -0.6904032,
+        0.64440554
+      ]
+    },
+    {
+      "name": "RightHand",
+      "parent": 47,
+      "driven": true,
+      "rest_translation": [
+        1.2062011e-7,
+        0.23265201,
+        3.4887648e-12
+      ],
+      "rest_rotation": [
+        0.23247035,
+        -0.23247038,
+        0.03252534,
+        0.9438523
+      ]
+    },
+    {
+      "name": "RightForeArm",
+      "parent": 48,
+      "driven": true,
+      "rest_translation": [
+        1.2062011e-7,
+        0.29543597,
+        -6.557912e-10
+      ],
+      "rest_rotation": [
+        3.1523668e-9,
+        7.993606e-14,
+        2.0711687e-16,
+        1.0
+      ]
+    },
+    {
+      "name": "RightArm",
+      "parent": 49,
+      "driven": true,
+      "rest_translation": [
+        1.12933556e-7,
+        0.158908,
+        1.4850086e-9
+      ],
+      "rest_rotation": [
+        -1.5144522e-9,
+        2.0166169e-7,
+        3.919499e-10,
+        1.0
+      ]
+    },
+    {
+      "name": "RightShoulder",
+      "parent": 50,
+      "driven": true,
+      "rest_translation": [
+        -0.031995,
+        0.18043831,
+        0.011652202
+      ],
+      "rest_rotation": [
+        -0.082851924,
+        0.08285182,
+        0.7022361,
+        0.7022361
+      ]
+    },
+    {
+      "name": "Spine3",
+      "parent": 51,
+      "driven": true,
+      "rest_translation": [
+        0.0,
+        0.09465194,
+        0.0
+      ],
+      "rest_rotation": [
+        0.1171704,
+        7.3992595e-8,
+        8.7298755e-9,
+        0.99311185
+      ]
+    },
+    {
+      "name": "Spine2",
+      "parent": 52,
+      "driven": true,
+      "rest_translation": [
+        1.4985188e-16,
+        0.09465246,
+        -7.450581e-9
+      ],
+      "rest_rotation": [
+        0.043622065,
+        -3.328829e-8,
+        1.4534886e-9,
+        0.9990481
+      ]
+    },
+    {
+      "name": "Spine1",
+      "parent": 53,
+      "driven": true,
+      "rest_translation": [
+        2.1062192e-15,
+        0.09465197,
+        -7.450581e-9
+      ],
+      "rest_rotation": [
+        0.04361594,
+        7.4247435e-15,
+        2.9065652e-9,
+        0.99904835
+      ]
+    },
+    {
+      "name": "Spine",
+      "parent": 54,
+      "driven": true,
+      "rest_translation": [
+        -3.5114764e-9,
+        0.06710146,
+        0.052693192
+      ],
+      "rest_rotation": [
+        0.5137802,
+        -9.317405e-15,
+        3.4238326e-8,
+        0.8579219
+      ]
+    },
+    {
+      "name": "Hips",
+      "parent": null,
+      "driven": true,
+      "rest_translation": [
+        0.0,
+        0.954413,
+        -7.205618e-8
+      ],
+      "rest_rotation": [
+        -0.58659726,
+        2.6985177e-8,
+        -1.954543e-8,
+        0.8098788
+      ]
+    }
+  ]
+}

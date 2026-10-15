@@ -1,0 +1,16 @@
+// The survey tool (ticket 0009, step 3): carried in the pack or a bag, never
+// held. A ping reads the ground round the player out to a reach that the
+// `range` line scales: `worst` at 0 (per-mille), exactly the dial at store grade (500),
+// `best` at 1000. The dial itself is `assets/resources/survey.ron`.
+(
+    id: "veyra:tool.survey",
+    name: "Survey tool",
+    maker: "the dealer",
+    kind: Tool(reads: Survey, worst: 750, best: 1500),
+    stack: 1,
+    price: Some(120),
+    lines: [
+        (id: "range", name: "Range"),
+    ],
+    icon: (shape: Rod, color: "#6FD1C1", symbol: Some("veyra:icon.ability.survey-pulse")),
+)

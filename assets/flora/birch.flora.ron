@@ -1,0 +1,38 @@
+// A slender pale broadleaf that mixes into the forests and fills their wet
+// edges.
+(
+    id: "strata:birch",
+    name: "Birch",
+    kind: "tree",
+    biomes: [
+        (biome: "strata:forest", weight: 0.45),
+        (biome: "strata:plains", weight: 0.06),
+        (biome: "strata:highlands", weight: 0.12),
+    ],
+    spacing_m: 7.0,
+    slope_max: 0.6,
+    altitude_m: (min: 2.0, max: 1100.0),
+    sea_clearance_m: 2.0,
+    moisture: (min: 0.4, max: 1.0),
+    cover_floor: 0.05,
+    size: (min: 0.8, max: 1.2),
+    exclusion_m: 2.2,
+    tint_dry: (0.34, 0.44, 0.12),
+    tint_lush: (0.20, 0.46, 0.10),
+    // Birch stands in small airy clumps, with ferns at their feet.
+    cluster: (radius_m: 12.0, clumps_per_ha: 6.0, patch_m: 70.0, patch_cover: 0.6),
+    children: [(species: "strata:woodland_fern", count: [0, 2], radius_m: [1.5, 5.0])],
+    tree: (
+        height_m: (min: 10.0, max: 14.0),
+        levels: 3,
+        branch_factor: 3,
+        taper: 0.65,
+        split_angle_deg: 30.0,
+        trunk_ratio: 0.016,
+        card_ratio: 0.1,
+        bark: "birch",
+        leaves: "broad",
+        // Baked by the content step; the tree library's count wins.
+        variants: 6,
+    ),
+)

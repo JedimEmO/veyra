@@ -1,0 +1,33 @@
+// The `yard_greatblade` (ticket 0010, step 3): a greatblade: 70 units of structural metal, a cell core for its power and a seal set.
+// The cell core is a material cost only: no line reads it.
+// The edge is the metal's hardness and stability; durability its toughness and
+// strength; moddability is read as the patrol carbine's is, from hardness
+// and strength, so a platform metal opens the extra mounts. Read by
+// `strata_registry::schematic`; in no world version and no handshake.
+(
+    id: "veyra:schematic.yard_greatblade",
+    makes: "veyra:weapon.yard_greatblade",
+    complexity: 3,
+    profession: Some("weaponsmith.edges.3"),
+    licence: Some("veyra:maker.bracken"),
+    fixture: None,
+    slots: [
+        (id: "frame", name: "Frame", takes: Class("strata:structural_metal"), units: 70),
+        (id: "core", name: "Cell core", takes: Component("veyra:component.cell_core"), count: 1),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "edge", from: [
+            (slot: "frame", stat: Attribute(Hardness), weight: 0.5),
+            (slot: "frame", stat: Attribute(Stability), weight: 0.5),
+        ]),
+        (line: "durability", from: [
+            (slot: "frame", stat: Attribute(Toughness), weight: 0.6),
+            (slot: "frame", stat: Attribute(Strength), weight: 0.4),
+        ]),
+        (line: "moddability", from: [
+            (slot: "frame", stat: Attribute(Hardness), weight: 0.6),
+            (slot: "frame", stat: Attribute(Strength), weight: 0.4),
+        ]),
+    ],
+)

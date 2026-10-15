@@ -1,0 +1,37 @@
+{
+  "schema": 2,
+  "kind": "sfx",
+  "name": "impact_flesh_1",
+  "prompt": "a projectile hitting an armoured body: dull heavy thud with a short crunch of composite armour, close, dry, no scream",
+  "tags": [],
+  "created": "2026-10-01",
+  "created_by": "agent:claude",
+  "provenance": "recorded",
+  "rig": null,
+  "generator": {
+    "tool": "moss_sound_effect",
+    "model": "OpenMOSS-Team/MOSS-SoundEffect-v2.0",
+    "seed": 13945786,
+    "duration_s": 0.5,
+    "steps": 100,
+    "cfg": 4.0
+  },
+  "source": {
+    "path": null,
+    "sha256": null,
+    "skeleton": null
+  },
+  "recipe": null,
+  "measured": {
+    "frames": null,
+    "fps": null,
+    "duration_s": 0.5,
+    "avg_speed_mps": null,
+    "root_motion": null,
+    "mesh": null
+  },
+  "body": null,
+  "events": null,
+  "content_hash": "sha256:46b59b67ebb322aba483f99a43b70ac6349f50cf3ab20cadd1a526bd5f5f34d7",
+  "note": "Game ships this levelled copy. Reproduce with python3 tools/combat_audio.py; recipe and hashes: assets/audio/combat/levelling.json. Original render and generator record: assets-src/combat/forge/assets-src/sfx/takes/impact_flesh_1.wav."
+}

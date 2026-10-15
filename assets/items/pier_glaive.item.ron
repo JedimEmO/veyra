@@ -1,0 +1,28 @@
+// A polearm on the Glaive class: it reaches further than the blade and cuts more slowly.
+// Its edge line scales the damage of its cuts (the signature): a bought one,
+// at 500, cuts at 0.95 of the class's figure, as a bought carbine fires
+// slower than the table. Its chassis in `crates/veyra-weapons` gives it mounts
+// and its baked picture and model (ticket 0010, step 3): edge open, grip opens at 400, so a bought one (500) has both.
+// Sold at Pelagic's board, and made by its schematic.
+(
+    id: "veyra:weapon.pier_glaive",
+    name: "Pier glaive",
+    maker: "Pelagic Works",
+    kind: Weapon(
+        family: "Glaive",
+        chassis: "reach_glaive",
+        mounts: [
+            (slot: "edge"),
+            (slot: "grip", opens_at: Some(400)),
+        ],
+        signature: Some((line: "edge", property: HitDamage, worst: 0.80, best: 1.10)),
+    ),
+    stack: 1,
+    price: Some(240),
+    lines: [
+        (id: "edge", name: "Edge"),
+        (id: "durability", name: "Durability"),
+        (id: "moddability", name: "Moddability"),
+    ],
+    icon: (shape: Rod, color: "#B4BFB0", picture: Some("reach_glaive/whole.png"), symbol: Some("veyra:icon.weapon.blade")),
+)

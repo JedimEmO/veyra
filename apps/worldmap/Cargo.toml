@@ -1,0 +1,22 @@
+[package]
+name = "worldmap"
+description = "Renders a biome and height map of a seed to PNG: the worldgen dev loop."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+strata-core = { workspace = true }
+strata-registry = { workspace = true }
+strata-worldgen = { workspace = true }
+strata-weather = { workspace = true }
+clap = { workspace = true }
+image = { workspace = true }
+rayon = { workspace = true }
+anyhow = { workspace = true }
+
+[lints]
+workspace = true

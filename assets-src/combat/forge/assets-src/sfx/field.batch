@@ -1,0 +1,42 @@
+# name|seconds|prompt. Takes are separate names so each gets its own seed.
+survey_ping_1|1.2|a handheld geological survey scanner emitting one ping: a clean rising electronic chirp followed by a soft low sonar pulse spreading outward, close, dry
+survey_ping_2|1.2|a handheld geological survey scanner emitting one ping: a clean rising electronic chirp followed by a soft low sonar pulse spreading outward, close, dry
+survey_found_1|0.8|a survey scanner confirming a find: two soft ascending electronic tones with a faint shimmer, positive, short, dry
+survey_found_2|0.8|a survey scanner confirming a find: two soft ascending electronic tones with a faint shimmer, positive, short, dry
+survey_empty_1|0.6|a survey scanner finding nothing: one soft descending muted electronic tone, short, dry
+sample_loop_1|3.0|a handheld core sampling drill working steadily into rock: even grinding whir with grit and a low motor hum, continuous, constant level, no start and no stop
+sample_done_1|0.7|a core sample tube ejecting from a handheld drill: a pneumatic pop, a click and a small canister rattle, short, dry
+sample_done_2|0.7|a core sample tube ejecting from a handheld drill: a pneumatic pop, a click and a small canister rattle, short, dry
+bike_hum_1|4.0|a small sci-fi hover bike running: steady smooth electric turbine hum with a soft airy rush, continuous, constant level, no start and no stop
+bike_call_1|1.5|a small hover bike arriving and settling to a hover: a descending electric whine and a soft puff of air on gravel, short
+bike_mount_1|1.0|a rider swinging onto a hover bike seat: suit rustle, a seat creak, a latch click and a rising electric spool up, close, dry
+bike_mount_2|1.0|a rider swinging onto a hover bike seat: suit rustle, a seat creak, a latch click and a rising electric spool up, close, dry
+bike_dismount_1|1.0|a hover bike powering down as its rider steps off: a falling electric whine and two boots landing on gravel, close, dry
+bike_dismount_2|1.0|a hover bike powering down as its rider steps off: a falling electric whine and two boots landing on gravel, close, dry
+bike_thrown_1|1.2|a hover bike crashing and throwing its rider: a heavy metallic crunch, scraping on gravel and a short electric fizzle, close, dry
+bike_thrown_2|1.2|a hover bike crashing and throwing its rider: a heavy metallic crunch, scraping on gravel and a short electric fizzle, close, dry
+harvester_hum_1|4.0|a small automated mining rig running: slow rhythmic mechanical pumping over a low engine drone, continuous, constant level, no start and no stop
+harvester_plant_1|1.5|a heavy machine anchoring itself into the ground: hydraulic clamps, a deep thunk and a motor starting up, close, dry
+harvester_collect_1|0.9|ore pouring from a hopper into a container: a gritty rattle of rock fragments settling, short, dry
+harvester_collect_2|0.9|ore pouring from a hopper into a container: a gritty rattle of rock fragments settling, short, dry
+craft_roll_1|0.5|a precision workbench tool making one adjustment: a short servo whir and a ratchet click, close, dry
+craft_roll_2|0.5|a precision workbench tool making one adjustment: a short servo whir and a ratchet click, close, dry
+craft_good_1|0.7|a precise machining step going well: a clean bright metallic ting with a soft positive electronic tone, short, dry
+craft_good_2|0.7|a precise machining step going well: a clean bright metallic ting with a soft positive electronic tone, short, dry
+craft_great_1|1.0|an exceptional crafting result: a bright resonant metallic chime with a rising shimmer, short, dry
+craft_poor_1|0.6|a machining step going badly: a dull clunk and a short low buzz, close, dry
+craft_poor_2|0.6|a machining step going badly: a dull clunk and a short low buzz, close, dry
+craft_finish_1|1.2|assembling a finished device: parts sliding together, two firm clicks and a short power up tone, close, dry
+craft_finish_2|1.2|assembling a finished device: parts sliding together, two firm clicks and a short power up tone, close, dry
+fit_part_1|0.7|attaching a part to a weapon: a slide, a firm metallic clack and a small screw whir, close, dry
+fit_part_2|0.7|attaching a part to a weapon: a slide, a firm metallic clack and a small screw whir, close, dry
+repair_1|1.0|a field repair of equipment: a short welding sizzle, two taps of a tool and a click, close, dry
+sale_1|0.6|a sci-fi credit transfer confirmed: a soft double electronic blip with a faint coin like chime, short, dry
+sale_2|0.6|a sci-fi credit transfer confirmed: a soft double electronic blip with a faint coin like chime, short, dry
+map_open_1|0.6|unfolding a holographic map: a soft airy shimmer with a paper like flutter and a low tone, short, dry
+weapon_swap_1|0.6|holstering one weapon and drawing another: fabric, a magnetic latch click and a metallic slide, close, dry
+weapon_swap_2|0.6|holstering one weapon and drawing another: fabric, a magnetic latch click and a metallic slide, close, dry
+guard_break_1|0.7|a force guard shattering: a sharp glassy electric crack with a falling buzz, close, dry
+guard_break_2|0.7|a force guard shattering: a sharp glassy electric crack with a falling buzz, close, dry
+blast_1|1.0|a small plasma explosion: a tight punchy boom with a crackling electric tail, close, dry
+blast_2|1.0|a small plasma explosion: a tight punchy boom with a crackling electric tail, close, dry

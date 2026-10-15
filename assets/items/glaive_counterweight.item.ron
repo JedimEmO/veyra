@@ -1,0 +1,29 @@
+// The `glaive_counterweight` part of `crates/veyra-weapons` (ticket 0010, step 3): a heavy butt: a quicker tail, a slower draw. Toughness and strength make the recovery, a lighter metal the draw.
+// Its effects are the module's factors there, each driven by the line of its
+// name; a part is made at a bench, never sold. `part` is the module's key,
+// which its baked picture is filed under.
+(
+    id: "veyra:module.glaive_counterweight",
+    name: "Glaive counterweight",
+    maker: "Morrow",
+    kind: Module(
+        slot: "grip",
+        fits: ["veyra:weapon.pier_glaive"],
+        part: "glaive_counterweight",
+        effects: [
+            (property: RecoveryTime, factor: 0.92, line: "recovery_time"),
+            (property: EquipTime, factor: 1.06, line: "equip_time"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "recovery_time", name: "Recovery"),
+        (id: "equip_time", name: "Draw"),
+    ],
+    icon: (
+        shape: Ingot,
+        color: "#B4BFB0",
+        picture: Some("reach_glaive/grip.glaive_counterweight.png"),
+        symbol: Some("veyra:icon.module.grip"),
+    ),
+)

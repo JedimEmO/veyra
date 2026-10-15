@@ -1,0 +1,15 @@
+{
+  "samples": 2997,
+  "median_tick_s": 0.01666699999999821,
+  "minimum_health": 100.0,
+  "minimum_shield": 40.0,
+  "shots": 27,
+  "enemy_shots": 2,
+  "received_hits": 0,
+  "hostiles_remaining": 0,
+  "cleared_at_s": 27.916667,
+  "authored_player_bolt_mps": 38,
+  "authored_sentry_bolt_mps": 24,
+  "authored_sentry_charge_s": 0.65,
+  "authored_shot_interval_s": 0.24
+}

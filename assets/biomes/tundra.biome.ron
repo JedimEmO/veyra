@@ -1,0 +1,18 @@
+// Cold lowland: snow over long low ribs of ground.
+(
+    id: "strata:tundra",
+    name: "Tundra",
+    climate: (
+        temperature: (min: 0.0, max: 0.28),
+        moisture: (min: 0.0, max: 1.0),
+        elevation: (min: 0.55, max: 0.7),
+    ),
+    relief: (kind: "ridges", amplitude_m: 30.0, wavelength_m: 1500.0, octaves: 3, erosion: 0.3),
+    surface: (material: "strata:snow", slope_material: "strata:gravel"),
+    tint: (0.90, 0.92, 0.95),
+    // The ground's palette colour (ticket 0006): snow in a blue light.
+    ground: (0.86, 0.90, 0.97),
+    // Cold and quiet: the coolest white point and the least colour, so
+    // the snow reads blue-white.
+    grade: (temperature: -0.012, saturation: 0.85),
+)

@@ -1,0 +1,28 @@
+// The Vigil long optic (ticket 0010, step 4): a harness, 10 units of any
+// conductor and a seal set, as the reflex sight is. Aim spread is the
+// harness's conductance and the conductor's stability; the draw is quicker
+// the lighter the conductor is. Taught by Fittings 4 of the Weaponsmith.
+// Read by `strata_registry::schematic`; in no world version and no
+// handshake.
+(
+    id: "veyra:schematic.vigil_long_optic",
+    makes: "veyra:module.vigil_long_optic",
+    complexity: 2,
+    profession: Some("weaponsmith.fittings.4"),
+    licence: None,
+    fixture: None,
+    slots: [
+        (id: "harness", name: "Harness", takes: Component("veyra:component.harness"), count: 1),
+        (id: "conductor", name: "Conductor", takes: Class("strata:conductor"), units: 10),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "aim_spread", from: [
+            (slot: "harness", stat: Line("conductance"), weight: 0.5),
+            (slot: "conductor", stat: Attribute(Stability), weight: 0.5),
+        ]),
+        (line: "equip_time", from: [
+            (slot: "conductor", stat: Light(Density), weight: 1.0),
+        ]),
+    ],
+)

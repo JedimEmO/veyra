@@ -1,0 +1,39 @@
+// Pelagic Works, the one buyer of ticket 0007, step 7 (crafting.md, 7): the
+// wardens' upkeep, which refills with played time, and the processor's east
+// intake, a project that is bought once and ends. A sale pays the price a
+// unit, and above a line's minimum each point of the grade adds `per_point`
+// thousandths of the price, up to `cap`. In no world version and no
+// handshake.
+(
+    version: 1,
+    id: "veyra:buyer.pelagic_works",
+    name: "Pelagic Works",
+    premium: (per_point: 1, cap: 300),
+    // What it sells the household, store grade, for credits: the board's
+    // FOR SALE (ticket 0009, step 2).
+    sells: [
+        (item: "veyra:vehicle.courier_bike", price: 450),
+        (item: "veyra:tool.survey", price: 120),
+        (item: "veyra:station.field_harvester", price: 300),
+        (item: "veyra:weapon.service_blade", price: 180),
+        (item: "veyra:weapon.yard_greatblade", price: 260),
+        (item: "veyra:weapon.pier_glaive", price: 240),
+        (item: "veyra:weapon.marksman_rifle", price: 520),
+    ],
+    orders: [
+        (
+            id: "upkeep", name: "Upkeep", kind: Upkeep,
+            lines: [
+                (id: "cell_cores", wants: Item("veyra:component.cell_core"), grade: Line("charge_density"), min: 500, quantity: 40, price: 120, refill: Some((units: 4, every_s: 600))),
+                (id: "patrol_magazines", wants: Item("veyra:module.patrol_extended_feed"), grade: Line("capacity"), min: 550, quantity: 12, price: 260, refill: Some((units: 1, every_s: 900))),
+                (id: "structural_metal", wants: Class("strata:structural_metal"), grade: Attribute(Strength), min: 450, quantity: 600, price: 2, refill: Some((units: 60, every_s: 600))),
+            ],
+        ),
+        (
+            id: "east_intake", name: "The east intake", kind: Project,
+            lines: [
+                (id: "intake_metal", wants: Class("strata:structural_metal"), grade: Attribute(Strength), min: 650, quantity: 2000, price: 4, refill: None),
+            ],
+        ),
+    ],
+)

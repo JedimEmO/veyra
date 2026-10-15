@@ -1,0 +1,55 @@
+{
+  "forge_record": 2,
+  "kind": "lift",
+  "tool": "trellis2",
+  "created": "2026-10-01",
+  "created_by": "agent:claude",
+  "backend": {
+    "name": "trellis2",
+    "commit": "75fbf0183001ed9876c8dbb35de6b68552ee08bd",
+    "python": "3.11.16",
+    "torch": "2.6.0+cu124",
+    "model": "microsoft/TRELLIS.2-4B",
+    "model_revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+    "executor": "env",
+    "comfyui_commit": null,
+    "workflow_sha256": null,
+    "packs": null
+  },
+  "inputs": [
+    {
+      "role": "image",
+      "path": "assets-src/refs/characters/frontier_ranger_v2.png",
+      "sha256": "sha256:9aef4cdd486454f482b1fedbbb8f366e98ce825cee28c8036065d4727d5b179a",
+      "source": null,
+      "prompt": null
+    }
+  ],
+  "params": {
+    "attn_backend": "flash_attn",
+    "decimation_target_vertices": 25000,
+    "pipeline_type": "1024_cascade",
+    "preset": "character",
+    "prompt_from": null,
+    "remesh": true,
+    "resolution": 1024,
+    "seed": 11,
+    "texture_baker": "nvdiffrast (NVIDIA Source Code License, non-commercial)",
+    "texture_size": 1024
+  },
+  "outputs": [
+    {
+      "path": "out/lifts/frontier_ranger_v3_s11.glb",
+      "sha256": "sha256:e9d979e9b82ce4e889ad8b36ca79e307aaf3d754df6e39035407a7f43b6d053c",
+      "bytes": 4068696
+    }
+  ],
+  "measured": {
+    "images": 2,
+    "keyed_subject_fraction": 0.19198278427691673,
+    "triangles": 24074,
+    "vertices": 26890
+  },
+  "fake": false,
+  "note": null
+}

@@ -1,0 +1,29 @@
+// The service pistol's extended cell: the patrol magazine's schematic over
+// the same cell core, in a smaller casing (25 units) and under Kestrel's
+// licence. A second product of one component, which is what a component is
+// for (crafting.md, 5.2).
+(
+    id: "veyra:schematic.pistol_extended_cell",
+    makes: "veyra:module.pistol_extended_cell",
+    complexity: 2,
+    profession: Some("weaponsmith.fittings.1"),
+    licence: Some("veyra:maker.kestrel"),
+    fixture: Some("cells"),
+    slots: [
+        (id: "core", name: "Cell core", takes: Component("veyra:component.cell_core"), count: 1),
+        (id: "harness", name: "Harness", takes: Component("veyra:component.harness"), count: 1),
+        (id: "casing", name: "Casing", takes: Type("strata:light_alloy_ore"), units: 25),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "capacity", from: [
+            (slot: "core", stat: Line("charge_density"), weight: 0.60),
+            (slot: "harness", stat: Line("conductance"), weight: 0.25),
+            (slot: "casing", stat: Attribute(Purity), weight: 0.15),
+        ]),
+        (line: "reload_time", from: [
+            (slot: "casing", stat: Light(Density), weight: 0.60),
+            (slot: "casing", stat: Attribute(Strength), weight: 0.40),
+        ]),
+    ],
+)

@@ -1,0 +1,11 @@
+// The arrival's starting sheet when there is no household file: the
+// light cut and the carbine, 14 points, the same start as the arrival of
+// `household.ron`, which the game prefers when it is present. The chain,
+// the heavy and the pistol are boxes to learn at a trainer.
+(
+    version: 1,
+    sheet: (
+        learned: ["blade.novice", "marksman.novice", "marksman.carbine.1"],
+        xp: {Ranged: 150},
+    ),
+)

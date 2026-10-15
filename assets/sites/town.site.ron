@@ -1,0 +1,62 @@
+// A town site: an inland service town or a river port, the size of place
+// a road network hangs off. Level ground by a river mouth, a confluence or
+// a bay, far from other towns and from Port Serein. Its pad takes the town's
+// first prefabricated buildings; the town grows round it later.
+(
+    id: "strata:town",
+    name: "Town site",
+    rank: 0,
+    // Towns 8 to 15 km apart (ticket 0005, decided 4): the spacing binds
+    // long before this count does on the ground they want.
+    per_1000_km2: 3.0,
+    // The pad holds the group (it reaches 39.4 m) and its board, and no
+    // more: a 75 m one read as a car park from above.
+    footprint_m: 50.0,
+    blend_m: 45.0,
+    crown: 0.012,
+    max_cut_m: 6.0,
+    spacing: (own_m: 9000.0, others_m: 1500.0, settlements_m: 8000.0),
+    ground: (
+        slope_max: 0.09,
+        height_m: (min: 2.5, max: 450.0),
+        biomes: [
+            (id: "strata:mountains", weight: 0.0),
+            (id: "strata:highlands", weight: 0.5),
+            (id: "strata:tundra", weight: 0.4),
+            (id: "strata:desert", weight: 0.5),
+            (id: "strata:ocean", weight: 0.0),
+        ],
+        provinces: [(id: "strata:badlands", weight: 0.4)],
+    ),
+    wants: [
+        // Where water meets: the reason a town is here.
+        (any: [
+            (feature: "mouth", size_m: 3.0, within_m: 600.0, fade_m: 1500.0),
+            (feature: "confluence", size_m: 2.5, within_m: 600.0, fade_m: 1200.0),
+            (feature: "cove", at_least: 0.35, full: 0.75),
+        ], weight: 3.0, required: true),
+        // And beside it, a river worth bridging or the shore.
+        (any: [
+            (feature: "river", size_m: 3.0, within_m: 150.0, fade_m: 600.0),
+            (feature: "sea", within_m: 120.0, fade_m: 500.0),
+        ], weight: 1.5),
+        // A day's travel from the port, not its suburb.
+        (any: [(feature: "settlement", beyond_m: 12000.0, fade_m: 4000.0)], weight: 1.0),
+    ],
+    facing: "water",
+    road: "service",
+    group: "veyra:town_site",
+    names: (
+        onsets: ["b", "c", "d", "g", "h", "l", "m", "n", "r", "s", "t", "v", "br", "cl", "tr", "st"],
+        vowels: ["a", "e", "i", "o", "a", "e", "au", "ei"],
+        codas: ["", "n", "r", "l", "s", "nt", "rne", "lle", "ck"],
+        syllables: [2, 3],
+        patterns: ["{root}", "{root}", "{root}", "New {root}"],
+        by_feature: [
+            (feature: "mouth", patterns: ["Port {root}", "{root}", "{root} Mouth"]),
+            (feature: "cove", patterns: ["Port {root}", "{root}", "{root} Bay"]),
+            (feature: "sea", patterns: ["Port {root}", "{root}"]),
+            (feature: "confluence", patterns: ["{root}", "{root} Junction", "{root} Meet"]),
+        ],
+    ),
+)

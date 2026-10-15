@@ -1,0 +1,87 @@
+[package]
+name = "strata-client"
+description = "Cameras, input and the debug HUD for sci-fi-scrolls: the client plugin. Bevy with a window."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[features]
+default = ["ui"]
+# The slotted UI: the glass theme, the pause and settings screens from the
+# menu templates, and the HUD layers (the debug statistics, the reticle,
+# the hotbar). The Bevy features named here are the ones this crate's own
+# code reaches for; slotted's `ui` feature turns on the rest of Bevy's UI
+# stack (picking, focus, widgets) on the same `bevy` package.
+ui = [
+    "dep:slotted",
+    "dep:dirs",
+    "dep:serde",
+    "dep:ron",
+    "bevy/bevy_ui",
+    "bevy/bevy_ui_render",
+    "bevy/bevy_text",
+    "bevy/bevy_input_focus",
+    "bevy/bevy_ui_widgets",
+    "bevy/default_font",
+]
+# The frame statistics log, the wireframe toggle (F4, bevy_pbr's
+# wireframe) and the time-of-day scrub.
+dev = ["bevy/bevy_pbr"]
+
+[dependencies]
+strata-core = { workspace = true }
+# The skill graph's types, for the character sheet and the bench.
+strata-registry = { workspace = true }
+strata-atmosphere = { workspace = true }
+strata-sim = { workspace = true }
+strata-stream = { workspace = true }
+# The character's dimensions, for the placeholder capsule and the camera's
+# eye height.
+strata-physics = { workspace = true }
+# The port only, for the HUD's network line (role, round trip, players in
+# sight); the adapter behind it is never a dependency of a render crate.
+strata-net = { workspace = true }
+# For the meshing counters in the statistics line; the PLAN's graph has the
+# client above terrain.
+strata-terrain = { workspace = true }
+# For the foliage counters in the statistics line, likewise.
+strata-foliage = { workspace = true }
+# The baked weapon pieces in the hand are props over a material library of
+# their own. Featureless, as the foliage crate takes it: no kernel.
+ashlar-bevy = { workspace = true }
+# `bevy_window` for the cursor grab while the right button is held. Input,
+# time and transforms are in the umbrella's always-on set. The placeholder
+# player is a capsule mesh with a `StandardMaterial`, hence assets, meshes
+# and PBR.
+bevy = { workspace = true, features = [
+    "std",
+    "bevy_state",
+    "bevy_window",
+    "bevy_asset",
+    "bevy_mesh",
+    "bevy_camera",
+    "bevy_pbr",
+    "bevy_gltf",
+    "bevy_animation",
+    "bevy_scene",
+    "bevy_audio",
+    "wav",
+] }
+tracing = { workspace = true }
+slotted = { workspace = true, optional = true, features = ["ui", "menu"] }
+dirs = { workspace = true, optional = true }
+# The weapon diagram's parameters, read from a `custom` node's value.
+serde = { workspace = true, optional = true }
+# The settings are RON in whatever store is installed.
+ron = { workspace = true, optional = true }
+
+[dev-dependencies]
+slotted-test = { workspace = true, features = ["menu"] }
+ron = { workspace = true }
+# A real faction map under the claim words' tests.
+strata-worldgen = { workspace = true }
+
+[lints]
+workspace = true

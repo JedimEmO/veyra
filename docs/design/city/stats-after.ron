@@ -1,0 +1,965 @@
+[
+    (
+        path: "buildings/outpost.ashlar",
+        instances: 24,
+        colliders: 88,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 216,
+                unique_triangles: 3088,
+                drawn_triangles: 11368,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 139,
+                unique_triangles: 1428,
+                drawn_triangles: 6060,
+            ),
+            (
+                until: None,
+                pieces: 6,
+                unique_triangles: 1880,
+                drawn_triangles: 1880,
+            ),
+        ],
+    ),
+    (
+        path: "buildings/corporate.ashlar",
+        instances: 70,
+        colliders: 117,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 473,
+                unique_triangles: 2352,
+                drawn_triangles: 19544,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 390,
+                unique_triangles: 1208,
+                drawn_triangles: 15892,
+            ),
+            (
+                until: None,
+                pieces: 8,
+                unique_triangles: 6432,
+                drawn_triangles: 6432,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/terminal.ashlar",
+        instances: 1,
+        colliders: 9,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 21,
+                unique_triangles: 5130,
+                drawn_triangles: 5130,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 21,
+                unique_triangles: 3808,
+                drawn_triangles: 3808,
+            ),
+            (
+                until: None,
+                pieces: 12,
+                unique_triangles: 976,
+                drawn_triangles: 976,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/beacon.ashlar",
+        instances: 1,
+        colliders: 2,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 10,
+                unique_triangles: 1348,
+                drawn_triangles: 1348,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 9,
+                unique_triangles: 724,
+                drawn_triangles: 724,
+            ),
+            (
+                until: None,
+                pieces: 6,
+                unique_triangles: 524,
+                drawn_triangles: 524,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/warehouse-2.ashlar",
+        instances: 1,
+        colliders: 2,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 9,
+                unique_triangles: 920,
+                drawn_triangles: 920,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 8,
+                unique_triangles: 344,
+                drawn_triangles: 344,
+            ),
+            (
+                until: None,
+                pieces: 6,
+                unique_triangles: 180,
+                drawn_triangles: 180,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/warehouse-3.ashlar",
+        instances: 1,
+        colliders: 2,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 9,
+                unique_triangles: 1208,
+                drawn_triangles: 1208,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 8,
+                unique_triangles: 468,
+                drawn_triangles: 468,
+            ),
+            (
+                until: None,
+                pieces: 6,
+                unique_triangles: 244,
+                drawn_triangles: 244,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/warehouse-4.ashlar",
+        instances: 1,
+        colliders: 2,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 9,
+                unique_triangles: 920,
+                drawn_triangles: 920,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 8,
+                unique_triangles: 344,
+                drawn_triangles: 344,
+            ),
+            (
+                until: None,
+                pieces: 6,
+                unique_triangles: 180,
+                drawn_triangles: 180,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/warehouse-5.ashlar",
+        instances: 1,
+        colliders: 2,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 9,
+                unique_triangles: 920,
+                drawn_triangles: 920,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 8,
+                unique_triangles: 344,
+                drawn_triangles: 344,
+            ),
+            (
+                until: None,
+                pieces: 6,
+                unique_triangles: 180,
+                drawn_triangles: 180,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/warehouse-6.ashlar",
+        instances: 1,
+        colliders: 2,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 9,
+                unique_triangles: 920,
+                drawn_triangles: 920,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 8,
+                unique_triangles: 344,
+                drawn_triangles: 344,
+            ),
+            (
+                until: None,
+                pieces: 6,
+                unique_triangles: 180,
+                drawn_triangles: 180,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/warehouse-7.ashlar",
+        instances: 1,
+        colliders: 2,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 9,
+                unique_triangles: 920,
+                drawn_triangles: 920,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 8,
+                unique_triangles: 344,
+                drawn_triangles: 344,
+            ),
+            (
+                until: None,
+                pieces: 6,
+                unique_triangles: 180,
+                drawn_triangles: 180,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/warehouse-8.ashlar",
+        instances: 1,
+        colliders: 2,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 9,
+                unique_triangles: 908,
+                drawn_triangles: 908,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 8,
+                unique_triangles: 332,
+                drawn_triangles: 332,
+            ),
+            (
+                until: None,
+                pieces: 6,
+                unique_triangles: 180,
+                drawn_triangles: 180,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/warehouse-9.ashlar",
+        instances: 1,
+        colliders: 2,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 9,
+                unique_triangles: 908,
+                drawn_triangles: 908,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 8,
+                unique_triangles: 344,
+                drawn_triangles: 344,
+            ),
+            (
+                until: None,
+                pieces: 6,
+                unique_triangles: 180,
+                drawn_triangles: 180,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/processor.ashlar",
+        instances: 1,
+        colliders: 8,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 38,
+                unique_triangles: 25870,
+                drawn_triangles: 25870,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 38,
+                unique_triangles: 16704,
+                drawn_triangles: 16704,
+            ),
+            (
+                until: None,
+                pieces: 20,
+                unique_triangles: 8584,
+                drawn_triangles: 8584,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/headquarters.ashlar",
+        instances: 1,
+        colliders: 5,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 12,
+                unique_triangles: 4464,
+                drawn_triangles: 4464,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 12,
+                unique_triangles: 4444,
+                drawn_triangles: 4444,
+            ),
+            (
+                until: None,
+                pieces: 7,
+                unique_triangles: 292,
+                drawn_triangles: 292,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/slab-0.ashlar",
+        instances: 1,
+        colliders: 4,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 11,
+                unique_triangles: 15842,
+                drawn_triangles: 15842,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 10,
+                unique_triangles: 9510,
+                drawn_triangles: 9510,
+            ),
+            (
+                until: None,
+                pieces: 10,
+                unique_triangles: 2156,
+                drawn_triangles: 2156,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/slab-1.ashlar",
+        instances: 1,
+        colliders: 4,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 11,
+                unique_triangles: 12180,
+                drawn_triangles: 12180,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 10,
+                unique_triangles: 7316,
+                drawn_triangles: 7316,
+            ),
+            (
+                until: None,
+                pieces: 10,
+                unique_triangles: 1696,
+                drawn_triangles: 1696,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/slab-2.ashlar",
+        instances: 1,
+        colliders: 4,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 11,
+                unique_triangles: 8988,
+                drawn_triangles: 8988,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 10,
+                unique_triangles: 5396,
+                drawn_triangles: 5396,
+            ),
+            (
+                until: None,
+                pieces: 10,
+                unique_triangles: 1288,
+                drawn_triangles: 1288,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/slab-3.ashlar",
+        instances: 1,
+        colliders: 4,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 11,
+                unique_triangles: 12180,
+                drawn_triangles: 12180,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 10,
+                unique_triangles: 7316,
+                drawn_triangles: 7316,
+            ),
+            (
+                until: None,
+                pieces: 10,
+                unique_triangles: 1696,
+                drawn_triangles: 1696,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/slab-4.ashlar",
+        instances: 1,
+        colliders: 4,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 11,
+                unique_triangles: 14760,
+                drawn_triangles: 14760,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 10,
+                unique_triangles: 8844,
+                drawn_triangles: 8844,
+            ),
+            (
+                until: None,
+                pieces: 10,
+                unique_triangles: 2028,
+                drawn_triangles: 2028,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/slab-5.ashlar",
+        instances: 1,
+        colliders: 4,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 11,
+                unique_triangles: 10296,
+                drawn_triangles: 10296,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 10,
+                unique_triangles: 6184,
+                drawn_triangles: 6184,
+            ),
+            (
+                until: None,
+                pieces: 10,
+                unique_triangles: 1448,
+                drawn_triangles: 1448,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/exchange-dressing.ashlar",
+        instances: 20,
+        colliders: 5,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 37,
+                unique_triangles: 200,
+                drawn_triangles: 820,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 22,
+                unique_triangles: 124,
+                drawn_triangles: 432,
+            ),
+            (
+                until: None,
+                pieces: 4,
+                unique_triangles: 180,
+                drawn_triangles: 180,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/exchange-market.ashlar",
+        instances: 84,
+        colliders: 78,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 554,
+                unique_triangles: 140328,
+                drawn_triangles: 142434,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 378,
+                unique_triangles: 43516,
+                drawn_triangles: 45238,
+            ),
+            (
+                until: None,
+                pieces: 37,
+                unique_triangles: 15398,
+                drawn_triangles: 15398,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/landing-infill.ashlar",
+        instances: 4,
+        colliders: 4,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 42,
+                unique_triangles: 8700,
+                drawn_triangles: 11472,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 42,
+                unique_triangles: 2600,
+                drawn_triangles: 3400,
+            ),
+            (
+                until: None,
+                pieces: 25,
+                unique_triangles: 2736,
+                drawn_triangles: 2736,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/port-fittings.ashlar",
+        instances: 316,
+        colliders: 51,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 1168,
+                unique_triangles: 2398,
+                drawn_triangles: 107602,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 767,
+                unique_triangles: 1112,
+                drawn_triangles: 26400,
+            ),
+            (
+                until: None,
+                pieces: 48,
+                unique_triangles: 3376,
+                drawn_triangles: 3376,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/quay-cargo.ashlar",
+        instances: 24,
+        colliders: 44,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 88,
+                unique_triangles: 4224,
+                drawn_triangles: 5808,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 44,
+                unique_triangles: 384,
+                drawn_triangles: 528,
+            ),
+            (
+                until: None,
+                pieces: 26,
+                unique_triangles: 528,
+                drawn_triangles: 528,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/quay-cranes.ashlar",
+        instances: 8,
+        colliders: 8,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 40,
+                unique_triangles: 7392,
+                drawn_triangles: 7392,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 40,
+                unique_triangles: 7072,
+                drawn_triangles: 7072,
+            ),
+            (
+                until: None,
+                pieces: 15,
+                unique_triangles: 4464,
+                drawn_triangles: 4464,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/street.ashlar",
+        instances: 204,
+        colliders: 52,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 400,
+                unique_triangles: 212,
+                drawn_triangles: 13280,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 248,
+                unique_triangles: 124,
+                drawn_triangles: 4352,
+            ),
+            (
+                until: None,
+                pieces: 51,
+                unique_triangles: 1584,
+                drawn_triangles: 1584,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/terrace-houses.ashlar",
+        instances: 2966,
+        colliders: 1266,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 8055,
+                unique_triangles: 272236,
+                drawn_triangles: 5382000,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 7639,
+                unique_triangles: 70448,
+                drawn_triangles: 1551076,
+            ),
+            (
+                until: None,
+                pieces: 415,
+                unique_triangles: 268480,
+                drawn_triangles: 268480,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/blockout-gate.ashlar",
+        instances: 4,
+        colliders: 4,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 4,
+                unique_triangles: 48,
+                drawn_triangles: 48,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 4,
+                unique_triangles: 48,
+                drawn_triangles: 48,
+            ),
+            (
+                until: None,
+                pieces: 2,
+                unique_triangles: 48,
+                drawn_triangles: 48,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/blockout-lanes.ashlar",
+        instances: 175,
+        colliders: 175,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 350,
+                unique_triangles: 96140,
+                drawn_triangles: 96140,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 345,
+                unique_triangles: 28740,
+                drawn_triangles: 28740,
+            ),
+            (
+                until: None,
+                pieces: 72,
+                unique_triangles: 27740,
+                drawn_triangles: 27740,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/blockout-pelagic.ashlar",
+        instances: 1,
+        colliders: 1,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 1,
+                unique_triangles: 12,
+                drawn_triangles: 12,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 1,
+                unique_triangles: 12,
+                drawn_triangles: 12,
+            ),
+            (
+                until: None,
+                pieces: 1,
+                unique_triangles: 12,
+                drawn_triangles: 12,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/blockout-processor.ashlar",
+        instances: 77,
+        colliders: 77,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 77,
+                unique_triangles: 2588,
+                drawn_triangles: 2588,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 77,
+                unique_triangles: 1756,
+                drawn_triangles: 1756,
+            ),
+            (
+                until: None,
+                pieces: 14,
+                unique_triangles: 1756,
+                drawn_triangles: 1756,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/blockout-quay.ashlar",
+        instances: 156,
+        colliders: 156,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 156,
+                unique_triangles: 6032,
+                drawn_triangles: 6032,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 156,
+                unique_triangles: 3536,
+                drawn_triangles: 3536,
+            ),
+            (
+                until: None,
+                pieces: 16,
+                unique_triangles: 1248,
+                drawn_triangles: 1248,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/blockout-stair.ashlar",
+        instances: 12,
+        colliders: 12,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 24,
+                unique_triangles: 9288,
+                drawn_triangles: 9288,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 23,
+                unique_triangles: 2316,
+                drawn_triangles: 2316,
+            ),
+            (
+                until: None,
+                pieces: 6,
+                unique_triangles: 2316,
+                drawn_triangles: 2316,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/blockout-starport.ashlar",
+        instances: 41,
+        colliders: 41,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 41,
+                unique_triangles: 1052,
+                drawn_triangles: 1052,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 41,
+                unique_triangles: 716,
+                drawn_triangles: 716,
+            ),
+            (
+                until: None,
+                pieces: 10,
+                unique_triangles: 316,
+                drawn_triangles: 316,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/blockout-terraces.ashlar",
+        instances: 9,
+        colliders: 9,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 9,
+                unique_triangles: 828,
+                drawn_triangles: 828,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 9,
+                unique_triangles: 396,
+                drawn_triangles: 396,
+            ),
+            (
+                until: None,
+                pieces: 9,
+                unique_triangles: 252,
+                drawn_triangles: 252,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/blockout-transit.ashlar",
+        instances: 171,
+        colliders: 171,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 171,
+                unique_triangles: 4372,
+                drawn_triangles: 4372,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 143,
+                unique_triangles: 2644,
+                drawn_triangles: 2644,
+            ),
+            (
+                until: None,
+                pieces: 11,
+                unique_triangles: 1508,
+                drawn_triangles: 1508,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein/blockout-walls.ashlar",
+        instances: 556,
+        colliders: 556,
+        levels: [
+            (
+                until: Some(60.0),
+                pieces: 1975,
+                unique_triangles: 122789,
+                drawn_triangles: 122789,
+            ),
+            (
+                until: Some(250.0),
+                pieces: 1538,
+                unique_triangles: 70345,
+                drawn_triangles: 70345,
+            ),
+            (
+                until: None,
+                pieces: 184,
+                unique_triangles: 36279,
+                drawn_triangles: 36279,
+            ),
+        ],
+    ),
+    (
+        path: "settlements/port_serein.skyline.ashlar",
+        instances: 2651,
+        colliders: 0,
+        levels: [
+            (
+                until: None,
+                pieces: 38,
+                unique_triangles: 156185,
+                drawn_triangles: 156185,
+            ),
+        ],
+    ),
+]

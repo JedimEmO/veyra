@@ -1,0 +1,56 @@
+---
+source: tools/content/tests/stats.rs
+expression: stats()
+---
+[
+  BuildingStats(
+    path: "buildings/outpost.ashlar",
+    instances: 24,
+    colliders: 88,
+    levels: [
+      LevelStats(
+        until: Some(60.0),
+        pieces: 216,
+        unique_triangles: 3088,
+        drawn_triangles: 11368,
+      ),
+      LevelStats(
+        until: Some(250.0),
+        pieces: 139,
+        unique_triangles: 1428,
+        drawn_triangles: 6060,
+      ),
+      LevelStats(
+        until: None,
+        pieces: 6,
+        unique_triangles: 1880,
+        drawn_triangles: 1880,
+      ),
+    ],
+  ),
+  BuildingStats(
+    path: "buildings/corporate.ashlar",
+    instances: 70,
+    colliders: 117,
+    levels: [
+      LevelStats(
+        until: Some(60.0),
+        pieces: 473,
+        unique_triangles: 2352,
+        drawn_triangles: 19544,
+      ),
+      LevelStats(
+        until: Some(250.0),
+        pieces: 390,
+        unique_triangles: 1208,
+        drawn_triangles: 15892,
+      ),
+      LevelStats(
+        until: None,
+        pieces: 8,
+        unique_triangles: 6432,
+        drawn_triangles: 6432,
+      ),
+    ],
+  ),
+]

@@ -1,0 +1,310 @@
+[
+  {
+    "case": "woodland-0.32-baseline",
+    "command": [
+      "./target/release/game",
+      "--study-scene",
+      "woodland",
+      "--render-look-file",
+      "/tmp/strata-presets-final/baseline.ron",
+      "--visual-time",
+      "0.32",
+      "--flycam",
+      "--lock-camera",
+      "--camera-altitude",
+      "1.8",
+      "--camera-pitch=-0.05",
+      "--look=-1.25",
+      "--aa",
+      "taa",
+      "--wind",
+      "0",
+      "--frames",
+      "2700",
+      "--window",
+      "2560x1440",
+      "--screenshot",
+      "/tmp/strata-presets-final/woodland-0.32-baseline.png",
+      "--fullscreen"
+    ],
+    "environment": {
+      "XDG_CONFIG_HOME": "/tmp/strata-presets-final/config"
+    },
+    "fov_degrees": 45.0,
+    "foliage_distance_percent": 100.0,
+    "exit_code": 0,
+    "image_dimensions": [
+      2560,
+      1440
+    ],
+    "last_windows": [
+      [
+        150.0,
+        6.7,
+        5.8,
+        16.9,
+        18.6,
+        18.9,
+        4.1
+      ],
+      [
+        151.0,
+        6.6,
+        5.9,
+        16.8,
+        19.2,
+        19.3,
+        4.1
+      ],
+      [
+        150.0,
+        6.7,
+        5.8,
+        17.2,
+        19.0,
+        20.7,
+        4.2
+      ]
+    ],
+    "gpu_mean_ms": 4.133333333333333,
+    "errors": [],
+    "foliage_final": {
+      "cells": 323,
+      "blades": 1163508,
+      "plants": 195809,
+      "entities": 55662,
+      "in_flight": 0
+    }
+  },
+  {
+    "case": "woodland-0.32-clear-contrast",
+    "command": [
+      "./target/release/game",
+      "--study-scene",
+      "woodland",
+      "--render-look-file",
+      "/tmp/strata-presets-final/clear-contrast.ron",
+      "--visual-time",
+      "0.32",
+      "--flycam",
+      "--lock-camera",
+      "--camera-altitude",
+      "1.8",
+      "--camera-pitch=-0.05",
+      "--look=-1.25",
+      "--aa",
+      "taa",
+      "--wind",
+      "0",
+      "--frames",
+      "2700",
+      "--window",
+      "2560x1440",
+      "--screenshot",
+      "/tmp/strata-presets-final/woodland-0.32-clear-contrast.png",
+      "--fullscreen"
+    ],
+    "environment": {
+      "XDG_CONFIG_HOME": "/tmp/strata-presets-final/config"
+    },
+    "fov_degrees": 45.0,
+    "foliage_distance_percent": 100.0,
+    "exit_code": 0,
+    "image_dimensions": [
+      2560,
+      1440
+    ],
+    "last_windows": [
+      [
+        60.0,
+        16.7,
+        16.6,
+        22.6,
+        24.0,
+        39.9,
+        5.5
+      ],
+      [
+        60.0,
+        16.7,
+        16.8,
+        21.7,
+        23.2,
+        23.4,
+        5.9
+      ],
+      [
+        60.0,
+        16.7,
+        16.5,
+        21.2,
+        23.5,
+        23.6,
+        5.4
+      ]
+    ],
+    "gpu_mean_ms": 5.6000000000000005,
+    "errors": [],
+    "foliage_final": {
+      "cells": 323,
+      "blades": 1163508,
+      "plants": 195809,
+      "entities": 55662,
+      "in_flight": 0
+    }
+  },
+  {
+    "case": "woodland-0.32-sunlit-mist",
+    "command": [
+      "./target/release/game",
+      "--study-scene",
+      "woodland",
+      "--render-look-file",
+      "/tmp/strata-presets-final/sunlit-mist.ron",
+      "--visual-time",
+      "0.32",
+      "--flycam",
+      "--lock-camera",
+      "--camera-altitude",
+      "1.8",
+      "--camera-pitch=-0.05",
+      "--look=-1.25",
+      "--aa",
+      "taa",
+      "--wind",
+      "0",
+      "--frames",
+      "2700",
+      "--window",
+      "2560x1440",
+      "--screenshot",
+      "/tmp/strata-presets-final/woodland-0.32-sunlit-mist.png",
+      "--fullscreen"
+    ],
+    "environment": {
+      "XDG_CONFIG_HOME": "/tmp/strata-presets-final/config"
+    },
+    "fov_degrees": 45.0,
+    "foliage_distance_percent": 100.0,
+    "exit_code": 0,
+    "image_dimensions": [
+      2560,
+      1440
+    ],
+    "last_windows": [
+      [
+        129.0,
+        7.8,
+        6.9,
+        17.0,
+        19.8,
+        22.0,
+        5.6
+      ],
+      [
+        128.0,
+        7.8,
+        7.0,
+        17.2,
+        20.4,
+        20.7,
+        5.7
+      ],
+      [
+        127.0,
+        7.9,
+        7.0,
+        17.4,
+        20.7,
+        25.0,
+        5.6
+      ]
+    ],
+    "gpu_mean_ms": 5.633333333333333,
+    "errors": [],
+    "foliage_final": {
+      "cells": 323,
+      "blades": 1163508,
+      "plants": 195809,
+      "entities": 55662,
+      "in_flight": 0
+    }
+  },
+  {
+    "case": "woodland-0.32-cinematic-woodland",
+    "command": [
+      "./target/release/game",
+      "--study-scene",
+      "woodland",
+      "--render-look-file",
+      "/tmp/strata-presets-final/cinematic-woodland.ron",
+      "--visual-time",
+      "0.32",
+      "--flycam",
+      "--lock-camera",
+      "--camera-altitude",
+      "1.8",
+      "--camera-pitch=-0.05",
+      "--look=-1.25",
+      "--aa",
+      "taa",
+      "--wind",
+      "0",
+      "--frames",
+      "2700",
+      "--window",
+      "2560x1440",
+      "--screenshot",
+      "/tmp/strata-presets-final/woodland-0.32-cinematic-woodland.png",
+      "--fullscreen"
+    ],
+    "environment": {
+      "XDG_CONFIG_HOME": "/tmp/strata-presets-final/config"
+    },
+    "fov_degrees": 45.0,
+    "foliage_distance_percent": 100.0,
+    "exit_code": 0,
+    "image_dimensions": [
+      2560,
+      1440
+    ],
+    "last_windows": [
+      [
+        126.0,
+        7.9,
+        7.2,
+        16.0,
+        20.7,
+        23.5,
+        5.8
+      ],
+      [
+        126.0,
+        7.9,
+        7.2,
+        15.7,
+        20.3,
+        20.9,
+        5.9
+      ],
+      [
+        126.0,
+        7.9,
+        7.1,
+        15.7,
+        21.0,
+        22.2,
+        6.1
+      ]
+    ],
+    "gpu_mean_ms": 5.933333333333334,
+    "errors": [],
+    "foliage_final": {
+      "cells": 323,
+      "blades": 1163508,
+      "plants": 195809,
+      "entities": 55662,
+      "in_flight": 0
+    }
+  }
+]

@@ -1,0 +1,17 @@
+// The drive coil (ticket 0009, step 5): the part a survey tool's sensor and
+// a courier bike's motor are wound from. Sold at store grade (flux 500) and
+// made from a conductor and a brine by `veyra:schematic.drive_coil`; the
+// price is what a bench buys one for when a slot wants it and the stock has
+// none.
+(
+    id: "veyra:component.drive_coil",
+    name: "Drive coil",
+    maker: "the dealer",
+    kind: Component,
+    stack: 20,
+    price: Some(110),
+    lines: [
+        (id: "flux", name: "Flux"),
+    ],
+    icon: (shape: Gem, color: "#6FD1C1", symbol: Some("veyra:icon.crafting.component")),
+)

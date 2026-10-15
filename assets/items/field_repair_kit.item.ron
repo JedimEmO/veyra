@@ -1,0 +1,17 @@
+// The field repair kit (crafting.md, 4.6): consumed to mend a weapon and its
+// fitted parts. Its one line says how much it restores; at a workbench any
+// kit restores everything, so the line matters in the field and the poorest
+// kit is the one a bench spends. Bought at store grade, or made from the
+// light alloy and a seal set
+// (`assets/schematics/field_repair_kit.schematic.ron`).
+(
+    id: "veyra:kit.field_repair",
+    name: "Field repair kit",
+    maker: "the dealer",
+    kind: Kit,
+    stack: 10,
+    lines: [
+        (id: "restore", name: "Restoration"),
+    ],
+    icon: (shape: Slab, color: "#D9A441", symbol: Some("veyra:icon.ability.field-repair")),
+)

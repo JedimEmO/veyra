@@ -1,0 +1,23 @@
+// The factory's dials (docs/design/crafting.md, 5.4): how a prototype is
+// recorded as a blueprint and how a fabricator runs one. Read by
+// `strata_registry::schematic` (`FactoryRules`); in no world version and
+// no handshake. Until the Weaponsmith and Fabricator trees exist (ticket
+// 0007, step 9) anyone records and anyone runs, so these are the whole of
+// the rules.
+(
+    version: 1,
+    // The item a recorded blueprint is.
+    blueprint: "veyra:blueprint.production",
+    // How far under the prototype a blueprint may be recorded: its lines
+    // and every minimum it asks for are the prototype's times this, so a
+    // lower one makes less and takes poorer stock.
+    derate: (from: 0.70, to: 1.00, step: 0.05),
+    // Runs a blueprint starts with, by the schematic's complexity, from 1.
+    runs: [100, 50, 25],
+    // Played seconds a unit, a point of complexity, with a worker on it: a
+    // batch of twenty cell cores is four minutes.
+    seconds_per_point: 12.0,
+    // The share of that rate with nobody on it, so a household of one can
+    // run a fabricator from the first day.
+    unattended: 0.5,
+)

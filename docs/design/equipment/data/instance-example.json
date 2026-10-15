@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "status": "design_proposal_not_runtime",
+  "example_only": true,
+  "household": "example_household",
+  "active_character": "arrival",
+  "characters": [
+    "arrival",
+    "fabricator"
+  ],
+  "items": [
+    {
+      "instance_id": "rifle_001",
+      "definition": "veyra:weapon.burst_rifle",
+      "location": {
+        "kind": "equipped",
+        "character": "arrival"
+      },
+      "installed_modules": {
+        "sight": "optic_001"
+      },
+      "stock_parts": "integral_retained",
+      "loaded_ammo": 0,
+      "spare_ammo": 0,
+      "heat": 0.0,
+      "condition_model": null,
+      "provenance": {
+        "source": "commission",
+        "maker": "veyra:maker.kestrel",
+        "material_lots": []
+      }
+    },
+    {
+      "instance_id": "optic_001",
+      "definition": "veyra:module.adapted_morrow_optic",
+      "location": {
+        "kind": "installed",
+        "parent": "rifle_001",
+        "slot": "sight"
+      },
+      "provenance": {
+        "source": "workshop_conversion",
+        "maker": "veyra:maker.morrow",
+        "material_lots": []
+      }
+    },
+    {
+      "instance_id": "dressing_lot_001",
+      "definition": "veyra:supply.field_dressing",
+      "location": {
+        "kind": "ready",
+        "character": "arrival"
+      },
+      "quantity": 2,
+      "lot_id": "clinic_batch_example"
+    }
+  ],
+  "character_state": [
+    {
+      "character": "arrival",
+      "current_pools": {
+        "health": 62,
+        "shield": 10,
+        "stamina": 35,
+        "posture": 70
+      },
+      "cooldowns_remaining_sim_seconds": {
+        "recovery_supply": 23.0
+      }
+    },
+    {
+      "character": "fabricator",
+      "current_pools": {
+        "health": 100,
+        "shield": 40,
+        "stamina": 100,
+        "posture": 100
+      },
+      "cooldowns_remaining_sim_seconds": {
+        "recovery_supply": 0.0
+      }
+    }
+  ]
+}

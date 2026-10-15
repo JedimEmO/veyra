@@ -1,0 +1,23 @@
+// The `blade_balanced_grip` part (ticket 0010, step 3). Taught by Edges 2 of the Weaponsmith.
+// Read by `strata_registry::schematic`; in no world version and no handshake.
+(
+    id: "veyra:schematic.blade_balanced_grip",
+    makes: "veyra:module.blade_balanced_grip",
+    complexity: 2,
+    profession: Some("weaponsmith.edges.2"),
+    licence: Some("veyra:maker.morrow"),
+    fixture: None,
+    slots: [
+        (id: "metal", name: "Metal", takes: Class("strata:structural_metal"), units: 15),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "attack_stamina", from: [
+            (slot: "metal", stat: Light(Density), weight: 0.7),
+            (slot: "metal", stat: Attribute(Workability), weight: 0.3),
+        ]),
+        (line: "hit_posture", from: [
+            (slot: "metal", stat: Attribute(Hardness), weight: 1.0),
+        ]),
+    ],
+)

@@ -1,0 +1,29 @@
+// The service pistol's feed module in `crates/veyra-weapons`
+// (`pistol_extended_cell`, which fits the service pistol alone), with the
+// maker of the pistol it is made for. The effects are its factors there,
+// each on the line of its name.
+(
+    id: "veyra:module.pistol_extended_cell",
+    name: "Pistol extended cell",
+    maker: "Kestrel",
+    kind: Module(
+        slot: "feed",
+        fits: ["veyra:weapon.service_pistol"],
+        part: "pistol_extended_cell",
+        effects: [
+            (property: Capacity, factor: 1.25, line: "capacity"),
+            (property: ReloadTime, factor: 1.15, line: "reload_time"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "capacity", name: "Capacity"),
+        (id: "reload_time", name: "Handling"),
+    ],
+    icon: (
+        shape: Slab,
+        color: "#7FD1FF",
+        picture: Some("service_pistol/feed.pistol_extended_cell.png"),
+        symbol: Some("veyra:icon.module.feed"),
+    ),
+)

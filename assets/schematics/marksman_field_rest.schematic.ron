@@ -1,0 +1,26 @@
+// The Marksman field rest (ticket 0010, step 4): 40 units of any structural
+// metal and a seal set. Aim spread is the metal's stability and hardness; the
+// brace is slower the denser it is. Taught by Fittings 4 of the Weaponsmith.
+// Read by `strata_registry::schematic`; in no world version and no
+// handshake.
+(
+    id: "veyra:schematic.marksman_field_rest",
+    makes: "veyra:module.marksman_field_rest",
+    complexity: 2,
+    profession: Some("weaponsmith.fittings.4"),
+    licence: None,
+    fixture: None,
+    slots: [
+        (id: "metal", name: "Metal", takes: Class("strata:structural_metal"), units: 40),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "aim_spread", from: [
+            (slot: "metal", stat: Attribute(Stability), weight: 0.5),
+            (slot: "metal", stat: Attribute(Hardness), weight: 0.5),
+        ]),
+        (line: "brace_time", from: [
+            (slot: "metal", stat: Attribute(Density), weight: 1.0),
+        ]),
+    ],
+)

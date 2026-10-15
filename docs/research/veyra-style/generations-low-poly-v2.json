@@ -1,0 +1,51 @@
+{
+  "date": "2026-09-13",
+  "tool": "built-in image_gen",
+  "revision": "low-poly-v2",
+  "prompts": "prompts-low-poly-v2.json",
+  "original_capture_manifest": "captures.json",
+  "notes": [
+    "Edits of the earlier screenshot-based concepts; no new game capture was needed.",
+    "The generated revision also stylizes terrain, water and foliage. Those renderer changes are conceptual.",
+    "These are raster references. Mesh topology, polygon counts and local 3D generation compatibility have not been tested."
+  ],
+  "outputs": [
+    {
+      "name": "port-serein-low-poly-v2",
+      "edit_target": "concepts/port-serein.png",
+      "edit_target_sha256": "af1c3ed5decc2366b024bb08e6aeacbdd2d7ae5e812d806cc13d08405de6b7de",
+      "output": "concepts/port-serein-low-poly-v2.png",
+      "output_dimensions": [
+        1711,
+        919
+      ],
+      "output_sha256": "e9f22b8dbb6e9715097aca6f3376c26c1ed1691413fe936c89feb251b60193f2",
+      "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-66787eab-9fb2-4dfe-8ee7-90a89043a161.png"
+    },
+    {
+      "name": "atmospheric-processor-low-poly-v2",
+      "edit_target": "concepts/atmospheric-processor.png",
+      "edit_target_sha256": "054f816ba50f81e282aeac857abfe14fe60f7cf02bace3dc846ed1f9cf088683",
+      "output": "concepts/atmospheric-processor-low-poly-v2.png",
+      "output_dimensions": [
+        1701,
+        924
+      ],
+      "output_sha256": "3fea62227451ed3a8d3182ed6bdbad377cb06aa4e1c8e547b88a79a7a4945ec5",
+      "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-80e4f037-87a0-4f99-9ed4-36408a34ce5a.png"
+    },
+    {
+      "name": "woodland-borough-low-poly-v2",
+      "edit_target": "concepts/woodland-borough.png",
+      "edit_target_sha256": "3365c6b4a4cdd90fc8aa5d297ed542714534db86fe2a14982e8ba712d48c88aa",
+      "output": "concepts/woodland-borough-low-poly-v2.png",
+      "output_dimensions": [
+        1701,
+        925
+      ],
+      "output_sha256": "0f93078d689e1d2c21637b718173ca4192533e2fe54c1ce99dc0cd27949da33e",
+      "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-3a14695e-e77b-4a57-93c3-f3acbcf105ca.png"
+    }
+  ],
+  "status": "rejected: too low-poly; current engine environment must remain unchanged"
+}

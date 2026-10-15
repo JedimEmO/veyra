@@ -1,0 +1,36 @@
+// The Vigil patrol carbine (crafting.md, section 6): a frame cut from 80
+// units of structural metal, a harness for the action and a seal set. The
+// frame's rigidity (its Strength) and the hardness of what the mounts are
+// cut in set the moddability, which is the smith's real choice: a fine plain
+// rifle, or a platform. So ferrous ore is the platform metal and light alloy
+// the workable one that rolls better, and `strata-worldgen`'s deposit tests
+// hold the shipped world to having platform metal within a walk of the city. A made carbine opens its extra mounts at the thresholds of
+// `assets/items/patrol_carbine.item.ron`. Read by `strata_registry::schematic`;
+// in no world version and no handshake.
+(
+    id: "veyra:schematic.patrol_carbine",
+    makes: "veyra:weapon.patrol_carbine",
+    complexity: 3,
+    profession: Some("weaponsmith.frames.1"),
+    licence: Some("veyra:maker.vigil"),
+    fixture: Some("cells"),
+    slots: [
+        (id: "frame", name: "Frame", takes: Class("strata:structural_metal"), units: 80),
+        (id: "action", name: "Action", takes: Component("veyra:component.harness"), count: 1),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "interval", from: [
+            (slot: "action", stat: Line("conductance"), weight: 0.5),
+            (slot: "frame", stat: Attribute(Stability), weight: 0.5),
+        ]),
+        (line: "durability", from: [
+            (slot: "frame", stat: Attribute(Toughness), weight: 0.6),
+            (slot: "frame", stat: Attribute(Strength), weight: 0.4),
+        ]),
+        (line: "moddability", from: [
+            (slot: "frame", stat: Attribute(Hardness), weight: 0.6),
+            (slot: "frame", stat: Attribute(Strength), weight: 0.4),
+        ]),
+    ],
+)

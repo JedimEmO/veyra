@@ -1,0 +1,48 @@
+// Basalt plateau: dark flat flows in steps, columns at the edges, falls over
+// the lip. Each flow is metres to tens of metres thick, a cliff of columns
+// over the softer rubbly top of the flow beneath. Where a range rises
+// through it, the range is folded rock.
+(
+    id: "strata:basalt",
+    name: "Basalt plateau",
+    tint: (0.36, 0.30, 0.44),
+    deal_order: 3,
+    in_ranges: Some("strata:folded"),
+    rock: (
+        // Its own layer (near-black plumb columns), baked by `just content`.
+        face: "strata:basalt",
+        bare_slope: 0.9,
+        far_tint: (0.75, 0.75, 0.78),
+    ),
+    // Step 4 (ticket 0004): damped fbm, benches in steps. The amplitudes
+    // are ten and six times the biomes' (1.0 and 0.6 in the design) because
+    // fbm rarely leaves the middle fifth of its range, so a plains relief of
+    // 18 m stands a few metres; the damping 1.5 (3 in the design) because
+    // this kernel's slopes run to 3 or more, and at 3 the damping laid the
+    // whole relief flat but for creases. Half its ground is tundra, hence
+    // the `ridges` rule. The escarpment at each flow waits for step 5's beds.
+    // Also away from the design, with no reason step 4 recorded (found by
+    // its review): the plains' wavelength 3.0 (1.5), the hills' amplitude
+    // 0.8 (0.6), and the `ridges` rule's numbers, set by eye on the maps.
+    relief: [
+        (class: "plains", shape: "damped", amplitude: 10.0, wavelength: 3.0, erosion: 0.6, damping: 1.5),
+        (class: "hills", shape: "damped", amplitude: 0.8, wavelength: 1.5, erosion: 0.7, damping: 1.5),
+        (class: "ridges", shape: "damped", amplitude: 6.0, wavelength: 2.5, erosion: 0.6, damping: 1.5),
+    ],
+    // Step 5 (ticket 0004): beds of 25 to 70 m (10 to 35 in the design): at a
+    // hard share of 0.8, beds thinner than sandstone's stood more steps than
+    // sandstone's where basalt wants fewer, thicker ones ("each flow metres to
+    // tens of metres, rarely 100 m"). The slope gate at 0.05 to 0.25 for
+    // sandstone's reason (its file). Risers 26.9 % of its steep ground.
+    beds: (
+        thickness_m: (min: 25.0, max: 70.0),
+        hard_share: 0.8,
+        strength: 0.9,
+        dip_deg: (min: 0.0, max: 2.0),
+        slope_gate: (min: 0.05, max: 0.25),
+    ),
+    water: (section: "stepped", keep_pits_m: 15.0, hang: 0.7),
+    kit: [
+        (species: "strata:granite_stone", weight: 0.5),
+    ],
+)

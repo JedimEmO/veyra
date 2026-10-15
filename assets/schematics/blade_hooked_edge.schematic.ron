@@ -1,0 +1,23 @@
+// The `blade_hooked_edge` part (ticket 0010, step 3). Taught by Edges 1 of the Weaponsmith.
+// Read by `strata_registry::schematic`; in no world version and no handshake.
+(
+    id: "veyra:schematic.blade_hooked_edge",
+    makes: "veyra:module.blade_hooked_edge",
+    complexity: 2,
+    profession: Some("weaponsmith.edges.1"),
+    licence: Some("veyra:maker.morrow"),
+    fixture: None,
+    slots: [
+        (id: "metal", name: "Metal", takes: Class("strata:structural_metal"), units: 15),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "hit_posture", from: [
+            (slot: "metal", stat: Attribute(Hardness), weight: 0.6),
+            (slot: "metal", stat: Attribute(Strength), weight: 0.4),
+        ]),
+        (line: "recovery_time", from: [
+            (slot: "metal", stat: Attribute(Toughness), weight: 1.0),
+        ]),
+    ],
+)

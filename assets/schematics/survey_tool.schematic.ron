@@ -1,0 +1,25 @@
+// The survey tool (ticket 0009, step 5): a drive coil, 15 units of any
+// conductor and a seal set. The range line is the coil's flux and the
+// conductor's conductivity, so a surveyed conductor and a good coil out-reach
+// the 120 credit tool sold at the board. Taught by Materials 1 of the
+// Fabricator. Read by `strata_registry::schematic`; in no world version and
+// no handshake.
+(
+    id: "veyra:schematic.survey_tool",
+    makes: "veyra:tool.survey",
+    complexity: 2,
+    profession: Some("fabricator.materials.1"),
+    licence: None,
+    fixture: None,
+    slots: [
+        (id: "coil", name: "Drive coil", takes: Component("veyra:component.drive_coil"), count: 1),
+        (id: "conductor", name: "Conductor", takes: Class("strata:conductor"), units: 15),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "range", from: [
+            (slot: "coil", stat: Line("flux"), weight: 0.6),
+            (slot: "conductor", stat: Attribute(Conductivity), weight: 0.4),
+        ]),
+    ],
+)

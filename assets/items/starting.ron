@@ -1,0 +1,138 @@
+// The first day's stock, and what a household saved before items existed
+// is given. Every record is checked against the items and the carrying
+// rules at load: the count within the item's stack, exactly the item's
+// lines, a condition on a weapon and on nothing else.
+//
+// A bought item is store grade: batch 0, no maker of its own, every line
+// 500. A crafted one names its batch and who made it.
+//
+// Version 2 adds the purse and the first lots (ticket 0007, step 3).
+(
+    version: 2,
+    // The household's credits on the first day, and what a household saved
+    // before the purse existed is given once.
+    purse: 2500,
+    // The lots in the store on the first day, each drawn from the nearest
+    // deposit of its type (or of any type of its class) to the default
+    // spawn within `lots_within_m`, with that deposit's own figures: enough
+    // for several crafts of the worked example (crafting.md, 5.5), which
+    // takes 20 units of salt and 30 of brine a cell core. One that finds no
+    // deposit is left out, and said.
+    lots: [
+        (of: Type("strata:evaporite_salt"), units: 160),
+        (of: Class("strata:brine"), units: 160),
+        (of: Type("strata:light_alloy_ore"), units: 200),
+    ],
+    lots_within_m: 20000.0,
+    // The two weapon slots, for everyone: any two weapons of different
+    // families (the carbine, then the pistol, to begin). A pair, so in
+    // round brackets.
+    hands: (
+        (
+            item: "veyra:weapon.patrol_carbine",
+            lines: {"interval": 500, "durability": 500, "moddability": 500},
+            condition: Some(1000),
+        ),
+        (
+            item: "veyra:weapon.service_pistol",
+            lines: {"interval": 500, "durability": 500, "moddability": 500},
+            condition: Some(1000),
+        ),
+    ),
+    // The household's store, from its first cell. The two stacks of the
+    // patrol magazine are two batches and never merge: four bought, and the
+    // two Tovan Reyes made, which are the card of ticket 0007.
+    store: [
+        (
+            item: "veyra:module.patrol_extended_feed",
+            count: 4,
+            lines: {"capacity": 500, "reload_time": 500},
+        ),
+        (
+            item: "veyra:module.patrol_extended_feed",
+            count: 2,
+            batch: 412,
+            by: Some("Tovan Reyes"),
+            lines: {"capacity": 610, "reload_time": 433},
+        ),
+        (
+            item: "veyra:module.pistol_extended_cell",
+            count: 3,
+            lines: {"capacity": 500, "reload_time": 500},
+        ),
+        (
+            item: "veyra:module.vigil_reflex",
+            lines: {"aim_spread": 500, "equip_time": 500},
+        ),
+        (
+            item: "veyra:module.vigil_angled_grip",
+            count: 2,
+            lines: {"equip_time": 500, "recoil_recovery": 500},
+        ),
+        (item: "veyra:bag.haul_pack"),
+        // Bought parts for the first magazines (ticket 0007, step 4): a
+        // harness and a seal set go into each, beside a cell core made at
+        // the bench and light alloy from the lots above.
+        (
+            item: "veyra:component.harness",
+            count: 3,
+            lines: {"conductance": 500},
+        ),
+        (item: "veyra:commodity.seal_set", count: 6),
+        // Two repair kits at store grade (step 6).
+        (item: "veyra:kit.field_repair", count: 2, lines: {"restore": 500}),
+        // One vented muzzle at store grade (step 9), for a carbine whose
+        // muzzle mount is open.
+        (
+            item: "veyra:module.vigil_compensator",
+            lines: {"recoil_recovery": 500, "aim_move_speed": 500},
+        ),
+        // Two blades at store grade, for a member who knows the Blade tree
+        // to take into a hand (ticket 0010, step 2).
+        (
+            item: "veyra:weapon.service_blade",
+            count: 1,
+            lines: {"edge": 500, "durability": 500, "moddability": 500},
+            condition: Some(1000),
+        ),
+        (
+            item: "veyra:weapon.service_blade",
+            count: 1,
+            lines: {"edge": 500, "durability": 500, "moddability": 500},
+            condition: Some(1000),
+        ),
+    ],
+    // What a member carries on arrival, by name. Everyone carries a survey
+    // tool at store grade (ticket 0009, step 3), since whoever is out is the
+    // one who pings. It sits in the pack's last cell (the pack is six by
+    // three), the tools' corner, so the first cells stay free for what is
+    // picked up. The arrival's satchel is in the first bag slot with a
+    // stack in its cells, so the rule that a full bag stays is live at once.
+    packs: {
+        "Frontier ranger": (
+            cells: [
+                None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None,
+                Some((item: "veyra:tool.survey", lines: {"range": 500})),
+            ],
+            bag_slots: [Some((item: "veyra:bag.field_satchel"))],
+            bags: [[
+                Some((
+                    item: "veyra:module.pistol_extended_cell",
+                    lines: {"capacity": 500, "reload_time": 500},
+                )),
+            ]],
+        ),
+        "Tovan Reyes": (cells: [
+                None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None,
+                Some((item: "veyra:tool.survey", lines: {"range": 500})),
+            ]),
+        "Ilse Marrow": (cells: [
+                None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None,
+                Some((item: "veyra:tool.survey", lines: {"range": 500})),
+            ]),
+        "Dr. Anneke Faal": (cells: [
+                None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None,
+                Some((item: "veyra:tool.survey", lines: {"range": 500})),
+            ]),
+    },
+)

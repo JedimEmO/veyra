@@ -1,0 +1,33 @@
+// Granite cliff pieces sunk into steep slopes, facing down them. Granite
+// country's own; karst and folded rock borrow them until they have a kit
+// of their own.
+(
+    id: "strata:granite_cliff",
+    name: "Granite cliff",
+    kind: "rock",
+    // How rocky each climate and height is; which rock stands there is the
+    // province's, by its kit (assets/geology), so a granite and a sandstone
+    // species list the same biomes (ticket 0004, step 3e).
+    biomes: [
+        (biome: "strata:mountains", weight: 0.55),
+        (biome: "strata:highlands", weight: 0.35),
+        (biome: "strata:desert", weight: 0.35),
+        (biome: "strata:coast", weight: 0.3),
+        (biome: "strata:savanna", weight: 0.25),
+        (biome: "strata:tundra", weight: 0.2),
+        (biome: "strata:forest", weight: 0.1),
+        (biome: "strata:plains", weight: 0.08),
+    ],
+    spacing_m: 16.0,
+    slope_max: 8.0,
+    sea_clearance_m: 2.0,
+    size: (min: 0.8, max: 1.2),
+    exclusion_m: 6.0,
+    tint_dry: (0.5, 0.5, 0.5),
+    tint_lush: (0.5, 0.5, 0.5),
+    // Cliffs gather into outcrops with open slope between, rather than
+    // standing in a row along a steep band.
+    cluster: (radius_m: 26.0, clumps_per_ha: 2.0, patch_m: 90.0, patch_cover: 0.55),
+    ground: (slope_min: 0.65, face_downhill: true),
+    children: [(species: "strata:granite_stone", count: [1, 3], radius_m: [6.0, 14.0])],
+)

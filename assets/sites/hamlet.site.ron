@@ -1,0 +1,58 @@
+// A hamlet: a handful of prefabricated homes and a workshop on gentle
+// ground by water, a few kilometres out from a town, keeping its ford.
+(
+    id: "strata:hamlet",
+    name: "Hamlet",
+    rank: 1,
+    // Hamlets and stations every 2 to 4 km (ticket 0005, decided 4).
+    per_1000_km2: 16.0,
+    // The pad holds the group (it reaches 26.3 m) and its board, and no
+    // more: a wider one read as a car park from above.
+    footprint_m: 34.0,
+    blend_m: 30.0,
+    crown: 0.02,
+    max_cut_m: 5.0,
+    spacing: (own_m: 2800.0, others_m: 1000.0, settlements_m: 1800.0),
+    ground: (
+        slope_max: 0.15,
+        height_m: (min: 2.0, max: 900.0),
+        biomes: [
+            (id: "strata:mountains", weight: 0.15),
+            (id: "strata:tundra", weight: 0.5),
+            (id: "strata:desert", weight: 0.4),
+            (id: "strata:ocean", weight: 0.0),
+        ],
+        provinces: [(id: "strata:badlands", weight: 0.5)],
+    ),
+    wants: [
+        // Water it lives by: a ford on a stream worth the name first.
+        (any: [
+            // As close as the band's clearance of the channel allows
+            // (about 85 m from a creek's line), so the ford is in sight.
+            (feature: "ford", size_m: 2.0, within_m: 130.0, fade_m: 350.0),
+            (feature: "river", size_m: 2.0, within_m: 90.0, fade_m: 400.0),
+            (feature: "lake", within_m: 120.0, fade_m: 300.0),
+            (feature: "sea", within_m: 100.0, fade_m: 300.0),
+        ], weight: 3.0, required: true),
+        // A few kilometres from a town or the port.
+        (any: [
+            (feature: "kind", kind: "strata:town", beyond_m: 2000.0, within_m: 6000.0, fade_m: 3000.0),
+            (feature: "settlement", beyond_m: 2000.0, within_m: 8000.0, fade_m: 4000.0),
+        ], weight: 1.5),
+    ],
+    facing: "water",
+    road: "track",
+    group: "veyra:hamlet",
+    names: (
+        onsets: ["b", "c", "d", "f", "g", "h", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "br", "gr", "th"],
+        vowels: ["a", "e", "i", "o", "u", "a", "e", "ea", "oa"],
+        codas: ["", "n", "r", "l", "s", "m", "ck", "th", "nd", "rn"],
+        syllables: [1, 2],
+        patterns: ["{root}", "{root}", "{root}'s Hold", "{root} End", "{root} Steading"],
+        by_feature: [
+            (feature: "ford", patterns: ["{root} Ford", "{root}'s Ford", "{root} Crossing"]),
+            (feature: "lake", patterns: ["{root} Mere", "{root} Water"]),
+            (feature: "sea", patterns: ["{root} Strand", "{root}'s Shore"]),
+        ],
+    ),
+)

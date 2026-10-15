@@ -1,0 +1,37 @@
+// The Vigil marksman rifle (ticket 0010, step 4; its id is `vigil_` so it sorts after the carbine's and
+// a harness or a core is still read through the first schematic that used it): a frame cut from 110 units of
+// structural metal, a harness for the action and a seal set, a heavier frame
+// than the carbine's. The bore, which tightens the aimed cone, is the frame's
+// stability and the harness's conductance; durability and moddability are the
+// carbine's: toughness and strength, hardness and strength, so a platform
+// metal opens the extra mounts. Taught by Frames 3 of the Weaponsmith. Its
+// complexity is 3, the highest the session's dials and the factory's runs
+// give points for. Read by `strata_registry::schematic`; in no world version
+// and no handshake.
+(
+    id: "veyra:schematic.vigil_marksman_rifle",
+    makes: "veyra:weapon.marksman_rifle",
+    complexity: 3,
+    profession: Some("weaponsmith.frames.3"),
+    licence: Some("veyra:maker.vigil"),
+    fixture: Some("cells"),
+    slots: [
+        (id: "frame", name: "Frame", takes: Class("strata:structural_metal"), units: 110),
+        (id: "action", name: "Action", takes: Component("veyra:component.harness"), count: 1),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "bore", from: [
+            (slot: "action", stat: Line("conductance"), weight: 0.5),
+            (slot: "frame", stat: Attribute(Stability), weight: 0.5),
+        ]),
+        (line: "durability", from: [
+            (slot: "frame", stat: Attribute(Toughness), weight: 0.6),
+            (slot: "frame", stat: Attribute(Strength), weight: 0.4),
+        ]),
+        (line: "moddability", from: [
+            (slot: "frame", stat: Attribute(Hardness), weight: 0.6),
+            (slot: "frame", stat: Attribute(Strength), weight: 0.4),
+        ]),
+    ],
+)

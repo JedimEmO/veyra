@@ -1,0 +1,35 @@
+// Terrain materials. Each `texture_set` is a terrain layer `just content`
+// bakes from `veyra-materials` into `generated/materials/terrain/<name>/`.
+// The texture array layer a material occupies is its position in sorted id
+// order, assigned at freeze; adding a material in the middle of the alphabet
+// shifts the layers after it, which only matters to a mesh baked before the
+// change.
+// `tiling_m` is the metres one repeat of the set covers, and must be the
+// repeat the set's graph was drawn for (`veyra_materials::TERRAIN`); the
+// content step's terrain test holds the two together.
+[
+    // Living cover takes the ground's palette (ticket 0006): the colour
+    // shapes and its biome's hue near. The rest keep their own colour.
+    (id: "strata:grass", texture_set: "grass", tiling_m: 8.0, palette: true),
+    (id: "strata:forest_floor", texture_set: "forest_floor", tiling_m: 6.0, palette: true),
+    (id: "strata:sand", texture_set: "sand", tiling_m: 12.0),
+    (id: "strata:rock", texture_set: "rock", tiling_m: 8.0),
+    (id: "strata:snow", texture_set: "snow", tiling_m: 10.0),
+    (id: "strata:gravel", texture_set: "gravel", tiling_m: 4.0),
+    // Port Serein's ground: the terraces' lanes, the quay apron and the
+    // gardens. The two pavings are laid in courses, which the stochastic
+    // read would turn on end, so they are read plainly.
+    (id: "strata:setts", texture_set: "setts", tiling_m: 4.0, patterned: true),
+    (id: "strata:flagstones", texture_set: "flagstones", tiling_m: 8.0, patterned: true),
+    (id: "strata:soil", texture_set: "soil", tiling_m: 6.0),
+    // The provinces' bare faces (ticket 0004, step 3). Karst's limestone is
+    // `strata:rock` above. Granite has no grain and is read like the ground;
+    // the other four have one (level beds, plumb columns, steep cleavage,
+    // level bands) and are read `oriented`: shifted along the bed, never
+    // turned, so the grain keeps its direction on a cliff.
+    (id: "strata:granite", texture_set: "granite", tiling_m: 8.0),
+    (id: "strata:sandstone", texture_set: "sandstone", tiling_m: 8.0, oriented: true),
+    (id: "strata:basalt", texture_set: "basalt", tiling_m: 8.0, oriented: true),
+    (id: "strata:slate", texture_set: "slate", tiling_m: 8.0, oriented: true),
+    (id: "strata:clay", texture_set: "clay", tiling_m: 8.0, oriented: true),
+]

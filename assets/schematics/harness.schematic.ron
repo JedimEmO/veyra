@@ -1,0 +1,25 @@
+// The firing harness (crafting.md, section 6): 15 units of any conductor.
+// The harness is half of a carbine's Action line (its conductance, the other
+// half being the frame's Stability), so a surveyed conductor is how a made
+// carbine out-shoots a bought one, whose harness is sold at 500 only. The
+// frame's Stability is the other half and pulls against the hard ferrous
+// frame that moddability wants: the smith chooses between a quick weapon and
+// a platform. Read by `strata_registry::schematic`; in no world version and
+// no handshake.
+(
+    id: "veyra:schematic.harness",
+    makes: "veyra:component.harness",
+    complexity: 1,
+    profession: None,
+    licence: None,
+    fixture: Some("cells"),
+    slots: [
+        (id: "conductor", name: "Conductor", takes: Class("strata:conductor"), units: 15),
+    ],
+    lines: [
+        (line: "conductance", from: [
+            (slot: "conductor", stat: Attribute(Conductivity), weight: 0.8),
+            (slot: "conductor", stat: Attribute(Purity), weight: 0.2),
+        ]),
+    ],
+)

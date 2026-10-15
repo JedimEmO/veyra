@@ -1,0 +1,12 @@
+// The seal set: a certified part almost everything takes (crafting.md,
+// 5.2). A commodity: no quality of its own, every one the same, bought and
+// never made, so it has a price and no lines and no schematic weighs it.
+(
+    id: "veyra:commodity.seal_set",
+    name: "Seal set",
+    maker: "the dealer",
+    kind: Commodity,
+    stack: 50,
+    price: Some(20),
+    icon: (shape: Cube, color: "#8A97AD", symbol: Some("veyra:icon.crafting.batch")),
+)

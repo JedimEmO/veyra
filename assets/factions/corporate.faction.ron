@@ -1,0 +1,24 @@
+// A corporate concern: a company that takes the landings and the big
+// towns. Its names are hard consonants set in a trade word.
+(
+    id: "strata:corporate",
+    name: "Corporate concern",
+    nature: Corporate,
+    holds: [
+        (kind: "strata:landing", weight: 3.0, reach_m: 3500.0),
+        (kind: "strata:town", weight: 1.0, reach_m: 3000.0),
+        (kind: "strata:wreck", weight: 1.0, reach_m: 600.0, seat: false),
+        (kind: "strata:wreck_works", weight: 1.0, reach_m: 800.0, seat: false),
+    ],
+    // One concern to a dozen landings or towns on a mass.
+    per_mass: (sites_each: 12.0, least: 1, most: 500),
+    palette: ["#F2A33A", "#A08A2A", "#D9B24A", "#6B5A2A", "#5A3A1A", "#F5D58A"],
+    symbol: "veyra:icon.map.workshop",
+    names: (
+        onsets: ["b", "d", "g", "h", "k", "m", "n", "r", "t", "v", "z", "br", "kr", "tr"],
+        vowels: ["a", "e", "i", "o", "u", "a", "o"],
+        codas: ["", "n", "r", "l", "x", "k", "t", "rn"],
+        syllables: (1, 2),
+        patterns: ["{root} Extraction", "{root} Works", "{root} Holdings", "{root} Consolidated"],
+    ),
+)

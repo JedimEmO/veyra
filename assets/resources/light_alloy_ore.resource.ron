@@ -1,0 +1,28 @@
+// Light alloy ore: the light, forgiving structural metal (crafting.md 3.2
+// gives its ranges). No light alloy is ever as strong as good ferrous ore,
+// and none is as heavy: which of the two is best depends on what is made.
+(
+    id: "strata:light_alloy_ore",
+    name: "Light alloy ore",
+    short: "light alloy",
+    class: "strata:structural_metal",
+    grounds: ["scar", "edge"],
+    ranges: {
+        Purity: (floor: 300, cap: 900),
+        Strength: (floor: 250, cap: 700),
+        Toughness: (floor: 300, cap: 800),
+        Hardness: (floor: 200, cap: 600),
+        HeatTolerance: (floor: 300, cap: 700),
+        Stability: (floor: 400, cap: 900),
+        Density: (floor: 150, cap: 450),
+        Workability: (floor: 400, cap: 1000),
+    },
+    occurs: (
+        anywhere: 0.2,
+        provinces: [
+            (id: "strata:granite", weight: 0.8),
+            (id: "strata:basalt", weight: 0.8),
+            (id: "strata:folded", weight: 0.6),
+        ],
+    ),
+)

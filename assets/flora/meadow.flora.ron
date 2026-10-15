@@ -1,0 +1,24 @@
+// The common grass of temperate ground.
+(
+    id: "strata:meadow",
+    name: "Meadow grass",
+    kind: "grass",
+    biomes: [
+        (biome: "strata:plains", weight: 0.95),
+        (biome: "strata:forest", weight: 0.6),
+        (biome: "strata:highlands", weight: 0.5),
+        (biome: "strata:coast", weight: 0.35),
+        (biome: "strata:savanna", weight: 0.3),
+    ],
+    density_per_m2: 6.0,
+    grass_shape: (0.045, 0.42, 0.18, 0.08),
+    slope_max: 0.75,
+    altitude_m: (min: 0.3, max: 1800.0),
+    sea_clearance_m: 0.3,
+    moisture: (min: 0.25, max: 1.0),
+    cover_floor: 0.5,
+    size: (min: 0.3, max: 0.7),
+    exclusion_m: 0.0,
+    tint_dry: (0.55, 0.52, 0.22),
+    tint_lush: (0.20, 0.48, 0.10),
+)

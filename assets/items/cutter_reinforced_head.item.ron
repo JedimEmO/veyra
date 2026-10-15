@@ -1,0 +1,29 @@
+// The `cutter_reinforced_head` part of `crates/veyra-weapons` (ticket 0010, step 3): a thicker spine: more posture, a longer tail. Hardness and strength make the posture, toughness the recovery.
+// Its effects are the module's factors there, each driven by the line of its
+// name; a part is made at a bench, never sold. `part` is the module's key,
+// which its baked picture is filed under.
+(
+    id: "veyra:module.cutter_reinforced_head",
+    name: "Cutter reinforced head",
+    maker: "Bracken",
+    kind: Module(
+        slot: "head",
+        fits: ["veyra:weapon.yard_greatblade"],
+        part: "cutter_reinforced_head",
+        effects: [
+            (property: HitPosture, factor: 1.12, line: "hit_posture"),
+            (property: RecoveryTime, factor: 1.1, line: "recovery_time"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "hit_posture", name: "Posture"),
+        (id: "recovery_time", name: "Recovery"),
+    ],
+    icon: (
+        shape: Slab,
+        color: "#A9B1BA",
+        picture: Some("heavy_cutter/head.cutter_reinforced_head.png"),
+        symbol: Some("veyra:icon.crafting.component"),
+    ),
+)

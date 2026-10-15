@@ -1,0 +1,27 @@
+// Ferrous ore: the strong, hard, heavy structural metal, and the harder
+// one to work.
+(
+    id: "strata:ferrous_ore",
+    name: "Ferrous ore",
+    short: "ferrous ore",
+    class: "strata:structural_metal",
+    grounds: ["sill", "pit"],
+    ranges: {
+        Purity: (floor: 250, cap: 850),
+        Strength: (floor: 450, cap: 1000),
+        Toughness: (floor: 400, cap: 950),
+        Hardness: (floor: 400, cap: 950),
+        HeatTolerance: (floor: 450, cap: 900),
+        Stability: (floor: 200, cap: 700),
+        Density: (floor: 600, cap: 950),
+        Workability: (floor: 200, cap: 700),
+    },
+    occurs: (
+        anywhere: 0.4,
+        provinces: [
+            (id: "strata:basalt", weight: 1.0),
+            (id: "strata:folded", weight: 1.0),
+            (id: "strata:sandstone", weight: 0.6),
+        ],
+    ),
+)

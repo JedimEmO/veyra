@@ -1,0 +1,50 @@
+[package]
+name = "strata-terrain"
+description = "Heightfield meshing for sci-fi-scrolls: async mesh builder, LOD skirts, terrain material, origin-relative transforms. Bevy render."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+strata-core = { workspace = true }
+strata-registry = { workspace = true }
+strata-worldgen = { workspace = true }
+strata-sim = { workspace = true }
+strata-stream = { workspace = true }
+# The first crate in the graph that sees the renderer. `bevy_pbr` for the
+# terrain material, `bevy_mesh` and `bevy_asset` for the meshes it builds.
+bevy = { workspace = true, features = [
+    "std",
+    "bevy_state",
+    "bevy_asset",
+    "bevy_mesh",
+    "bevy_render",
+    "bevy_pbr",
+    # The water reads the camera's depth prepass.
+    "bevy_camera",
+    "bevy_core_pipeline",
+    # The terrain material stacks the Poly Haven jpegs into texture arrays.
+    "bevy_image",
+    "jpeg",
+] }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+# The seeded wave image's sines and powers, so it is the same bits on every
+# platform (the shader's waves are the sim's sea on every client).
+libm = { workspace = true }
+
+[dev-dependencies]
+# `examples/material_plane.rs` is a windowed check of the material and
+# needs the full Bevy stack plus the png screenshot writer.
+bevy = { workspace = true, features = ["default", "png", "jpeg"] }
+clap = { workspace = true }
+# Composes and validates the terrain shaders in a test (`tests/shaders.rs`):
+# shaders load from disk, so an edit that breaks one would otherwise show
+# only at run time. The versions Bevy already pulls in.
+naga = { workspace = true, features = ["wgsl-in"] }
+naga_oil = { workspace = true }
+
+[lints]
+workspace = true

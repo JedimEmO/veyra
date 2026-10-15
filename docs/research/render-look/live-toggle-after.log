@@ -1,0 +1,33 @@
+2026-09-12T21:06:09.937314Z  INFO bevy_diagnostic::system_information_diagnostics_plugin::internal: SystemInfo { os: "Linux (Ubuntu 24.04)", kernel: "6.8.0-139-generic", cpu: "13th Gen Intel(R) Core(TM) i9-13900KF", core_count: "24", memory: "62.6 GiB" }
+2026-09-12T21:06:09.998879Z  INFO bevy_render::renderer: AdapterInfo { name: "NVIDIA GeForce RTX 4090", vendor: 4318, device: 9860, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "595.84", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+2026-09-12T21:06:10.713309Z  INFO gilrs_core::platform::platform::gamepad: Gamepad /dev/input/event4 (Thustmaster Joystick - HOTAS Warthog) connected.
+2026-09-12T21:06:10.713397Z  INFO gilrs_core::platform::platform::gamepad: Gamepad /dev/input/event12 (Microsoft X-Box 360 pad) connected.
+2026-09-12T21:06:10.713508Z  WARN gilrs::gamepad: No mapping found for UUID 03000000-4f04-0000-0204-000011010000
+	Default mapping will be used.
+2026-09-12T21:06:10.720708Z  INFO bevy_pbr::cluster: GPU clustering is supported on this device.
+2026-09-12T21:06:10.720738Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-09-12T21:06:10.721035Z  INFO bevy_winit::system: Creating new window sky (65v0)
+2026-09-12T21:06:10.721180Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
+2026-09-12T21:06:10.723679Z  INFO bevy_input::gamepad: Gamepad 389v0 connected.
+2026-09-12T21:06:10.723709Z  INFO bevy_input::gamepad: Gamepad 390v0 connected.
+2026-09-12T21:06:11.075055Z  INFO strata_sim: no registries were loaded; entering the world with an empty set
+2026-09-12T21:06:12.618902Z  INFO sky: live render transition stage=1 name="cinematic-woodland"
+2026-09-12T21:06:14.120415Z  INFO sky: live render transition stage=2 name="baseline"
+2026-09-12T21:06:15.636887Z  INFO sky: live render transition stage=3 name="clear-contrast"
+2026-09-12T21:06:17.134728Z  INFO sky: live render transition stage=4 name="clear-contrast"
+2026-09-12T21:06:18.633756Z  INFO sky: live render transition stage=5 name="clear-contrast"
+2026-09-12T21:06:20.135785Z  INFO sky: live render transition stage=6 name="clear-contrast"
+2026-09-12T21:06:21.634757Z  INFO sky: live render transition stage=7 name="cinematic-woodland"
+2026-09-12T21:06:23.135019Z  INFO sky: live render transition stage=0 name="baseline"
+2026-09-12T21:06:24.735502Z  INFO sky: live render transition stage=1 name="cinematic-woodland"
+2026-09-12T21:06:26.601145Z  INFO sky: live render transition stage=2 name="baseline"
+2026-09-12T21:06:28.451440Z  INFO sky: live render transition stage=3 name="clear-contrast"
+2026-09-12T21:06:30.118736Z  INFO sky: live render transition stage=4 name="clear-contrast"
+2026-09-12T21:06:31.718932Z  INFO sky: live render transition stage=5 name="clear-contrast"
+2026-09-12T21:06:33.218633Z  INFO sky: live render transition stage=6 name="clear-contrast"
+2026-09-12T21:06:34.821416Z  INFO sky: live render transition stage=7 name="cinematic-woodland"
+2026-09-12T21:06:36.318697Z  INFO sky: live render transition stage=0 name="baseline"
+2026-09-12T21:06:37.831873Z  INFO sky: live render transition stage=1 name="cinematic-woodland"
+2026-09-12T21:06:39.398425Z  INFO sky: live render transition stage=2 name="baseline"
+2026-09-12T21:06:40.891341Z  INFO sky: live render transition stage=3 name="clear-contrast"
+2026-09-12T21:06:42.391413Z  INFO sky: live render transition stage=4 name="clear-contrast"

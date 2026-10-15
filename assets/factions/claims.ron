@@ -1,0 +1,26 @@
+// Which deposits are claims (ticket 0012, step 3). A deposit whose shared
+// grade is in the top `share` of the grades, standing in ground a faction
+// holds at `min_strength` or more, is that faction's claim, of the kind its
+// nature makes. A nature missing from `kinds` (the outlaws) claims nothing.
+(
+    // The top fifth by grade.
+    share: 0.2,
+    // The thin edge of a reach is not guarded.
+    min_strength: 0.25,
+    kinds: [
+        (Corporate, Concession),
+        (Assembly, Commons),
+        (Conservation, Reserve),
+    ],
+    // Units a member may take from one commons in a played day before it
+    // counts against the assembly.
+    commons_share: 30,
+    // A played day, hours.
+    day_h: 24.0,
+    // A concession's lease: credits and played hours.
+    lease: (price: 400, hours: 6.0),
+    // The countdown of a warning over a post, played seconds, and how near
+    // a guard an F buys a lease, metres.
+    warn_s: 12.0,
+    guard_reach_m: 3.0,
+)

@@ -1,0 +1,311 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "scrapyard_rifle_aim",
+  "prompt": "A person stands guard aiming a rifle with both hands at a target straight ahead, making small aiming corrections while keeping both feet planted.",
+  "tags": [
+    "scrapyard",
+    "aim",
+    "loop"
+  ],
+  "created": "2026-09-04",
+  "created_by": "agent:codex",
+  "provenance": "recorded",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": "https://github.com/nv-tlabs/ardy",
+    "commit": "693f74d13b3d04a0a22ce127ee79c929dd89756b",
+    "model": "core",
+    "seed": 23,
+    "duration_s": 5.0,
+    "cfg": 2.0,
+    "sample": 0,
+    "sweep_take": "rifle_aim__d5_c2_s23_0.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/scrapyard_rifle_aim.npz",
+    "sha256": "sha256:4e5305284ec5ec0799f529061e008e44bfca4531d9a78cad0ab08c330ca1e1b0",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 1.0,
+    "trim_end_s": 0.95,
+    "auto_trim": null,
+    "in_place": "strip",
+    "y_mode": "off",
+    "loop": true,
+    "loop_blend_s": 0.15,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": null,
+    "clip": "scrapyard_rifle_aim-loop"
+  },
+  "measured": {
+    "frames": 61,
+    "fps": 20.0,
+    "duration_s": 3.0,
+    "avg_speed_mps": 0.009999246,
+    "root_motion": {
+      "net_m": [
+        0.01,
+        -0.006
+      ],
+      "direction_deg": null,
+      "peak_speed_mps": 0.023,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.0,
+          0.0
+        ],
+        [
+          -0.001,
+          0.0
+        ],
+        [
+          -0.001,
+          0.0
+        ],
+        [
+          -0.001,
+          0.0
+        ],
+        [
+          -0.001,
+          0.001
+        ],
+        [
+          -0.001,
+          0.001
+        ],
+        [
+          -0.0,
+          0.001
+        ],
+        [
+          0.0,
+          0.001
+        ],
+        [
+          0.001,
+          0.002
+        ],
+        [
+          0.001,
+          0.002
+        ],
+        [
+          0.002,
+          0.002
+        ],
+        [
+          0.002,
+          0.002
+        ],
+        [
+          0.003,
+          0.003
+        ],
+        [
+          0.003,
+          0.002
+        ],
+        [
+          0.003,
+          0.003
+        ],
+        [
+          0.003,
+          0.003
+        ],
+        [
+          0.003,
+          0.003
+        ],
+        [
+          0.003,
+          0.003
+        ],
+        [
+          0.003,
+          0.004
+        ],
+        [
+          0.003,
+          0.004
+        ],
+        [
+          0.003,
+          0.004
+        ],
+        [
+          0.003,
+          0.004
+        ],
+        [
+          0.003,
+          0.003
+        ],
+        [
+          0.003,
+          0.003
+        ],
+        [
+          0.003,
+          0.003
+        ],
+        [
+          0.003,
+          0.002
+        ],
+        [
+          0.003,
+          0.001
+        ],
+        [
+          0.003,
+          0.001
+        ],
+        [
+          0.003,
+          0.0
+        ],
+        [
+          0.003,
+          -0.001
+        ],
+        [
+          0.004,
+          -0.002
+        ],
+        [
+          0.004,
+          -0.002
+        ],
+        [
+          0.005,
+          -0.002
+        ],
+        [
+          0.005,
+          -0.003
+        ],
+        [
+          0.006,
+          -0.003
+        ],
+        [
+          0.007,
+          -0.003
+        ],
+        [
+          0.008,
+          -0.003
+        ],
+        [
+          0.008,
+          -0.003
+        ],
+        [
+          0.009,
+          -0.003
+        ],
+        [
+          0.01,
+          -0.004
+        ],
+        [
+          0.01,
+          -0.003
+        ],
+        [
+          0.011,
+          -0.004
+        ],
+        [
+          0.011,
+          -0.004
+        ],
+        [
+          0.011,
+          -0.004
+        ],
+        [
+          0.011,
+          -0.004
+        ],
+        [
+          0.012,
+          -0.005
+        ],
+        [
+          0.011,
+          -0.005
+        ],
+        [
+          0.012,
+          -0.005
+        ],
+        [
+          0.011,
+          -0.005
+        ],
+        [
+          0.011,
+          -0.006
+        ],
+        [
+          0.011,
+          -0.005
+        ],
+        [
+          0.011,
+          -0.005
+        ],
+        [
+          0.011,
+          -0.005
+        ],
+        [
+          0.011,
+          -0.006
+        ],
+        [
+          0.01,
+          -0.005
+        ],
+        [
+          0.01,
+          -0.006
+        ],
+        [
+          0.01,
+          -0.006
+        ],
+        [
+          0.01,
+          -0.006
+        ],
+        [
+          0.01,
+          -0.006
+        ],
+        [
+          0.01,
+          -0.006
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [],
+  "content_hash": "sha256:c9df81c97b1f6ee9b29157daa37bee7d08cec4b1489f19a303210e3dc76f3677",
+  "note": "Deliberately quiet aiming hold; STATIC activity warning is expected for this role. Attachment reviewed separately."
+}

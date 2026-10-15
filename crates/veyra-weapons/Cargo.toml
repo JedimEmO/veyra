@@ -1,0 +1,21 @@
+[package]
+name = "veyra-weapons"
+description = "Procedural Veyra weapon assemblies and compatible component definitions."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+ashlar.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+ashlar-manifold.workspace = true
+ron.workspace = true
+
+[lints]
+workspace = true

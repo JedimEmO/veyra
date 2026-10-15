@@ -1,0 +1,23 @@
+// The broken security of a derelict machine (ticket 0012, step 5b): old
+// units that guard the place and do not chase, hostile to everyone and of
+// no faction. Sentries hold their ground; bulwarks hold the way in.
+(
+    version: 1,
+    id: "strata:machine_security",
+    at: Site("strata:wreck_works"),
+    crew: Unaligned,
+    stand_m: 260.0,
+    fold_m: 420.0,
+    returns_h: 12.0,
+    ring: [0.55, 0.4, 0.7, 0.25],
+    nudges: [0.0, 0.35, -0.35, 0.7, -0.7],
+    clear_m: 1.5,
+    tiers: [
+        // Tier 1.
+        [(kind: Sentry, count: 2)],
+        // Tier 2.
+        [(kind: Sentry, count: 3), (kind: Bulwark, count: 1)],
+        // Tier 3.
+        [(kind: Sentry, count: 4), (kind: Bulwark, count: 2)],
+    ],
+)

@@ -1,0 +1,52 @@
+// An outlaw camp: a few tents round a fire in remote ground by water, well
+// away from every road and place that keeps a law, behind a shoulder or at
+// the edge of a view of the way in. It ranks after every other kind so the
+// places already there keep theirs (ticket 0012, step 2). A trail leads in.
+(
+    id: "strata:wild_camp",
+    name: "Outlaw camp",
+    rank: 6,
+    per_1000_km2: 30.0,
+    footprint_m: 26.0,
+    blend_m: 24.0,
+    crown: 0.02,
+    max_cut_m: 4.0,
+    spacing: (own_m: 3000.0, others_m: 1500.0, settlements_m: 3000.0),
+    ground: (
+        slope_max: 0.12,
+        height_m: (min: 8.0, max: 1800.0),
+        biomes: [(id: "strata:ocean", weight: 0.0)],
+    ),
+    wants: [
+        // Water to drink and to hide a smoke by.
+        (any: [
+            (feature: "river", size_m: 3.0, within_m: 900.0, fade_m: 900.0),
+            (feature: "lake", within_m: 500.0, fade_m: 600.0),
+        ], weight: 2.0, required: true),
+        // Off the coast's open sand.
+        (any: [(feature: "sea", beyond_m: 1100.0, fade_m: 700.0)], weight: 1.0, required: true),
+        // Nowhere a hamlet's smoke shows or a town's patrols walk.
+        (any: [(feature: "kind", kind: "strata:hamlet", beyond_m: 2200.0, fade_m: 400.0)], weight: 1.5, required: true),
+        (any: [(feature: "kind", kind: "strata:landing", beyond_m: 2500.0, fade_m: 400.0)], weight: 1.0, required: true),
+        (any: [(feature: "kind", kind: "strata:town", beyond_m: 5000.0, fade_m: 1000.0)], weight: 1.5, required: true),
+        (any: [(feature: "settlement", beyond_m: 5000.0, fade_m: 1000.0)], weight: 1.5, required: true),
+        // Eyes on the approach.
+        (any: [(feature: "view", at_least: 0.2, full: 0.6)], weight: 1.5),
+        // Close enough to a settlement to prey on its roads.
+        (any: [(feature: "settlement", within_m: 12000.0, fade_m: 15000.0)], weight: 2.5),
+    ],
+    facing: "view",
+    road: "trail",
+    group: "veyra:outlaw_camp",
+    names: (
+        onsets: ["b", "c", "d", "g", "j", "k", "m", "r", "s", "t", "v", "cr", "gr", "sk", "sn"],
+        vowels: ["a", "e", "i", "o", "u", "a", "o"],
+        codas: ["", "n", "r", "l", "k", "t", "g", "rk"],
+        syllables: [1, 2],
+        patterns: ["{root}'s Hollow", "{root} Gully", "{root} Hide", "{root}'s Rest", "The {root}"],
+        by_feature: [
+            (feature: "river", patterns: ["{root} Bend", "{root}'s Wade", "{root} Cut"]),
+            (feature: "lake", patterns: ["{root} Mere", "{root}'s Shore"]),
+        ],
+    ),
+)

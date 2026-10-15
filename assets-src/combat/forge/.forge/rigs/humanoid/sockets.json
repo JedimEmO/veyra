@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "profile": "humanoid",
+  "authoring_frame": {
+    "axes": "gltf",
+    "long_axis": "+Y",
+    "front": "-Z",
+    "origin": "grip"
+  },
+  "note": "A socket is a named offset from a contract bone, metres in the bone's node space (+Y runs along the bone toward its children) with a rotation [x, y, z, w] that carries a prop's authoring frame (long axis +Y, front -Z, grip at the origin) into bone space. Every value is derived from the contract rest pose — chain contract.json from Hips down and you land on the T-pose the offsets are measured against — and sized against the body thickness of the proportion-reference mesh the rig was first built around; a shipped body is skinned to that same rest pose, so the offsets hold for any of them within the last-centimetre fit the attach site carries. In the rest pose the character's front is +Z (RightToeBase sits at z = +0.161 while its ankle sits at z = 0.000) and right is -X (RightUpLeg at x = -0.095, RightShoulder at x = -0.032); a socket offset is bone-local, so it rides the clips' half turn along with the body. These are the starting numbers, not sacred ones: the last 2 cm of fit is eyeballed in a running game, and the tests pin bands, not points.",
+  "sockets": [
+    {
+      "name": "hand_r",
+      "bone": "RightHand",
+      "translation": [0.0, 0.055, 0.005],
+      "rotation": [0.0, 0.0, 0.0, 1.0],
+      "note": "The primary grip. RightHand's +Y runs wrist to knuckles (its middle-finger child sits at local +0.075 Y) and the reference hand box is 0.076 x 0.09 x 0.044 m in local X x Y x Z, so the fist's centre is ~0.045 up the bone; 0.055 sits it just past centre where a closed hand grips, and +0.005 Z leans it a hair toward the palm side (the thumb root is at local +Z). Rotation: none — the blade continues the bone's own +Y, straight out past the fingers. A real fist wraps its fingers around the grip, which puts a real blade on the knuckle line, and the first cut of this table said exactly that; on screen it read as a reverse grip, because the clips animate an open, relaxed hand with nothing in it. Aligning the blade with the hand bone keeps it on the forearm's line in every pose. Judged in a running game (2026-08-04), not derived."
+    },
+    {
+      "name": "hand_l",
+      "bone": "LeftHand",
+      "translation": [0.0, 0.055, 0.005],
+      "rotation": [0.0, 0.0, 0.0, 1.0],
+      "note": "The off-hand grip: the same translation (its X component is zero and the hand bones' Y and Z axes are true mirrors) and the same identity rotation — a blade down the bone's +Y needs no mirroring, because both hands' +Y runs wrist to knuckles. The grip-axis test still stands guard where the old mirrored quarter turns needed it: the two blades must leave along opposite arms."
+    },
+    {
+      "name": "back",
+      "bone": "Spine3",
+      "translation": [-0.055, 0.12, -0.115],
+      "rotation": [0.6903455, 0.1530459, -0.6903455, 0.1530459],
+      "note": "Stowed on the back, hilt over the right shoulder. Spine3's local -Z points backward (its world Z is (0, -0.23, +0.97), and the rest pose's front is +Z), and the reference chest box is 0.105 m deep from the bone, so -0.115 clears the back surface by a centimetre. -0.055 X puts the hilt on the right; 0.12 Y raises it to shoulder height. Rotation: prop +Y (the blade) is aimed 25 degrees off straight-down and lies exactly in the back plane — perpendicular to the bone's Z to seven decimals — with the tip toward the character's left, and prop +X (the flat's normal) onto the bone's -Z, pointing away from the ribs, so the blade lies flat against the back rather than edge-on to it."
+    },
+    {
+      "name": "hip_l",
+      "bone": "Hips",
+      "translation": [0.14, -0.03, -0.02],
+      "rotation": [-0.7263839, 0.0, 0.0, 0.6872892],
+      "note": "A scabbard on the left hip — left, because a right hand draws across the body. Hips is the odd bone: its local +Y points forward-and-up (world (0, +0.31, -0.95)) and its local +Z up-and-back, so the offset reads strangely until you resolve it — it lands 0.14 m to the left, 3 cm below and 2 cm behind the hip joint, just outside the 0.115 m half-width of the reference pelvis box. Rotation: prop +Y hangs down with a 15 degree tilt toward the character's back — hilt forward, tip trailing, which is how a scabbard is worn — and prop +X faces outward from the hip. That is a -93 degree turn about the bone's local X once Hips' own tilt is taken out."
+    },
+    {
+      "name": "head",
+      "bone": "Head",
+      "translation": [0.0, 0.12, 0.0],
+      "rotation": [0.0, 1.0, 0.0, 0.0],
+      "note": "Hats and helmets. Head's rest rotation is exactly world-identity in the T-pose, so this rotation is the whole of the answer to which way a hat faces: a half turn about the bone's Y, because a prop's front is its -Z while the rest pose's front is +Z. Identity here would leave a brim pointing at the character's own back — the one socket where that mistake is invisible until something with a front is hung on it. The reference head is 0.12 m long precisely so the crown lands at 1.80 m, so 0.12 up the bone is the crown itself."
+    }
+  ]
+}

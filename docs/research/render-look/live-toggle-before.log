@@ -1,0 +1,74 @@
+2026-09-12T21:04:38.290469Z  INFO bevy_diagnostic::system_information_diagnostics_plugin::internal: SystemInfo { os: "Linux (Ubuntu 24.04)", kernel: "6.8.0-139-generic", cpu: "13th Gen Intel(R) Core(TM) i9-13900KF", core_count: "24", memory: "62.6 GiB" }
+2026-09-12T21:04:38.414681Z  INFO bevy_render::renderer: AdapterInfo { name: "NVIDIA GeForce RTX 4090", vendor: 4318, device: 9860, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "595.84", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+2026-09-12T21:04:39.154564Z  INFO gilrs_core::platform::platform::gamepad: Gamepad /dev/input/event4 (Thustmaster Joystick - HOTAS Warthog) connected.
+2026-09-12T21:04:39.154646Z  INFO gilrs_core::platform::platform::gamepad: Gamepad /dev/input/event12 (Microsoft X-Box 360 pad) connected.
+2026-09-12T21:04:39.154739Z  WARN gilrs::gamepad: No mapping found for UUID 03000000-4f04-0000-0204-000011010000
+	Default mapping will be used.
+2026-09-12T21:04:39.161953Z  INFO bevy_pbr::cluster: GPU clustering is supported on this device.
+2026-09-12T21:04:39.161983Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-09-12T21:04:39.162256Z  INFO bevy_winit::system: Creating new window sky (65v0)
+2026-09-12T21:04:39.162405Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
+2026-09-12T21:04:39.166350Z  INFO bevy_input::gamepad: Gamepad 389v0 connected.
+2026-09-12T21:04:39.166385Z  INFO bevy_input::gamepad: Gamepad 390v0 connected.
+2026-09-12T21:04:39.549064Z  INFO strata_sim: no registries were loaded; entering the world with an empty set
+2026-09-12T21:04:41.067111Z  INFO sky: live render transition stage=1 name="cinematic-woodland"
+2026-09-12T21:04:42.817905Z  INFO sky: live render transition stage=2 name="baseline"
+2026-09-12T21:04:42.849101Z ERROR bevy_render::error_handler: Caught rendering error: Validation Error
+
+Caused by:
+  In a CommandEncoder
+    In a set_pipeline command
+      Render pipeline targets are incompatible with render pass
+        Incompatible color attachments at indices []: the RenderPass uses textures with formats [] but the RenderPipeline with 'background_motion_vectors_pipeline' label uses attachments with formats [Some(Rgb10a2Unorm), Some(Rg16Float), None, None]
+
+2026-09-12T21:04:42.849328Z ERROR bevy_render::error_handler: Caught rendering error: Validation Error
+
+Caused by:
+  In Queue::submit
+    In a set_pipeline command
+      Render pipeline targets are incompatible with render pass
+        Incompatible color attachments at indices []: the RenderPass uses textures with formats [] but the RenderPipeline with 'background_motion_vectors_pipeline' label uses attachments with formats [Some(Rgb10a2Unorm), Some(Rg16Float), None, None]
+
+2026-09-12T21:04:42.849708Z ERROR bevy_render::error_handler: Quitting the application due to Validation RenderError
+2026-09-12T21:04:42.877674Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877699Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877705Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877715Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877718Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877722Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877725Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877727Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877738Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877742Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877744Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877748Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877750Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877753Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877755Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877758Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877760Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877764Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877766Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877768Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877777Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877783Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877785Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877788Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877790Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877794Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877796Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877799Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877806Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877808Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877810Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877811Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877821Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877824Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877826Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877830Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877835Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877840Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877842Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877846Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877850Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?
+2026-09-12T21:04:42.877865Z  WARN bevy_ecs::world::command_queue: CommandQueue has un-applied commands being dropped. Did you forget to call SystemState::apply?

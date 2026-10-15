@@ -1,0 +1,16 @@
+[package]
+name = "strata-stream"
+description = "Which regions of the world should exist: quadtree selection with hysteresis, load and unload diffing under a budget, no holes across LOD changes. Bevy, no render."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+strata-core = { workspace = true }
+strata-sim = { workspace = true }
+bevy = { workspace = true, features = ["std", "bevy_state"] }
+
+[lints]
+workspace = true

@@ -1,0 +1,29 @@
+// The Marksman compact magazine of `crates/veyra-weapons`
+// (`marksman_compact_feed`, which fits the marksman rifle alone): a shorter
+// box that holds fewer rounds and reloads a little quicker (ticket 0010,
+// step 4). Its lines are the two properties the module changes there.
+(
+    id: "veyra:module.marksman_compact_feed",
+    name: "Marksman compact magazine",
+    maker: "Vigil",
+    kind: Module(
+        slot: "feed",
+        fits: ["veyra:weapon.marksman_rifle"],
+        part: "marksman_compact_feed",
+        effects: [
+            (property: Capacity, factor: 0.85, line: "capacity"),
+            (property: ReloadTime, factor: 0.94, line: "reload_time"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "capacity", name: "Capacity"),
+        (id: "reload_time", name: "Handling"),
+    ],
+    icon: (
+        shape: Slab,
+        color: "#7FD1FF",
+        picture: Some("marksman_rifle/feed.marksman_compact_feed.png"),
+        symbol: Some("veyra:icon.module.feed"),
+    ),
+)

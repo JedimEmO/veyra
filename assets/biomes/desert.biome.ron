@@ -1,0 +1,18 @@
+// Hot and dry. Billow noise gives rounded dunes.
+(
+    id: "strata:desert",
+    name: "Desert",
+    climate: (
+        temperature: (min: 0.62, max: 1.0),
+        moisture: (min: 0.0, max: 0.35),
+        elevation: (min: 0.55, max: 0.7),
+    ),
+    relief: (kind: "dunes", amplitude_m: 40.0, wavelength_m: 700.0, octaves: 3, persistence: 0.45),
+    surface: (material: "strata:sand", slope_material: "strata:rock", slope_threshold: 1.2),
+    tint: (0.88, 0.76, 0.42),
+    // The ground's palette colour (ticket 0006): a warm ochre sand.
+    ground: (0.88, 0.72, 0.46),
+    // Heat: warm and bleached, the brights pushed and the colour a
+    // little down so the sun reads as hard.
+    grade: (temperature: 0.01, saturation: 0.97, gain: 1.04),
+)

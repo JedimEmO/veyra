@@ -1,0 +1,248 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "sword_chop",
+  "prompt": "A person swings a two-handed sword in a heavy overhead chop, then recovers to a ready stance.",
+  "tags": [
+    "attack",
+    "review-2026-09-04"
+  ],
+  "created": "2026-09-04",
+  "created_by": "agent:claude",
+  "provenance": "recorded",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": "https://github.com/nv-tlabs/ardy",
+    "commit": "693f74d13b3d04a0a22ce127ee79c929dd89756b",
+    "model": "core",
+    "seed": 3,
+    "duration_s": 3.0,
+    "cfg": 2.0,
+    "sample": 0,
+    "sweep_take": "a_person_swings_a_two_handed__d3_c2_s3_0.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/sword_chop.npz",
+    "sha256": "sha256:a368913d06b65342979af6dd8eca7dfc2517f3b5a965af4f83865c1cfaa069a5",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 0.0,
+    "trim_end_s": 1.0,
+    "auto_trim": null,
+    "in_place": "detrend",
+    "y_mode": "off",
+    "loop": false,
+    "loop_blend_s": 0.0,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": null,
+    "clip": "sword_chop"
+  },
+  "measured": {
+    "frames": 40,
+    "fps": 20.0,
+    "duration_s": 1.95,
+    "avg_speed_mps": 0.39315164,
+    "root_motion": {
+      "net_m": [
+        0.525,
+        -0.269
+      ],
+      "direction_deg": 57.2,
+      "peak_speed_mps": 1.344,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.001,
+          -0.0
+        ],
+        [
+          -0.002,
+          -0.002
+        ],
+        [
+          -0.002,
+          -0.005
+        ],
+        [
+          -0.002,
+          -0.01
+        ],
+        [
+          0.002,
+          -0.017
+        ],
+        [
+          0.01,
+          -0.026
+        ],
+        [
+          0.023,
+          -0.036
+        ],
+        [
+          0.041,
+          -0.05
+        ],
+        [
+          0.065,
+          -0.066
+        ],
+        [
+          0.095,
+          -0.088
+        ],
+        [
+          0.133,
+          -0.114
+        ],
+        [
+          0.18,
+          -0.144
+        ],
+        [
+          0.237,
+          -0.174
+        ],
+        [
+          0.299,
+          -0.2
+        ],
+        [
+          0.359,
+          -0.222
+        ],
+        [
+          0.411,
+          -0.24
+        ],
+        [
+          0.455,
+          -0.254
+        ],
+        [
+          0.493,
+          -0.264
+        ],
+        [
+          0.526,
+          -0.272
+        ],
+        [
+          0.552,
+          -0.28
+        ],
+        [
+          0.573,
+          -0.287
+        ],
+        [
+          0.586,
+          -0.291
+        ],
+        [
+          0.595,
+          -0.294
+        ],
+        [
+          0.598,
+          -0.293
+        ],
+        [
+          0.597,
+          -0.291
+        ],
+        [
+          0.591,
+          -0.291
+        ],
+        [
+          0.583,
+          -0.289
+        ],
+        [
+          0.573,
+          -0.287
+        ],
+        [
+          0.564,
+          -0.286
+        ],
+        [
+          0.554,
+          -0.285
+        ],
+        [
+          0.545,
+          -0.284
+        ],
+        [
+          0.538,
+          -0.281
+        ],
+        [
+          0.533,
+          -0.279
+        ],
+        [
+          0.529,
+          -0.278
+        ],
+        [
+          0.526,
+          -0.276
+        ],
+        [
+          0.524,
+          -0.274
+        ],
+        [
+          0.524,
+          -0.272
+        ],
+        [
+          0.524,
+          -0.27
+        ],
+        [
+          0.525,
+          -0.269
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [
+    {
+      "t": 0.75,
+      "t_src": 0.75,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 0.75,
+      "t_src": 0.75,
+      "name": "impact",
+      "origin": "agent:claude",
+      "audio": null
+    },
+    {
+      "t": 1.05,
+      "t_src": 1.05,
+      "name": "footstep_l",
+      "origin": "contacts",
+      "audio": null
+    }
+  ],
+  "content_hash": "sha256:b1a0c3d40c7ca6135dc26eda712da7f8750dea57826a7520984400bcdc136a88",
+  "note": "Toolchain review 2026-09-04: first clip through generate_clips → promote_clip over MCP since Phase 3 closed. Take 0 of seed 3, chop lands ~0.75 s."
+}

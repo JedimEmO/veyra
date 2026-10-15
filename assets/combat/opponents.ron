@@ -1,0 +1,122 @@
+// The encounter's scripted opponents: the pools they get and the numbers
+// the simple AI in `game --combat` plays by.
+(
+    version: 7,
+    // Hostile pools; the passive training target has its own health.
+    health: 85.0,
+    passive_health: 300.0,
+    shield: 20.0,
+    // Opponents pressure without a player damage nerf.
+    damage_scale: 0.5,
+    // Hostiles aggress once one is hurt or the player is this close.
+    engage_distance: 11.0,
+    sentry: (
+        // A slow, readable bolt the player can sidestep.
+        bolt_speed: 24.0,
+        // One bolt a charge, whatever the carbine row it fires says.
+        mode: Single,
+        // Seconds of visible charge before the shot releases.
+        charge: 0.65,
+        // Seconds after a shot before the next charge.
+        recover: 1.65,
+        // Seconds before the first action, and after a stagger.
+        cooldown: 1.0,
+        stagger_cooldown: 0.9,
+        walk_speed: 2.5,
+        // Holds range between these, strafing in between.
+        hold_near: 9.0,
+        hold_far: 20.0,
+        fire_range: 32.0,
+    ),
+    rusher: (
+        walk_speed: 3.1,
+        // Swings a heavy within this distance.
+        reach: 1.7,
+        // Seconds between swings.
+        cooldown: 2.6,
+        // Seconds before the first action.
+        initial_cooldown: 0.5,
+    ),
+    // Holds 40 to 80 m behind a beam the player can read: the aim follows the
+    // target until `lock` seconds before the shot, so a player crossing its
+    // line when the lock begins is missed and one standing still is hit.
+    marksman: (
+        bolt_speed: 110.0,
+        // Seconds from the start of an aim to the shot.
+        charge: 1.6,
+        // The last seconds of the charge in which the aim holds still.
+        lock: 0.35,
+        recover: 2.2,
+        cooldown: 0.9,
+        stagger_cooldown: 1.2,
+        walk_speed: 1.8,
+        hold_near: 40.0,
+        hold_far: 80.0,
+        fire_range: 120.0,
+        // Inside this it stops charging and walks straight away.
+        flee: 12.0,
+        // The share of its walking speed when it closes or backs off aiming.
+        pace: 0.7,
+    ),
+    // Guards while it closes, parries a slow cut it sees begin, and is open
+    // while it swings and for `rest` seconds after.
+    duelist: (
+        walk_speed: 3.0,
+        reach: 1.9,
+        // Seconds from the end of one attack to the start of the next.
+        cooldown: 1.6,
+        initial_cooldown: 0.6,
+        // Inside this it guards while it closes and between attacks.
+        wary: 7.0,
+        // Seconds between seeing a slow cut begin and raising the guard it
+        // lowered to meet it: a parry window open when a heavy lands and
+        // shut when a light does.
+        react: 0.22,
+        // Every third attack is a heavy; the others a light and its follow up.
+        heavy_every: 3,
+        // Seconds the guard stays down after its own attack ends.
+        rest: 0.5,
+        // Seconds its guard must have been down to parry when raised, in place
+        // of melee.ron's parry_rest for the player; 0 means one tick.
+        parry_rest: 0.0,
+        // Seconds it waits after a stagger.
+        stagger_cooldown: 0.6,
+        // Seconds beyond react an ability must take to land to be met.
+        slow_margin: 0.1,
+        // It reads a slow cut from this many times its reach.
+        read_reach: 1.5,
+    ),
+    // A shield bearer: walks in behind a guard that holds bolts from the
+    // front (a thirtieth gets through) and is spent by blades, and lowers it to
+    // cut. Open while it cuts and for `rest` seconds after.
+    bulwark: (
+        // Metres a second it closes at with the guard up; a player backing
+        // away firing moves at 3.85, walks at 5.5, sprints at 8.5.
+        advance_speed: 4.6,
+        reach: 2.0,
+        // Seconds from the end of one attack to the start of the next.
+        cooldown: 1.8,
+        // Seconds it stands in reach behind its guard before its first
+        // attack, counted from when it first gets there.
+        initial_cooldown: 0.9,
+        // Seconds the guard stays down after its own attack ends.
+        rest: 0.45,
+        // Seconds after a stagger before it attacks, and before it has its
+        // guard back: what a broken guard opens.
+        stagger_cooldown: 1.2,
+        // Seconds a cut met by its guard holds its own attack back; a bolt
+        // holds nothing.
+        pinned: 0.9,
+        // Its own guard, not the Blade's: against a bolt it reads `bolts`.
+        guard: (
+            share: 0.60,
+            arc: 75.0,
+            stamina: 2.00,
+            posture: 0.40,
+            parry: 0.0,
+            riposte: 0.0,
+            bolts: Some((share: 0.97, stamina: 0.15, posture: 0.0)),
+        ),
+    ),
+    sprint_speed: 6.0,
+)

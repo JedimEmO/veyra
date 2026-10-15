@@ -1,0 +1,123 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "ruin_explorer_attack",
+  "prompt": "A boxer throws a single fast straight punch with the right hand at an opponent in front, then pulls the right fist back into guard, feet planted.",
+  "tags": [
+    "sprite-test"
+  ],
+  "created": "2026-09-07",
+  "created_by": "agent:codex",
+  "provenance": "recorded",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": "https://github.com/nv-tlabs/ardy",
+    "commit": "693f74d13b3d04a0a22ce127ee79c929dd89756b",
+    "model": "core",
+    "seed": 3,
+    "duration_s": 4.0,
+    "cfg": 2.0,
+    "sample": 2,
+    "sweep_take": "ruin_explorer_attack__d4_c2_s3_2.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/ruin_explorer_attack.npz",
+    "sha256": "sha256:d7d190c95f2cfbbbdb7712b94ea1810f42eb261e92449351544e920750cc4960",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 0.25,
+    "trim_end_s": 2.85,
+    "auto_trim": null,
+    "in_place": "strip",
+    "y_mode": "off",
+    "loop": false,
+    "loop_blend_s": 0.0,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": "0:0,0.2:0.08,0.4:0.14,0.85:0.4",
+    "clip": "ruin_explorer_attack"
+  },
+  "measured": {
+    "frames": 9,
+    "fps": 20.0,
+    "duration_s": 0.4,
+    "avg_speed_mps": 0.52876234,
+    "root_motion": {
+      "net_m": [
+        -0.003,
+        -0.021
+      ],
+      "direction_deg": null,
+      "peak_speed_mps": 1.058,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          0.013,
+          -0.002
+        ],
+        [
+          0.066,
+          0.006
+        ],
+        [
+          0.1,
+          0.001
+        ],
+        [
+          0.092,
+          -0.01
+        ],
+        [
+          0.063,
+          -0.015
+        ],
+        [
+          0.03,
+          -0.02
+        ],
+        [
+          0.009,
+          -0.022
+        ],
+        [
+          -0.003,
+          -0.021
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [
+    {
+      "t": 0.095,
+      "t_src": 0.5,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 0.14,
+      "t_src": 0.65,
+      "name": "attack_contact",
+      "origin": "agent:codex",
+      "audio": null
+    },
+    {
+      "t": 0.313,
+      "t_src": 0.95,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    }
+  ],
+  "content_hash": "sha256:6d4c0ec903c00e0e686ff8596e4e87c0c7486e7386e72e0315a257653c3051cb",
+  "note": "Single right-hand punch, sample 2; visible action despite low whole-body activity flag. Short windup and recovery; authored contact at raw 0.65 seconds."
+}

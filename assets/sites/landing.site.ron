@@ -1,0 +1,40 @@
+// A landing: a slipway and a shed on a sheltered piece of coast, where a
+// boat comes in out of the weather.
+(
+    id: "strata:landing",
+    name: "Landing",
+    rank: 3,
+    per_1000_km2: 8.0,
+    footprint_m: 32.0,
+    blend_m: 24.0,
+    crown: 0.015,
+    max_cut_m: 4.0,
+    spacing: (own_m: 4000.0, others_m: 1000.0, settlements_m: 2500.0),
+    ground: (
+        slope_max: 0.15,
+        height_m: (min: 1.5, max: 30.0),
+        biomes: [(id: "strata:ocean", weight: 0.0), (id: "strata:mountains", weight: 0.2)],
+    ),
+    wants: [
+        // At the water's edge.
+        (any: [(feature: "sea", within_m: 60.0, fade_m: 200.0)], weight: 3.0, required: true),
+        // In a cove or a bay: land round the water.
+        (any: [(feature: "cove", at_least: 0.25, full: 0.7)], weight: 2.5, required: true),
+        // Near somewhere a boat would bring things to.
+        (any: [
+            (feature: "kind", kind: "strata:hamlet", within_m: 2500.0, fade_m: 2500.0),
+            (feature: "kind", kind: "strata:town", within_m: 4000.0, fade_m: 3000.0),
+            (feature: "mouth", within_m: 800.0, fade_m: 1200.0),
+        ], weight: 1.0),
+    ],
+    facing: "water",
+    road: "track",
+    group: "veyra:landing",
+    names: (
+        onsets: ["b", "c", "d", "g", "h", "k", "l", "m", "n", "p", "r", "s", "t", "w", "gr", "sk"],
+        vowels: ["a", "e", "i", "o", "u", "a", "ee", "oo"],
+        codas: ["", "n", "r", "l", "s", "k", "rk", "sk", "ll"],
+        syllables: [1, 2],
+        patterns: ["{root} Landing", "{root} Quay", "{root} Cove", "{root}'s Slip", "{root} Haven"],
+    ),
+)

@@ -1,0 +1,29 @@
+// The `cutter_compact_power` part of `crates/veyra-weapons` (ticket 0010, step 3): a shorter rear cell: a quicker draw, and a reserve the blade has no use for yet.
+// Its effects are the module's factors there, each driven by the line of its
+// name; a part is made at a bench, never sold. `part` is the module's key,
+// which its baked picture is filed under.
+(
+    id: "veyra:module.cutter_compact_power",
+    name: "Cutter compact cell",
+    maker: "Bracken",
+    kind: Module(
+        slot: "power",
+        fits: ["veyra:weapon.yard_greatblade"],
+        part: "cutter_compact_power",
+        effects: [
+            (property: Capacity, factor: 0.85, line: "capacity"),
+            (property: EquipTime, factor: 0.95, line: "equip_time"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "capacity", name: "Reserve"),
+        (id: "equip_time", name: "Draw"),
+    ],
+    icon: (
+        shape: Gem,
+        color: "#7FD1FF",
+        picture: Some("heavy_cutter/power.cutter_compact_power.png"),
+        symbol: Some("veyra:icon.module.cell"),
+    ),
+)

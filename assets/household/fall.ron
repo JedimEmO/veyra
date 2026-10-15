@@ -1,0 +1,14 @@
+// What a fall in the world costs (ticket 0012, step 4a), read by
+// `strata_registry::fall` (`FallRules`); in no world version and no
+// handshake. A member who falls is carried home after a fade and is out of
+// play for played hours; nothing they carry is lost.
+(
+    version: 1,
+    // Played hours out of play, injured.
+    out_h: 2.0,
+    // Seconds of the fade while they are carried home.
+    fade_s: 1.2,
+    // When nobody is able: the soonest to heal stands up at once with this
+    // many played minutes of the injury left.
+    early_min: 0.0,
+)

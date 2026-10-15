@@ -1,0 +1,32 @@
+// The guards of a concession (ticket 0012, step 3b): a faction's people who
+// stand round a rich deposit it keeps, neutral until the member crosses
+// them. A claim has no pad, so they stand on a ring of `post_m` metres
+// round the deposit's centre.
+(
+    version: 1,
+    id: "strata:concession_post",
+    // The claims whose guards these are.
+    at: Claim(Concession),
+    // An observer inside this stands the guards up.
+    stand_m: 220.0,
+    // Beyond this, with nobody fighting, they fold away.
+    fold_m: 380.0,
+    // Played hours a cleared post stays quiet.
+    returns_h: 3.0,
+    // The ring they stand on, metres from the deposit's centre.
+    post_m: Some(14.0),
+    // Shares of `post_m` tried in order, and the turns of an angle tried
+    // when a spot is taken; there are no walls at a claim, so the first
+    // wins.
+    ring: [1.0, 0.7],
+    nudges: [0.0, 0.35, -0.35],
+    clear_m: 1.5,
+    tiers: [
+        // Tier 1.
+        [(kind: Duelist, count: 1), (kind: Sentry, count: 1)],
+        // Tier 2.
+        [(kind: Duelist, count: 2), (kind: Marksman, count: 1)],
+        // Tier 3.
+        [(kind: Duelist, count: 2), (kind: Marksman, count: 2), (kind: Bulwark, count: 1)],
+    ],
+)

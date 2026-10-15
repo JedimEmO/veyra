@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -D warnings
+
+jobs:
+  ci:
+    name: just ci (ubuntu)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Bevy needs these on Linux: alsa for bevy_audio, udev for gilrs,
+      # wayland and xkbcommon for winit.
+      - name: Install Bevy system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev pkg-config
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      # The `[patch]` in .cargo/config.toml points at a sibling bevy-slotted
+      # checkout that does not exist on the runner, and a patch whose path is
+      # missing is a hard error. The file holds nothing else, so dropping it
+      # leaves the git dependencies pinned in Cargo.toml, which is the
+      # clean-clone build this job exists to prove.
+      - name: Drop the local bevy-slotted patch
+        run: rm -f .cargo/config.toml
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+          # rust-cache keys on Cargo.lock and never rewrites an existing key;
+          # a profile change in Cargo.toml would otherwise restore stale
+          # artifacts forever and rebuild everything on every run.
+          key: ${{ hashFiles('**/Cargo.toml', 'rust-toolchain.toml') }}
+
+      - uses: extractions/setup-just@v2
+
+      - name: fmt-check, lint, test, server-check
+        run: just ci

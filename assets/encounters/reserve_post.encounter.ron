@@ -1,0 +1,28 @@
+// The wardens of a reserve (ticket 0012, step 3b): a conservation body's
+// people who stand round a deposit it keeps. They sell no lease; working a
+// reserve at all draws their warning.
+(
+    version: 1,
+    id: "strata:reserve_post",
+    // The claims whose wardens these are.
+    at: Claim(Reserve),
+    // An observer inside this stands the wardens up.
+    stand_m: 220.0,
+    // Beyond this, with nobody fighting, they fold away.
+    fold_m: 380.0,
+    // Played hours a cleared post stays quiet.
+    returns_h: 3.0,
+    // The ring they stand on, metres from the deposit's centre.
+    post_m: Some(14.0),
+    ring: [1.0, 0.7],
+    nudges: [0.0, 0.35, -0.35],
+    clear_m: 1.5,
+    tiers: [
+        // Tier 1.
+        [(kind: Marksman, count: 1), (kind: Sentry, count: 1)],
+        // Tier 2.
+        [(kind: Marksman, count: 2), (kind: Duelist, count: 1)],
+        // Tier 3.
+        [(kind: Marksman, count: 2), (kind: Duelist, count: 2)],
+    ],
+)

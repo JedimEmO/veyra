@@ -1,0 +1,4371 @@
+{
+  "version": 1,
+  "icons": {
+    "veyra:icon.ability.thrust": {
+      "description": "A precise forward melee stab.",
+      "depicts": "A broad pointed steel blade projects from an armoured fist toward the upper-right corner, surrounded by a narrow white-blue wake.",
+      "action": "thrust",
+      "role": "activated",
+      "subjects": [
+        "blade",
+        "glove"
+      ],
+      "palette": [
+        "blue",
+        "silver"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A straight piercing attack; use Light cut for a sweeping slash.",
+      "related_ids": [
+        "veyra:icon.ability.light-cut"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.sweeping-cut": {
+      "description": "A broad melee sweep against nearby targets.",
+      "depicts": "A rugged blade sweeps horizontally across the lower half in one enormous amber crescent, cropped arm at left and broad red-orange motion arc above it.",
+      "action": "sweeping cut",
+      "role": "activated",
+      "subjects": [
+        "blade",
+        "slash"
+      ],
+      "palette": [
+        "orange",
+        "red"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A wide horizontal sweep; use Return cut for a reverse combo strike.",
+      "related_ids": [
+        "veyra:icon.ability.return-cut"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.pommel-strike": {
+      "description": "A blunt close-range strike with a weapon handle.",
+      "depicts": "Large gloved fist drives the blunt steel pommel of a knife into an angular armour plate; one compact yellow impact star, blade points back away from impact, burgundy shadows.",
+      "action": "pommel strike",
+      "role": "activated",
+      "subjects": [
+        "knife handle",
+        "glove",
+        "armour plate"
+      ],
+      "palette": [
+        "yellow",
+        "red"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Blunt handle impact rather than cutting with the blade.",
+      "related_ids": [
+        "veyra:icon.ability.heavy-cut"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.disarm": {
+      "description": "Knock an opponent's weapon out of their grip.",
+      "depicts": "A hooked steel blade catches a compact pistol and wrenches it upward out of an open armoured glove; the separating pistol silhouette dominates, bright white hook arc over teal shadows.",
+      "action": "disarm",
+      "role": "activated",
+      "subjects": [
+        "blade",
+        "pistol",
+        "glove"
+      ],
+      "palette": [
+        "teal",
+        "silver"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Weapon separation rather than simply blocking an attack.",
+      "related_ids": [
+        "veyra:icon.ability.parry"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.armour-break": {
+      "description": "Break an enemy's armour or protection.",
+      "depicts": "A heavy pointed industrial pick strikes a single large chest plate, splitting it into two chunky halves around a brilliant orange fracture.",
+      "action": "armour break",
+      "role": "activated",
+      "subjects": [
+        "pick",
+        "broken armour"
+      ],
+      "palette": [
+        "orange",
+        "red"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Broken armour is the subject; use Heavy cut for the attacking blade.",
+      "related_ids": [
+        "veyra:icon.ability.heavy-cut"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.charged-shot": {
+      "description": "Release a charged energy weapon shot.",
+      "depicts": "Extreme close crop of a thick coilgun muzzle with two broad copper coils and a concentrated violet-white bolt leaving the barrel diagonally upward right, purple shadows.",
+      "action": "charged shot",
+      "role": "activated",
+      "subjects": [
+        "coilgun",
+        "energy bolt"
+      ],
+      "palette": [
+        "purple",
+        "white"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Charging coils and energy bolt rather than scope-based precision.",
+      "related_ids": [
+        "veyra:icon.ability.precision-shot"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.scatter-blast": {
+      "description": "Fire a wide close-range shotgun blast.",
+      "depicts": "A very broad double-bore scattergun muzzle fills the lower left, firing a single fan of five chunky orange shot streaks toward upper right; deep brown-red shadows.",
+      "action": "scatter blast",
+      "role": "activated",
+      "subjects": [
+        "shotgun",
+        "pellets"
+      ],
+      "palette": [
+        "orange",
+        "red"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Wide fan of pellets rather than a narrow rifle burst.",
+      "related_ids": [
+        "veyra:icon.ability.aimed-burst"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.ricochet": {
+      "description": "Bounce a projectile off a hard surface.",
+      "depicts": "One bright yellow projectile trail makes a sharp V-shaped bounce off the corner of a large steel plate, with one bright impact spark at the bend and cobalt background.",
+      "action": "ricochet",
+      "role": "activated",
+      "subjects": [
+        "projectile",
+        "steel plate"
+      ],
+      "palette": [
+        "yellow",
+        "blue"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A visible bent trajectory rather than direct fire.",
+      "related_ids": [
+        "veyra:icon.ability.precision-shot"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.explosive-shot": {
+      "description": "Fire a projectile that detonates on impact.",
+      "depicts": "A single chunky copper projectile meets a metal target in an enormous orange-white spherical impact bloom with three large armour fragments, dark red corners.",
+      "action": "explosive shot",
+      "role": "activated",
+      "subjects": [
+        "projectile",
+        "explosion"
+      ],
+      "palette": [
+        "orange",
+        "red"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "One explosive impact rather than a spread of pellets.",
+      "related_ids": [
+        "veyra:icon.ability.scatter-blast"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.shock-grenade": {
+      "description": "Throw an electrical area-disruption grenade.",
+      "depicts": "A fist-sized industrial grenade with broad conductor bands floats at centre while three thick cyan lightning forks burst outward; dark navy background, strong spherical silhouette.",
+      "action": "shock grenade",
+      "role": "activated",
+      "subjects": [
+        "grenade",
+        "lightning"
+      ],
+      "palette": [
+        "cyan",
+        "blue"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A deployed grenade rather than a malfunctioning installed power coil.",
+      "related_ids": [
+        "veyra:icon.ability.overload"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.smoke-screen": {
+      "description": "Obscure an area with a smoke canister.",
+      "depicts": "A short metal smoke canister at lower right emits one enormous curling grey-white plume sweeping upward left, a small amber valve glow and deep olive shadows.",
+      "action": "smoke screen",
+      "role": "activated",
+      "subjects": [
+        "canister",
+        "smoke"
+      ],
+      "palette": [
+        "grey",
+        "white"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Opaque curling smoke rather than a flash of light.",
+      "related_ids": [
+        "veyra:icon.ability.flash-burst"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.flash-burst": {
+      "description": "Disorient nearby targets with a flash device.",
+      "depicts": "A gloved hand holds a compact canister beneath a large white-gold starburst, with violet shadows at the edges.",
+      "action": "flash burst",
+      "role": "activated",
+      "subjects": [
+        "canister",
+        "flash",
+        "glove"
+      ],
+      "palette": [
+        "white",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "The source device activating; use Blinded for the affected character.",
+      "related_ids": [
+        "veyra:icon.ability.blinded"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.barrier-dome": {
+      "description": "Project an area shield around a position.",
+      "depicts": "A chunky ground-mounted three-legged shield emitter supports a single brilliant translucent cyan dome, seen close from low angle, ground wedge at base and deep blue corners.",
+      "action": "barrier dome",
+      "role": "activated",
+      "subjects": [
+        "emitter",
+        "shield dome"
+      ],
+      "palette": [
+        "cyan",
+        "blue"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Area protection from a ground emitter rather than recharging personal shielding.",
+      "related_ids": [
+        "veyra:icon.ability.shield-recharge"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.intercept-projectile": {
+      "description": "Catch an incoming projectile with a shield.",
+      "depicts": "One large orange projectile freezes nose-first against a curved blue shield surface, bright white contact point and concentric ripples, shield emitter edge at lower left.",
+      "action": "intercept projectile",
+      "role": "activated",
+      "subjects": [
+        "bullet",
+        "shield"
+      ],
+      "palette": [
+        "blue",
+        "orange"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Projectile stopped at the shield rather than visibly rebounding.",
+      "related_ids": [
+        "veyra:icon.ability.reflect-shot"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.reflect-shot": {
+      "description": "Deflect an incoming shot back outward.",
+      "depicts": "A polished angled forearm shield at centre bends an orange incoming tracer into a distinct cyan outgoing tracer, sharp V trajectory and white contact spark, navy shadows.",
+      "action": "reflect shot",
+      "role": "activated",
+      "subjects": [
+        "forearm shield",
+        "tracer"
+      ],
+      "palette": [
+        "cyan",
+        "orange"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A clear outgoing reflected trajectory rather than absorption.",
+      "related_ids": [
+        "veyra:icon.ability.intercept-projectile"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.fortify-armour": {
+      "description": "Apply extra protective plating.",
+      "depicts": "Armoured gloves secure broad clamps over a thick silver chest plate. Amber sparks mark the attachment points against dark armour.",
+      "action": "fortify armour",
+      "role": "activated",
+      "subjects": [
+        "glove",
+        "armour plate"
+      ],
+      "palette": [
+        "silver",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Applying the plate is an action; use Fortified for the resulting protection status.",
+      "related_ids": [
+        "veyra:icon.ability.fortified"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.kinetic-absorb": {
+      "description": "Absorb impact energy into a defensive device.",
+      "depicts": "A large armoured gauntlet with a circular amber shock absorber catches a broad steel hammer head; compressed golden rings converge inward around the impact, dark umber corners.",
+      "action": "kinetic absorb",
+      "role": "activated",
+      "subjects": [
+        "gauntlet",
+        "hammer",
+        "shock absorber"
+      ],
+      "palette": [
+        "yellow",
+        "grey"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Visible energy absorption into a device rather than passive bracing.",
+      "related_ids": [
+        "veyra:icon.ability.braced-guard"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.emergency-cover": {
+      "description": "Deploy portable hard cover.",
+      "depicts": "A portable case opens into upright metal barricade panels. Orange hinges and a blue impact spark separate the cover from the dark background.",
+      "action": "emergency cover",
+      "role": "activated",
+      "subjects": [
+        "barricade",
+        "case"
+      ],
+      "palette": [
+        "grey",
+        "blue"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Physical metal cover rather than a translucent energy dome.",
+      "related_ids": [
+        "veyra:icon.ability.barrier-dome"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.grappling-line": {
+      "description": "Pull toward an anchor using a grappling cable.",
+      "depicts": "A large three-pronged steel grappling hook bites into a rock edge at upper right, thick taut cable sweeps diagonally toward lower left; teal sky-shadow and amber contact sparks.",
+      "action": "grappling line",
+      "role": "activated",
+      "subjects": [
+        "hook",
+        "cable",
+        "rock"
+      ],
+      "palette": [
+        "teal",
+        "silver"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Hook and cable movement rather than direct hand adhesion.",
+      "related_ids": [
+        "veyra:icon.ability.magnetic-grip"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.jump-jets": {
+      "description": "Boost upward with suit thrusters.",
+      "depicts": "Two large suit thruster nozzles fire cyan-white exhaust down the square. Cropped armour frames the upper edge.",
+      "action": "jump jets",
+      "role": "activated",
+      "subjects": [
+        "thrusters",
+        "exhaust"
+      ],
+      "palette": [
+        "cyan",
+        "blue"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Powered vertical boost rather than running on foot.",
+      "related_ids": [
+        "veyra:icon.ability.sprint"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.combat-slide": {
+      "description": "Slide low beneath incoming fire.",
+      "depicts": "One armoured shin and boot skims almost horizontally across rough ground, broad spray of ochre grit behind it and low cyan motion streak, tight low-angle crop.",
+      "action": "combat slide",
+      "role": "activated",
+      "subjects": [
+        "boot",
+        "ground"
+      ],
+      "palette": [
+        "blue",
+        "brown"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Low ground slide rather than an upright evasive step.",
+      "related_ids": [
+        "veyra:icon.ability.evasive-step"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.vault-obstacle": {
+      "description": "Vault over a low obstacle.",
+      "depicts": "A single braced glove presses onto a concrete ledge while a large bent armoured boot clears it above, broad diagonal body movement implied without showing a whole person; amber dust and blue shadows.",
+      "action": "vault obstacle",
+      "role": "activated",
+      "subjects": [
+        "glove",
+        "boot",
+        "ledge"
+      ],
+      "palette": [
+        "yellow",
+        "blue"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Hand-assisted obstacle crossing rather than propulsion.",
+      "related_ids": [
+        "veyra:icon.ability.jump-jets"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.magnetic-grip": {
+      "description": "Grip a metal surface with a magnetic glove.",
+      "depicts": "An open armoured glove presses against a vertical steel wall, seen from the back of the hand. Cyan arcs gather around the fingertips.",
+      "action": "magnetic grip",
+      "role": "activated",
+      "subjects": [
+        "glove",
+        "steel wall"
+      ],
+      "palette": [
+        "cyan",
+        "grey"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Direct magnetic hand contact rather than a hook or cable.",
+      "related_ids": [
+        "veyra:icon.ability.grappling-line"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.silent-step": {
+      "description": "Move carefully without making noise.",
+      "depicts": "A large soft-soled sci-fi boot places its toe gently on a dark floor, heel raised, restrained narrow violet motion curl and pale silver rim light, shadow dominates.",
+      "action": "silent step",
+      "role": "activated",
+      "subjects": [
+        "boot",
+        "floor"
+      ],
+      "palette": [
+        "purple",
+        "grey"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Careful quiet placement rather than fast running.",
+      "related_ids": [
+        "veyra:icon.ability.sprint"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.deploy-turret": {
+      "description": "Place an automated gun emplacement.",
+      "depicts": "An angular gun turret stands on stout mechanical legs, its large barrel aimed upward-right. Amber lights contrast with cobalt shadows.",
+      "action": "deploy turret",
+      "role": "activated",
+      "subjects": [
+        "turret",
+        "gun"
+      ],
+      "palette": [
+        "yellow",
+        "blue"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Stationary ground gun rather than a flying support drone.",
+      "related_ids": [
+        "veyra:icon.ability.deploy-drone"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.deploy-mine": {
+      "description": "Arm a proximity mine on the ground.",
+      "depicts": "A gloved hand releases a broad low-profile disc mine onto a rough floor, three thick radial arms and one vivid red central sensor, burgundy shadows.",
+      "action": "deploy mine",
+      "role": "activated",
+      "subjects": [
+        "mine",
+        "glove"
+      ],
+      "palette": [
+        "red",
+        "grey"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Placing the device rather than triggering an existing charge.",
+      "related_ids": [
+        "veyra:icon.ability.remote-detonate"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.hack-terminal": {
+      "description": "Connect a tool to bypass an electronic terminal.",
+      "depicts": "A gloved hand pushes a chunky violet diagnostic spike into a rectangular terminal socket, two broad luminous data ribbons bend from plug to terminal.",
+      "action": "hack terminal",
+      "role": "activated",
+      "subjects": [
+        "spike",
+        "terminal",
+        "glove"
+      ],
+      "palette": [
+        "purple",
+        "cyan"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Electronic access bypass rather than diagnosing physical machinery.",
+      "related_ids": [
+        "veyra:icon.ability.diagnose-machinery"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.disrupt-signal": {
+      "description": "Jam nearby radio or control signals.",
+      "depicts": "A rugged twin-pronged jammer antenna splits two incoming cyan signal arcs into broken violet fragments; dominant fork silhouette and dark indigo corners.",
+      "action": "disrupt signal",
+      "role": "activated",
+      "subjects": [
+        "antenna",
+        "signal"
+      ],
+      "palette": [
+        "purple",
+        "cyan"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Breaking a communication signal rather than sending instructions.",
+      "related_ids": [
+        "veyra:icon.ability.coordinate-crew"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.decoy-beacon": {
+      "description": "Deploy a false signal to distract enemies.",
+      "depicts": "A small physical beacon projects a large translucent cyan duplicate helmet above itself, visibly fragmented at the base, hot amber beacon core and navy shadows.",
+      "action": "decoy beacon",
+      "role": "activated",
+      "subjects": [
+        "beacon",
+        "helmet hologram"
+      ],
+      "palette": [
+        "cyan",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A separate false target rather than concealing the wearer.",
+      "related_ids": [
+        "veyra:icon.ability.camouflage"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.remote-detonate": {
+      "description": "Trigger a previously placed explosive charge.",
+      "depicts": "A large gloved thumb depresses a single guarded red switch on a rugged handheld detonator, one broad orange flash behind the device.",
+      "action": "remote detonate",
+      "role": "activated",
+      "subjects": [
+        "detonator",
+        "switch",
+        "glove"
+      ],
+      "palette": [
+        "red",
+        "orange"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Triggering a charge rather than placing a mine.",
+      "related_ids": [
+        "veyra:icon.ability.deploy-mine"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.calibrate-optic": {
+      "description": "Adjust a weapon optic for accuracy.",
+      "depicts": "A gloved fingertip turns the large adjustment ring of a blue glass scope, one clean amber alignment line crossing the lens, diagonal close crop and dark steel shadows.",
+      "action": "calibrate optic",
+      "role": "activated",
+      "subjects": [
+        "scope",
+        "glove"
+      ],
+      "palette": [
+        "blue",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Adjusting a scope rather than firing through it.",
+      "related_ids": [
+        "veyra:icon.ability.precision-shot"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.forge-part": {
+      "description": "Shape a hot metal component.",
+      "depicts": "A heavy forging hammer descends onto one glowing orange metal blank on a dark anvil, broad white-yellow contact line and three chunky sparks, black-red corners.",
+      "action": "forge part",
+      "role": "activated",
+      "subjects": [
+        "hammer",
+        "anvil",
+        "metal blank"
+      ],
+      "palette": [
+        "orange",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Solid metal shaping rather than pouring molten material.",
+      "related_ids": [
+        "veyra:icon.ability.refine-material"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.assemble-module": {
+      "description": "Fit components into an equipment module.",
+      "depicts": "Two gloved fingertips press a chunky cyan power component into a square steel housing; broad socket shapes and one amber seating spark, close top-down crop.",
+      "action": "assemble module",
+      "role": "activated",
+      "subjects": [
+        "component",
+        "housing",
+        "gloves"
+      ],
+      "palette": [
+        "cyan",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Mechanical insertion rather than joining metal by welding.",
+      "related_ids": [
+        "veyra:icon.ability.arc-weld"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.salvage-parts": {
+      "description": "Remove a usable component from damaged machinery.",
+      "depicts": "A large mechanical claw lifts one intact copper gear from a broken dark machine casing, three large shattered panels frame it, teal rim light and warm gear focus.",
+      "action": "salvage parts",
+      "role": "activated",
+      "subjects": [
+        "claw",
+        "gear",
+        "machine"
+      ],
+      "palette": [
+        "brown",
+        "teal"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Recovering an intact part rather than processing loose scrap.",
+      "related_ids": [
+        "veyra:icon.ability.recycle-scrap"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.recycle-scrap": {
+      "description": "Process waste metal into reusable material.",
+      "depicts": "A heavy industrial jaw compresses chunky metal scrap around an orange-hot centre. Dark steel plates frame the bright material.",
+      "action": "recycle scrap",
+      "role": "activated",
+      "subjects": [
+        "crusher",
+        "scrap",
+        "billet"
+      ],
+      "palette": [
+        "orange",
+        "blue"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Bulk scrap processing rather than carefully retrieving an intact part.",
+      "related_ids": [
+        "veyra:icon.ability.salvage-parts"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.overclock-machine": {
+      "description": "Push machinery above its normal output.",
+      "depicts": "A gloved hand pushes an orange lever beside a large spinning turbine. A broad cyan wake circles the rotor.",
+      "action": "overclock machine",
+      "role": "activated",
+      "subjects": [
+        "turbine",
+        "lever",
+        "glove"
+      ],
+      "palette": [
+        "cyan",
+        "orange"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Controlled temporary performance boost; use Overload for electrical malfunction.",
+      "related_ids": [
+        "veyra:icon.ability.overload"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.bandage-wound": {
+      "description": "Wrap an injury with a field bandage.",
+      "depicts": "A dark gloved hand draws a broad clean ivory bandage diagonally around an armoured forearm, large visible roll at upper right, soft green treatment light and dark olive shadows.",
+      "action": "bandage wound",
+      "role": "activated",
+      "subjects": [
+        "bandage",
+        "forearm",
+        "glove"
+      ],
+      "palette": [
+        "white",
+        "green"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A visible fabric wrap rather than an injector patch.",
+      "related_ids": [
+        "veyra:icon.ability.trauma-patch"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.splint-limb": {
+      "description": "Stabilize an injured limb with a brace.",
+      "depicts": "Two thick pale medical splint rails clamp around a bent armoured lower leg, a gloved hand pulls one broad orange securing strap tight, dark teal shadows.",
+      "action": "splint limb",
+      "role": "activated",
+      "subjects": [
+        "splint",
+        "leg",
+        "strap"
+      ],
+      "palette": [
+        "white",
+        "teal"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Rigid limb support rather than a soft bandage.",
+      "related_ids": [
+        "veyra:icon.ability.bandage-wound"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.oxygen-boost": {
+      "description": "Restore breathing support from an oxygen supply.",
+      "depicts": "A gloved hand seats a chunky breathing mask connected to a short visible hose over a cropped helmet mouth, pale cyan flow curls into the mask, navy shadows.",
+      "action": "oxygen boost",
+      "role": "activated",
+      "subjects": [
+        "mask",
+        "hose",
+        "helmet"
+      ],
+      "palette": [
+        "cyan",
+        "white"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Breathing support rather than an injected stamina boost.",
+      "related_ids": [
+        "veyra:icon.ability.inject-stimulant"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.cooling-injection": {
+      "description": "Reduce overheating with a coolant treatment.",
+      "depicts": "A broad blue medical injector touches the seam of an overheated orange armoured forearm, one white cold-vapour curl at the contact and cobalt shadows.",
+      "action": "cooling injection",
+      "role": "activated",
+      "subjects": [
+        "injector",
+        "forearm"
+      ],
+      "palette": [
+        "blue",
+        "orange"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Applying coolant as treatment; use Chilled for a cold-related status.",
+      "related_ids": [
+        "veyra:icon.ability.chilled"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.radiation-cleanse": {
+      "description": "Remove radioactive contamination from equipment or clothing.",
+      "depicts": "A thick decontamination spray nozzle sweeps pale teal foam across an orange-lit suit shoulder, a few bright yellow contamination flecks visibly wash away, dark olive corners.",
+      "action": "radiation cleanse",
+      "role": "activated",
+      "subjects": [
+        "spray nozzle",
+        "shoulder",
+        "foam"
+      ],
+      "palette": [
+        "teal",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Decontamination action rather than radiation exposure status.",
+      "related_ids": [
+        "veyra:icon.ability.irradiated"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.med-drone": {
+      "description": "Send a support drone to deliver treatment.",
+      "depicts": "One compact white two-rotor medical drone lowers a broad green treatment beam onto a cropped armoured forearm, dark emerald background, drone is the dominant readable silhouette.",
+      "action": "med drone",
+      "role": "activated",
+      "subjects": [
+        "medical drone",
+        "forearm"
+      ],
+      "palette": [
+        "white",
+        "green"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Healing support rather than a general-purpose drone.",
+      "related_ids": [
+        "veyra:icon.ability.deploy-drone"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.camouflage": {
+      "description": "Conceal the wearer against their surroundings.",
+      "depicts": "Close crop of one helmet and shoulder blending into broad moss-green leaf shapes; half the angular visor remains solid and half dissolves into olive painted camouflage patches.",
+      "action": "camouflage",
+      "role": "activated",
+      "subjects": [
+        "helmet",
+        "leaves"
+      ],
+      "palette": [
+        "green",
+        "brown"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Concealing the actual wearer rather than projecting a separate decoy.",
+      "related_ids": [
+        "veyra:icon.ability.decoy-beacon"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.harvest-fibre": {
+      "description": "Gather usable plant fibre.",
+      "depicts": "A curved harvesting knife cuts across a bundle of golden-green stems held by a dark glove. Pale cut fibres sweep diagonally against olive shadows.",
+      "action": "harvest fibre",
+      "role": "activated",
+      "subjects": [
+        "knife",
+        "stems",
+        "glove"
+      ],
+      "palette": [
+        "green",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Bulk usable stems rather than taking a small specimen.",
+      "related_ids": [
+        "veyra:icon.ability.sample-organism"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.purify-water": {
+      "description": "Filter unsafe water into drinking water.",
+      "depicts": "A rugged filter cylinder divides a broad muddy brown incoming stream from a clear cyan outgoing stream, large transparent lower chamber, diagonal flow and dark teal background.",
+      "action": "purify water",
+      "role": "activated",
+      "subjects": [
+        "filter",
+        "water"
+      ],
+      "palette": [
+        "cyan",
+        "brown"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Filtering water rather than testing its composition.",
+      "related_ids": [
+        "veyra:icon.ability.analyse-water"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.cook-ration": {
+      "description": "Prepare a field meal.",
+      "depicts": "A battered metal pan holding golden food pieces rests over a compact orange burner. White steam rises against dark umber corners in a close overhead view.",
+      "action": "cook ration",
+      "role": "activated",
+      "subjects": [
+        "pan",
+        "food",
+        "burner"
+      ],
+      "palette": [
+        "orange",
+        "brown"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Food preparation over a burner rather than signalling with fire.",
+      "related_ids": [
+        "veyra:icon.ability.light-flare"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.light-flare": {
+      "description": "Ignite a flare for visibility or signalling.",
+      "depicts": "A large armoured hand holds a short rugged flare diagonally upward, brilliant red-orange flame and thick white smoke at its tip fill the upper half, dark blue corners.",
+      "action": "light flare",
+      "role": "activated",
+      "subjects": [
+        "flare",
+        "glove"
+      ],
+      "palette": [
+        "red",
+        "orange"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Bright handheld signal rather than concealment smoke.",
+      "related_ids": [
+        "veyra:icon.ability.smoke-screen"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.pitch-shelter": {
+      "description": "Set up a temporary field shelter.",
+      "depicts": "A gloved hand pulls a thick guyline taut beside one angular orange tent corner and steel peg, triangular fabric mass dominates the square, dark blue dusk shadows.",
+      "action": "pitch shelter",
+      "role": "activated",
+      "subjects": [
+        "tent",
+        "guyline",
+        "peg"
+      ],
+      "palette": [
+        "orange",
+        "blue"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A camp shelter rather than combat cover.",
+      "related_ids": [
+        "veyra:icon.ability.emergency-cover"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.burning": {
+      "description": "Ongoing heat or fire damage.",
+      "depicts": "One large dark armoured shoulder plate engulfed by three broad orange-red flames, bright yellow rim at the centre.",
+      "action": "burning",
+      "role": "status",
+      "subjects": [
+        "armour",
+        "flames"
+      ],
+      "palette": [
+        "orange",
+        "red"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "An active fire condition rather than a cooling treatment.",
+      "related_ids": [
+        "veyra:icon.ability.cooling-injection"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.chilled": {
+      "description": "Cold exposure or impaired movement from freezing.",
+      "depicts": "A chunky armoured boot encased along its sole in large pale blue ice crystals, white frost clings to the ankle, deep cobalt shadows.",
+      "action": "chilled",
+      "role": "status",
+      "subjects": [
+        "boot",
+        "ice"
+      ],
+      "palette": [
+        "blue",
+        "white"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "Ice is the cause; use Slowed for generic movement impairment.",
+      "related_ids": [
+        "veyra:icon.ability.slowed"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.poisoned": {
+      "description": "Ongoing toxic contamination or poison damage.",
+      "depicts": "A large cracked respirator filter surrounded by one curling sickly green vapour ribbon, three heavy droplets on the filter rim, dark olive background.",
+      "action": "poisoned",
+      "role": "status",
+      "subjects": [
+        "respirator",
+        "toxic vapour"
+      ],
+      "palette": [
+        "green",
+        "grey"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "Toxic exposure status rather than applying an antidote.",
+      "related_ids": [
+        "veyra:icon.ability.cleanse-toxin"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.irradiated": {
+      "description": "Radiation exposure or accumulated contamination.",
+      "depicts": "A cropped armoured glove holds a dull metal shard shedding a few strong yellow-green motes that cling to the glove, broad amber halo and dark violet shadows.",
+      "action": "irradiated",
+      "role": "status",
+      "subjects": [
+        "glove",
+        "metal shard"
+      ],
+      "palette": [
+        "yellow",
+        "green"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "Contaminating material rather than a decontamination tool.",
+      "related_ids": [
+        "veyra:icon.ability.radiation-cleanse"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.shocked": {
+      "description": "Electrical shock interrupting the wearer.",
+      "depicts": "An open armoured glove spasms within thick white-cyan lightning forks, with a broad wrist silhouette and deep purple background.",
+      "action": "shocked",
+      "role": "status",
+      "subjects": [
+        "glove",
+        "lightning"
+      ],
+      "palette": [
+        "cyan",
+        "purple"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "Shock affecting a character rather than an overloaded machine coil.",
+      "related_ids": [
+        "veyra:icon.ability.overload"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.shield-broken": {
+      "description": "Personal shielding has collapsed.",
+      "depicts": "One brilliant cyan curved shield surface fractures into five large separated glass-like energy shards around a dark wrist emitter, orange breach point, navy background.",
+      "action": "shield broken",
+      "role": "status",
+      "subjects": [
+        "shield shards",
+        "wrist emitter"
+      ],
+      "palette": [
+        "cyan",
+        "orange"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "Shattered protection rather than restoring a shield.",
+      "related_ids": [
+        "veyra:icon.ability.shield-recharge"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.slowed": {
+      "description": "Movement speed is reduced.",
+      "depicts": "A heavy armoured boot drags through a broad sticky ochre trail, heel deeply weighted, two short muted blue motion strokes stop behind it, dark earth shadows.",
+      "action": "slowed",
+      "role": "status",
+      "subjects": [
+        "boot",
+        "mud"
+      ],
+      "palette": [
+        "brown",
+        "blue"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "Generic hindered movement without ice or a physical restraint.",
+      "related_ids": [
+        "veyra:icon.ability.chilled"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.rooted": {
+      "description": "Movement is prevented by a physical restraint.",
+      "depicts": "A large armoured boot is gripped firmly by three thick teal industrial cable loops anchored to a steel floor, strong horizontal restraint shapes, dark blue shadows.",
+      "action": "rooted",
+      "role": "status",
+      "subjects": [
+        "boot",
+        "cables"
+      ],
+      "palette": [
+        "teal",
+        "grey"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "An anchored foot cannot move; use Slowed for reduced speed.",
+      "related_ids": [
+        "veyra:icon.ability.slowed"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.blinded": {
+      "description": "Vision is obscured or overwhelmed.",
+      "depicts": "A close frontal helmet visor is crossed by a huge harsh white-yellow glare that hides the glass, dark violet helmet silhouette remains visible.",
+      "action": "blinded",
+      "role": "status",
+      "subjects": [
+        "helmet",
+        "visor",
+        "glare"
+      ],
+      "palette": [
+        "white",
+        "yellow"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "The affected visor rather than the flash device causing the effect.",
+      "related_ids": [
+        "veyra:icon.ability.flash-burst"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.silenced": {
+      "description": "Communications or device activation is disrupted.",
+      "depicts": "A cropped helmet's chunky radio earpiece sputters with violet sparks while a single broad cyan signal arc breaks beside it, dark navy silhouette.",
+      "action": "silenced",
+      "role": "status",
+      "subjects": [
+        "helmet",
+        "headset",
+        "signal"
+      ],
+      "palette": [
+        "purple",
+        "cyan"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "The affected headset rather than an active jammer antenna.",
+      "related_ids": [
+        "veyra:icon.ability.disrupt-signal"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.focused": {
+      "description": "Improved aim or concentration.",
+      "depicts": "Close crop of an armoured helmet with a wide cyan visor and a bright aiming reflection, a sharp steel brow and deep cobalt shadows.",
+      "action": "focused",
+      "role": "status",
+      "subjects": [
+        "helmet",
+        "visor"
+      ],
+      "palette": [
+        "cyan",
+        "blue"
+      ],
+      "use_cases": [
+        "status effect display",
+        "beneficial effect list"
+      ],
+      "distinction": "A prepared aiming state rather than a fired precision attack.",
+      "related_ids": [
+        "veyra:icon.ability.precision-shot"
+      ],
+      "effect": "beneficial"
+    },
+    "veyra:icon.ability.fortified": {
+      "description": "Extra armour or damage resistance is active.",
+      "depicts": "A massive layered chest plate with broad interlocked silver sections stands behind a golden protective halo, in a frontal symmetrical composition with deep brown corners.",
+      "action": "fortified",
+      "role": "status",
+      "subjects": [
+        "chest plate",
+        "halo"
+      ],
+      "palette": [
+        "silver",
+        "yellow"
+      ],
+      "use_cases": [
+        "status effect display",
+        "beneficial effect list"
+      ],
+      "distinction": "The resulting reinforced armour state rather than attaching a plate.",
+      "related_ids": [
+        "veyra:icon.ability.fortify-armour"
+      ],
+      "effect": "beneficial"
+    },
+    "veyra:icon.ability.light-cut": {
+      "description": "A quick diagonal blade slash.",
+      "depicts": "A single large utilitarian steel blade held in a rugged glove cuts from lower-left to upper-right. One bright narrow cyan cutting arc; deep blue shadows. Blade and arc dominate; just the glove and blade.",
+      "action": "light cut",
+      "role": "activated",
+      "subjects": [
+        "blade",
+        "glove"
+      ],
+      "palette": [
+        "blue",
+        "silver"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A rising diagonal cut rather than a straight thrust.",
+      "related_ids": [
+        "veyra:icon.ability.thrust"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.return-cut": {
+      "description": "A reverse blade cut for a follow-up attack.",
+      "depicts": "A large gloved hand drives a short steel blade back from upper-right to lower-left. Two broad sweeping pale violet trails describe a hooked returning stroke. Deep indigo shadows. Clear opposite movement to an opening cut.",
+      "action": "return cut",
+      "role": "activated",
+      "subjects": [
+        "blade",
+        "glove"
+      ],
+      "palette": [
+        "purple",
+        "silver"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A hooked returning slash rather than a broad horizontal sweep.",
+      "related_ids": [
+        "veyra:icon.ability.sweeping-cut"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.heavy-cut": {
+      "description": "A forceful downward blade strike.",
+      "depicts": "A broad industrial blade plunges diagonally down into one dark armour plate. Oversized wedge-shaped steel edge, one concentrated red-orange impact crack. Deep crimson shadows; ponderous powerful downward composition.",
+      "action": "heavy cut",
+      "role": "activated",
+      "subjects": [
+        "blade",
+        "armour plate"
+      ],
+      "palette": [
+        "orange",
+        "red"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Focuses on the strike rather than a visibly shattered armour plate.",
+      "related_ids": [
+        "veyra:icon.ability.armour-break"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.evasive-step": {
+      "description": "A quick sidestep to evade an attack.",
+      "depicts": "A huge cropped rugged sci-fi boot sweeps toward lower right, seen from low below. A single curved electric-blue motion wake wraps behind the sole; cobalt shadows. Closely match the approved boot tile.",
+      "action": "evasive step",
+      "role": "activated",
+      "subjects": [
+        "boot",
+        "motion arc"
+      ],
+      "palette": [
+        "blue",
+        "cyan"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "One boot and a curved evasive wake rather than two boots running forward.",
+      "related_ids": [
+        "veyra:icon.ability.sprint"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.parry": {
+      "description": "Intercept a melee attack with a blade.",
+      "depicts": "Close-up of a rugged armoured glove holding one steel blade diagonally across an incoming second blade. Concentrated amber spark at the crossing, burgundy shadows. Silver blocking silhouette dominates, closely matching the approved parry tile.",
+      "action": "parry",
+      "role": "activated",
+      "subjects": [
+        "crossed blades",
+        "glove"
+      ],
+      "palette": [
+        "silver",
+        "orange"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "The weapons remain in contact; Disarm shows a weapon coming free.",
+      "related_ids": [
+        "veyra:icon.ability.disarm"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.aimed-burst": {
+      "description": "Fire a controlled burst from a carbine.",
+      "depicts": "Extreme close-up of the front and upper receiver of a compact sci-fi carbine firing to upper right. Huge orange muzzle flash with three grouped directional streaks, burnt orange and charcoal. Closely match the approved gun tile.",
+      "action": "aimed burst",
+      "role": "activated",
+      "subjects": [
+        "carbine",
+        "muzzle flash"
+      ],
+      "palette": [
+        "orange",
+        "red"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A narrow forward burst rather than a wide pellet fan.",
+      "related_ids": [
+        "veyra:icon.ability.scatter-blast"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.precision-shot": {
+      "description": "Take a carefully aimed rifle shot.",
+      "depicts": "One enormous dark rifle scope and a small part of its receiver, viewed from the side at a low angle, aiming across the square. A single thin ice-blue shot streak points right across a dark midnight background. Large pale-blue lens is the focal shape.",
+      "action": "precision shot",
+      "role": "activated",
+      "subjects": [
+        "scope",
+        "rifle",
+        "beam"
+      ],
+      "palette": [
+        "blue",
+        "cyan"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "The scope dominates rather than a charged weapon coil.",
+      "related_ids": [
+        "veyra:icon.ability.charged-shot"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.rapid-reload": {
+      "description": "Insert a fresh magazine or power feed.",
+      "depicts": "One rugged glove firmly pushes a chunky rectangular power magazine upward into the underside of a cropped sci-fi receiver. A short curved warm-white motion sweep describes the insertion. Copper-lit magazine, cool navy background. Two clear interlocking masses.",
+      "action": "rapid reload",
+      "role": "activated",
+      "subjects": [
+        "magazine",
+        "glove",
+        "weapon"
+      ],
+      "palette": [
+        "yellow",
+        "blue"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Feeding the held weapon rather than drawing another weapon.",
+      "related_ids": [
+        "veyra:icon.ability.weapon-swap"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.weapon-swap": {
+      "description": "Draw or switch to a sidearm.",
+      "depicts": "A large rugged hand draws a compact sci-fi pistol upward from a dark utility holster at the hip. Bright ochre diagonal motion streak behind the pistol, deep blue-black background. Only the cropped pistol, hand and holster.",
+      "action": "weapon swap",
+      "role": "activated",
+      "subjects": [
+        "pistol",
+        "glove"
+      ],
+      "palette": [
+        "yellow",
+        "grey"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A whole pistol is drawn; no magazine insertion.",
+      "related_ids": [
+        "veyra:icon.ability.rapid-reload"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.shield-recharge": {
+      "description": "Restore a personal energy shield.",
+      "depicts": "A large circular wearable shield-emitter puck clipped to a cropped forearm bracer is charging. Three broad concentric electric-blue arcs bloom from the puck, white-blue centre and deep sapphire shadows. Physical emitter remains clear under the energy.",
+      "action": "shield recharge",
+      "role": "activated",
+      "subjects": [
+        "wrist emitter",
+        "shield arcs"
+      ],
+      "palette": [
+        "blue",
+        "cyan"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Personal wrist-based recovery rather than area protection.",
+      "related_ids": [
+        "veyra:icon.ability.barrier-dome"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.field-repair": {
+      "description": "Repair a damaged plate with a handheld tool.",
+      "depicts": "A large gloved hand presses a stubby industrial repair tool against a fractured metal plate, producing one brilliant yellow arc and a few chunky sparks. Olive and ochre shadows. Tight action crop matching the approved repair tile.",
+      "action": "field repair",
+      "role": "activated",
+      "subjects": [
+        "glove",
+        "tool",
+        "plate",
+        "sparks"
+      ],
+      "palette": [
+        "yellow",
+        "brown"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Direct repair contact rather than tracing a machine fault.",
+      "related_ids": [
+        "veyra:icon.ability.diagnose-machinery"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.arc-weld": {
+      "description": "Join metal with an electrical welding arc.",
+      "depicts": "A stout welding torch held by a glove joins two thick metal plates along a single diagonal seam. A brilliant white-violet welding point and a short molten orange seam, deep plum shadows. Big torch silhouette and two plates.",
+      "action": "arc weld",
+      "role": "activated",
+      "subjects": [
+        "welding torch",
+        "glove",
+        "seam"
+      ],
+      "palette": [
+        "purple",
+        "orange"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Thin joining seam rather than cutting through a thick edge.",
+      "related_ids": [
+        "veyra:icon.ability.cutting-torch"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.power-transfer": {
+      "description": "Connect a power cable to transfer energy.",
+      "depicts": "A rugged glove pushes a large cylindrical power connector into a machinery socket. A thick short turquoise electric arc bridges the last gap, dark petrol shadows and bright brass connector contacts. Connector and socket fill square.",
+      "action": "power transfer",
+      "role": "activated",
+      "subjects": [
+        "connector",
+        "cable",
+        "socket",
+        "glove"
+      ],
+      "palette": [
+        "cyan",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Physical power coupling rather than personal shield recovery.",
+      "related_ids": [
+        "veyra:icon.ability.shield-recharge"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.deploy-drone": {
+      "description": "Launch a small general-purpose drone.",
+      "depicts": "One compact industrial quad-rotor inspection drone launches from a cropped open gloved palm, viewed close from below. Four broad rotor pods and central amber lens form one strong silhouette, electric-blue lift streaks on deep teal shadows.",
+      "action": "deploy drone",
+      "role": "activated",
+      "subjects": [
+        "drone",
+        "glove",
+        "rotors"
+      ],
+      "palette": [
+        "blue",
+        "cyan"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "General support drone rather than a dedicated healing drone.",
+      "related_ids": [
+        "veyra:icon.ability.med-drone"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.cutting-torch": {
+      "description": "Cut through a metal plate using a torch.",
+      "depicts": "A large angled industrial plasma torch nozzle emits a short intense orange-white jet slicing the edge of one thick steel plate. One glowing cut line, copper and charcoal shadows, nozzle fills half square. Distinct directional flame rather than repair sparks.",
+      "action": "cutting torch",
+      "role": "activated",
+      "subjects": [
+        "torch",
+        "plate",
+        "glove"
+      ],
+      "palette": [
+        "orange",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Cutting at a plate edge rather than welding along a seam.",
+      "related_ids": [
+        "veyra:icon.ability.arc-weld"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.refine-material": {
+      "description": "Pour refined molten metal into a mould.",
+      "depicts": "One heavy industrial crucible lip pours a broad luminous orange stream of molten metal into a chunky ingot mould. Strong falling curve and rectangular mould; dark rust-brown shadows. Cropped machinery and material only.",
+      "action": "refine material",
+      "role": "activated",
+      "subjects": [
+        "molten metal",
+        "mould",
+        "crucible"
+      ],
+      "palette": [
+        "orange",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Liquid metal processing rather than shaping a solid blank.",
+      "related_ids": [
+        "veyra:icon.ability.forge-part"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.survey-pulse": {
+      "description": "Scan terrain for geological information.",
+      "depicts": "A cropped rugged hand holds a geological scanner over a single broad wedge of layered ground, sending three bright concentric teal scan bands downward. Rich petrol-blue shadows and one turquoise scanner face.",
+      "action": "survey pulse",
+      "role": "activated",
+      "subjects": [
+        "scanner",
+        "terrain",
+        "scan rings"
+      ],
+      "palette": [
+        "teal",
+        "cyan"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A remote scan rather than physically drilling a sample.",
+      "related_ids": [
+        "veyra:icon.ability.extract-core"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.extract-core": {
+      "description": "Drill a geological core sample.",
+      "depicts": "A chunky cylindrical hollow drill pulls a clearly layered rock core upward from dark ground. Ochre rock cylinder and silver drill collar dominate, amber light at the extraction point, deep umber shadows.",
+      "action": "extract core",
+      "role": "activated",
+      "subjects": [
+        "drill",
+        "rock",
+        "dust"
+      ],
+      "palette": [
+        "yellow",
+        "brown"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Physical extraction rather than remote prospecting.",
+      "related_ids": [
+        "veyra:icon.ability.survey-pulse"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.trace-route": {
+      "description": "Plan a path through a navigation display.",
+      "depicts": "A large gloved fingertip presses one raised junction on a rugged physical navigation slate. One thick luminous amber route bends between three bright nodes across the slates dark blue surface. Tight crop of hand and device.",
+      "action": "trace route",
+      "role": "activated",
+      "subjects": [
+        "glove",
+        "map",
+        "route line"
+      ],
+      "palette": [
+        "blue",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A planned route rather than a wildlife trail.",
+      "related_ids": [
+        "veyra:icon.ability.track-creature"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.track-creature": {
+      "description": "Follow a creature's tracks.",
+      "depicts": "A huge three-toed alien animal track pressed into damp dark soil, with a handheld scanner head entering one corner and outlining the footprint in pale cyan. Moss-green and charcoal palette, strong footprint silhouette.",
+      "action": "track creature",
+      "role": "activated",
+      "subjects": [
+        "footprint",
+        "ground",
+        "scanner"
+      ],
+      "palette": [
+        "teal",
+        "green"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "An animal footprint rather than a general navigation route.",
+      "related_ids": [
+        "veyra:icon.ability.trace-route"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.sample-organism": {
+      "description": "Collect a small biological specimen.",
+      "depicts": "A rugged glove holds a small clear specimen tube against one broad unfamiliar leaf while metal tweezers place a leaf sample into it. Luminous lime leaf and ivory tube rim dominate dark forest-green shadows. Close crop.",
+      "action": "sample organism",
+      "role": "activated",
+      "subjects": [
+        "leaf",
+        "vial",
+        "tweezers",
+        "glove"
+      ],
+      "palette": [
+        "green",
+        "yellow"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A careful small sample rather than bulk harvesting.",
+      "related_ids": [
+        "veyra:icon.ability.harvest-fibre"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.analyse-water": {
+      "description": "Test a liquid sample.",
+      "depicts": "A stout transparent water sample vial is held beside a handheld testing probe; one large suspended turquoise droplet catches white light between vial and probe. Deep marine-blue shadows, clear big droplet and vial shapes.",
+      "action": "analyse water",
+      "role": "activated",
+      "subjects": [
+        "vial",
+        "probe",
+        "glove",
+        "water"
+      ],
+      "palette": [
+        "blue",
+        "cyan"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Testing water rather than filtering it for consumption.",
+      "related_ids": [
+        "veyra:icon.ability.purify-water"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.trauma-patch": {
+      "description": "Apply a compact treatment patch.",
+      "depicts": "Large dark gloved fingers press a compact white medical injector patch onto a cropped forearm. Concentrated green light at contact, emerald shadows, white device makes a clear focal shape.",
+      "action": "trauma patch",
+      "role": "activated",
+      "subjects": [
+        "patch",
+        "forearm",
+        "glove"
+      ],
+      "palette": [
+        "green",
+        "white"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A rigid medical patch rather than a fabric bandage.",
+      "related_ids": [
+        "veyra:icon.ability.bandage-wound"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.inject-stimulant": {
+      "description": "Inject a temporary stimulant.",
+      "depicts": "One large compact industrial autoinjector is pressed against the outer sleeve of an armoured arm. Bright amber cartridge window and a decisive downward pressing hand, deep olive and charcoal shadows. Strong diagonal injector silhouette.",
+      "action": "inject stimulant",
+      "role": "activated",
+      "subjects": [
+        "injector",
+        "forearm",
+        "glove"
+      ],
+      "palette": [
+        "yellow",
+        "orange"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Injected boost rather than breathing support.",
+      "related_ids": [
+        "veyra:icon.ability.oxygen-boost"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.cleanse-toxin": {
+      "description": "Apply a toxin-removal treatment.",
+      "depicts": "A white medical filter applicator draws a small sickly-green vapour stream from a forearm treatment port into a clear sealed cartridge. Clean turquoise light at skin contact contrasts with the green cartridge; deep teal shadows.",
+      "action": "cleanse toxin",
+      "role": "activated",
+      "subjects": [
+        "extractor",
+        "forearm",
+        "glove"
+      ],
+      "palette": [
+        "teal",
+        "green"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "The treatment action rather than the poisoned condition.",
+      "related_ids": [
+        "veyra:icon.ability.poisoned"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.revive": {
+      "description": "Resuscitate an incapacitated ally.",
+      "depicts": "Two broad white portable resuscitation pads held by rugged gloves touch the cropped upper chest of an armoured suit. One bright green-white pulse bridges the pads, deep emerald shadows. Chest and hands only.",
+      "action": "revive",
+      "role": "activated",
+      "subjects": [
+        "defibrillator paddles",
+        "chest armour"
+      ],
+      "palette": [
+        "green",
+        "white"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Two paddles on a chest rather than routine patch treatment.",
+      "related_ids": [
+        "veyra:icon.ability.trauma-patch"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.suppress-fire": {
+      "description": "Maintain covering fire with a heavy weapon.",
+      "depicts": "A close side-view cropped carbine barrel fires a broad FAN of three orange tracer strokes to the right over one dark cover plate. Strong horizontal composition, deep smoky red background, bright orange muzzle. Distinct fan rather than precision beam.",
+      "action": "suppressing fire",
+      "role": "activated",
+      "subjects": [
+        "heavy gun",
+        "muzzle flash"
+      ],
+      "palette": [
+        "orange",
+        "red"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Heavy sustained fire rather than a compact carbine burst.",
+      "related_ids": [
+        "veyra:icon.ability.aimed-burst"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.braced-guard": {
+      "description": "Brace an armoured forearm against impact.",
+      "depicts": "One enormous armoured forearm braced upright across the square takes an impact against its metal plate. A broad pale-blue shield-like impact crescent wraps the outside edge; cold steel and deep cobalt shadows.",
+      "action": "braced guard",
+      "role": "activated",
+      "subjects": [
+        "gauntlet",
+        "impact burst"
+      ],
+      "palette": [
+        "blue",
+        "silver"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Braced physical protection rather than energy collection.",
+      "related_ids": [
+        "veyra:icon.ability.kinetic-absorb"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.sprint": {
+      "description": "Run forward at speed.",
+      "depicts": "Two cropped rugged boots and lower legs drive forward in a long running stride, with one huge boot in front and the other receding. Three straight electric-turquoise speed streaks trail left over deep teal shadows.",
+      "action": "sprint",
+      "role": "activated",
+      "subjects": [
+        "two boots",
+        "speed trails"
+      ],
+      "palette": [
+        "blue",
+        "cyan"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Forward running with two boots rather than a single curved dodge.",
+      "related_ids": [
+        "veyra:icon.ability.evasive-step"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.overload": {
+      "description": "Electrical energy overloads a machine component.",
+      "depicts": "A chunky industrial power cell with an exposed central coil erupts with three thick branching violet-white electrical arcs. Dark purple shadows and hot magenta coil. The physical cell remains the dominant silhouette.",
+      "action": "overload",
+      "role": "status",
+      "subjects": [
+        "power coil",
+        "lightning"
+      ],
+      "palette": [
+        "purple",
+        "white"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "Uncontrolled electrical malfunction rather than a deliberate performance boost.",
+      "related_ids": [
+        "veyra:icon.ability.overclock-machine"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.staggered": {
+      "description": "An impact causes a brief loss of balance or control.",
+      "depicts": "Close crop of a rugged sci-fi helmet sharply tilted sideways under a glancing blow; one bright yellow impact star and two sweeping orange disorientation strokes above the helmet. Deep brown-red shadows.",
+      "action": "staggered",
+      "role": "status",
+      "subjects": [
+        "helmet",
+        "impact spark",
+        "curved trail"
+      ],
+      "palette": [
+        "orange",
+        "yellow"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "A physical helmet impact rather than a glare-obscured visor.",
+      "related_ids": [
+        "veyra:icon.ability.blinded"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.bleeding": {
+      "description": "An injury causes ongoing damage.",
+      "depicts": "A damaged cropped armoured forearm with a torn dark fabric seam and one large dark-red drop falling from it. A stark red slash across the plate implies injury; maroon and black shadows. Stylized non-graphic.",
+      "action": "bleeding",
+      "role": "status",
+      "subjects": [
+        "damaged forearm",
+        "red streaks"
+      ],
+      "palette": [
+        "red",
+        "grey"
+      ],
+      "use_cases": [
+        "status effect display",
+        "harmful effect list"
+      ],
+      "distinction": "An untreated injury status rather than a healing action.",
+      "related_ids": [
+        "veyra:icon.ability.bandage-wound"
+      ],
+      "effect": "harmful"
+    },
+    "veyra:icon.ability.negotiate-contract": {
+      "description": "Reach a trade agreement.",
+      "depicts": "Two rugged civilian gloved hands clasp firmly above one cropped metal contract slate with an amber illuminated blank panel. Strong handshake silhouette, warm copper light and deep navy shadows.",
+      "action": "negotiate contract",
+      "role": "activated",
+      "subjects": [
+        "handshake",
+        "contract tablet"
+      ],
+      "palette": [
+        "yellow",
+        "blue"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Agreement between two parties rather than directing a crew.",
+      "related_ids": [
+        "veyra:icon.ability.coordinate-crew"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.coordinate-crew": {
+      "description": "Direct a crew through radio instructions.",
+      "depicts": "One commanding gloved hand points forward beside a large rugged shoulder radio with a bright teal indicator; two broad amber signal arcs radiate outward. Tight crop of hand and radio, deep midnight blue background.",
+      "action": "coordinate crew",
+      "role": "activated",
+      "subjects": [
+        "pointing glove",
+        "radio",
+        "signal arcs"
+      ],
+      "palette": [
+        "yellow",
+        "blue"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Sending instructions rather than disrupting a signal.",
+      "related_ids": [
+        "veyra:icon.ability.disrupt-signal"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.seal-leak": {
+      "description": "Clamp a leaking pipe closed.",
+      "depicts": "A chunky gloved hand clamps a broad metal repair band around a leaking industrial pipe. A single vivid blue water jet is pinched off at the clamp, wet silver highlights and dark petrol shadows. Close-up physical action.",
+      "action": "seal leak",
+      "role": "activated",
+      "subjects": [
+        "pipe",
+        "clamp",
+        "glove",
+        "water spray"
+      ],
+      "palette": [
+        "blue",
+        "silver"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "A leaking fluid pipe rather than generic plate repair.",
+      "related_ids": [
+        "veyra:icon.ability.field-repair"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.ability.diagnose-machinery": {
+      "description": "Trace a machine fault with a probe.",
+      "depicts": "A large rugged diagnostic probe touches the exposed brass contact of one open machinery housing. One luminous amber circuit branch lights across three large components; deep blue-grey shadows. Probe and contact fill frame.",
+      "action": "diagnose machinery",
+      "role": "activated",
+      "subjects": [
+        "probe",
+        "glove",
+        "machine",
+        "circuit path"
+      ],
+      "palette": [
+        "yellow",
+        "brown"
+      ],
+      "use_cases": [
+        "ability hotbar",
+        "skill tree",
+        "action picker"
+      ],
+      "distinction": "Mechanical fault tracing rather than bypassing electronic access.",
+      "related_ids": [
+        "veyra:icon.ability.hack-terminal"
+      ],
+      "effect": "none"
+    },
+    "veyra:icon.weapon.pistol": {
+      "description": "Pistol.",
+      "depicts": "Solid monochrome pistol symbol with transparent negative space.",
+      "action": "pistol",
+      "role": "symbol",
+      "subjects": [
+        "pistol"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment category",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.weapon.carbine": {
+      "description": "Carbine.",
+      "depicts": "Solid monochrome carbine symbol with transparent negative space.",
+      "action": "carbine",
+      "role": "symbol",
+      "subjects": [
+        "carbine"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment category",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.weapon.rifle": {
+      "description": "Precision rifle.",
+      "depicts": "Solid monochrome precision rifle symbol with transparent negative space.",
+      "action": "precision rifle",
+      "role": "symbol",
+      "subjects": [
+        "precision rifle"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment category",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.weapon.scattergun": {
+      "description": "Scattergun.",
+      "depicts": "Solid monochrome scattergun symbol with transparent negative space.",
+      "action": "scattergun",
+      "role": "symbol",
+      "subjects": [
+        "scattergun"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment category",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.weapon.blade": {
+      "description": "Blade.",
+      "depicts": "Solid monochrome blade symbol with transparent negative space.",
+      "action": "blade",
+      "role": "symbol",
+      "subjects": [
+        "blade"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment category",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.weapon.heavy-tool": {
+      "description": "Heavy cutter.",
+      "depicts": "Solid monochrome heavy cutter symbol with transparent negative space.",
+      "action": "heavy cutter",
+      "role": "symbol",
+      "subjects": [
+        "heavy cutter"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment category",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.equipment.body-armour": {
+      "description": "Body armour.",
+      "depicts": "Solid monochrome body armour symbol with transparent negative space.",
+      "action": "body armour",
+      "role": "symbol",
+      "subjects": [
+        "body armour"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.equipment.helmet": {
+      "description": "Helmet.",
+      "depicts": "Solid monochrome helmet symbol with transparent negative space.",
+      "action": "helmet",
+      "role": "symbol",
+      "subjects": [
+        "helmet"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.equipment.gloves": {
+      "description": "Gloves.",
+      "depicts": "Solid monochrome gloves symbol with transparent negative space.",
+      "action": "gloves",
+      "role": "symbol",
+      "subjects": [
+        "gloves"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.equipment.boots": {
+      "description": "Boots.",
+      "depicts": "Solid monochrome boots symbol with transparent negative space.",
+      "action": "boots",
+      "role": "symbol",
+      "subjects": [
+        "boots"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.equipment.pack": {
+      "description": "Carry pack.",
+      "depicts": "Solid monochrome carry pack symbol with transparent negative space.",
+      "action": "carry pack",
+      "role": "symbol",
+      "subjects": [
+        "carry pack"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.equipment.implant": {
+      "description": "Implant.",
+      "depicts": "Solid monochrome implant symbol with transparent negative space.",
+      "action": "implant",
+      "role": "symbol",
+      "subjects": [
+        "implant"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.equipment.belt": {
+      "description": "Utility belt.",
+      "depicts": "Solid monochrome utility belt symbol with transparent negative space.",
+      "action": "utility belt",
+      "role": "symbol",
+      "subjects": [
+        "utility belt"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.equipment.shield-emitter": {
+      "description": "Shield emitter.",
+      "depicts": "Solid monochrome shield emitter symbol with transparent negative space.",
+      "action": "shield emitter",
+      "role": "symbol",
+      "subjects": [
+        "shield emitter"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "equipment slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.module.optic": {
+      "description": "Optic.",
+      "depicts": "Solid monochrome optic symbol with transparent negative space.",
+      "action": "optic",
+      "role": "symbol",
+      "subjects": [
+        "optic"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "module slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.module.feed": {
+      "description": "Feed.",
+      "depicts": "Solid monochrome feed symbol with transparent negative space.",
+      "action": "feed",
+      "role": "symbol",
+      "subjects": [
+        "feed"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "module slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.module.grip": {
+      "description": "Grip.",
+      "depicts": "Solid monochrome grip symbol with transparent negative space.",
+      "action": "grip",
+      "role": "symbol",
+      "subjects": [
+        "grip"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "module slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.module.stock": {
+      "description": "Stock.",
+      "depicts": "Solid monochrome stock symbol with transparent negative space.",
+      "action": "stock",
+      "role": "symbol",
+      "subjects": [
+        "stock"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "module slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.module.muzzle": {
+      "description": "Muzzle.",
+      "depicts": "Solid monochrome muzzle symbol with transparent negative space.",
+      "action": "muzzle",
+      "role": "symbol",
+      "subjects": [
+        "muzzle"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "module slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.module.cell": {
+      "description": "Power cell.",
+      "depicts": "Solid monochrome power cell symbol with transparent negative space.",
+      "action": "power cell",
+      "role": "symbol",
+      "subjects": [
+        "power cell"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "module slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.module.cooler": {
+      "description": "Cooling unit.",
+      "depicts": "Solid monochrome cooling unit symbol with transparent negative space.",
+      "action": "cooling unit",
+      "role": "symbol",
+      "subjects": [
+        "cooling unit"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "module slot",
+        "inventory filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.material.ore": {
+      "description": "Ore.",
+      "depicts": "Solid monochrome ore symbol with transparent negative space.",
+      "action": "ore",
+      "role": "symbol",
+      "subjects": [
+        "ore"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "material category",
+        "crafting filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.material.ingot": {
+      "description": "Metal ingot.",
+      "depicts": "Solid monochrome metal ingot symbol with transparent negative space.",
+      "action": "metal ingot",
+      "role": "symbol",
+      "subjects": [
+        "metal ingot"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "material category",
+        "crafting filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.material.conductor": {
+      "description": "Conductor.",
+      "depicts": "Solid monochrome conductor symbol with transparent negative space.",
+      "action": "conductor",
+      "role": "symbol",
+      "subjects": [
+        "conductor"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "material category",
+        "crafting filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.material.crystal": {
+      "description": "Crystal.",
+      "depicts": "Solid monochrome crystal symbol with transparent negative space.",
+      "action": "crystal",
+      "role": "symbol",
+      "subjects": [
+        "crystal"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "material category",
+        "crafting filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.material.liquid": {
+      "description": "Liquid sample.",
+      "depicts": "Solid monochrome liquid sample symbol with transparent negative space.",
+      "action": "liquid sample",
+      "role": "symbol",
+      "subjects": [
+        "liquid sample"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "material category",
+        "crafting filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.material.reactive": {
+      "description": "Reactive material.",
+      "depicts": "Solid monochrome reactive material symbol with transparent negative space.",
+      "action": "reactive material",
+      "role": "symbol",
+      "subjects": [
+        "reactive material"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "material category",
+        "crafting filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.material.biological": {
+      "description": "Biological material.",
+      "depicts": "Solid monochrome biological material symbol with transparent negative space.",
+      "action": "biological material",
+      "role": "symbol",
+      "subjects": [
+        "biological material"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "material category",
+        "crafting filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.material.gas": {
+      "description": "Gas canister.",
+      "depicts": "Solid monochrome gas canister symbol with transparent negative space.",
+      "action": "gas canister",
+      "role": "symbol",
+      "subjects": [
+        "gas canister"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "material category",
+        "crafting filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.material.scrap": {
+      "description": "Scrap.",
+      "depicts": "Solid monochrome scrap symbol with transparent negative space.",
+      "action": "scrap",
+      "role": "symbol",
+      "subjects": [
+        "scrap"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "material category",
+        "crafting filter"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.crafting.component": {
+      "description": "Component.",
+      "depicts": "Solid monochrome component symbol with transparent negative space.",
+      "action": "component",
+      "role": "symbol",
+      "subjects": [
+        "component"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "crafting interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.crafting.schematic": {
+      "description": "Schematic.",
+      "depicts": "Solid monochrome schematic symbol with transparent negative space.",
+      "action": "schematic",
+      "role": "symbol",
+      "subjects": [
+        "schematic"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "crafting interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.crafting.fabricate": {
+      "description": "Fabricate.",
+      "depicts": "Solid monochrome fabricate symbol with transparent negative space.",
+      "action": "fabricate",
+      "role": "symbol",
+      "subjects": [
+        "fabricate"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "crafting interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.crafting.batch": {
+      "description": "Batch.",
+      "depicts": "Solid monochrome batch symbol with transparent negative space.",
+      "action": "batch",
+      "role": "symbol",
+      "subjects": [
+        "batch"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "crafting interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.crafting.workbench": {
+      "description": "Workbench.",
+      "depicts": "Solid monochrome workbench symbol with transparent negative space.",
+      "action": "workbench",
+      "role": "symbol",
+      "subjects": [
+        "workbench"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "crafting interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.crafting.factory": {
+      "description": "Factory.",
+      "depicts": "Solid monochrome factory symbol with transparent negative space.",
+      "action": "factory",
+      "role": "symbol",
+      "subjects": [
+        "factory"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "crafting interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.search": {
+      "description": "Search.",
+      "depicts": "Solid monochrome search symbol with transparent negative space.",
+      "action": "search",
+      "role": "symbol",
+      "subjects": [
+        "search"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.filter": {
+      "description": "Filter.",
+      "depicts": "Solid monochrome filter symbol with transparent negative space.",
+      "action": "filter",
+      "role": "symbol",
+      "subjects": [
+        "filter"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.sort": {
+      "description": "Sort.",
+      "depicts": "Solid monochrome sort symbol with transparent negative space.",
+      "action": "sort",
+      "role": "symbol",
+      "subjects": [
+        "sort"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.close": {
+      "description": "Close.",
+      "depicts": "Solid monochrome close symbol with transparent negative space.",
+      "action": "close",
+      "role": "symbol",
+      "subjects": [
+        "close"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.back": {
+      "description": "Back.",
+      "depicts": "Solid monochrome back symbol with transparent negative space.",
+      "action": "back",
+      "role": "symbol",
+      "subjects": [
+        "back"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.next": {
+      "description": "Next.",
+      "depicts": "Solid monochrome next symbol with transparent negative space.",
+      "action": "next",
+      "role": "symbol",
+      "subjects": [
+        "next"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.expand": {
+      "description": "Expand.",
+      "depicts": "Solid monochrome expand symbol with transparent negative space.",
+      "action": "expand",
+      "role": "symbol",
+      "subjects": [
+        "expand"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.collapse": {
+      "description": "Collapse.",
+      "depicts": "Solid monochrome collapse symbol with transparent negative space.",
+      "action": "collapse",
+      "role": "symbol",
+      "subjects": [
+        "collapse"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.transfer": {
+      "description": "Transfer.",
+      "depicts": "Solid monochrome transfer symbol with transparent negative space.",
+      "action": "transfer",
+      "role": "symbol",
+      "subjects": [
+        "transfer"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.repair": {
+      "description": "Repair.",
+      "depicts": "Solid monochrome repair symbol with transparent negative space.",
+      "action": "repair",
+      "role": "symbol",
+      "subjects": [
+        "repair"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.inspect": {
+      "description": "Inspect.",
+      "depicts": "Solid monochrome inspect symbol with transparent negative space.",
+      "action": "inspect",
+      "role": "symbol",
+      "subjects": [
+        "inspect"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.equip": {
+      "description": "Equip.",
+      "depicts": "Solid monochrome equip symbol with transparent negative space.",
+      "action": "equip",
+      "role": "symbol",
+      "subjects": [
+        "equip"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.unequip": {
+      "description": "Unequip.",
+      "depicts": "Solid monochrome unequip symbol with transparent negative space.",
+      "action": "unequip",
+      "role": "symbol",
+      "subjects": [
+        "unequip"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.split-stack": {
+      "description": "Split stack.",
+      "depicts": "Solid monochrome split stack symbol with transparent negative space.",
+      "action": "split stack",
+      "role": "symbol",
+      "subjects": [
+        "split stack"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.combine": {
+      "description": "Combine.",
+      "depicts": "Solid monochrome combine symbol with transparent negative space.",
+      "action": "combine",
+      "role": "symbol",
+      "subjects": [
+        "combine"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.pin": {
+      "description": "Pin.",
+      "depicts": "Solid monochrome pin symbol with transparent negative space.",
+      "action": "pin",
+      "role": "symbol",
+      "subjects": [
+        "pin"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.favorite": {
+      "description": "Favourite.",
+      "depicts": "Solid monochrome favourite symbol with transparent negative space.",
+      "action": "favourite",
+      "role": "symbol",
+      "subjects": [
+        "favourite"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.settings": {
+      "description": "Settings.",
+      "depicts": "Solid monochrome settings symbol with transparent negative space.",
+      "action": "settings",
+      "role": "symbol",
+      "subjects": [
+        "settings"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.map": {
+      "description": "Map.",
+      "depicts": "Solid monochrome map symbol with transparent negative space.",
+      "action": "map",
+      "role": "symbol",
+      "subjects": [
+        "map"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.journal": {
+      "description": "Journal.",
+      "depicts": "Solid monochrome journal symbol with transparent negative space.",
+      "action": "journal",
+      "role": "symbol",
+      "subjects": [
+        "journal"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.character": {
+      "description": "Character.",
+      "depicts": "Solid monochrome character symbol with transparent negative space.",
+      "action": "character",
+      "role": "symbol",
+      "subjects": [
+        "character"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.group": {
+      "description": "Group.",
+      "depicts": "Solid monochrome group symbol with transparent negative space.",
+      "action": "group",
+      "role": "symbol",
+      "subjects": [
+        "group"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.chat": {
+      "description": "Chat.",
+      "depicts": "Solid monochrome chat symbol with transparent negative space.",
+      "action": "chat",
+      "role": "symbol",
+      "subjects": [
+        "chat"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.trade": {
+      "description": "Trade.",
+      "depicts": "Solid monochrome trade symbol with transparent negative space.",
+      "action": "trade",
+      "role": "symbol",
+      "subjects": [
+        "trade"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.credits": {
+      "description": "Credits.",
+      "depicts": "Solid monochrome credits symbol with transparent negative space.",
+      "action": "credits",
+      "role": "symbol",
+      "subjects": [
+        "credits"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.confirm": {
+      "description": "Confirm.",
+      "depicts": "Solid monochrome confirm symbol with transparent negative space.",
+      "action": "confirm",
+      "role": "symbol",
+      "subjects": [
+        "confirm"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.add": {
+      "description": "Add.",
+      "depicts": "Solid monochrome add symbol with transparent negative space.",
+      "action": "add",
+      "role": "symbol",
+      "subjects": [
+        "add"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.remove": {
+      "description": "Remove.",
+      "depicts": "Solid monochrome remove symbol with transparent negative space.",
+      "action": "remove",
+      "role": "symbol",
+      "subjects": [
+        "remove"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.refresh": {
+      "description": "Refresh.",
+      "depicts": "Solid monochrome refresh symbol with transparent negative space.",
+      "action": "refresh",
+      "role": "symbol",
+      "subjects": [
+        "refresh"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.play": {
+      "description": "Start.",
+      "depicts": "Solid monochrome start symbol with transparent negative space.",
+      "action": "start",
+      "role": "symbol",
+      "subjects": [
+        "start"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.pause": {
+      "description": "Pause.",
+      "depicts": "Solid monochrome pause symbol with transparent negative space.",
+      "action": "pause",
+      "role": "symbol",
+      "subjects": [
+        "pause"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.ui.stop": {
+      "description": "Stop.",
+      "depicts": "Solid monochrome stop symbol with transparent negative space.",
+      "action": "stop",
+      "role": "symbol",
+      "subjects": [
+        "stop"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface control"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.locked": {
+      "description": "Locked.",
+      "depicts": "Solid monochrome locked symbol with transparent negative space.",
+      "action": "locked",
+      "role": "symbol",
+      "subjects": [
+        "locked"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.unlocked": {
+      "description": "Unlocked.",
+      "depicts": "Solid monochrome unlocked symbol with transparent negative space.",
+      "action": "unlocked",
+      "role": "symbol",
+      "subjects": [
+        "unlocked"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.equipped": {
+      "description": "Equipped.",
+      "depicts": "Solid monochrome equipped symbol with transparent negative space.",
+      "action": "equipped",
+      "role": "symbol",
+      "subjects": [
+        "equipped"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.warning": {
+      "description": "Warning.",
+      "depicts": "Solid monochrome warning symbol with transparent negative space.",
+      "action": "warning",
+      "role": "symbol",
+      "subjects": [
+        "warning"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.info": {
+      "description": "Information.",
+      "depicts": "Solid monochrome information symbol with transparent negative space.",
+      "action": "information",
+      "role": "symbol",
+      "subjects": [
+        "information"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.unavailable": {
+      "description": "Unavailable.",
+      "depicts": "Solid monochrome unavailable symbol with transparent negative space.",
+      "action": "unavailable",
+      "role": "symbol",
+      "subjects": [
+        "unavailable"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.damaged": {
+      "description": "Damaged.",
+      "depicts": "Solid monochrome damaged symbol with transparent negative space.",
+      "action": "damaged",
+      "role": "symbol",
+      "subjects": [
+        "damaged"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.condition": {
+      "description": "Condition.",
+      "depicts": "Solid monochrome condition symbol with transparent negative space.",
+      "action": "condition",
+      "role": "symbol",
+      "subjects": [
+        "condition"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.cooldown": {
+      "description": "Cooldown.",
+      "depicts": "Solid monochrome cooldown symbol with transparent negative space.",
+      "action": "cooldown",
+      "role": "symbol",
+      "subjects": [
+        "cooldown"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.charges": {
+      "description": "Charges.",
+      "depicts": "Solid monochrome charges symbol with transparent negative space.",
+      "action": "charges",
+      "role": "symbol",
+      "subjects": [
+        "charges"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.health": {
+      "description": "Health.",
+      "depicts": "Solid monochrome health symbol with transparent negative space.",
+      "action": "health",
+      "role": "symbol",
+      "subjects": [
+        "health"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.stamina": {
+      "description": "Stamina.",
+      "depicts": "Solid monochrome stamina symbol with transparent negative space.",
+      "action": "stamina",
+      "role": "symbol",
+      "subjects": [
+        "stamina"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.shield": {
+      "description": "Shield.",
+      "depicts": "Solid monochrome shield symbol with transparent negative space.",
+      "action": "shield",
+      "role": "symbol",
+      "subjects": [
+        "shield"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.state.connection": {
+      "description": "Connection.",
+      "depicts": "Solid monochrome connection symbol with transparent negative space.",
+      "action": "connection",
+      "role": "symbol",
+      "subjects": [
+        "connection"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "interface status"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.marksman": {
+      "description": "Marksman.",
+      "depicts": "Solid monochrome marksman symbol with transparent negative space.",
+      "action": "marksman",
+      "role": "symbol",
+      "subjects": [
+        "marksman"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.blade": {
+      "description": "Blade discipline.",
+      "depicts": "Solid monochrome blade discipline symbol with transparent negative space.",
+      "action": "blade discipline",
+      "role": "symbol",
+      "subjects": [
+        "blade discipline"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.guard": {
+      "description": "Guard.",
+      "depicts": "Solid monochrome guard symbol with transparent negative space.",
+      "action": "guard",
+      "role": "symbol",
+      "subjects": [
+        "guard"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.footwork": {
+      "description": "Footwork.",
+      "depicts": "Solid monochrome footwork symbol with transparent negative space.",
+      "action": "footwork",
+      "role": "symbol",
+      "subjects": [
+        "footwork"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.survey": {
+      "description": "Surveyor.",
+      "depicts": "Solid monochrome surveyor symbol with transparent negative space.",
+      "action": "surveyor",
+      "role": "symbol",
+      "subjects": [
+        "surveyor"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.runner": {
+      "description": "Runner.",
+      "depicts": "Solid monochrome runner symbol with transparent negative space.",
+      "action": "runner",
+      "role": "symbol",
+      "subjects": [
+        "runner"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.fabrication": {
+      "description": "Fabricator.",
+      "depicts": "Solid monochrome fabricator symbol with transparent negative space.",
+      "action": "fabricator",
+      "role": "symbol",
+      "subjects": [
+        "fabricator"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.rigger": {
+      "description": "Rigger.",
+      "depicts": "Solid monochrome rigger symbol with transparent negative space.",
+      "action": "rigger",
+      "role": "symbol",
+      "subjects": [
+        "rigger"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.medicine": {
+      "description": "Medic.",
+      "depicts": "Solid monochrome medic symbol with transparent negative space.",
+      "action": "medic",
+      "role": "symbol",
+      "subjects": [
+        "medic"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.broker": {
+      "description": "Broker.",
+      "depicts": "Solid monochrome broker symbol with transparent negative space.",
+      "action": "broker",
+      "role": "symbol",
+      "subjects": [
+        "broker"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.warden": {
+      "description": "Warden.",
+      "depicts": "Solid monochrome warden symbol with transparent negative space.",
+      "action": "warden",
+      "role": "symbol",
+      "subjects": [
+        "warden"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.ranger": {
+      "description": "Ranger.",
+      "depicts": "Solid monochrome ranger symbol with transparent negative space.",
+      "action": "ranger",
+      "role": "symbol",
+      "subjects": [
+        "ranger"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.station-engineer": {
+      "description": "Station engineer.",
+      "depicts": "Solid monochrome station engineer symbol with transparent negative space.",
+      "action": "station engineer",
+      "role": "symbol",
+      "subjects": [
+        "station engineer"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.ecologist": {
+      "description": "Ecologist.",
+      "depicts": "Solid monochrome ecologist symbol with transparent negative space.",
+      "action": "ecologist",
+      "role": "symbol",
+      "subjects": [
+        "ecologist"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.skill.assembly-agent": {
+      "description": "Assembly agent.",
+      "depicts": "Solid monochrome assembly agent symbol with transparent negative space.",
+      "action": "assembly agent",
+      "role": "symbol",
+      "subjects": [
+        "assembly agent"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "profession heading"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.waypoint": {
+      "description": "Waypoint.",
+      "depicts": "Solid monochrome waypoint symbol with transparent negative space.",
+      "action": "waypoint",
+      "role": "symbol",
+      "subjects": [
+        "waypoint"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.home": {
+      "description": "Home.",
+      "depicts": "Solid monochrome home symbol with transparent negative space.",
+      "action": "home",
+      "role": "symbol",
+      "subjects": [
+        "home"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.settlement": {
+      "description": "Settlement.",
+      "depicts": "Solid monochrome settlement symbol with transparent negative space.",
+      "action": "settlement",
+      "role": "symbol",
+      "subjects": [
+        "settlement"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.transit": {
+      "description": "Transit.",
+      "depicts": "Solid monochrome transit symbol with transparent negative space.",
+      "action": "transit",
+      "role": "symbol",
+      "subjects": [
+        "transit"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.workshop": {
+      "description": "Workshop.",
+      "depicts": "Solid monochrome workshop symbol with transparent negative space.",
+      "action": "workshop",
+      "role": "symbol",
+      "subjects": [
+        "workshop"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.clinic": {
+      "description": "Clinic.",
+      "depicts": "Solid monochrome clinic symbol with transparent negative space.",
+      "action": "clinic",
+      "role": "symbol",
+      "subjects": [
+        "clinic"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.market": {
+      "description": "Market.",
+      "depicts": "Solid monochrome market symbol with transparent negative space.",
+      "action": "market",
+      "role": "symbol",
+      "subjects": [
+        "market"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.deposit": {
+      "description": "Deposit.",
+      "depicts": "Solid monochrome deposit symbol with transparent negative space.",
+      "action": "deposit",
+      "role": "symbol",
+      "subjects": [
+        "deposit"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.water": {
+      "description": "Water.",
+      "depicts": "Solid monochrome water symbol with transparent negative space.",
+      "action": "water",
+      "role": "symbol",
+      "subjects": [
+        "water"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.power": {
+      "description": "Power station.",
+      "depicts": "Solid monochrome power station symbol with transparent negative space.",
+      "action": "power station",
+      "role": "symbol",
+      "subjects": [
+        "power station"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.route": {
+      "description": "Route.",
+      "depicts": "Solid monochrome route symbol with transparent negative space.",
+      "action": "route",
+      "role": "symbol",
+      "subjects": [
+        "route"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.mission": {
+      "description": "Mission.",
+      "depicts": "Solid monochrome mission symbol with transparent negative space.",
+      "action": "mission",
+      "role": "symbol",
+      "subjects": [
+        "mission"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.danger": {
+      "description": "Hazard area.",
+      "depicts": "Solid monochrome hazard area symbol with transparent negative space.",
+      "action": "hazard area",
+      "role": "symbol",
+      "subjects": [
+        "hazard area"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    },
+    "veyra:icon.map.camp": {
+      "description": "Camp.",
+      "depicts": "Solid monochrome camp symbol with transparent negative space.",
+      "action": "camp",
+      "role": "symbol",
+      "subjects": [
+        "camp"
+      ],
+      "palette": [
+        "theme-tinted"
+      ],
+      "use_cases": [
+        "places interface"
+      ],
+      "distinction": "Use for the category or interface meaning; individual item previews use their 3D models.",
+      "related_ids": [],
+      "effect": "none"
+    }
+  }
+}

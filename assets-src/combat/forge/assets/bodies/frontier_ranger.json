@@ -1,0 +1,510 @@
+{
+  "schema": 2,
+  "kind": "body",
+  "name": "frontier_ranger",
+  "prompt": null,
+  "tags": [],
+  "created": "2026-10-01",
+  "created_by": "agent:claude",
+  "provenance": "recorded",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "trellis2",
+    "model": "microsoft/TRELLIS.2-4B",
+    "trellis_commit": "75fbf0183001ed9876c8dbb35de6b68552ee08bd",
+    "resolution": 512,
+    "pipeline_type": "512",
+    "seed": 42,
+    "decimation_target_vertices": 25000,
+    "texture_size": 1024,
+    "remesh": true,
+    "texture_baker": "nvdiffrast (NVIDIA Source Code License, non-commercial)",
+    "image": "assets-src/refs/characters/frontier_ranger_v2.png",
+    "image_sha256": "sha256:9aef4cdd486454f482b1fedbbb8f366e98ce825cee28c8036065d4727d5b179a",
+    "lift_sha256": "sha256:ed1d00da8bf5feba2c7c68f77e3d0e3c3a95d64b9043717dd961c9c408d061c7",
+    "post": {
+      "tool": "blender",
+      "script": "rig+export",
+      "version": "Khronos glTF Blender I/O v5.2.40"
+    }
+  },
+  "source": {
+    "path": "assets-src/blender/frontier_ranger.blend",
+    "sha256": "sha256:42e2adbea84e63c8aae94fb3f8f498b5bdb51a983acafc5420896d92d80a8451",
+    "skeleton": null
+  },
+  "recipe": null,
+  "measured": {
+    "frames": null,
+    "fps": null,
+    "duration_s": null,
+    "avg_speed_mps": null,
+    "root_motion": null,
+    "mesh": {
+      "vertices": 25978,
+      "triangles": 24509,
+      "bones_skinned": 55,
+      "lowest_y": -2.4120956e-8,
+      "bounds": [
+        [
+          -0.9069718,
+          -2.4120956e-8,
+          -0.1875065
+        ],
+        [
+          0.90697193,
+          1.8000001,
+          0.18750651
+        ]
+      ]
+    }
+  },
+  "body": {
+    "motion_scale": 1.0,
+    "bones": [
+      {
+        "name": "LeftToeBase",
+        "rest_translation": [
+          0.0,
+          0.142297,
+          0.0
+        ]
+      },
+      {
+        "name": "LeftFoot",
+        "rest_translation": [
+          0.0,
+          0.500423,
+          -0.0
+        ]
+      },
+      {
+        "name": "LeftLeg",
+        "rest_translation": [
+          0.0,
+          0.374327,
+          0.0
+        ]
+      },
+      {
+        "name": "LeftUpLeg",
+        "rest_translation": [
+          0.106023,
+          -0.009658,
+          -0.029429
+        ]
+      },
+      {
+        "name": "RightToeBase",
+        "rest_translation": [
+          0.0,
+          0.142297,
+          -0.0
+        ]
+      },
+      {
+        "name": "RightFoot",
+        "rest_translation": [
+          -0.0,
+          0.500423,
+          -0.0
+        ]
+      },
+      {
+        "name": "RightLeg",
+        "rest_translation": [
+          -0.0,
+          0.374327,
+          0.0
+        ]
+      },
+      {
+        "name": "RightUpLeg",
+        "rest_translation": [
+          -0.106023,
+          -0.009658,
+          -0.029429
+        ]
+      },
+      {
+        "name": "LeftHandEnd",
+        "rest_translation": [
+          0.003442,
+          0.065588,
+          -0.033462
+        ]
+      },
+      {
+        "name": "LeftHandIndex3",
+        "rest_translation": [
+          0.0,
+          0.027531,
+          -0.0
+        ]
+      },
+      {
+        "name": "LeftHandIndex2",
+        "rest_translation": [
+          0.0,
+          0.042356,
+          -0.0
+        ]
+      },
+      {
+        "name": "LeftHandIndex1",
+        "rest_translation": [
+          0.031767,
+          0.079417,
+          0.0
+        ]
+      },
+      {
+        "name": "LeftHandMiddle3",
+        "rest_translation": [
+          0.0,
+          0.029649,
+          0.0
+        ]
+      },
+      {
+        "name": "LeftHandMiddle2",
+        "rest_translation": [
+          0.0,
+          0.045533,
+          0.0
+        ]
+      },
+      {
+        "name": "LeftHandMiddle1",
+        "rest_translation": [
+          0.010589,
+          0.079417,
+          0.0
+        ]
+      },
+      {
+        "name": "LeftHandPinky3",
+        "rest_translation": [
+          -0.0,
+          0.022237,
+          0.0
+        ]
+      },
+      {
+        "name": "LeftHandPinky2",
+        "rest_translation": [
+          0.0,
+          0.034944,
+          0.0
+        ]
+      },
+      {
+        "name": "LeftHandPinky1",
+        "rest_translation": [
+          -0.031767,
+          0.079417,
+          -0.0
+        ]
+      },
+      {
+        "name": "LeftHandRing3",
+        "rest_translation": [
+          -0.0,
+          0.027531,
+          0.0
+        ]
+      },
+      {
+        "name": "LeftHandRing2",
+        "rest_translation": [
+          -0.0,
+          0.042356,
+          -0.0
+        ]
+      },
+      {
+        "name": "LeftHandRing1",
+        "rest_translation": [
+          -0.010589,
+          0.079417,
+          -0.0
+        ]
+      },
+      {
+        "name": "LeftHandThumb3",
+        "rest_translation": [
+          0.0,
+          0.033885,
+          -0.0
+        ]
+      },
+      {
+        "name": "LeftHandThumb2",
+        "rest_translation": [
+          0.0,
+          0.060586,
+          -0.0
+        ]
+      },
+      {
+        "name": "LeftHandThumb1",
+        "rest_translation": [
+          -0.003441,
+          0.050389,
+          0.033462
+        ]
+      },
+      {
+        "name": "LeftHand",
+        "rest_translation": [
+          -0.0,
+          0.246355,
+          0.0
+        ]
+      },
+      {
+        "name": "LeftForeArm",
+        "rest_translation": [
+          -0.0,
+          0.226777,
+          -0.0
+        ]
+      },
+      {
+        "name": "LeftArm",
+        "rest_translation": [
+          0.0,
+          0.170238,
+          0.0
+        ]
+      },
+      {
+        "name": "LeftShoulder",
+        "rest_translation": [
+          0.034276,
+          0.193304,
+          0.012483
+        ]
+      },
+      {
+        "name": "Head",
+        "rest_translation": [
+          0.0,
+          0.126204,
+          -0.0
+        ]
+      },
+      {
+        "name": "Neck",
+        "rest_translation": [
+          0.0,
+          0.242328,
+          -0.022598
+        ]
+      },
+      {
+        "name": "RightHandEnd",
+        "rest_translation": [
+          -0.003441,
+          0.065589,
+          -0.033462
+        ]
+      },
+      {
+        "name": "RightHandIndex3",
+        "rest_translation": [
+          0.0,
+          0.027531,
+          -0.0
+        ]
+      },
+      {
+        "name": "RightHandIndex2",
+        "rest_translation": [
+          0.0,
+          0.042356,
+          -0.0
+        ]
+      },
+      {
+        "name": "RightHandIndex1",
+        "rest_translation": [
+          -0.031767,
+          0.079417,
+          0.0
+        ]
+      },
+      {
+        "name": "RightHandMiddle3",
+        "rest_translation": [
+          -0.0,
+          0.029649,
+          0.0
+        ]
+      },
+      {
+        "name": "RightHandMiddle2",
+        "rest_translation": [
+          -0.0,
+          0.045533,
+          0.0
+        ]
+      },
+      {
+        "name": "RightHandMiddle1",
+        "rest_translation": [
+          -0.010589,
+          0.079417,
+          0.0
+        ]
+      },
+      {
+        "name": "RightHandPinky3",
+        "rest_translation": [
+          0.0,
+          0.022237,
+          -0.0
+        ]
+      },
+      {
+        "name": "RightHandPinky2",
+        "rest_translation": [
+          0.0,
+          0.034944,
+          0.0
+        ]
+      },
+      {
+        "name": "RightHandPinky1",
+        "rest_translation": [
+          0.031767,
+          0.079418,
+          -0.0
+        ]
+      },
+      {
+        "name": "RightHandRing3",
+        "rest_translation": [
+          -0.0,
+          0.027531,
+          0.0
+        ]
+      },
+      {
+        "name": "RightHandRing2",
+        "rest_translation": [
+          0.0,
+          0.042356,
+          0.0
+        ]
+      },
+      {
+        "name": "RightHandRing1",
+        "rest_translation": [
+          0.010589,
+          0.079417,
+          -0.0
+        ]
+      },
+      {
+        "name": "RightHandThumb3",
+        "rest_translation": [
+          -0.0,
+          0.033885,
+          0.0
+        ]
+      },
+      {
+        "name": "RightHandThumb2",
+        "rest_translation": [
+          0.0,
+          0.060586,
+          -0.0
+        ]
+      },
+      {
+        "name": "RightHandThumb1",
+        "rest_translation": [
+          0.003441,
+          0.050389,
+          0.033462
+        ]
+      },
+      {
+        "name": "RightHand",
+        "rest_translation": [
+          0.0,
+          0.246355,
+          0.0
+        ]
+      },
+      {
+        "name": "RightForeArm",
+        "rest_translation": [
+          0.0,
+          0.226777,
+          -0.0
+        ]
+      },
+      {
+        "name": "RightArm",
+        "rest_translation": [
+          -0.0,
+          0.170238,
+          -0.0
+        ]
+      },
+      {
+        "name": "RightShoulder",
+        "rest_translation": [
+          -0.034276,
+          0.193304,
+          0.012483
+        ]
+      },
+      {
+        "name": "Spine3",
+        "rest_translation": [
+          -0.0,
+          0.091784,
+          0.0
+        ]
+      },
+      {
+        "name": "Spine2",
+        "rest_translation": [
+          0.0,
+          0.091784,
+          -0.0
+        ]
+      },
+      {
+        "name": "Spine1",
+        "rest_translation": [
+          -0.0,
+          0.091784,
+          -0.0
+        ]
+      },
+      {
+        "name": "Spine",
+        "rest_translation": [
+          -0.0,
+          0.065068,
+          0.051097
+        ]
+      },
+      {
+        "name": "Hips",
+        "rest_translation": [
+          0.0,
+          0.95441,
+          0.0
+        ]
+      }
+    ]
+  },
+  "events": null,
+  "content_hash": "sha256:b73ae901314305b9682b5e87f75d469c1f987df2f30855111fadcef09813a841",
+  "note": "Accepted seed 42 at the 512 grid after nine-view and rear/shoulder closure review. The 512 grid was chosen because the 1024 cascade opened the thin dark undersuit beneath the plates, including the seat and collar even at a 100000-vertex budget. SkinTokens fit and hip-symmetry gate passed on the first sample; all pre-export checks passed."
+}

@@ -1,0 +1,51 @@
+// A landmark: somewhere striking a trail leaves the road for, about a
+// kilometre off it. Beside a fall, on a gorge's rim, at a lake's shore, on a
+// lone summit. A marker and a bench, perhaps a ruin.
+(
+    id: "strata:landmark",
+    name: "Landmark",
+    rank: 5,
+    per_1000_km2: 14.0,
+    footprint_m: 10.0,
+    blend_m: 24.0,
+    crown: 0.03,
+    max_cut_m: 3.0,
+    spacing: (own_m: 2000.0, others_m: 800.0, settlements_m: 1000.0),
+    ground: (
+        slope_max: 0.3,
+        height_m: (min: 2.0, max: 3500.0),
+        biomes: [(id: "strata:ocean", weight: 0.0)],
+    ),
+    wants: [
+        // Something to see.
+        (any: [
+            (feature: "fall", size_m: 15.0, within_m: 150.0, fade_m: 250.0),
+            (feature: "gorge", size_m: 50.0, within_m: 250.0, fade_m: 250.0),
+            (feature: "lake", size_m: 500.0, within_m: 100.0, fade_m: 200.0),
+            (feature: "summit", at_least: 50.0, full: 160.0),
+        ], weight: 3.0, required: true),
+        // A short walk off where a road will run: near, not at, a place.
+        (any: [
+            (feature: "kind", kind: "strata:hamlet", beyond_m: 700.0, within_m: 2000.0, fade_m: 1500.0),
+            (feature: "kind", kind: "strata:town", beyond_m: 1000.0, within_m: 3000.0, fade_m: 2000.0),
+            (feature: "kind", kind: "strata:station", beyond_m: 700.0, within_m: 2000.0, fade_m: 1500.0),
+            (feature: "settlement", beyond_m: 1000.0, within_m: 4000.0, fade_m: 2000.0),
+        ], weight: 1.5),
+    ],
+    facing: "view",
+    road: "trail",
+    group: "veyra:landmark",
+    names: (
+        onsets: ["b", "c", "d", "f", "g", "h", "k", "l", "m", "n", "r", "s", "t", "v", "w", "gr", "dr", "sh"],
+        vowels: ["a", "e", "i", "o", "u", "ea", "ow"],
+        codas: ["", "n", "r", "l", "m", "ck", "rn", "th"],
+        syllables: [1, 2],
+        patterns: ["{root} Stone", "{root}'s Rock", "{root} Cairn"],
+        by_feature: [
+            (feature: "fall", patterns: ["{root} Falls", "{root} Force", "{root}'s Leap"]),
+            (feature: "gorge", patterns: ["{root} Gorge", "{root} Rim", "{root} Chasm"]),
+            (feature: "lake", patterns: ["{root} Tarn", "{root} Water", "{root} Mere"]),
+            (feature: "summit", patterns: ["{root} Knoll", "{root} Tor", "{root} Height", "Mount {root}"]),
+        ],
+    ),
+)

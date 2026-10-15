@@ -1,0 +1,23 @@
+[package]
+name = "veyra-flora"
+description = "Veyra's plants as ashlar props: what the content step bakes for the forests."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+# No Bevy: the content step builds props from this, and the server may read
+# the collider shapes it describes.
+[dependencies]
+ashlar.workspace = true
+# The bark tiles the UVs repeat by, shared with the graphs that bake them.
+veyra-materials.workspace = true
+
+# The review test writes its contact sheets as PNGs.
+[dev-dependencies]
+image.workspace = true
+
+[lints]
+workspace = true

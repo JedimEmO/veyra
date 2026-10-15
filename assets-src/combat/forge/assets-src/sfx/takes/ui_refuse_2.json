@@ -1,0 +1,52 @@
+{
+  "forge_record": 2,
+  "kind": "sfx",
+  "tool": "moss_sound_effect",
+  "created": "2026-10-02",
+  "created_by": "unknown",
+  "backend": {
+    "name": "moss_sfx",
+    "commit": null,
+    "python": null,
+    "torch": null,
+    "model": "OpenMOSS-Team/MOSS-SoundEffect-v2.0",
+    "model_revision": null,
+    "executor": "comfy",
+    "comfyui_commit": "169fcf35a2fc163fec31338b816503ddac0d3fcf",
+    "workflow_sha256": "sha256:ac0d90d698c9dae3ae4f5cc40980db2a79c368ddf73c164d2e6c3367c1f4191f",
+    "packs": {
+      "https://github.com/diodiogod/TTS-Audio-Suite": "fab00263fbdcdaddd4c721d1b560e1a08b6025ea"
+    }
+  },
+  "inputs": [
+    {
+      "role": "prompt",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "prompt": "a short dull low electronic denial buzz from a helmet display, muted, dry"
+    }
+  ],
+  "params": {
+    "cfg": 4.0,
+    "duration_s": 0.5,
+    "model": "OpenMOSS-Team/MOSS-SoundEffect-v2.0",
+    "seed": 1130,
+    "steps": 100,
+    "workflow": "sfx.api.json"
+  },
+  "outputs": [
+    {
+      "path": "out/audio/sfx/ui_refuse_2.wav",
+      "sha256": "sha256:084fd699f3de1ff2a470bc7f951f09e24677d12180ce27fcb7699a8d75f064d3",
+      "bytes": 48078
+    }
+  ],
+  "measured": {
+    "channels": 1,
+    "duration_s": 0.5,
+    "sample_rate": 48000
+  },
+  "fake": false,
+  "note": null
+}

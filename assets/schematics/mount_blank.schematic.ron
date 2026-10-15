@@ -1,0 +1,20 @@
+// The mount blank (crafting.md, 4.2). Its temper reads the same figures as
+// the carbine's moddability line, the frame's Hardness (0.6) and Strength
+// (0.4), which is why a blank can carry a frame's hardness to a weapon that
+// already exists. Taught by Weaponsmith: Frames 2. Read by
+// `strata_registry::schematic`; in no world version and no handshake.
+(
+    id: "veyra:schematic.mount_blank",
+    makes: "veyra:component.mount_blank",
+    complexity: 1,
+    profession: Some("weaponsmith.frames.2"),
+    slots: [
+        (id: "metal", name: "Metal", takes: Class("strata:structural_metal"), units: 20),
+    ],
+    lines: [
+        (line: "temper", from: [
+            (slot: "metal", stat: Attribute(Hardness), weight: 0.6),
+            (slot: "metal", stat: Attribute(Strength), weight: 0.4),
+        ]),
+    ],
+)

@@ -1,0 +1,20 @@
+// Open sea. Claims everything below the continental shelf; the floor is
+// gentle so the shelf and the coast do the shaping.
+(
+    id: "strata:ocean",
+    name: "Ocean",
+    climate: (
+        temperature: (min: 0.0, max: 1.0),
+        moisture: (min: 0.0, max: 1.0),
+        elevation: (min: 0.0, max: 0.45),
+    ),
+    relief: (kind: "plains", amplitude_m: 25.0, wavelength_m: 3000.0, octaves: 2),
+    surface: (material: "strata:sand", slope_material: "strata:rock"),
+    tint: (0.10, 0.25, 0.50),
+    // The ground's palette colour (ticket 0006): the shelf, a little cooler.
+    ground: (0.10, 0.27, 0.50),
+    // Seen from a boat or the shore: the coast's cool, a touch
+    // further, so the bay does not warm as the camera crosses the
+    // shelf.
+    grade: (temperature: -0.01, saturation: 0.95, gain: 1.03),
+)

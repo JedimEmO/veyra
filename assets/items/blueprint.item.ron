@@ -1,0 +1,15 @@
+// The production blueprint (crafting.md, 5.4): one item for every
+// blueprint a household records. What a blueprint makes, its lines, what
+// each slot asks for and the runs it has left are the household's record of
+// it, kept under the stack's batch number, which is the blueprint's number;
+// the stack names who recorded it. A single, since each is its own record,
+// with no lines and no price: it is recorded at a workbench, never bought.
+// Named by `assets/crafting/factory.ron`.
+(
+    id: "veyra:blueprint.production",
+    name: "Production blueprint",
+    maker: "the household",
+    kind: Blueprint,
+    stack: 1,
+    icon: (shape: Slab, color: "#7FD1FF", symbol: Some("veyra:icon.crafting.schematic")),
+)

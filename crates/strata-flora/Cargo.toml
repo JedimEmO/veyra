@@ -1,0 +1,28 @@
+[package]
+name = "strata-flora"
+description = "Vegetation placement for sci-fi-scrolls: the plants of one 64 m cell as a pure function of the world, the species registry and the seed. No Bevy."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+strata-core = { workspace = true }
+strata-registry = { workspace = true }
+strata-worldgen = { workspace = true }
+serde = { workspace = true }
+ron = { workspace = true }
+thiserror = { workspace = true }
+# Correctly specified transcendentals, the same bits on every OS: a cliff's
+# facing and a child's bearing decide where a collider stands.
+libm = { workspace = true }
+
+[dev-dependencies]
+proptest = { workspace = true }
+insta = { workspace = true }
+rayon = { workspace = true }
+pretty_assertions = { workspace = true }
+
+[lints]
+workspace = true

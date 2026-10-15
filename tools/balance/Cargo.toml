@@ -1,0 +1,28 @@
+[package]
+name = "balance"
+description = "The duel harness: bouts between policies over the real sim and physics, headless, over a grid of combat table values, as CSV."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+# A dev tool, like tools/content: it links the sim and the physics (the one
+# model) and never a render crate; `just server-check` runs its graph
+# through the same denylist as the server binary's.
+[dependencies]
+strata-core.workspace = true
+strata-registry.workspace = true
+strata-sim.workspace = true
+strata-stream.workspace = true
+strata-physics.workspace = true
+strata-worldgen.workspace = true
+bevy = { workspace = true, features = ["std", "bevy_state"] }
+anyhow.workspace = true
+clap.workspace = true
+ron.workspace = true
+serde.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,22 @@
+// A conservation body: it keeps the monitoring stations and the places
+// worth seeing. Its names are long vowels set in a word of keeping.
+(
+    id: "strata:conservation",
+    name: "Conservation body",
+    nature: Conservation,
+    holds: [
+        (kind: "strata:station", weight: 3.0, reach_m: 2500.0),
+        (kind: "strata:landmark", weight: 2.0, reach_m: 2000.0),
+        (kind: "strata:wreck_works", weight: 1.0, reach_m: 800.0, seat: false),
+    ],
+    per_mass: (sites_each: 25.0, least: 1, most: 500),
+    palette: ["#0F5F4F", "#2FD0B8", "#7FE08A", "#2E8F3A", "#B8E86A", "#5FB8D8"],
+    symbol: "veyra:icon.map.water",
+    names: (
+        onsets: ["l", "m", "n", "r", "s", "v", "th", "ar", "el", "al", "ol"],
+        vowels: ["a", "e", "i", "o", "u", "a", "e", "o"],
+        codas: ["", "n", "r", "l", "s", "th", "m"],
+        syllables: (2, 3),
+        patterns: ["{root} Trust", "the {root} Institute", "{root} Watch"],
+    ),
+)

@@ -1,0 +1,122 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "scrapyard_rifle_fire",
+  "prompt": "A person fires a powerful shotgun held with both hands once, the strong recoil pushes the shoulder backward, then the person brings the gun back up to aim.",
+  "tags": [
+    "scrapyard",
+    "combat"
+  ],
+  "created": "2026-09-04",
+  "created_by": "agent:codex",
+  "provenance": "recorded",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": "https://github.com/nv-tlabs/ardy",
+    "commit": "693f74d13b3d04a0a22ce127ee79c929dd89756b",
+    "model": "core",
+    "seed": 31,
+    "duration_s": 4.0,
+    "cfg": 2.0,
+    "sample": 3,
+    "sweep_take": "heavy_fire__d4_c2_s31_3.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/scrapyard_rifle_fire.npz",
+    "sha256": "sha256:24094ce3798d6f86e8d9691b30c6f32deb366586eb64aee4f35a50d9d2073e54",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 0.45,
+    "trim_end_s": 2.15,
+    "auto_trim": null,
+    "in_place": "strip",
+    "y_mode": "off",
+    "loop": false,
+    "loop_blend_s": 0.0,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": "0:0,0.2:0.08,0.65:0.18,1.35:0.55",
+    "clip": "scrapyard_rifle_fire"
+  },
+  "measured": {
+    "frames": 12,
+    "fps": 20.0,
+    "duration_s": 0.55,
+    "avg_speed_mps": 0.3385322,
+    "root_motion": {
+      "net_m": [
+        -0.023,
+        0.01
+      ],
+      "direction_deg": null,
+      "peak_speed_mps": 0.945,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          0.004,
+          -0.004
+        ],
+        [
+          -0.013,
+          -0.013
+        ],
+        [
+          -0.032,
+          -0.056
+        ],
+        [
+          -0.058,
+          -0.051
+        ],
+        [
+          -0.062,
+          -0.044
+        ],
+        [
+          -0.061,
+          -0.035
+        ],
+        [
+          -0.058,
+          -0.019
+        ],
+        [
+          -0.052,
+          0.001
+        ],
+        [
+          -0.041,
+          0.012
+        ],
+        [
+          -0.03,
+          0.013
+        ],
+        [
+          -0.023,
+          0.01
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [
+    {
+      "t": 0.08,
+      "t_src": 0.65,
+      "name": "fire",
+      "origin": "agent:codex",
+      "audio": null
+    }
+  ],
+  "content_hash": "sha256:475bc6bd78291003426934ef11b6d357001f0f12db7807f17bf808e39b4b9d07",
+  "note": "Single heavy shot; faster recoil and recovery authored through the recorded time map."
+}

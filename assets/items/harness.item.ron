@@ -1,0 +1,16 @@
+// The harness: the conductor loom of a feed (crafting.md, 5.2). A
+// component with one line, sold at store grade (every line 500) and made
+// from a conductor by `veyra:schematic.harness`. The price is what a bench buys one
+// for when a slot wants it and the stock has none.
+(
+    id: "veyra:component.harness",
+    name: "Harness",
+    maker: "the dealer",
+    kind: Component,
+    stack: 20,
+    price: Some(80),
+    lines: [
+        (id: "conductance", name: "Conductance"),
+    ],
+    icon: (shape: Gem, color: "#E08A5B", symbol: Some("veyra:icon.crafting.component")),
+)

@@ -1,0 +1,57 @@
+// Sandstone country: flat beds, mesas and stepped canyons, red and buff.
+// Hard sandstones stand as cliffs and caps, soft shales between them weather
+// back to slopes. Where a range rises through it, its core is granite, as the
+// laccoliths of the Colorado Plateau are.
+(
+    id: "strata:sandstone",
+    name: "Sandstone country",
+    tint: (0.95, 0.55, 0.22),
+    deal_order: 1,
+    in_ranges: Some("strata:granite"),
+    rock: (
+        // Its own layer (red and buff cross-bedded sets), baked by `just content`.
+        face: "strata:sandstone",
+        bare_slope: 0.7,
+        far_tint: (1.25, 0.95, 0.75),
+        // 0.8 in the design. 1 for now, as its order of work has it for
+        // step 3b, so that bare badlands are that step's one visible change;
+        // 0.8 waits for a step that judges it on screen.
+        cover: 1.0,
+    ),
+    // Step 4 (ticket 0004): damped fbm, benches with short bluffs between
+    // them. The amplitudes are ten times the design's (18 against 1.8 on the
+    // plains) because fbm rarely leaves the middle fifth of its range, and
+    // the damping 1.5 because at the design's 2 to 3, with this kernel's
+    // steep slopes, the plains lay flat but for creases. Flat 29.8 % and
+    // steep 5.3 % of its own ground (25.5 and 3.3 before); mesas with cliffs
+    // wait for step 5's beds. A third of its ground is tundra, hence the
+    // `ridges` rule. The damping above is the plains'; the hills' is 2.0,
+    // the design's 1.5 raised. Also away from the design, with no reason
+    // step 4 recorded (its record names the amplitudes and the plains'
+    // damping only; found by its review): the plains' wavelength 3.5 (1.5),
+    // the hills' damping 2.0 (1.5), and the `ridges` rule's numbers, set by
+    // eye on the maps.
+    relief: [
+        (class: "plains", shape: "damped", amplitude: 18.0, wavelength: 3.5, erosion: 0.8, damping: 1.5),
+        (class: "hills", shape: "damped", amplitude: 1.2, wavelength: 1.2, erosion: 1.0, damping: 2.0),
+        (class: "ridges", shape: "damped", amplitude: 10.0, wavelength: 2.8, erosion: 0.8, damping: 1.5),
+    ],
+    // Step 5 (ticket 0004): the design's beds, with the slope gate at 0.05 to
+    // 0.25 (the default 0.15 to 0.5): the gate reads the coarse slope, which
+    // is continuous where the ground's own is not, and gentler than it on
+    // sandstone's short bluffs; at the default its risers were 2 % of its
+    // steep ground. 9.5 % since.
+    beds: (
+        thickness_m: (min: 8.0, max: 40.0),
+        hard_share: 0.45,
+        strength: 0.85,
+        dip_deg: (min: 0.0, max: 3.0),
+        slope_gate: (min: 0.05, max: 0.25),
+    ),
+    water: (section: "stepped", keep_pits_m: 30.0, hang: 0.9),
+    kit: [
+        (species: "strata:sandstone_cliff", weight: 1.0),
+        (species: "strata:sandstone_boulder", weight: 1.0),
+        (species: "strata:sandstone_stone", weight: 1.0),
+    ],
+)

@@ -1,0 +1,16 @@
+// The mount blank: a stock of metal cut and tempered to be worked into a
+// weapon's mounts (crafting.md, 4.2). A smith spends one to rework a weapon
+// that already exists. Its one line is the temper, the hardness a rework can
+// carry to the weapon. Sold at store grade (500) until a schematic makes one.
+(
+    id: "veyra:component.mount_blank",
+    name: "Mount blank",
+    maker: "the dealer",
+    kind: Component,
+    stack: 20,
+    price: Some(150),
+    lines: [
+        (id: "temper", name: "Temper"),
+    ],
+    icon: (shape: Gem, color: "#8FA3B5", symbol: Some("veyra:icon.crafting.component")),
+)

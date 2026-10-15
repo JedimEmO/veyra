@@ -1,0 +1,236 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "death",
+  "prompt": "A person collapses to the ground.",
+  "tags": [
+    "sample"
+  ],
+  "created": "2026-08-23",
+  "created_by": "human",
+  "provenance": "reconstructed",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": null,
+    "commit": null,
+    "model": null,
+    "seed": null,
+    "duration_s": null,
+    "cfg": null,
+    "sample": null,
+    "sweep_take": "gen_death.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/death.npz",
+    "sha256": "sha256:6ff56a1e8cd197dc538a30670454fb453f31ff997d6e48b21a94ffc53b967b0f",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 0.5,
+    "trim_end_s": 1.55,
+    "auto_trim": null,
+    "in_place": "off",
+    "y_mode": "off",
+    "loop": false,
+    "loop_blend_s": 0.0,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": null,
+    "clip": "death"
+  },
+  "measured": {
+    "frames": 39,
+    "fps": 20.0,
+    "duration_s": 1.9,
+    "avg_speed_mps": 0.5594071,
+    "root_motion": {
+      "net_m": [
+        -0.191,
+        -0.939
+      ],
+      "direction_deg": -10.122,
+      "peak_speed_mps": 1.601,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.001,
+          -0.007
+        ],
+        [
+          -0.0,
+          -0.018
+        ],
+        [
+          0.002,
+          -0.031
+        ],
+        [
+          0.004,
+          -0.048
+        ],
+        [
+          0.005,
+          -0.069
+        ],
+        [
+          0.005,
+          -0.094
+        ],
+        [
+          0.006,
+          -0.12
+        ],
+        [
+          0.006,
+          -0.149
+        ],
+        [
+          0.008,
+          -0.181
+        ],
+        [
+          0.009,
+          -0.215
+        ],
+        [
+          0.011,
+          -0.249
+        ],
+        [
+          0.015,
+          -0.277
+        ],
+        [
+          0.021,
+          -0.292
+        ],
+        [
+          0.027,
+          -0.291
+        ],
+        [
+          0.031,
+          -0.28
+        ],
+        [
+          0.032,
+          -0.278
+        ],
+        [
+          0.032,
+          -0.292
+        ],
+        [
+          0.03,
+          -0.321
+        ],
+        [
+          0.024,
+          -0.357
+        ],
+        [
+          0.016,
+          -0.399
+        ],
+        [
+          0.004,
+          -0.451
+        ],
+        [
+          -0.012,
+          -0.514
+        ],
+        [
+          -0.031,
+          -0.591
+        ],
+        [
+          -0.049,
+          -0.669
+        ],
+        [
+          -0.068,
+          -0.743
+        ],
+        [
+          -0.086,
+          -0.808
+        ],
+        [
+          -0.1,
+          -0.859
+        ],
+        [
+          -0.109,
+          -0.889
+        ],
+        [
+          -0.112,
+          -0.9
+        ],
+        [
+          -0.122,
+          -0.919
+        ],
+        [
+          -0.135,
+          -0.932
+        ],
+        [
+          -0.15,
+          -0.941
+        ],
+        [
+          -0.164,
+          -0.948
+        ],
+        [
+          -0.177,
+          -0.95
+        ],
+        [
+          -0.185,
+          -0.949
+        ],
+        [
+          -0.19,
+          -0.946
+        ],
+        [
+          -0.192,
+          -0.943
+        ],
+        [
+          -0.191,
+          -0.939
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [
+    {
+      "t": 1.65,
+      "t_src": 2.15,
+      "name": "footstep_l",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 1.8,
+      "t_src": 2.3,
+      "name": "footstep_l",
+      "origin": "contacts",
+      "audio": null
+    }
+  ],
+  "content_hash": "sha256:05c972c4ab25651e2fee5526c68b9b21fbc8c3fa35f3f7a7779c0b0c8c76e43e",
+  "note": "migrated from the old repository's gen_death (sweep file death__d4_c2_s0_1.npz; no take record survives, so seed, cfg and duration are unknown); trims found by the old action search"
+}

@@ -1,0 +1,6 @@
+* procedural materials: Substance Designer-style graphs, reusable generators, parameterized finishes
+* decals: signs, markings, grime, leaks, repairs and damage
+* world adaptation: fit buildings to terrain with foundations, supports and entrance transitions
+* procedural roads/paths: connect buildings and settlements, follow terrain
+* geometry attachment points: extend sockets for snapping modules, attaching props and connecting services
+* functional parts: moving doors, breakable vents, interaction states and collision updates

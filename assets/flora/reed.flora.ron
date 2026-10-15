@@ -1,0 +1,40 @@
+// Reeds on the wet bank of lakes and wide rivers (ticket 0005, step 8):
+// within 0.7 m over the water's surface where its edge reaches, by a lake
+// or a river 6 m wide or more, never by a fall or a creek. Dressing: the
+// client's alone, placed after and thinned below every other plant so it
+// moves none, which is why a server places none and the world's version
+// leaves it out.
+(
+    id: "strata:reed",
+    name: "Reeds",
+    kind: "bush",
+    dressing: true,
+    biomes: [
+        (biome: "strata:plains", weight: 0.9),
+        (biome: "strata:forest", weight: 0.85),
+        (biome: "strata:coast", weight: 0.8),
+        (biome: "strata:highlands", weight: 0.6),
+        (biome: "strata:savanna", weight: 0.45),
+        (biome: "strata:tundra", weight: 0.2),
+    ],
+    spacing_m: 1.5,
+    slope_max: 0.35,
+    altitude_m: (min: 0.3, max: 1600.0),
+    sea_clearance_m: 0.03,
+    moisture: (min: 0.15, max: 1.0),
+    // A reed bed is where the water is, whatever the ground round it holds.
+    cover_floor: 1.0,
+    size: (min: 0.8, max: 1.15),
+    exclusion_m: 0.55,
+    tint_dry: (0.24, 0.32, 0.1),
+    tint_lush: (0.24, 0.32, 0.1),
+    ground: (bank_m: 0.7, bank_width_min_m: 6.0),
+    // Beds along the shore with open water's edge between them.
+    cluster: (radius_m: 9.0, clumps_per_ha: 30.0, patch_m: 40.0, patch_cover: 0.65),
+    tree: (
+        form: "reed",
+        height_m: (min: 1.4, max: 2.1),
+        bark: "plain",
+        variants: 6,
+    ),
+)

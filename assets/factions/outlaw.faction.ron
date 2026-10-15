@@ -1,0 +1,21 @@
+// An outlaw band: it holds the camps of remote ground, a couple apiece. Its
+// names are blunt, set in a word of company.
+(
+    id: "strata:outlaw",
+    name: "Outlaw band",
+    nature: Outlaw,
+    holds: [
+        (kind: "strata:wild_camp", weight: 1.0, reach_m: 1200.0),
+    ],
+    // A band holds about two camps.
+    per_mass: (sites_each: 2.0, least: 1, most: 500),
+    palette: ["#4B1F6B", "#8A3A1F", "#6A2A8A", "#B5502A", "#2F1A45", "#7A3F5F"],
+    symbol: "veyra:icon.map.camp",
+    names: (
+        onsets: ["b", "d", "g", "j", "k", "r", "s", "v", "sk", "gr"],
+        vowels: ["a", "e", "i", "o", "u"],
+        codas: ["", "k", "x", "ck", "g", "d", "rn"],
+        syllables: (1, 2),
+        patterns: ["the {root} Band", "{root}'s Crew", "the {root} Gang"],
+    ),
+)

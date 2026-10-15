@@ -1,0 +1,66 @@
+// Per melee class: how it plays the cut rows of `actions.ron`. The body has
+// one set of cut clips, so a class does not own a moveset yet: it scales the
+// Light, Followup and Heavy rows, and the same clips play slower or faster
+// while the same sweep reaches further. A Blade is the rows exactly as
+// `actions.ron` has them (every factor one), which is what a sheet's boxes
+// are written against; a box still changes the row first and the class
+// scales what is left.
+//
+// blade_reach_m: metres the baked sweep reaches from the hand, used only to
+// say a reach in metres.
+// reach: a factor on how far along and beyond the baked blade the sweep's
+// points lie.
+// light is applied to Light and Followup, heavy to Heavy. time scales
+// contact_start, contact_end, duration and dodge_cancel together; damage,
+// posture, stamina and travel scale the row's own figures.
+// swing_posture: the share of incoming posture damage the holder takes while
+// one of its own cuts is under way (one is no protection).
+//
+// caught: what a cut made with a melee weapon (a light, a follow up, a heavy,
+// an ability's strike) multiplies on a bearer whose hand holds a gun and whose
+// guard does not meet it: a gun is no guard. Posture and damage are factors
+// on the cut's own, stagger on the length of the stagger when that cut is the
+// one that breaks the bearer; a bolt, or a cut on a melee bearer, never reads
+// it.
+//
+// The guard is the aim button held with a melee weapon in hand, a Ready
+// actor's state that any other action ends.
+// parry_rest: seconds a guard must have been down before raising it can
+// parry again, so a hammered button is not a standing parry.
+// guard_regen: the share of stamina regeneration kept while the guard is up.
+// guard, per class: share is the part of a hit's damage a guard takes off;
+// arc the half angle, in degrees either side of the facing, a hit must come
+// from to meet it; stamina what a point of damage taken off costs; posture
+// the part of a hit's posture damage that still lands through it; parry the
+// seconds after it is raised in which a hit is parried; riposte the posture
+// damage a parried cut gives its attacker.
+(
+    version: 4,
+    blade_reach_m: 1.7,
+    parry_rest: 0.5,
+    guard_regen: 0.35,
+    caught: (posture: 1.6, damage: 1.0, stagger: 1.5),
+    classes: {
+        Blade: (
+            reach: 1.0,
+            light: (time: 1.0, damage: 1.0, posture: 1.0, stamina: 1.0, travel: 1.0),
+            heavy: (time: 1.0, damage: 1.0, posture: 1.0, stamina: 1.0, travel: 1.0),
+            swing_posture: 1.0,
+            guard: (share: 0.60, arc: 70, stamina: 1.40, posture: 0.40, parry: 0.20, riposte: 70),
+        ),
+        Greatblade: (
+            reach: 1.3,
+            light: (time: 1.75, damage: 1.65, posture: 1.70, stamina: 1.65, travel: 1.0),
+            heavy: (time: 1.35, damage: 1.65, posture: 1.65, stamina: 1.50, travel: 1.0),
+            swing_posture: 0.3,
+            guard: (share: 0.80, arc: 80, stamina: 0.70, posture: 0.20, parry: 0.10, riposte: 90),
+        ),
+        Glaive: (
+            reach: 1.75,
+            light: (time: 1.35, damage: 1.15, posture: 1.00, stamina: 1.20, travel: 1.2),
+            heavy: (time: 1.20, damage: 1.10, posture: 1.00, stamina: 1.20, travel: 1.4),
+            swing_posture: 1.0,
+            guard: (share: 0.50, arc: 60, stamina: 1.70, posture: 0.50, parry: 0.14, riposte: 60),
+        ),
+    },
+)

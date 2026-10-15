@@ -1,0 +1,424 @@
+// Active skills: what a press of a place on the bar does, and the statuses
+// some of them put on their user. A member knows an ability through a box
+// (`Grant`), slots it on a bar of `bar.weapon` places per weapon class and
+// `bar.utility` places that stay, and presses it. It costs stamina, starts
+// its cooldown at the press and commits the actor for `length` seconds.
+//
+// Statuses: what a status does, from a fixed set of fields, each left out
+// when it does nothing. `tight_cone`: the bearer's cone is its aimed cone at
+// its tightest, moving or not, aiming or not, with no bloom. `posture_taken`:
+// a factor on the posture damage the bearer takes. `damage_taken`: a factor
+// on the damage the bearer takes, after any guard. `says` is the one line a
+// card shows. `pace`: a share of the bearer's moving speed (walking; the
+// travel of a cut or a dodge is not scaled, and a sprint is not kept, as
+// with any pace under 1). `shield_locked`: the shield does
+// not recover while it lasts, and its wait starts over when it ends.
+// `disarmed`: the bearer can begin no shot, no cut and no ability, but may
+// move, dodge, guard, reload and swap. `reflects`: a bolt the bearer's guard
+// blocks or parries is sent back at its shooter with that share of its damage
+// and posture, once.
+//
+// Abilities:
+//   slot: Weapon (a place of the class in hand) or Utility (any weapon).
+//   works_with: the classes it may be slotted for and used with; for a
+//     utility, the classes it needs in hand, empty for any.
+//   stamina, cooldown (seconds), windup (seconds before the effect),
+//   length (seconds of the whole commitment, at least the windup), cancel
+//   (seconds after which a dodge may cut it short), pace (the share of
+//   walking speed kept during it).
+//   armed: the trigger fires as usual during the commitment.
+//   effect:
+//     Cut(action)   begins that cut by its own row in actions.ron; the
+//                   ability's stamina, windup, length, cancel and pace are
+//                   left out, only its cooldown is its own.
+//     Shot(rounds, gap, cone, damage, posture, bloom, and the optional
+//          on_hit, jump, blast, breach)
+//                   at the windup's end the weapon fires `rounds` bolts, `gap`
+//                   seconds apart, each taking a round of the magazine;
+//                   cone is Aimed (the weapon's aimed cone whatever the
+//                   stance) or Exact (none); damage and posture are factors on
+//                   the weapon's own; bloom false means the bolts neither
+//                   read nor add bloom. Hip is the weapon's hip cone as it
+//                   stands (its bloom too when bloom is true).
+//                   on_hit(status, seconds): put on whoever a bolt hits and
+//                   is not guarded against (a blocked, parried or broken
+//                   hit carries none); a bolt at falloff's far end carries
+//                   it whole, only its damage is a share.
+//                   jump(radius, share): on its first hit on a hostile the
+//                   bolt strikes the nearest other living hostile within
+//                   `radius` metres, once, at `share` of its damage and
+//                   posture, if a line of sight reaches it (a wall in the
+//                   way means no jump, not the next nearest); the jump
+//                   never returns to the first and carries no status.
+//                   blast(radius, damage, posture): at the first contact,
+//                   with an actor or the world, every living hostile within
+//                   `radius` metres takes that blow once, the one struck
+//                   included, never the user or its side.
+//                   breach: the bolt empties what is left of its target's
+//                   shield before its damage is counted.
+//     Strike(reach, arc, damage, posture)
+//                   at the windup's end everything hostile within `reach`
+//                   metres and `arc` degrees either side of the facing takes
+//                   that blow once, as a cut does. `scaled`: reach is a
+//                   factor on the weapon in hand's and damage and posture
+//                   factors on its class's light cut, so one row serves two
+//                   classes. `on_hit` as a Shot has it.
+//     Hit(damage, posture, status, seconds)
+//                   one attack with whatever is in hand that puts a status on
+//                   what it lands on unguarded: with a gun one aimed bolt, a
+//                   round of the magazine, factors on the weapon's own; with
+//                   a melee weapon a scaled strike at the weapon's reach in
+//                   the `hit_arc` below, factors on the light cut.
+//     Move(distance, seconds, along, then, cover)
+//                   from the windup's end the user is carried `distance`
+//                   metres over `seconds` by the character step (a wall or
+//                   a body stops it), along Aim (the facing at the press) or
+//                   Input (the way being walked, else the facing); `then` is
+//                   a strike landed where the movement ends or is stopped.
+//                   `cover` (arc, share): while the movement lasts a bolt
+//                   from within `arc` degrees either side of its direction
+//                   is met as a block that takes `share` of its damage and
+//                   all of its posture, at no stamina; a Reflecting user
+//                   returns it as any blocked bolt.
+//                   The length is at least the windup plus the seconds.
+//     Own(what)     at the windup's end, on the user: Reload, Shield (the
+//                   shield's wait before it recovers ends now) or
+//                   Status(id, seconds). With a length of nought it is
+//                   instant: paid, cooled down and applied in the tick of
+//                   the press, committing the user to nothing (no other
+//                   effect may have a length of nought).
+(
+    version: 5,
+    bar: (weapon: 3, utility: 2),
+    // The arc in degrees of the strike a Hit makes with a melee weapon.
+    hit_arc: 40.0,
+    statuses: [
+        (
+            id: "focused",
+            name: "Focused",
+            icon: "veyra:icon.ability.focused",
+            says: "Your shots leave in the tightest cone, moving or not.",
+            tight_cone: true,
+        ),
+        (
+            id: "fortified",
+            name: "Fortified",
+            icon: "veyra:icon.ability.fortified",
+            says: "You take half the damage of every blow and nothing staggers you.",
+            posture_taken: Some(0.0),
+            damage_taken: Some(0.5),
+        ),
+        (
+            id: "slowed",
+            name: "Slowed",
+            icon: "veyra:icon.ability.slowed",
+            says: "You move at a fraction of your speed.",
+            pace: Some(0.6),
+        ),
+        (
+            id: "shield_broken",
+            name: "Shield broken",
+            icon: "veyra:icon.ability.shield-broken",
+            says: "Your shield does not recover.",
+            shield_locked: true,
+        ),
+        (
+            id: "disarmed",
+            name: "Disarmed",
+            icon: "veyra:icon.ability.silenced",
+            says: "You cannot fire, cut or use an ability, but you can still move, dodge, guard, reload and swap.",
+            disarmed: true,
+        ),
+        (
+            id: "reflecting",
+            name: "Reflecting",
+            icon: "veyra:icon.ability.reflect-shot",
+            says: "A bolt your guard meets goes back at whoever fired it, at twice its strength.",
+            reflects: Some(2.0),
+        ),
+    ],
+    abilities: [
+        (
+            id: "heavy_cut",
+            name: "Heavy cut",
+            icon: "veyra:icon.ability.heavy-cut",
+            says: "The slow cut that breaks posture. Press it on a foe that stands still, where a quick cut would be parried.",
+            slot: Weapon,
+            works_with: [Blade, Greatblade, Glaive],
+            cooldown: 0.0,
+            effect: Cut(Heavy),
+        ),
+        (
+            id: "butt_strike",
+            name: "Butt strike",
+            icon: "veyra:icon.ability.pommel-strike",
+            says: "A quick blow with the stock that staggers a foe in front of you whose guard is down. Press it as a foe inside your gun begins its cut.",
+            slot: Weapon,
+            works_with: [Carbine, Pistol, Rifle],
+            stamina: 20.0,
+            cooldown: 6.0,
+            windup: 0.12,
+            length: 0.40,
+            cancel: 0.30,
+            pace: 0.3,
+            effect: Strike(reach: 2.2, arc: 50.0, damage: 8.0, posture: 105.0),
+        ),
+        (
+            id: "precision_shot",
+            name: "Precision shot",
+            icon: "veyra:icon.ability.precision-shot",
+            says: "A short wind-up, then one bolt that goes exactly where you point it. Worth it on a foe that stands still.",
+            slot: Weapon,
+            works_with: [Pistol],
+            stamina: 25.0,
+            cooldown: 8.0,
+            windup: 0.35,
+            length: 0.65,
+            cancel: 0.50,
+            pace: 0.3,
+            effect: Shot(rounds: 1, gap: 0.0, cone: Exact, damage: 2.2, posture: 1.5, bloom: false),
+        ),
+        (
+            id: "aimed_burst",
+            name: "Aimed burst",
+            icon: "veyra:icon.ability.aimed-burst",
+            says: "Quick rounds in the aimed cone with no bloom. Worth it when you can hold the target for a moment.",
+            slot: Weapon,
+            works_with: [Carbine],
+            stamina: 25.0,
+            cooldown: 10.0,
+            windup: 0.20,
+            length: 0.75,
+            cancel: 0.65,
+            pace: 0.4,
+            effect: Shot(rounds: 5, gap: 0.08, cone: Aimed, damage: 1.0, posture: 1.0, bloom: false),
+        ),
+        (
+            id: "focus",
+            name: "Focus",
+            icon: "veyra:icon.ability.calibrate-optic",
+            says: "Closes your cone at once for a few seconds, moving or not. Worth it when you have to shoot on the run.",
+            slot: Weapon,
+            works_with: [Rifle],
+            stamina: 30.0,
+            cooldown: 18.0,
+            windup: 0.0,
+            length: 0.0,
+            cancel: 0.0,
+            pace: 1.0,
+            effect: Own(Status(id: "focused", seconds: 5.0)),
+        ),
+        (
+            id: "kinetic_absorb",
+            name: "Kinetic absorb",
+            icon: "veyra:icon.ability.kinetic-absorb",
+            says: "For a moment you take half the damage of every blow and nothing staggers you. Press it as a heavy blow comes in.",
+            slot: Weapon,
+            works_with: [Greatblade],
+            stamina: 30.0,
+            cooldown: 12.0,
+            windup: 0.10,
+            length: 0.30,
+            cancel: 0.30,
+            pace: 1.0,
+            effect: Own(Status(id: "fortified", seconds: 2.0)),
+        ),
+        (
+            id: "rapid_reload",
+            name: "Rapid reload",
+            icon: "veyra:icon.ability.rapid-reload",
+            says: "Fills the magazine at once. Worth it when the last rounds are all you have left.",
+            slot: Utility,
+            works_with: [Carbine, Pistol, Rifle],
+            stamina: 15.0,
+            cooldown: 10.0,
+            windup: 0.125,
+            length: 0.2,
+            cancel: 0.2,
+            pace: 0.6,
+            effect: Own(Reload),
+        ),
+        (
+            id: "shield_recharge",
+            name: "Shield recharge",
+            icon: "veyra:icon.ability.shield-recharge",
+            says: "Your shield starts to recover now. Worth it after a hit, when you have a moment to spare.",
+            slot: Utility,
+            works_with: [],
+            stamina: 40.0,
+            cooldown: 30.0,
+            windup: 0.40,
+            length: 0.60,
+            cancel: 0.60,
+            pace: 0.5,
+            effect: Own(Shield),
+        ),
+        (
+            id: "ricochet",
+            name: "Ricochet",
+            icon: "veyra:icon.ability.ricochet",
+            says: "One bolt that leaves again for the next enemy near the first. Worth it against a pack.",
+            slot: Weapon,
+            works_with: [Pistol],
+            stamina: 20.0,
+            cooldown: 9.0,
+            windup: 0.15,
+            length: 0.45,
+            cancel: 0.35,
+            pace: 0.6,
+            effect: Shot(rounds: 1, gap: 0.0, cone: Aimed, damage: 1.0, posture: 1.0, bloom: false, jump: Some((radius: 8.0, share: 0.8))),
+        ),
+        (
+            id: "disarm",
+            name: "Disarm",
+            icon: "veyra:icon.ability.disarm",
+            says: "A hit that, if the guard misses it, leaves the target unable to fire, cut or use an ability for a moment. Worth it on a foe about to strike.",
+            slot: Weapon,
+            works_with: [Pistol, Blade],
+            stamina: 25.0,
+            cooldown: 7.0,
+            windup: 0.10,
+            length: 0.35,
+            cancel: 0.25,
+            pace: 0.5,
+            effect: Hit(damage: 0.6, posture: 0.5, status: "disarmed", seconds: 3.0),
+        ),
+        (
+            id: "suppressing_fire",
+            name: "Suppressing fire",
+            icon: "veyra:icon.ability.suppress-fire",
+            says: "A burst from the hip that slow whoever they hit. Worth it to stop a foe that is closing on you.",
+            slot: Weapon,
+            works_with: [Carbine],
+            stamina: 30.0,
+            cooldown: 14.0,
+            windup: 0.15,
+            length: 1.10,
+            cancel: 0.85,
+            pace: 0.3,
+            effect: Shot(rounds: 10, gap: 0.07, cone: Hip, damage: 0.6, posture: 0.8, bloom: false, on_hit: Some((status: "slowed", seconds: 3.0))),
+        ),
+        (
+            id: "explosive_shot",
+            name: "Explosive shot",
+            icon: "veyra:icon.ability.explosive-shot",
+            says: "One bolt that bursts where it lands and hurts everyone near. Worth it on a guarded foe or a crowd.",
+            slot: Weapon,
+            works_with: [Carbine],
+            stamina: 35.0,
+            cooldown: 10.0,
+            windup: 0.20,
+            length: 0.50,
+            cancel: 0.30,
+            pace: 0.4,
+            effect: Shot(rounds: 1, gap: 0.0, cone: Aimed, damage: 1.6, posture: 1.0, bloom: false, blast: Some((radius: 4.0, damage: 48.0, posture: 90.0))),
+        ),
+        // The charge is the 0.9 s windup, not a held button: a default.
+        (
+            id: "charged_shot",
+            name: "Charged shot",
+            icon: "veyra:icon.ability.charged-shot",
+            says: "A long charge, then one exact bolt that empties the target's shield first. Worth it on a shielded foe at range.",
+            slot: Weapon,
+            works_with: [Rifle],
+            stamina: 35.0,
+            cooldown: 14.0,
+            windup: 0.90,
+            length: 1.20,
+            cancel: 0.90,
+            pace: 0.2,
+            effect: Shot(rounds: 1, gap: 0.0, cone: Exact, damage: 1.1, posture: 1.5, bloom: false, breach: true),
+        ),
+        (
+            id: "armour_break",
+            name: "Armour break",
+            icon: "veyra:icon.ability.armour-break",
+            says: "A hit that, if the guard misses it, keeps the target's shield from recovering. Worth it with a rifle on a foe at range, or on a swinging foe whose guard is down.",
+            slot: Weapon,
+            works_with: [Rifle, Greatblade],
+            stamina: 30.0,
+            cooldown: 18.0,
+            windup: 0.30,
+            length: 0.70,
+            cancel: 0.55,
+            pace: 0.4,
+            effect: Hit(damage: 0.4, posture: 0.5, status: "shield_broken", seconds: 8.0),
+        ),
+        (
+            id: "thrust",
+            name: "Thrust",
+            icon: "veyra:icon.ability.thrust",
+            says: "Lunge behind your blade and strike where you stop. Closes on a gun before it fires twice.",
+            slot: Weapon,
+            works_with: [Blade, Glaive],
+            stamina: 25.0,
+            cooldown: 8.0,
+            windup: 0.15,
+            length: 0.66,
+            cancel: 0.51,
+            pace: 0.0,
+            effect: Move(distance: 6.0, seconds: 0.28, along: Aim, then: Some((reach: 1.0, arc: 20.0, damage: 1.3, posture: 1.2, scaled: true)), cover: Some((arc: 60.0, share: 0.8))),
+        ),
+        (
+            id: "reflect_shot",
+            name: "Reflect shot",
+            icon: "veyra:icon.ability.reflect-shot",
+            says: "For a while a bolt your guard meets goes back at whoever fired it, at twice its strength. Press it before you walk into fire.",
+            slot: Weapon,
+            works_with: [Blade],
+            stamina: 15.0,
+            cooldown: 9.0,
+            windup: 0.0,
+            length: 0.0,
+            cancel: 0.0,
+            pace: 1.0,
+            effect: Own(Status(id: "reflecting", seconds: 8.0)),
+        ),
+        (
+            id: "sweeping_cut",
+            name: "Sweeping cut",
+            icon: "veyra:icon.ability.sweeping-cut",
+            says: "A wide cut that takes everything in front of you. Worth it when two or more stand close; against one foe the plain cuts do as well.",
+            slot: Weapon,
+            works_with: [Greatblade, Glaive],
+            stamina: 35.0,
+            cooldown: 6.0,
+            windup: 0.35,
+            length: 0.85,
+            cancel: 0.65,
+            pace: 0.2,
+            effect: Strike(reach: 1.0, arc: 110.0, damage: 1.8, posture: 1.0, scaled: true),
+        ),
+        (
+            id: "vault",
+            name: "Vault",
+            icon: "veyra:icon.ability.vault-obstacle",
+            says: "Leap a little past a thrust and break more posture where you land. Bolts from ahead partly glance off. Worth it to cross open ground under fire.",
+            slot: Weapon,
+            works_with: [Glaive],
+            stamina: 30.0,
+            cooldown: 12.0,
+            windup: 0.10,
+            length: 0.85,
+            cancel: 0.70,
+            pace: 0.0,
+            effect: Move(distance: 6.5, seconds: 0.55, along: Aim, then: Some((reach: 1.0, arc: 60.0, damage: 1.2, posture: 1.5, scaled: true)), cover: Some((arc: 60.0, share: 0.4))),
+        ),
+        (
+            id: "combat_slide",
+            name: "Combat slide",
+            icon: "veyra:icon.ability.combat-slide",
+            says: "Slide the way you are moving, with your weapon still up. Worth it to leave the line of a bolt.",
+            slot: Utility,
+            works_with: [],
+            stamina: 20.0,
+            cooldown: 6.0,
+            windup: 0.0,
+            length: 0.50,
+            cancel: 0.50,
+            pace: 0.0,
+            armed: true,
+            effect: Move(distance: 6.0, seconds: 0.45, along: Input),
+        ),
+    ],
+)

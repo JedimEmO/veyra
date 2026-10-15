@@ -1,0 +1,26 @@
+[package]
+name = "server"
+description = "The sci-fi-scrolls dedicated server: the headless simulation served over UDP, no window, no renderer."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+# The tree library: Bevy-free, read for the handshake and the world.
+strata-flora = { workspace = true }
+# The headless facade and the replication adapter, and nothing that draws:
+# `just server-check` asserts this binary's graph has no renderer, window
+# or UI crate in it.
+# A path dependency rather than the workspace's: an inherited dependency
+# cannot turn the defaults off, and the defaults are the client.
+strata = { path = "../../crates/strata", default-features = false, features = ["headless", "net-replicon"] }
+# `bevy_log` for the log plugin; the rest is the umbrella's always-on set.
+bevy = { workspace = true, features = ["std", "bevy_state", "bevy_log"] }
+clap = { workspace = true }
+tracing = { workspace = true }
+
+[lints]
+workspace = true

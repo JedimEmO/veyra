@@ -1,0 +1,46 @@
+// A wreck: a freighter's hull in pieces on open ground, where it came down
+// under a landing's approach or out on a coast or plain. It ranks after
+// every other kind so the places already there keep theirs (ticket 0012,
+// step 5). A track leads in; the hull is the scar the pad's cut makes.
+(
+    id: "strata:wreck",
+    name: "Wreck",
+    rank: 7,
+    per_1000_km2: 3.0,
+    footprint_m: 40.0,
+    blend_m: 40.0,
+    crown: 0.0,
+    max_cut_m: 7.0,
+    spacing: (own_m: 9000.0, others_m: 2500.0, settlements_m: 3500.0),
+    ground: (
+        slope_max: 0.08,
+        height_m: (min: 3.0, max: 900.0),
+        biomes: [(id: "strata:ocean", weight: 0.0), (id: "strata:mountains", weight: 0.1)],
+    ),
+    wants: [
+        // On a river's or a lake's dry side, never in it: open ground.
+        (any: [(feature: "river", beyond_m: 120.0, fade_m: 100.0)], weight: 1.0, required: true),
+        (any: [(feature: "lake", beyond_m: 150.0, fade_m: 150.0)], weight: 1.0, required: true),
+        (any: [(feature: "sea", beyond_m: 150.0, fade_m: 150.0)], weight: 1.0, required: true),
+        // Where nobody lives.
+        (any: [(feature: "kind", kind: "strata:hamlet", beyond_m: 3000.0, fade_m: 800.0)], weight: 1.0, required: true),
+        (any: [(feature: "kind", kind: "strata:town", beyond_m: 4000.0, fade_m: 1000.0)], weight: 1.0, required: true),
+        // Under a landing's approach, or a coast within reach of one.
+        (any: [
+            (feature: "kind", kind: "strata:landing", within_m: 9000.0, fade_m: 9000.0),
+            (feature: "sea", within_m: 6000.0, fade_m: 8000.0),
+        ], weight: 3.0),
+        // Open, not shut in by a shoulder.
+        (any: [(feature: "view", at_least: 0.1, full: 0.5)], weight: 0.5),
+    ],
+    facing: "view",
+    road: "track",
+    group: "veyra:wreck",
+    names: (
+        onsets: ["b", "c", "d", "g", "k", "m", "n", "r", "s", "t", "v", "ch", "sh"],
+        vowels: ["a", "e", "i", "o", "u", "a", "e"],
+        codas: ["", "n", "r", "l", "s", "k", "x"],
+        syllables: [1, 2],
+        patterns: ["The {root} Venture", "Hull of the {root}", "{root} Wreck", "The {root}", "{root} Down"],
+    ),
+)

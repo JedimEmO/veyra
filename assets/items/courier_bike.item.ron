@@ -1,0 +1,20 @@
+// The household's bike (ticket 0009, step 2): the vehicle of the same name
+// in `vehicles/`, owned. Bought at store grade at the board (every line 500,
+// reading exactly as the vehicle file's dials), taken as the ride, worn by a
+// crash and mended with a kit. Its speed line scales the two top speeds and
+// its handling line the turn, as the vehicle file states; its durability
+// line, as a weapon's, makes a crash cost less.
+(
+    id: "veyra:vehicle.courier_bike",
+    name: "Courier bike",
+    maker: "Pelagic Works",
+    kind: Vehicle(vehicle: "veyra:vehicle.courier_bike"),
+    stack: 1,
+    price: Some(450),
+    lines: [
+        (id: "speed", name: "Speed"),
+        (id: "handling", name: "Handling"),
+        (id: "durability", name: "Durability"),
+    ],
+    icon: (shape: Slab, color: "#7FA3B5", symbol: Some("veyra:icon.map.transit")),
+)

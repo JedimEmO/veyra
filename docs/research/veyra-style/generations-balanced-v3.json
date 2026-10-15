@@ -1,0 +1,22 @@
+{
+  "date": "2026-09-13",
+  "tool": "built-in image_gen",
+  "revision": "balanced-v3",
+  "status": "reference for review",
+  "edit_target": "sources/woodland.png",
+  "layout_reference": "concepts/woodland-borough.png",
+  "output": "concepts/woodland-borough-balanced-v3.png",
+  "dimensions": [
+    1701,
+    924
+  ],
+  "sha256": "5d83efcf462c1713626c055bbcbd65a6e2b88fa4fa7bff6949df4812f74985cb",
+  "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-77828797-0b1d-4e68-8a1b-8fa977b3d3ff.png",
+  "prompts": "prompts-balanced-v3.json",
+  "constraint": "Preserve the current engine environment; simplify only the added man-made assets.",
+  "notes": [
+    "The original screenshot is the edit target; v1 provides settlement layout guidance.",
+    "The faceted low-poly-v2 experiment was rejected by the user.",
+    "Raster concept only; no engine, foliage, terrain or shader changes were made."
+  ]
+}

@@ -1,0 +1,29 @@
+// The `blade_hooked_edge` part of `crates/veyra-weapons` (ticket 0010, step 3): a recurved tip that bites a guard: more posture, a slower tail. Hardness and strength make the posture, toughness the recovery.
+// Its effects are the module's factors there, each driven by the line of its
+// name; a part is made at a bench, never sold. `part` is the module's key,
+// which its baked picture is filed under.
+(
+    id: "veyra:module.blade_hooked_edge",
+    name: "Blade hooked edge",
+    maker: "Morrow",
+    kind: Module(
+        slot: "edge",
+        fits: ["veyra:weapon.service_blade"],
+        part: "blade_hooked_edge",
+        effects: [
+            (property: HitPosture, factor: 1.08, line: "hit_posture"),
+            (property: RecoveryTime, factor: 1.06, line: "recovery_time"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "hit_posture", name: "Posture"),
+        (id: "recovery_time", name: "Recovery"),
+    ],
+    icon: (
+        shape: Slab,
+        color: "#B9C4CF",
+        picture: Some("field_blade/edge.blade_hooked_edge.png"),
+        symbol: Some("veyra:icon.crafting.component"),
+    ),
+)

@@ -1,0 +1,1765 @@
+{
+  "version": 1,
+  "icons": [
+    {
+      "id": "veyra:icon.ability.light-cut",
+      "stem": "ability.light-cut",
+      "label": "Light cut",
+      "group": "combat",
+      "tags": [
+        "blade",
+        "melee",
+        "attack",
+        "slash",
+        "light"
+      ],
+      "meaning": "A single large utilitarian steel blade held in a rugged glove cuts from lower-left to upper-right. One bright narrow cyan cutting arc; deep blue shadows. Blade and arc dominate; just the glove and blade, no enemy.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A single large utilitarian steel blade held in a rugged glove cuts from lower-left to upper-right. One bright narrow cyan cutting arc; deep blue shadows. Blade and arc dominate; just the glove and blade, no enemy.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.return-cut",
+      "stem": "ability.return-cut",
+      "label": "Return cut",
+      "group": "combat",
+      "tags": [
+        "blade",
+        "melee",
+        "followup",
+        "combo",
+        "return"
+      ],
+      "meaning": "A large gloved hand drives a short steel blade BACK from upper-right to lower-left. Two broad sweeping pale violet trails describe a hooked returning stroke. Deep indigo shadows. Clear opposite movement to an opening cut; no enemy.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large gloved hand drives a short steel blade BACK from upper-right to lower-left. Two broad sweeping pale violet trails describe a hooked returning stroke. Deep indigo shadows. Clear opposite movement to an opening cut; no enemy.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.heavy-cut",
+      "stem": "ability.heavy-cut",
+      "label": "Heavy cut",
+      "group": "combat",
+      "tags": [
+        "blade",
+        "melee",
+        "heavy",
+        "breaking",
+        "posture"
+      ],
+      "meaning": "A broad industrial blade plunges diagonally DOWN into one dark armour plate. Oversized wedge-shaped steel edge, one concentrated red-orange impact crack. Deep crimson shadows; ponderous powerful downward composition. No gore.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A broad industrial blade plunges diagonally DOWN into one dark armour plate. Oversized wedge-shaped steel edge, one concentrated red-orange impact crack. Deep crimson shadows; ponderous powerful downward composition. No gore.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.evasive-step",
+      "stem": "ability.evasive-step",
+      "label": "Evasive step",
+      "group": "movement",
+      "tags": [
+        "dodge",
+        "evade",
+        "footwork",
+        "movement",
+        "mobility",
+        "travel"
+      ],
+      "meaning": "A huge cropped rugged sci-fi boot sweeps toward lower right, seen from low below. A single curved electric-blue motion wake wraps behind the sole; cobalt shadows. Closely match the approved boot tile.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A huge cropped rugged sci-fi boot sweeps toward lower right, seen from low below. A single curved electric-blue motion wake wraps behind the sole; cobalt shadows. Closely match the approved boot tile.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.parry",
+      "stem": "ability.parry",
+      "label": "Parry",
+      "group": "combat",
+      "tags": [
+        "guard",
+        "block",
+        "parry",
+        "blade",
+        "defence"
+      ],
+      "meaning": "Close-up of a rugged armoured glove holding one steel blade diagonally across an incoming second blade. Concentrated amber spark at the crossing, burgundy shadows. Silver blocking silhouette dominates, closely matching the approved parry tile.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Close-up of a rugged armoured glove holding one steel blade diagonally across an incoming second blade. Concentrated amber spark at the crossing, burgundy shadows. Silver blocking silhouette dominates, closely matching the approved parry tile.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.aimed-burst",
+      "stem": "ability.aimed-burst",
+      "label": "Aimed burst",
+      "group": "combat",
+      "tags": [
+        "carbine",
+        "shoot",
+        "burst",
+        "ranged",
+        "attack"
+      ],
+      "meaning": "Extreme close-up of the front and upper receiver of a compact sci-fi carbine firing to upper right. Huge orange muzzle flash with three grouped directional streaks, burnt orange and charcoal. Closely match the approved gun tile.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Extreme close-up of the front and upper receiver of a compact sci-fi carbine firing to upper right. Huge orange muzzle flash with three grouped directional streaks, burnt orange and charcoal. Closely match the approved gun tile.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.precision-shot",
+      "stem": "ability.precision-shot",
+      "label": "Precision shot",
+      "group": "combat",
+      "tags": [
+        "rifle",
+        "marksman",
+        "aim",
+        "precision",
+        "ranged"
+      ],
+      "meaning": "One enormous dark rifle scope and a small part of its receiver, viewed from the side at a low angle, aiming across the square. A single thin ice-blue shot streak points right across a dark midnight background. Large pale-blue lens is the focal shape; no tiny crosshair overlay.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One enormous dark rifle scope and a small part of its receiver, viewed from the side at a low angle, aiming across the square. A single thin ice-blue shot streak points right across a dark midnight background. Large pale-blue lens is the focal shape; no tiny crosshair overlay.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.rapid-reload",
+      "stem": "ability.rapid-reload",
+      "label": "Rapid reload",
+      "group": "combat",
+      "tags": [
+        "reload",
+        "magazine",
+        "cell",
+        "feed",
+        "handling"
+      ],
+      "meaning": "One rugged glove firmly pushes a chunky rectangular power magazine upward into the underside of a cropped sci-fi receiver. A short curved warm-white motion sweep describes the insertion. Copper-lit magazine, cool navy background. Two clear interlocking masses.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One rugged glove firmly pushes a chunky rectangular power magazine upward into the underside of a cropped sci-fi receiver. A short curved warm-white motion sweep describes the insertion. Copper-lit magazine, cool navy background. Two clear interlocking masses.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.weapon-swap",
+      "stem": "ability.weapon-swap",
+      "label": "Weapon swap",
+      "group": "combat",
+      "tags": [
+        "swap",
+        "draw",
+        "pistol",
+        "ready",
+        "handling"
+      ],
+      "meaning": "A large rugged hand draws a compact sci-fi pistol upward from a dark utility holster at the hip. Bright ochre diagonal motion streak behind the pistol, deep blue-black background. Only the cropped pistol, hand and holster; no second gun or full figure.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large rugged hand draws a compact sci-fi pistol upward from a dark utility holster at the hip. Bright ochre diagonal motion streak behind the pistol, deep blue-black background. Only the cropped pistol, hand and holster; no second gun or full figure.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.shield-recharge",
+      "stem": "ability.shield-recharge",
+      "label": "Shield recharge",
+      "group": "defence",
+      "tags": [
+        "shield",
+        "recharge",
+        "recovery",
+        "protection",
+        "defense",
+        "defensive"
+      ],
+      "meaning": "A large circular wearable shield-emitter puck clipped to a cropped forearm bracer is charging. Three broad concentric electric-blue arcs bloom from the puck, white-blue centre and deep sapphire shadows. Physical emitter remains clear under the energy.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large circular wearable shield-emitter puck clipped to a cropped forearm bracer is charging. Three broad concentric electric-blue arcs bloom from the puck, white-blue centre and deep sapphire shadows. Physical emitter remains clear under the energy.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.field-repair",
+      "stem": "ability.field-repair",
+      "label": "Field repair",
+      "group": "engineering",
+      "tags": [
+        "repair",
+        "durability",
+        "maintenance",
+        "tool",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "A large gloved hand presses a stubby industrial repair tool against a fractured metal plate, producing one brilliant yellow arc and a few chunky sparks. Olive and ochre shadows. Tight action crop matching the approved repair tile.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large gloved hand presses a stubby industrial repair tool against a fractured metal plate, producing one brilliant yellow arc and a few chunky sparks. Olive and ochre shadows. Tight action crop matching the approved repair tile.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.arc-weld",
+      "stem": "ability.arc-weld",
+      "label": "Arc weld",
+      "group": "engineering",
+      "tags": [
+        "weld",
+        "fabricate",
+        "assembly",
+        "metal",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "A stout welding torch held by a glove joins two thick metal plates along a single diagonal seam. A brilliant white-violet welding point and a short molten orange seam, deep plum shadows. Big torch silhouette and two plates; no dense sparks.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A stout welding torch held by a glove joins two thick metal plates along a single diagonal seam. A brilliant white-violet welding point and a short molten orange seam, deep plum shadows. Big torch silhouette and two plates; no dense sparks.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.power-transfer",
+      "stem": "ability.power-transfer",
+      "label": "Power transfer",
+      "group": "engineering",
+      "tags": [
+        "power",
+        "energy",
+        "connector",
+        "rigger",
+        "charge",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "A rugged glove pushes a large cylindrical power connector into a machinery socket. A thick short turquoise electric arc bridges the last gap, dark petrol shadows and bright brass connector contacts. Connector and socket fill square.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A rugged glove pushes a large cylindrical power connector into a machinery socket. A thick short turquoise electric arc bridges the last gap, dark petrol shadows and bright brass connector contacts. Connector and socket fill square.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.deploy-drone",
+      "stem": "ability.deploy-drone",
+      "label": "Deploy drone",
+      "group": "engineering",
+      "tags": [
+        "drone",
+        "deploy",
+        "robotics",
+        "rigger",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "One compact industrial quad-rotor inspection drone launches from a cropped open gloved palm, viewed close from below. Four broad rotor pods and central amber lens form one strong silhouette, electric-blue lift streaks on deep teal shadows. No swarm.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One compact industrial quad-rotor inspection drone launches from a cropped open gloved palm, viewed close from below. Four broad rotor pods and central amber lens form one strong silhouette, electric-blue lift streaks on deep teal shadows. No swarm.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.cutting-torch",
+      "stem": "ability.cutting-torch",
+      "label": "Cutting torch",
+      "group": "engineering",
+      "tags": [
+        "cut",
+        "cutter",
+        "salvage",
+        "plasma",
+        "tool",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "A large angled industrial plasma torch nozzle emits a short intense orange-white jet slicing the edge of one thick steel plate. One glowing cut line, copper and charcoal shadows, nozzle fills half square. Distinct directional flame rather than repair sparks.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large angled industrial plasma torch nozzle emits a short intense orange-white jet slicing the edge of one thick steel plate. One glowing cut line, copper and charcoal shadows, nozzle fills half square. Distinct directional flame rather than repair sparks.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.refine-material",
+      "stem": "ability.refine-material",
+      "label": "Refine material",
+      "group": "crafting",
+      "tags": [
+        "refine",
+        "smelt",
+        "metal",
+        "ingot",
+        "material",
+        "crafting",
+        "craft",
+        "manufacture",
+        "production"
+      ],
+      "meaning": "One heavy industrial crucible lip pours a broad luminous orange stream of molten metal into a chunky ingot mould. Strong falling curve and rectangular mould; dark rust-brown shadows. Cropped machinery and material only, no workshop scene.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One heavy industrial crucible lip pours a broad luminous orange stream of molten metal into a chunky ingot mould. Strong falling curve and rectangular mould; dark rust-brown shadows. Cropped machinery and material only, no workshop scene.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.survey-pulse",
+      "stem": "ability.survey-pulse",
+      "label": "Survey pulse",
+      "group": "survey",
+      "tags": [
+        "survey",
+        "scan",
+        "geology",
+        "deposits",
+        "prospect",
+        "exploration",
+        "geological"
+      ],
+      "meaning": "A cropped rugged hand holds a geological scanner over a single broad wedge of layered ground, sending three bright concentric teal scan bands downward. Rich petrol-blue shadows and one turquoise scanner face. Match the approved survey tile, simplify terrain.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A cropped rugged hand holds a geological scanner over a single broad wedge of layered ground, sending three bright concentric teal scan bands downward. Rich petrol-blue shadows and one turquoise scanner face. Match the approved survey tile, simplify terrain.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.extract-core",
+      "stem": "ability.extract-core",
+      "label": "Extract core",
+      "group": "survey",
+      "tags": [
+        "extract",
+        "core",
+        "drill",
+        "sample",
+        "geology",
+        "mining",
+        "exploration",
+        "geological"
+      ],
+      "meaning": "A chunky cylindrical hollow drill pulls a clearly layered rock core upward from dark ground. Ochre rock cylinder and silver drill collar dominate, amber light at the extraction point, deep umber shadows. No landscape.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A chunky cylindrical hollow drill pulls a clearly layered rock core upward from dark ground. Ochre rock cylinder and silver drill collar dominate, amber light at the extraction point, deep umber shadows. No landscape.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.trace-route",
+      "stem": "ability.trace-route",
+      "label": "Trace route",
+      "group": "logistics",
+      "tags": [
+        "route",
+        "navigation",
+        "logistics",
+        "road",
+        "path"
+      ],
+      "meaning": "A large gloved fingertip presses one raised junction on a rugged physical navigation slate. One thick luminous amber route bends between three bright nodes across the slates dark blue surface. Tight crop of hand and device, no letters or map labels.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large gloved fingertip presses one raised junction on a rugged physical navigation slate. One thick luminous amber route bends between three bright nodes across the slates dark blue surface. Tight crop of hand and device, no letters or map labels.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.track-creature",
+      "stem": "ability.track-creature",
+      "label": "Track creature",
+      "group": "ecology",
+      "tags": [
+        "track",
+        "tracking",
+        "ranger",
+        "footprint",
+        "native",
+        "wildlife",
+        "exploration",
+        "biology"
+      ],
+      "meaning": "A huge three-toed alien animal track pressed into damp dark soil, with a handheld scanner head entering one corner and outlining the footprint in pale cyan. Moss-green and charcoal palette, strong footprint silhouette, no animal or broad scenery.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A huge three-toed alien animal track pressed into damp dark soil, with a handheld scanner head entering one corner and outlining the footprint in pale cyan. Moss-green and charcoal palette, strong footprint silhouette, no animal or broad scenery.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.sample-organism",
+      "stem": "ability.sample-organism",
+      "label": "Sample organism",
+      "group": "ecology",
+      "tags": [
+        "sample",
+        "biology",
+        "ecology",
+        "species",
+        "plant",
+        "exploration"
+      ],
+      "meaning": "A rugged glove holds a small clear specimen tube against one broad unfamiliar leaf while metal tweezers place a leaf sample into it. Luminous lime leaf and ivory tube rim dominate dark forest-green shadows. Close crop, no scenery or text.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A rugged glove holds a small clear specimen tube against one broad unfamiliar leaf while metal tweezers place a leaf sample into it. Luminous lime leaf and ivory tube rim dominate dark forest-green shadows. Close crop, no scenery or text.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.analyse-water",
+      "stem": "ability.analyse-water",
+      "label": "Analyse water",
+      "group": "ecology",
+      "tags": [
+        "water",
+        "analysis",
+        "brine",
+        "purity",
+        "environment",
+        "exploration",
+        "biology"
+      ],
+      "meaning": "A stout transparent water sample vial is held beside a handheld testing probe; one large suspended turquoise droplet catches white light between vial and probe. Deep marine-blue shadows, clear big droplet and vial shapes, no screen text.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A stout transparent water sample vial is held beside a handheld testing probe; one large suspended turquoise droplet catches white light between vial and probe. Deep marine-blue shadows, clear big droplet and vial shapes, no screen text.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.trauma-patch",
+      "stem": "ability.trauma-patch",
+      "label": "Trauma patch",
+      "group": "medicine",
+      "tags": [
+        "heal",
+        "medicine",
+        "treatment",
+        "patch",
+        "wounds",
+        "healing"
+      ],
+      "meaning": "Large dark gloved fingers press a compact white medical injector patch onto a cropped forearm. Concentrated green light at contact, emerald shadows, white device makes a clear focal shape. Match approved treatment tile. No wounds or blood.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Large dark gloved fingers press a compact white medical injector patch onto a cropped forearm. Concentrated green light at contact, emerald shadows, white device makes a clear focal shape. Match approved treatment tile. No wounds or blood.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.inject-stimulant",
+      "stem": "ability.inject-stimulant",
+      "label": "Inject stimulant",
+      "group": "medicine",
+      "tags": [
+        "stimulant",
+        "inject",
+        "stamina",
+        "boost",
+        "medicine",
+        "heal",
+        "healing",
+        "treatment"
+      ],
+      "meaning": "One large compact industrial autoinjector is pressed against the outer sleeve of an armoured arm. Bright amber cartridge window and a decisive downward pressing hand, deep olive and charcoal shadows. Strong diagonal injector silhouette. No exposed needle or text.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One large compact industrial autoinjector is pressed against the outer sleeve of an armoured arm. Bright amber cartridge window and a decisive downward pressing hand, deep olive and charcoal shadows. Strong diagonal injector silhouette. No exposed needle or text.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.cleanse-toxin",
+      "stem": "ability.cleanse-toxin",
+      "label": "Cleanse toxin",
+      "group": "medicine",
+      "tags": [
+        "cleanse",
+        "toxin",
+        "antidote",
+        "filter",
+        "medicine",
+        "poison",
+        "heal",
+        "healing",
+        "treatment"
+      ],
+      "meaning": "A white medical filter applicator draws a small sickly-green vapour stream from a forearm treatment port into a clear sealed cartridge. Clean turquoise light at skin contact contrasts with the green cartridge; deep teal shadows. No gore.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A white medical filter applicator draws a small sickly-green vapour stream from a forearm treatment port into a clear sealed cartridge. Clean turquoise light at skin contact contrasts with the green cartridge; deep teal shadows. No gore.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.revive",
+      "stem": "ability.revive",
+      "label": "Revive",
+      "group": "medicine",
+      "tags": [
+        "revive",
+        "resuscitate",
+        "rescue",
+        "medicine",
+        "ally",
+        "heal",
+        "healing",
+        "treatment"
+      ],
+      "meaning": "Two broad white portable resuscitation pads held by rugged gloves touch the cropped upper chest of an armoured suit. One bright green-white pulse bridges the pads, deep emerald shadows. Chest and hands only, no face or scene.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Two broad white portable resuscitation pads held by rugged gloves touch the cropped upper chest of an armoured suit. One bright green-white pulse bridges the pads, deep emerald shadows. Chest and hands only, no face or scene.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.suppress-fire",
+      "stem": "ability.suppress-fire",
+      "label": "Suppressing fire",
+      "group": "combat",
+      "tags": [
+        "suppression",
+        "fire",
+        "ranged",
+        "control",
+        "covering"
+      ],
+      "meaning": "A close side-view cropped carbine barrel fires a broad FAN of three orange tracer strokes to the right over one dark cover plate. Strong horizontal composition, deep smoky red background, bright orange muzzle. Distinct fan rather than precision beam.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A close side-view cropped carbine barrel fires a broad FAN of three orange tracer strokes to the right over one dark cover plate. Strong horizontal composition, deep smoky red background, bright orange muzzle. Distinct fan rather than precision beam.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.braced-guard",
+      "stem": "ability.braced-guard",
+      "label": "Braced guard",
+      "group": "defence",
+      "tags": [
+        "brace",
+        "guard",
+        "armour",
+        "defence",
+        "resist",
+        "defense",
+        "protection",
+        "defensive"
+      ],
+      "meaning": "One enormous armoured forearm braced upright across the square takes an impact against its metal plate. A broad pale-blue shield-like impact crescent wraps the outside edge; cold steel and deep cobalt shadows. No literal medieval shield.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One enormous armoured forearm braced upright across the square takes an impact against its metal plate. A broad pale-blue shield-like impact crescent wraps the outside edge; cold steel and deep cobalt shadows. No literal medieval shield.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.sprint",
+      "stem": "ability.sprint",
+      "label": "Sprint",
+      "group": "movement",
+      "tags": [
+        "sprint",
+        "run",
+        "speed",
+        "movement",
+        "travel",
+        "mobility"
+      ],
+      "meaning": "Two cropped rugged boots and lower legs drive forward in a long running stride, with one huge boot in front and the other receding. Three straight electric-turquoise speed streaks trail left over deep teal shadows. No full figure or scenery.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Two cropped rugged boots and lower legs drive forward in a long running stride, with one huge boot in front and the other receding. Three straight electric-turquoise speed streaks trail left over deep teal shadows. No full figure or scenery.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.overload",
+      "stem": "ability.overload",
+      "label": "Overload",
+      "group": "effects",
+      "tags": [
+        "overload",
+        "shock",
+        "energy",
+        "malfunction",
+        "electrical"
+      ],
+      "meaning": "A chunky industrial power cell with an exposed central coil erupts with three thick branching violet-white electrical arcs. Dark purple shadows and hot magenta coil. The physical cell remains the dominant silhouette, no text or radiation sign.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A chunky industrial power cell with an exposed central coil erupts with three thick branching violet-white electrical arcs. Dark purple shadows and hot magenta coil. The physical cell remains the dominant silhouette, no text or radiation sign.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.staggered",
+      "stem": "ability.staggered",
+      "label": "Staggered",
+      "group": "effects",
+      "tags": [
+        "stagger",
+        "stun",
+        "daze",
+        "posture",
+        "effect",
+        "control"
+      ],
+      "meaning": "Close crop of a rugged sci-fi helmet sharply tilted sideways under a glancing blow; one bright yellow impact star and two sweeping orange disorientation strokes above the helmet. Deep brown-red shadows. No face, gore or tiny stars.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Close crop of a rugged sci-fi helmet sharply tilted sideways under a glancing blow; one bright yellow impact star and two sweeping orange disorientation strokes above the helmet. Deep brown-red shadows. No face, gore or tiny stars.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.bleeding",
+      "stem": "ability.bleeding",
+      "label": "Bleeding",
+      "group": "effects",
+      "tags": [
+        "bleed",
+        "injury",
+        "damage",
+        "wound",
+        "effect"
+      ],
+      "meaning": "A damaged cropped armoured forearm with a torn dark fabric seam and one large dark-red drop falling from it. A stark red slash across the plate implies injury; maroon and black shadows. Stylized non-graphic, no exposed tissue.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A damaged cropped armoured forearm with a torn dark fabric seam and one large dark-red drop falling from it. A stark red slash across the plate implies injury; maroon and black shadows. Stylized non-graphic, no exposed tissue.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.negotiate-contract",
+      "stem": "ability.negotiate-contract",
+      "label": "Negotiate contract",
+      "group": "social",
+      "tags": [
+        "broker",
+        "negotiate",
+        "agreement",
+        "trade",
+        "contract",
+        "diplomacy"
+      ],
+      "meaning": "Two rugged civilian gloved hands clasp firmly above one cropped metal contract slate with an amber illuminated blank panel. Strong handshake silhouette, warm copper light and deep navy shadows. No writing, coin symbols or extra fingers.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Two rugged civilian gloved hands clasp firmly above one cropped metal contract slate with an amber illuminated blank panel. Strong handshake silhouette, warm copper light and deep navy shadows. No writing, coin symbols or extra fingers.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.coordinate-crew",
+      "stem": "ability.coordinate-crew",
+      "label": "Coordinate crew",
+      "group": "logistics",
+      "tags": [
+        "crew",
+        "command",
+        "coordinate",
+        "assembly",
+        "leadership",
+        "rally"
+      ],
+      "meaning": "One commanding gloved hand points forward beside a large rugged shoulder radio with a bright teal indicator; two broad amber signal arcs radiate outward. Tight crop of hand and radio, deep midnight blue background. No people in distance.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One commanding gloved hand points forward beside a large rugged shoulder radio with a bright teal indicator; two broad amber signal arcs radiate outward. Tight crop of hand and radio, deep midnight blue background. No people in distance.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.seal-leak",
+      "stem": "ability.seal-leak",
+      "label": "Seal leak",
+      "group": "engineering",
+      "tags": [
+        "seal",
+        "leak",
+        "water",
+        "pipe",
+        "station",
+        "repair",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "A chunky gloved hand clamps a broad metal repair band around a leaking industrial pipe. A single vivid blue water jet is pinched off at the clamp, wet silver highlights and dark petrol shadows. Close-up physical action.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A chunky gloved hand clamps a broad metal repair band around a leaking industrial pipe. A single vivid blue water jet is pinched off at the clamp, wet silver highlights and dark petrol shadows. Close-up physical action.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.diagnose-machinery",
+      "stem": "ability.diagnose-machinery",
+      "label": "Diagnose machinery",
+      "group": "engineering",
+      "tags": [
+        "diagnose",
+        "machinery",
+        "engineer",
+        "station",
+        "troubleshoot",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "A large rugged diagnostic probe touches the exposed brass contact of one open machinery housing. One luminous amber circuit branch lights across three large components; deep blue-grey shadows. Probe and contact fill frame, no tiny circuitry or text.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large rugged diagnostic probe touches the exposed brass contact of one open machinery housing. One luminous amber circuit branch lights across three large components; deep blue-grey shadows. Probe and contact fill frame, no tiny circuitry or text.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.thrust",
+      "stem": "ability.thrust",
+      "label": "Thrust",
+      "group": "combat",
+      "tags": [
+        "thrust",
+        "combat",
+        "blade",
+        "glove"
+      ],
+      "meaning": "A precise forward melee stab.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One long industrial blade thrusts directly toward the upper right, foreshortened point large in the foreground and gloved fist behind it; a narrow silver-white wake in navy shadows. A straight piercing attack; use Light cut for a sweeping slash. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.sweeping-cut",
+      "stem": "ability.sweeping-cut",
+      "label": "Sweeping cut",
+      "group": "combat",
+      "tags": [
+        "sweeping",
+        "cut",
+        "combat",
+        "blade",
+        "slash"
+      ],
+      "meaning": "A broad melee sweep against nearby targets.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A rugged blade sweeps horizontally across the lower half in one enormous amber crescent, cropped arm at left and broad red-orange motion arc above it. A wide horizontal sweep; use Return cut for a reverse combo strike. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.pommel-strike",
+      "stem": "ability.pommel-strike",
+      "label": "Pommel strike",
+      "group": "combat",
+      "tags": [
+        "pommel",
+        "strike",
+        "combat",
+        "knife handle",
+        "glove",
+        "armour plate"
+      ],
+      "meaning": "A blunt close-range strike with a weapon handle.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Large gloved fist drives the blunt steel pommel of a knife into an angular armour plate; one compact yellow impact star, blade points back away from impact, burgundy shadows. Blunt handle impact rather than cutting with the blade. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.disarm",
+      "stem": "ability.disarm",
+      "label": "Disarm",
+      "group": "combat",
+      "tags": [
+        "disarm",
+        "combat",
+        "blade",
+        "pistol",
+        "glove"
+      ],
+      "meaning": "Knock an opponent's weapon out of their grip.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A hooked steel blade catches a compact pistol and wrenches it upward out of an open armoured glove; the separating pistol silhouette dominates, bright white hook arc over teal shadows. Weapon separation rather than simply blocking an attack. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.armour-break",
+      "stem": "ability.armour-break",
+      "label": "Armour break",
+      "group": "combat",
+      "tags": [
+        "armour",
+        "break",
+        "combat",
+        "pick",
+        "broken armour"
+      ],
+      "meaning": "Break an enemy's armour or protection.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A heavy pointed industrial pick strikes a single large chest plate, splitting it into two chunky halves around a brilliant orange fracture; no person or injury visible. Broken armour is the subject; use Heavy cut for the attacking blade. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.charged-shot",
+      "stem": "ability.charged-shot",
+      "label": "Charged shot",
+      "group": "combat",
+      "tags": [
+        "charged",
+        "shot",
+        "combat",
+        "coilgun",
+        "energy bolt"
+      ],
+      "meaning": "Release a charged energy weapon shot.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Extreme close crop of a thick coilgun muzzle with two broad copper coils and a concentrated violet-white bolt leaving the barrel diagonally upward right, purple shadows. Charging coils and energy bolt rather than scope-based precision. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.scatter-blast",
+      "stem": "ability.scatter-blast",
+      "label": "Scatter blast",
+      "group": "combat",
+      "tags": [
+        "scatter",
+        "blast",
+        "combat",
+        "shotgun",
+        "pellets"
+      ],
+      "meaning": "Fire a wide close-range shotgun blast.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A very broad double-bore scattergun muzzle fills the lower left, firing a single fan of five chunky orange shot streaks toward upper right; deep brown-red shadows. Wide fan of pellets rather than a narrow rifle burst. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.ricochet",
+      "stem": "ability.ricochet",
+      "label": "Ricochet",
+      "group": "combat",
+      "tags": [
+        "ricochet",
+        "combat",
+        "projectile",
+        "steel plate"
+      ],
+      "meaning": "Bounce a projectile off a hard surface.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One bright yellow projectile trail makes a sharp V-shaped bounce off the corner of a large steel plate, with one bright impact spark at the bend and cobalt background. A visible bent trajectory rather than direct fire. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.explosive-shot",
+      "stem": "ability.explosive-shot",
+      "label": "Explosive shot",
+      "group": "combat",
+      "tags": [
+        "explosive",
+        "shot",
+        "combat",
+        "projectile",
+        "explosion"
+      ],
+      "meaning": "Fire a projectile that detonates on impact.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A single chunky copper projectile meets a metal target in an enormous orange-white spherical impact bloom with three large armour fragments, dark red corners; no gun or people. One explosive impact rather than a spread of pellets. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.shock-grenade",
+      "stem": "ability.shock-grenade",
+      "label": "Shock grenade",
+      "group": "combat",
+      "tags": [
+        "shock",
+        "grenade",
+        "combat",
+        "lightning"
+      ],
+      "meaning": "Throw an electrical area-disruption grenade.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A fist-sized industrial grenade with broad conductor bands floats at centre while three thick cyan lightning forks burst outward; dark navy background, strong spherical silhouette. A deployed grenade rather than a malfunctioning installed power coil. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.smoke-screen",
+      "stem": "ability.smoke-screen",
+      "label": "Smoke screen",
+      "group": "combat",
+      "tags": [
+        "smoke",
+        "screen",
+        "combat",
+        "canister"
+      ],
+      "meaning": "Obscure an area with a smoke canister.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A short metal smoke canister at lower right emits one enormous curling grey-white plume sweeping upward left, a small amber valve glow and deep olive shadows. Opaque curling smoke rather than a flash of light. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.flash-burst",
+      "stem": "ability.flash-burst",
+      "label": "Flash burst",
+      "group": "combat",
+      "tags": [
+        "flash",
+        "burst",
+        "combat",
+        "canister"
+      ],
+      "meaning": "Disorient nearby targets with a flash device.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A small faceted flash canister at bottom left releases an immense sharp white-gold starburst across dark violet background; recognizable short canister beneath the light. The source device activating; use Blinded for the affected character. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.barrier-dome",
+      "stem": "ability.barrier-dome",
+      "label": "Barrier dome",
+      "group": "defence",
+      "tags": [
+        "barrier",
+        "dome",
+        "defence",
+        "emitter",
+        "shield dome",
+        "defense",
+        "protection",
+        "defensive"
+      ],
+      "meaning": "Project an area shield around a position.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A chunky ground-mounted three-legged shield emitter supports a single brilliant translucent cyan dome, seen close from low angle, ground wedge at base and deep blue corners. Area protection from a ground emitter rather than recharging personal shielding. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.intercept-projectile",
+      "stem": "ability.intercept-projectile",
+      "label": "Intercept projectile",
+      "group": "defence",
+      "tags": [
+        "intercept",
+        "projectile",
+        "defence",
+        "bullet",
+        "shield",
+        "defense",
+        "protection",
+        "defensive"
+      ],
+      "meaning": "Catch an incoming projectile with a shield.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One large orange projectile freezes nose-first against a curved blue shield surface, bright white contact point and concentric ripples, shield emitter edge at lower left. Projectile stopped at the shield rather than visibly rebounding. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.reflect-shot",
+      "stem": "ability.reflect-shot",
+      "label": "Reflect shot",
+      "group": "defence",
+      "tags": [
+        "reflect",
+        "shot",
+        "defence",
+        "forearm shield",
+        "tracer",
+        "defense",
+        "protection",
+        "defensive"
+      ],
+      "meaning": "Deflect an incoming shot back outward.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A polished angled forearm shield at centre bends an orange incoming tracer into a distinct cyan outgoing tracer, sharp V trajectory and white contact spark, navy shadows. A clear outgoing reflected trajectory rather than absorption. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.fortify-armour",
+      "stem": "ability.fortify-armour",
+      "label": "Fortify armour",
+      "group": "defence",
+      "tags": [
+        "fortify",
+        "armour",
+        "defence",
+        "glove",
+        "armour plate",
+        "defense",
+        "protection",
+        "defensive"
+      ],
+      "meaning": "Apply extra protective plating.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A gloved hand locks a thick silver plate onto an existing dark chest plate, two broad clamps snapping closed with amber sparks, centred layered armour silhouette. Applying the plate is an action; use Fortified for the resulting protection status. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.kinetic-absorb",
+      "stem": "ability.kinetic-absorb",
+      "label": "Kinetic absorb",
+      "group": "defence",
+      "tags": [
+        "kinetic",
+        "absorb",
+        "defence",
+        "gauntlet",
+        "hammer",
+        "shock absorber",
+        "defense",
+        "protection",
+        "defensive"
+      ],
+      "meaning": "Absorb impact energy into a defensive device.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large armoured gauntlet with a circular amber shock absorber catches a broad steel hammer head; compressed golden rings converge inward around the impact, dark umber corners. Visible energy absorption into a device rather than passive bracing. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.emergency-cover",
+      "stem": "ability.emergency-cover",
+      "label": "Emergency cover",
+      "group": "defence",
+      "tags": [
+        "emergency",
+        "cover",
+        "defence",
+        "barricade",
+        "case",
+        "defense",
+        "protection",
+        "defensive"
+      ],
+      "meaning": "Deploy portable hard cover.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A compact industrial case unfolds into two thick upright steel barricade panels, wide angular silhouette, orange hinges and one pale blue bullet impact on the upper edge. Physical metal cover rather than a translucent energy dome. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.grappling-line",
+      "stem": "ability.grappling-line",
+      "label": "Grappling line",
+      "group": "movement",
+      "tags": [
+        "grappling",
+        "line",
+        "movement",
+        "hook",
+        "cable",
+        "rock",
+        "mobility",
+        "travel"
+      ],
+      "meaning": "Pull toward an anchor using a grappling cable.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large three-pronged steel grappling hook bites into a rock edge at upper right, thick taut cable sweeps diagonally toward lower left; teal sky-shadow and amber contact sparks. Hook and cable movement rather than direct hand adhesion. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.jump-jets",
+      "stem": "ability.jump-jets",
+      "label": "Jump jets",
+      "group": "movement",
+      "tags": [
+        "jump",
+        "jets",
+        "movement",
+        "thrusters",
+        "exhaust",
+        "mobility",
+        "travel"
+      ],
+      "meaning": "Boost upward with suit thrusters.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Close rear-three-quarter crop of two compact suit thruster nozzles blasting enormous cyan-white exhaust downward, cropped armoured hips above, dark cobalt corners. Powered vertical boost rather than running on foot. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.combat-slide",
+      "stem": "ability.combat-slide",
+      "label": "Combat slide",
+      "group": "movement",
+      "tags": [
+        "combat",
+        "slide",
+        "movement",
+        "boot",
+        "ground",
+        "mobility",
+        "travel"
+      ],
+      "meaning": "Slide low beneath incoming fire.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One armoured shin and boot skims almost horizontally across rough ground, broad spray of ochre grit behind it and low cyan motion streak, tight low-angle crop. Low ground slide rather than an upright evasive step. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.vault-obstacle",
+      "stem": "ability.vault-obstacle",
+      "label": "Vault obstacle",
+      "group": "movement",
+      "tags": [
+        "vault",
+        "obstacle",
+        "movement",
+        "glove",
+        "boot",
+        "ledge",
+        "mobility",
+        "travel"
+      ],
+      "meaning": "Vault over a low obstacle.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A single braced glove presses onto a concrete ledge while a large bent armoured boot clears it above, broad diagonal body movement implied without showing a whole person; amber dust and blue shadows. Hand-assisted obstacle crossing rather than propulsion. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.magnetic-grip",
+      "stem": "ability.magnetic-grip",
+      "label": "Magnetic grip",
+      "group": "movement",
+      "tags": [
+        "magnetic",
+        "grip",
+        "movement",
+        "glove",
+        "steel wall",
+        "mobility",
+        "travel"
+      ],
+      "meaning": "Grip a metal surface with a magnetic glove.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A broad open industrial glove adheres flat to a vertical steel wall, two cyan magnetic arcs wrap around fingertips, close frontal palm silhouette with dark blue corners. Direct magnetic hand contact rather than a hook or cable. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.silent-step",
+      "stem": "ability.silent-step",
+      "label": "Silent step",
+      "group": "movement",
+      "tags": [
+        "silent",
+        "step",
+        "movement",
+        "boot",
+        "floor",
+        "mobility",
+        "travel"
+      ],
+      "meaning": "Move carefully without making noise.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large soft-soled sci-fi boot places its toe gently on a dark floor, heel raised, restrained narrow violet motion curl and pale silver rim light, shadow dominates. Careful quiet placement rather than fast running. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.deploy-turret",
+      "stem": "ability.deploy-turret",
+      "label": "Deploy turret",
+      "group": "engineering",
+      "tags": [
+        "deploy",
+        "turret",
+        "engineering",
+        "gun",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "Place an automated gun emplacement.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One compact armoured turret unfolds on three stout legs, oversized short barrel points upper right, amber activation light and deep cobalt painted background. Stationary ground gun rather than a flying support drone. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.deploy-mine",
+      "stem": "ability.deploy-mine",
+      "label": "Deploy mine",
+      "group": "engineering",
+      "tags": [
+        "deploy",
+        "mine",
+        "engineering",
+        "glove",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "Arm a proximity mine on the ground.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A gloved hand releases a broad low-profile disc mine onto a rough floor, three thick radial arms and one vivid red central sensor, burgundy shadows. Placing the device rather than triggering an existing charge. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.hack-terminal",
+      "stem": "ability.hack-terminal",
+      "label": "Hack terminal",
+      "group": "engineering",
+      "tags": [
+        "hack",
+        "terminal",
+        "engineering",
+        "spike",
+        "glove",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "Connect a tool to bypass an electronic terminal.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A gloved hand pushes a chunky violet diagnostic spike into a rectangular terminal socket, two broad luminous data ribbons bend from plug to terminal, no writing or tiny screen details. Electronic access bypass rather than diagnosing physical machinery. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.disrupt-signal",
+      "stem": "ability.disrupt-signal",
+      "label": "Disrupt signal",
+      "group": "engineering",
+      "tags": [
+        "disrupt",
+        "signal",
+        "engineering",
+        "antenna",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "Jam nearby radio or control signals.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A rugged twin-pronged jammer antenna splits two incoming cyan signal arcs into broken violet fragments; dominant fork silhouette and dark indigo corners. Breaking a communication signal rather than sending instructions. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.decoy-beacon",
+      "stem": "ability.decoy-beacon",
+      "label": "Decoy beacon",
+      "group": "engineering",
+      "tags": [
+        "decoy",
+        "beacon",
+        "engineering",
+        "helmet hologram",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "Deploy a false signal to distract enemies.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A small physical beacon projects a large translucent cyan duplicate helmet above itself, visibly fragmented at the base, hot amber beacon core and navy shadows. A separate false target rather than concealing the wearer. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.remote-detonate",
+      "stem": "ability.remote-detonate",
+      "label": "Remote detonate",
+      "group": "engineering",
+      "tags": [
+        "remote",
+        "detonate",
+        "engineering",
+        "detonator",
+        "switch",
+        "glove",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "Trigger a previously placed explosive charge.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large gloved thumb depresses a single guarded red switch on a rugged handheld detonator, one broad orange flash behind the device; no labels or countdown digits. Triggering a charge rather than placing a mine. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.calibrate-optic",
+      "stem": "ability.calibrate-optic",
+      "label": "Calibrate optic",
+      "group": "crafting",
+      "tags": [
+        "calibrate",
+        "optic",
+        "crafting",
+        "scope",
+        "glove",
+        "craft",
+        "manufacture",
+        "production"
+      ],
+      "meaning": "Adjust a weapon optic for accuracy.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A gloved fingertip turns the large adjustment ring of a blue glass scope, one clean amber alignment line crossing the lens, diagonal close crop and dark steel shadows. Adjusting a scope rather than firing through it. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.forge-part",
+      "stem": "ability.forge-part",
+      "label": "Forge part",
+      "group": "crafting",
+      "tags": [
+        "forge",
+        "part",
+        "crafting",
+        "hammer",
+        "anvil",
+        "metal blank",
+        "craft",
+        "manufacture",
+        "production"
+      ],
+      "meaning": "Shape a hot metal component.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A heavy forging hammer descends onto one glowing orange metal blank on a dark anvil, broad white-yellow contact line and three chunky sparks, black-red corners. Solid metal shaping rather than pouring molten material. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.assemble-module",
+      "stem": "ability.assemble-module",
+      "label": "Assemble module",
+      "group": "crafting",
+      "tags": [
+        "assemble",
+        "module",
+        "crafting",
+        "component",
+        "housing",
+        "gloves",
+        "craft",
+        "manufacture",
+        "production"
+      ],
+      "meaning": "Fit components into an equipment module.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Two gloved fingertips press a chunky cyan power component into a square steel housing; broad socket shapes and one amber seating spark, close top-down crop. Mechanical insertion rather than joining metal by welding. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.salvage-parts",
+      "stem": "ability.salvage-parts",
+      "label": "Salvage parts",
+      "group": "crafting",
+      "tags": [
+        "salvage",
+        "parts",
+        "crafting",
+        "claw",
+        "gear",
+        "machine",
+        "craft",
+        "manufacture",
+        "production"
+      ],
+      "meaning": "Remove a usable component from damaged machinery.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large mechanical claw lifts one intact copper gear from a broken dark machine casing, three large shattered panels frame it, teal rim light and warm gear focus. Recovering an intact part rather than processing loose scrap. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.recycle-scrap",
+      "stem": "ability.recycle-scrap",
+      "label": "Recycle scrap",
+      "group": "crafting",
+      "tags": [
+        "recycle",
+        "scrap",
+        "crafting",
+        "crusher",
+        "billet",
+        "craft",
+        "manufacture",
+        "production"
+      ],
+      "meaning": "Process waste metal into reusable material.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A broad industrial crushing jaw compresses three angular scrap pieces into one glowing compact metal billet, orange furnace light below and deep blue shadows. Bulk scrap processing rather than carefully retrieving an intact part. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.overclock-machine",
+      "stem": "ability.overclock-machine",
+      "label": "Overclock machine",
+      "group": "engineering",
+      "tags": [
+        "overclock",
+        "machine",
+        "engineering",
+        "turbine",
+        "lever",
+        "technology",
+        "gadget"
+      ],
+      "meaning": "Push machinery above its normal output.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A chunky turbine spins with a bright cyan circular wake while a heavy orange lever is pushed forward at the edge; broad rotor blades, restrained sparks, dark navy background. Controlled temporary performance boost; use Overload for electrical malfunction. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.bandage-wound",
+      "stem": "ability.bandage-wound",
+      "label": "Bandage wound",
+      "group": "medicine",
+      "tags": [
+        "bandage",
+        "wound",
+        "medicine",
+        "forearm",
+        "glove",
+        "heal",
+        "healing",
+        "treatment"
+      ],
+      "meaning": "Wrap an injury with a field bandage.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A dark gloved hand draws a broad clean ivory bandage diagonally around an armoured forearm, large visible roll at upper right, soft green treatment light and dark olive shadows; no blood. A visible fabric wrap rather than an injector patch. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.splint-limb",
+      "stem": "ability.splint-limb",
+      "label": "Splint limb",
+      "group": "medicine",
+      "tags": [
+        "splint",
+        "limb",
+        "medicine",
+        "leg",
+        "strap",
+        "heal",
+        "healing",
+        "treatment"
+      ],
+      "meaning": "Stabilize an injured limb with a brace.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Two thick pale medical splint rails clamp around a bent armoured lower leg, a gloved hand pulls one broad orange securing strap tight, dark teal shadows, no injury detail. Rigid limb support rather than a soft bandage. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.oxygen-boost",
+      "stem": "ability.oxygen-boost",
+      "label": "Oxygen boost",
+      "group": "medicine",
+      "tags": [
+        "oxygen",
+        "boost",
+        "medicine",
+        "mask",
+        "hose",
+        "helmet",
+        "heal",
+        "healing",
+        "treatment"
+      ],
+      "meaning": "Restore breathing support from an oxygen supply.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A gloved hand seats a chunky breathing mask connected to a short visible hose over a cropped helmet mouth, pale cyan flow curls into the mask, navy shadows. Breathing support rather than an injected stamina boost. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.cooling-injection",
+      "stem": "ability.cooling-injection",
+      "label": "Cooling injection",
+      "group": "medicine",
+      "tags": [
+        "cooling",
+        "injection",
+        "medicine",
+        "injector",
+        "forearm",
+        "heal",
+        "healing",
+        "treatment"
+      ],
+      "meaning": "Reduce overheating with a coolant treatment.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A broad blue medical injector touches the seam of an overheated orange armoured forearm, one white cold-vapour curl at the contact and cobalt shadows; no wounds. Applying coolant as treatment; use Chilled for a cold-related status. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.radiation-cleanse",
+      "stem": "ability.radiation-cleanse",
+      "label": "Radiation cleanse",
+      "group": "medicine",
+      "tags": [
+        "radiation",
+        "cleanse",
+        "medicine",
+        "spray nozzle",
+        "shoulder",
+        "foam",
+        "heal",
+        "healing",
+        "treatment"
+      ],
+      "meaning": "Remove radioactive contamination from equipment or clothing.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A thick decontamination spray nozzle sweeps pale teal foam across an orange-lit suit shoulder, a few bright yellow contamination flecks visibly wash away, dark olive corners. Decontamination action rather than radiation exposure status. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.med-drone",
+      "stem": "ability.med-drone",
+      "label": "Med drone",
+      "group": "medicine",
+      "tags": [
+        "med",
+        "drone",
+        "medicine",
+        "medical drone",
+        "forearm",
+        "heal",
+        "healing",
+        "treatment"
+      ],
+      "meaning": "Send a support drone to deliver treatment.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One compact white two-rotor medical drone lowers a broad green treatment beam onto a cropped armoured forearm, dark emerald background, drone is the dominant readable silhouette, no emblem or text. Healing support rather than a general-purpose drone. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.camouflage",
+      "stem": "ability.camouflage",
+      "label": "Camouflage",
+      "group": "survival",
+      "tags": [
+        "camouflage",
+        "survival",
+        "helmet",
+        "leaves",
+        "outdoors",
+        "fieldwork"
+      ],
+      "meaning": "Conceal the wearer against their surroundings.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Close crop of one helmet and shoulder blending into broad moss-green leaf shapes; half the angular visor remains solid and half dissolves into olive painted camouflage patches, no full body. Concealing the actual wearer rather than projecting a separate decoy. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.harvest-fibre",
+      "stem": "ability.harvest-fibre",
+      "label": "Harvest fibre",
+      "group": "survival",
+      "tags": [
+        "harvest",
+        "fibre",
+        "survival",
+        "knife",
+        "stems",
+        "glove",
+        "outdoors",
+        "fieldwork"
+      ],
+      "meaning": "Gather usable plant fibre.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A hooked harvesting knife pulls across a bundle of three thick golden-green stems held by a dark glove, pale cut fibres sweep diagonally, olive shadows. Bulk usable stems rather than taking a small specimen. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.purify-water",
+      "stem": "ability.purify-water",
+      "label": "Purify water",
+      "group": "survival",
+      "tags": [
+        "purify",
+        "water",
+        "survival",
+        "filter",
+        "outdoors",
+        "fieldwork"
+      ],
+      "meaning": "Filter unsafe water into drinking water.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A rugged filter cylinder divides a broad muddy brown incoming stream from a clear cyan outgoing stream, large transparent lower chamber, diagonal flow and dark teal background. Filtering water rather than testing its composition. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.cook-ration",
+      "stem": "ability.cook-ration",
+      "label": "Cook ration",
+      "group": "survival",
+      "tags": [
+        "cook",
+        "ration",
+        "survival",
+        "pan",
+        "food",
+        "burner",
+        "outdoors",
+        "fieldwork"
+      ],
+      "meaning": "Prepare a field meal.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A battered metal pan holding three simple golden food pieces rests over a compact orange burner, one broad white steam curl rises, dark umber corners and close overhead crop. Food preparation over a burner rather than signalling with fire. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.light-flare",
+      "stem": "ability.light-flare",
+      "label": "Light flare",
+      "group": "survival",
+      "tags": [
+        "light",
+        "flare",
+        "survival",
+        "glove",
+        "outdoors",
+        "fieldwork"
+      ],
+      "meaning": "Ignite a flare for visibility or signalling.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large armoured hand holds a short rugged flare diagonally upward, brilliant red-orange flame and thick white smoke at its tip fill the upper half, dark blue corners. Bright handheld signal rather than concealment smoke. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.pitch-shelter",
+      "stem": "ability.pitch-shelter",
+      "label": "Pitch shelter",
+      "group": "survival",
+      "tags": [
+        "pitch",
+        "shelter",
+        "survival",
+        "tent",
+        "guyline",
+        "peg",
+        "outdoors",
+        "fieldwork"
+      ],
+      "meaning": "Set up a temporary field shelter.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A gloved hand pulls a thick guyline taut beside one angular orange tent corner and steel peg, triangular fabric mass dominates the square, dark blue dusk shadows. A camp shelter rather than combat cover. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.burning",
+      "stem": "ability.burning",
+      "label": "Burning",
+      "group": "effects",
+      "tags": [
+        "burning",
+        "effects",
+        "armour",
+        "flames"
+      ],
+      "meaning": "Ongoing heat or fire damage.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One large dark armoured shoulder plate engulfed by three broad orange-red flames, bright yellow rim at the centre, no person or injury detail, black-red corners. An active fire condition rather than a cooling treatment. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.chilled",
+      "stem": "ability.chilled",
+      "label": "Chilled",
+      "group": "effects",
+      "tags": [
+        "chilled",
+        "effects",
+        "boot",
+        "ice"
+      ],
+      "meaning": "Cold exposure or impaired movement from freezing.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A chunky armoured boot encased along its sole in large pale blue ice crystals, white frost clings to the ankle, deep cobalt shadows and no motion streak. Ice is the cause; use Slowed for generic movement impairment. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.poisoned",
+      "stem": "ability.poisoned",
+      "label": "Poisoned",
+      "group": "effects",
+      "tags": [
+        "poisoned",
+        "effects",
+        "respirator",
+        "toxic vapour"
+      ],
+      "meaning": "Ongoing toxic contamination or poison damage.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large cracked respirator filter surrounded by one curling sickly green vapour ribbon, three heavy droplets on the filter rim, dark olive background, no skull symbol. Toxic exposure status rather than applying an antidote. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.irradiated",
+      "stem": "ability.irradiated",
+      "label": "Irradiated",
+      "group": "effects",
+      "tags": [
+        "irradiated",
+        "effects",
+        "glove",
+        "metal shard"
+      ],
+      "meaning": "Radiation exposure or accumulated contamination.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A cropped armoured glove holds a dull metal shard shedding a few strong yellow-green motes that cling to the glove, broad amber halo and dark violet shadows, no radiation emblem. Contaminating material rather than a decontamination tool. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.shocked",
+      "stem": "ability.shocked",
+      "label": "Shocked",
+      "group": "effects",
+      "tags": [
+        "shocked",
+        "effects",
+        "glove",
+        "lightning"
+      ],
+      "meaning": "Electrical shock interrupting the wearer.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One clenched armoured glove spasms within three thick white-cyan lightning forks, broad wrist silhouette and deep purple background, no device held. Shock affecting a character rather than an overloaded machine coil. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.shield-broken",
+      "stem": "ability.shield-broken",
+      "label": "Shield broken",
+      "group": "effects",
+      "tags": [
+        "shield",
+        "broken",
+        "effects",
+        "shield shards",
+        "wrist emitter"
+      ],
+      "meaning": "Personal shielding has collapsed.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: One brilliant cyan curved shield surface fractures into five large separated glass-like energy shards around a dark wrist emitter, orange breach point, navy background. Shattered protection rather than restoring a shield. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.slowed",
+      "stem": "ability.slowed",
+      "label": "Slowed",
+      "group": "effects",
+      "tags": [
+        "slowed",
+        "effects",
+        "boot",
+        "mud"
+      ],
+      "meaning": "Movement speed is reduced.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A heavy armoured boot drags through a broad sticky ochre trail, heel deeply weighted, two short muted blue motion strokes stop behind it, dark earth shadows. Generic hindered movement without ice or a physical restraint. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.rooted",
+      "stem": "ability.rooted",
+      "label": "Rooted",
+      "group": "effects",
+      "tags": [
+        "rooted",
+        "effects",
+        "boot",
+        "cables"
+      ],
+      "meaning": "Movement is prevented by a physical restraint.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A large armoured boot is gripped firmly by three thick teal industrial cable loops anchored to a steel floor, strong horizontal restraint shapes, dark blue shadows. An anchored foot cannot move; use Slowed for reduced speed. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.blinded",
+      "stem": "ability.blinded",
+      "label": "Blinded",
+      "group": "effects",
+      "tags": [
+        "blinded",
+        "effects",
+        "helmet",
+        "visor",
+        "glare"
+      ],
+      "meaning": "Vision is obscured or overwhelmed.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A close frontal helmet visor is crossed by a huge harsh white-yellow glare that hides the glass, dark violet helmet silhouette remains visible, no source grenade. The affected visor rather than the flash device causing the effect. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.silenced",
+      "stem": "ability.silenced",
+      "label": "Silenced",
+      "group": "effects",
+      "tags": [
+        "silenced",
+        "effects",
+        "helmet",
+        "headset",
+        "signal"
+      ],
+      "meaning": "Communications or device activation is disrupted.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A cropped helmet's chunky radio earpiece sputters with violet sparks while a single broad cyan signal arc breaks beside it, dark navy silhouette, no text or crossed-out symbols. The affected headset rather than an active jammer antenna. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.focused",
+      "stem": "ability.focused",
+      "label": "Focused",
+      "group": "effects",
+      "tags": [
+        "focused",
+        "effects",
+        "helmet",
+        "eye lens"
+      ],
+      "meaning": "Improved aim or concentration.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: Close crop of one calm helmet eye lens with a single crisp cyan aiming reflection converging to a bright white point, sharp steel brow and deep cobalt shadows, no text or target UI overlay. A prepared aiming state rather than a fired precision attack. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    },
+    {
+      "id": "veyra:icon.ability.fortified",
+      "stem": "ability.fortified",
+      "label": "Fortified",
+      "group": "effects",
+      "tags": [
+        "fortified",
+        "effects",
+        "chest plate",
+        "halo"
+      ],
+      "meaning": "Extra armour or damage resistance is active.",
+      "prompt": "Use case: stylized-concept. Produce ONE finished square game ability icon, full-bleed painting to ALL FOUR EDGES, no margins or frame. Reference image is STYLE ONLY: match the six large painted tiles in the approved Veyra ability sheet, not the sheet layout, labels or bottom symbols. Original grounded sci-fi frontier MMO artwork with the vivid hand-painted action language of classic WoW ability icons. Broad confident painterly forms, tight dramatic crop, one unmistakable action, strong large silhouette and rich coloured shadows. Simplify into three or four major value masses so this reads at 32, 48 and 64 pixels. Brightest light at the action, dark corners. Practical worn industrial equipment and believable gloved anatomy. Opaque painted square background. NO text, letters, numbers, logos, border, keybindings, cooldown, UI, panels, multiple tiles, contact sheet, ornamental circuitry or fine decorative greebles. Do not make a product rendering or flat pictogram. Do not add subjects from the reference beyond the requested action. Subject brief: A single massive layered chest plate with three broad interlocked silver sections stands firm behind a restrained golden protective halo, frontal symmetrical composition and deep brown corners. The resulting reinforced armour state rather than attaching a plate. Treat this as an original standalone painting; no comparison, other icons, labels or UI.",
+      "reference": "docs/design/icons/ability-direction.png",
+      "gameplay_binding": null
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+// Red conductor: the conductor of folded and karst country, rare in
+// granite and in badlands.
+(
+    id: "strata:red_conductor",
+    name: "Red conductor",
+    short: "red conductor",
+    class: "strata:conductor",
+    grounds: ["lode", "seam"],
+    ranges: {
+        Purity: (floor: 300, cap: 950),
+        Conductivity: (floor: 500, cap: 1000),
+        HeatTolerance: (floor: 300, cap: 750),
+        Stability: (floor: 300, cap: 800),
+        Density: (floor: 500, cap: 850),
+        Workability: (floor: 500, cap: 1000),
+    },
+    occurs: (
+        anywhere: 0.3,
+        provinces: [
+            (id: "strata:folded", weight: 1.0),
+            (id: "strata:karst", weight: 1.0),
+            (id: "strata:granite", weight: 0.2),
+            (id: "strata:badlands", weight: 0.2),
+        ],
+    ),
+)

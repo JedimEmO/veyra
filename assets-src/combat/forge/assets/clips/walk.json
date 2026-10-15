@@ -1,0 +1,306 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "walk",
+  "prompt": "A person is walking.",
+  "tags": [
+    "loop"
+  ],
+  "created": "2026-10-01",
+  "created_by": "agent:codex",
+  "provenance": "reconstructed",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": null,
+    "commit": null,
+    "model": null,
+    "seed": null,
+    "duration_s": null,
+    "cfg": null,
+    "sample": null,
+    "sweep_take": "walk.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/walk.npz",
+    "sha256": "sha256:59f850d6d1eeb19331920c7c91283e72af5a7610601442e5e398bb9da686f74f",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 3.95,
+    "trim_end_s": 1.4,
+    "auto_trim": null,
+    "in_place": "strip",
+    "y_mode": "off",
+    "loop": true,
+    "loop_blend_s": 0.1,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": null,
+    "clip": "walk-loop"
+  },
+  "measured": {
+    "frames": 53,
+    "fps": 20.0,
+    "duration_s": 2.6,
+    "avg_speed_mps": 1.0448737,
+    "root_motion": {
+      "net_m": [
+        0.166,
+        -2.691
+      ],
+      "direction_deg": 3.202,
+      "peak_speed_mps": 1.337,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.007,
+          -0.053
+        ],
+        [
+          -0.011,
+          -0.103
+        ],
+        [
+          -0.013,
+          -0.151
+        ],
+        [
+          -0.013,
+          -0.197
+        ],
+        [
+          -0.012,
+          -0.241
+        ],
+        [
+          -0.011,
+          -0.284
+        ],
+        [
+          -0.008,
+          -0.33
+        ],
+        [
+          -0.005,
+          -0.379
+        ],
+        [
+          0.002,
+          -0.431
+        ],
+        [
+          0.013,
+          -0.488
+        ],
+        [
+          0.029,
+          -0.549
+        ],
+        [
+          0.046,
+          -0.614
+        ],
+        [
+          0.062,
+          -0.675
+        ],
+        [
+          0.076,
+          -0.731
+        ],
+        [
+          0.086,
+          -0.784
+        ],
+        [
+          0.093,
+          -0.835
+        ],
+        [
+          0.098,
+          -0.884
+        ],
+        [
+          0.103,
+          -0.93
+        ],
+        [
+          0.106,
+          -0.976
+        ],
+        [
+          0.109,
+          -1.022
+        ],
+        [
+          0.111,
+          -1.071
+        ],
+        [
+          0.111,
+          -1.123
+        ],
+        [
+          0.109,
+          -1.18
+        ],
+        [
+          0.104,
+          -1.241
+        ],
+        [
+          0.099,
+          -1.305
+        ],
+        [
+          0.093,
+          -1.366
+        ],
+        [
+          0.089,
+          -1.421
+        ],
+        [
+          0.087,
+          -1.473
+        ],
+        [
+          0.089,
+          -1.523
+        ],
+        [
+          0.091,
+          -1.57
+        ],
+        [
+          0.094,
+          -1.615
+        ],
+        [
+          0.098,
+          -1.66
+        ],
+        [
+          0.101,
+          -1.706
+        ],
+        [
+          0.106,
+          -1.754
+        ],
+        [
+          0.113,
+          -1.805
+        ],
+        [
+          0.124,
+          -1.86
+        ],
+        [
+          0.138,
+          -1.919
+        ],
+        [
+          0.153,
+          -1.98
+        ],
+        [
+          0.167,
+          -2.04
+        ],
+        [
+          0.177,
+          -2.092
+        ],
+        [
+          0.185,
+          -2.142
+        ],
+        [
+          0.191,
+          -2.189
+        ],
+        [
+          0.196,
+          -2.234
+        ],
+        [
+          0.199,
+          -2.277
+        ],
+        [
+          0.201,
+          -2.32
+        ],
+        [
+          0.202,
+          -2.364
+        ],
+        [
+          0.202,
+          -2.411
+        ],
+        [
+          0.2,
+          -2.46
+        ],
+        [
+          0.194,
+          -2.514
+        ],
+        [
+          0.185,
+          -2.573
+        ],
+        [
+          0.175,
+          -2.635
+        ],
+        [
+          0.166,
+          -2.691
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [
+    {
+      "t": 0.6,
+      "t_src": 4.55,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 1.25,
+      "t_src": 5.2,
+      "name": "footstep_l",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 1.85,
+      "t_src": 5.8,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 2.5,
+      "t_src": 6.45,
+      "name": "footstep_l",
+      "origin": "contacts",
+      "audio": null
+    }
+  ],
+  "content_hash": "sha256:7fcb0a6adf36ff7837a80bfc16ab417f97e8351609485485b6ad235622e96a20",
+  "note": "Re-baked existing ARDY take; upstream receipt in assets-src/imported/walk.upstream.json. Timing study, 2026-10-01."
+}

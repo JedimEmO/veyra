@@ -1,0 +1,23 @@
+[package]
+name = "building-preview"
+description = "The ashlar preview and reference gallery over the Veyra building content."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+# The viewer and the reference gallery are ashlar's; this binary is the catalog
+# of Veyra scenes they run over.
+ashlar-preview.workspace = true
+veyra-buildings.workspace = true
+veyra-materials.workspace = true
+# The Terraces' house catalogue, reviewed beside the corporate kit.
+veyra-settlements.workspace = true
+ashlar.workspace = true
+anyhow.workspace = true
+
+[lints]
+workspace = true

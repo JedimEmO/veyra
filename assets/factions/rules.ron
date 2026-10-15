@@ -1,0 +1,5 @@
+// How the ground reads: the second holder within this much strength of the
+// first makes it contested ground.
+(
+    contested_margin: 0.1,
+)

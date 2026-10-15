@@ -1,0 +1,24 @@
+// The scavengers at a wreck (ticket 0012, step 5b): hostile to everyone and
+// of no faction, whoever holds the ground. Lighter than a camp's people by
+// tier; the cargo is the prize. The pad is larger than a camp's, so the ring
+// sits at smaller shares of it.
+(
+    version: 1,
+    id: "strata:wreck_scavengers",
+    at: Site("strata:wreck"),
+    crew: Unaligned,
+    stand_m: 280.0,
+    fold_m: 440.0,
+    returns_h: 6.0,
+    ring: [0.5, 0.35, 0.65, 0.2],
+    nudges: [0.0, 0.35, -0.35, 0.7, -0.7],
+    clear_m: 1.5,
+    tiers: [
+        // Tier 1.
+        [(kind: Rusher, count: 2)],
+        // Tier 2.
+        [(kind: Duelist, count: 1), (kind: Rusher, count: 2), (kind: Marksman, count: 1)],
+        // Tier 3.
+        [(kind: Duelist, count: 1), (kind: Rusher, count: 2), (kind: Marksman, count: 2)],
+    ],
+)

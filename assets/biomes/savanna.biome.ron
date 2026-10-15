@@ -1,0 +1,18 @@
+// Hot but not dry enough for dunes: the band between plains and desert.
+(
+    id: "strata:savanna",
+    name: "Savanna",
+    climate: (
+        temperature: (min: 0.62, max: 1.0),
+        moisture: (min: 0.35, max: 0.6),
+        elevation: (min: 0.55, max: 0.7),
+    ),
+    relief: (kind: "plains", amplitude_m: 22.0, wavelength_m: 1400.0, octaves: 3),
+    surface: (material: "strata:grass", slope_material: "strata:gravel"),
+    tint: (0.72, 0.68, 0.30),
+    // The ground's palette colour (ticket 0006): a warm ochre, dry grass.
+    ground: (0.76, 0.64, 0.34),
+    // Golden grass: warm and a little richer than the plains, the
+    // prairie's gold.
+    grade: (temperature: 0.009, saturation: 1.04),
+)

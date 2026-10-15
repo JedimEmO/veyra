@@ -1,0 +1,62 @@
+[package]
+name = "strata-atmosphere"
+description = "Sky, sun, fog and the day cycle bound to sim time for sci-fi-scrolls. Bevy render."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+strata-core = { workspace = true }
+strata-sim = { workspace = true }
+# The fog field the ground fog pass draws.
+strata-weather = { workspace = true }
+# The biomes' colour grades (`grade`), plain data beside the biomes.
+strata-registry = { workspace = true }
+# `bevy_pbr` for `Atmosphere` and `DistanceFog`, `bevy_light` for the sun,
+# `bevy_core_pipeline` for tonemapping on the camera.
+bevy = { workspace = true, features = [
+    "std",
+    "bevy_state",
+    "bevy_asset",
+    "bevy_render",
+    "bevy_pbr",
+    "bevy_light",
+    "bevy_camera",
+    "bevy_core_pipeline",
+    "bevy_post_process",
+    "bevy_anti_alias",
+    "tonemapping_luts",
+    "zstd_rust",
+    "bluenoise_texture",
+    # `DirectionalLightTexture` on the sun, the cloud shadow (`clouds`).
+    # Turns on `bevy_pbr`'s clustered decals too, whose binding array the
+    # light texture is read through; render-side only.
+    "pbr_light_textures",
+] }
+tracing = { workspace = true }
+serde = { workspace = true }
+ron = { workspace = true }
+
+[dev-dependencies]
+# `examples/sky.rs` is a windowed check of the sky at a given time of day.
+bevy = { workspace = true, features = ["default", "png"] }
+clap = { workspace = true }
+# A world of a test's own for the clipmap's tests.
+strata-worldgen = { workspace = true }
+# Parses and validates `assets/shaders/fog.wgsl` in a test: shaders load
+# from disk, so an edit that breaks one would otherwise show only at run
+# time. The version wgpu already pulls in.
+naga = { workspace = true, features = ["wgsl-in"] }
+
+[features]
+# `DirectionalLight::soft_shadow_size` (`SkySettings::soft_shadow_size`).
+# Render-side only: it adds two samplers to the mesh view bindings and turns
+# on `bevy_pbr`'s PCSS path. A feature of its own because Tint, the browser's
+# shader compiler, rejects that path (a `textureSample` in non-uniform control
+# flow), so the web build leaves it out and a sky file's size goes unused.
+pcss = ["bevy/experimental_pbr_pcss"]
+
+[lints]
+workspace = true

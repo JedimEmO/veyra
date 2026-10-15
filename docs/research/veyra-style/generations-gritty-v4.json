@@ -1,0 +1,21 @@
+{
+  "date": "2026-09-13",
+  "tool": "built-in image_gen",
+  "revision": "gritty-v4",
+  "status": "reference for review",
+  "edit_target": "concepts/woodland-borough-balanced-v3.png",
+  "environment_reference": "sources/woodland.png",
+  "output": "concepts/woodland-borough-gritty-v4.png",
+  "dimensions": [
+    1701,
+    925
+  ],
+  "sha256": "8e93b38d8fe33aaa53eb86251238822252ea4d0325095c00e0bb569153fc202d",
+  "generated_original": "~/.codex/generated_images/01a09991-38a1-72d2-a766-822654d8031c/exec-c78eb151-2528-4092-a4ba-0842c7b1fa9e.png",
+  "prompts": "prompts-gritty-v4.json",
+  "notes": [
+    "Preserve the existing engine environment and moderate asset complexity.",
+    "Explore varied construction, repair history, weathering and local service-yard wear.",
+    "Raster concept only; added structures, decals and puddles are not implemented engine content."
+  ]
+}

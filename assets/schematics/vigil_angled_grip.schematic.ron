@@ -1,0 +1,25 @@
+// The Vigil angled grip (ticket 0009, step 5): 20 units of any structural
+// metal. A lighter metal draws quicker, a tougher and more workable one
+// settles the recoil. Taught by Fittings 3 of the Weaponsmith. Read by
+// `strata_registry::schematic`; in no world version and no handshake.
+(
+    id: "veyra:schematic.vigil_angled_grip",
+    makes: "veyra:module.vigil_angled_grip",
+    complexity: 1,
+    profession: Some("weaponsmith.fittings.3"),
+    licence: None,
+    fixture: None,
+    slots: [
+        (id: "metal", name: "Metal", takes: Class("strata:structural_metal"), units: 20),
+    ],
+    lines: [
+        (line: "equip_time", from: [
+            (slot: "metal", stat: Light(Density), weight: 0.6),
+            (slot: "metal", stat: Attribute(Workability), weight: 0.4),
+        ]),
+        (line: "recoil_recovery", from: [
+            (slot: "metal", stat: Attribute(Toughness), weight: 0.6),
+            (slot: "metal", stat: Attribute(Workability), weight: 0.4),
+        ]),
+    ],
+)

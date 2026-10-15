@@ -1,0 +1,30 @@
+// The pistol a character holsters: the service pistol of
+// `crates/veyra-weapons` (key `service_pistol`, Kestrel), on the Pistol
+// row of the combat tables.
+//
+// Its mounts are the three the chassis has there. The feed and the grip
+// are open on every example and the sight opens at 400 on the moddability
+// line, so a bought pistol, at 500, has all three. It has no signature
+// yet: the pistol cannot be made, so its action line would only ever read
+// store grade and the table's interval stays the pistol's.
+(
+    id: "veyra:weapon.service_pistol",
+    name: "Kestrel service pistol",
+    maker: "Kestrel",
+    kind: Weapon(
+        family: "Pistol",
+        chassis: "service_pistol",
+        mounts: [
+            (slot: "sight", opens_at: Some(400)),
+            (slot: "feed"),
+            (slot: "grip"),
+        ],
+    ),
+    stack: 1,
+    lines: [
+        (id: "interval", name: "Action"),
+        (id: "durability", name: "Durability"),
+        (id: "moddability", name: "Moddability"),
+    ],
+    icon: (shape: Rod, color: "#C6D0DD", picture: Some("service_pistol/whole.png"), symbol: Some("veyra:icon.weapon.pistol")),
+)

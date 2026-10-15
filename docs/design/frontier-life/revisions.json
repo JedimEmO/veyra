@@ -1,0 +1,12 @@
+{
+  "date": "2026-09-29",
+  "tool": "built-in image_gen",
+  "revisions": [
+    {
+      "name": "03-creatures-v2",
+      "input": "concepts/03-creatures.png",
+      "output": "concepts/03-creatures-v2.png",
+      "prompt": "Use case: precise-object-edit. Asset type: revised xenobiology concept sheet for Veyra, grounded science fiction RPG. Input image is the EDIT TARGET, not just a style reference. Preserve the off-white sheet, 2 by 2 layout, four numbered creatures 01 02 03 04, habitat swatches, human scale silhouettes, painterly stylised realism and muted mineral palette. Make one focused revision: resolve the native lineage's alien body plan, emphasizing three distinct pairs of limbs. In panel 01 replace the dinosaur-like long-neck grazer with an ORIGINAL reedback: a big low barrel torso, six stout load-bearing legs spaced evenly in three pairs, toes splayed broadly, short flexible downward-facing feeding head formed of TWO smooth overlapping spatulate cheek plates with paired long vertical sensory slits and a hidden ventral rasping mouth, NO recognizable dinosaur skull. The short feeding neck emerges between the low front shoulders; the animal crops reeds close to the ground. On the upper back retain only three broad folded reed-like dermal ridges lying BACK along the body, not stegosaurus plates. Broad ivory-blue-green fleshy shields, soft tissue in leg joints, weight and mass like a large marsh grazer; unfamiliar but calm. In panel 02 keep the sleek low wedge-headed predator but show exactly six legs clearly, three near-side legs distinct front, middle, hind and three offset far-side legs, all attached to a long smooth powerful torso, no long dinosaur tail: shorten its tail to a blunt balancing rudder. Avoid aggressive open jaws. In panel 03 keep the small rounded mud scavenger, verify SIX short splayed legs with three clear near-side feet. In panel 04 preserve the membrane-wing glider and verify four short hook legs behind the wing-bearing front limb pair. Do not add extra creatures, extra panels, extra text or machinery. No Earth dinosaur silhouettes, no insect exoskeleton, no glowing eyes. Keep comparative scales and all four whole bodies within their existing panels."
+    }
+  ]
+}

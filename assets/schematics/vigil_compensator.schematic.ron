@@ -1,0 +1,26 @@
+// The Vigil vented muzzle (ticket 0009, step 5): 25 units of any structural
+// metal and a seal set. Recoil recovery is the metal's heat tolerance and
+// hardness; aim move speed is its density. Taught by Fittings 4 of the
+// Weaponsmith. Read by `strata_registry::schematic`; in no world version and
+// no handshake.
+(
+    id: "veyra:schematic.vigil_compensator",
+    makes: "veyra:module.vigil_compensator",
+    complexity: 2,
+    profession: Some("weaponsmith.fittings.4"),
+    licence: None,
+    fixture: None,
+    slots: [
+        (id: "metal", name: "Metal", takes: Class("strata:structural_metal"), units: 25),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "recoil_recovery", from: [
+            (slot: "metal", stat: Attribute(HeatTolerance), weight: 0.6),
+            (slot: "metal", stat: Attribute(Hardness), weight: 0.4),
+        ]),
+        (line: "aim_move_speed", from: [
+            (slot: "metal", stat: Attribute(Density), weight: 1.0),
+        ]),
+    ],
+)

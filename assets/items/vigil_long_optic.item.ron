@@ -1,0 +1,29 @@
+// The Vigil long optic of `crates/veyra-weapons` (`vigil_long_optic`), the
+// rifle's own sight (ticket 0010, step 4). Its lines are the module's two
+// properties, aim spread and equip time, with the factors there; a longer
+// glass tightens the aimed cone and is slower to bring up.
+(
+    id: "veyra:module.vigil_long_optic",
+    name: "Vigil long optic",
+    maker: "Vigil",
+    kind: Module(
+        slot: "sight",
+        fits: ["veyra:weapon.marksman_rifle"],
+        part: "vigil_long_optic",
+        effects: [
+            (property: AimSpread, factor: 0.86, line: "aim_spread"),
+            (property: EquipTime, factor: 1.1, line: "equip_time"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "aim_spread", name: "Spread"),
+        (id: "equip_time", name: "Draw"),
+    ],
+    icon: (
+        shape: Gem,
+        color: "#7FD1FF",
+        picture: Some("marksman_rifle/sight.vigil_long_optic.png"),
+        symbol: Some("veyra:icon.module.optic"),
+    ),
+)

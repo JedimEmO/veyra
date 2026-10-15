@@ -1,0 +1,28 @@
+// Evaporite salt: what a basin leaves when its water goes. The salt of the
+// worked example (crafting.md, 5.5) and of the ticket's lot card. A type
+// gives a floor and a cap for each attribute its class carries, and says
+// where it occurs: a weight anywhere, plus the share of each province and
+// biome named at the point times its weight, plus the water record's.
+(
+    id: "strata:evaporite_salt",
+    name: "Evaporite salt",
+    // A lot's name: "Calder salt".
+    short: "salt",
+    class: "strata:reactive",
+    // A deposit's place: "Calder flats".
+    grounds: ["flats", "pan"],
+    ranges: {
+        Purity: (floor: 200, cap: 900),
+        Potency: (floor: 300, cap: 950),
+        Stability: (floor: 100, cap: 700),
+    },
+    occurs: (
+        anywhere: 0.3,
+        provinces: [(id: "strata:badlands", weight: 1.2)],
+        biomes: [
+            (id: "strata:desert", weight: 1.0),
+            (id: "strata:coast", weight: 0.8),
+            (id: "strata:savanna", weight: 0.3),
+        ],
+    ),
+)

@@ -1,0 +1,95 @@
+{
+  "trace_sha256": "b6106a32273877b77b67f6a866f13db69f94b73d633f2620c1cc220810bf1706",
+  "samples": 1795,
+  "median_step_s": 0.016666999999999987,
+  "max_horizontal_speed_mps": 20.516670281115893,
+  "shots": 27,
+  "hurts": 0,
+  "actions": [
+    {
+      "action": "Ready",
+      "start_s": 0.016667,
+      "end_s": 10.266667,
+      "samples": 616,
+      "displacement_m": 5.361408760489133
+    },
+    {
+      "action": "Light",
+      "start_s": 10.283333,
+      "end_s": 10.483333,
+      "samples": 13,
+      "displacement_m": 0.3927068432125852
+    },
+    {
+      "action": "Followup",
+      "start_s": 10.5,
+      "end_s": 10.9,
+      "samples": 25,
+      "displacement_m": 0.5969038495310459
+    },
+    {
+      "action": "Ready",
+      "start_s": 10.916667,
+      "end_s": 12.083333,
+      "samples": 71,
+      "displacement_m": 0.0
+    },
+    {
+      "action": "Heavy",
+      "start_s": 12.1,
+      "end_s": 12.933333,
+      "samples": 51,
+      "displacement_m": 0.7552145840600453
+    },
+    {
+      "action": "Ready",
+      "start_s": 12.95,
+      "end_s": 13.483333,
+      "samples": 33,
+      "displacement_m": 0.2216350308435215
+    },
+    {
+      "action": "Dodge",
+      "start_s": 13.5,
+      "end_s": 13.966667,
+      "samples": 29,
+      "displacement_m": 3.0572328852509703
+    },
+    {
+      "action": "Ready",
+      "start_s": 13.983333,
+      "end_s": 15.083333,
+      "samples": 67,
+      "displacement_m": 0.0
+    },
+    {
+      "action": "Light",
+      "start_s": 15.1,
+      "end_s": 15.483333,
+      "samples": 24,
+      "displacement_m": 0.39431965559431126
+    },
+    {
+      "action": "Ready",
+      "start_s": 15.5,
+      "end_s": 19.283333,
+      "samples": 228,
+      "displacement_m": 0.0
+    },
+    {
+      "action": "Reload",
+      "start_s": 19.3,
+      "end_s": 20.633333,
+      "samples": 81,
+      "displacement_m": 0.0
+    },
+    {
+      "action": "Ready",
+      "start_s": 20.65,
+      "end_s": 29.916667,
+      "samples": 557,
+      "displacement_m": 2.663553106479037
+    }
+  ],
+  "note": "Elapsed simulation time; manual stepping cannot benchmark wall-clock FPS. Displacement between stored endpoints omits the entry tick."
+}

@@ -1,0 +1,73 @@
+// Where the deposits are and how far each reaches (docs/design/crafting.md, 3.3;
+// ticket 0007, step 3). Every dial of `strata_worldgen::deposits` and of
+// a lot's stack is here. Read by `strata_registry::resource`; in no world
+// version and no handshake: a deposit is a pure function of the seed, these
+// numbers, the resource types and the ground, and it moves no ground.
+(
+    version: 2,
+    // One candidate a cell of a square lattice, `cell_m` a side. `keep` is
+    // the share of cells that hold one; `jitter` how much of its cell a
+    // candidate may stand off the centre by; `tries` how many points of the
+    // cell are tried before it is left empty. A changed `cell_m` renames
+    // every deposit, since a deposit's id is its cell.
+    lattice: (cell_m: 400.0, keep: 0.85, jitter: 0.8, tries: 3),
+    // A point is refused in a river or a lake, within `shore_m` of the
+    // sea's level, on ground steeper than `slope_max` (rise over run), on a
+    // road's cleared way past `cleared_max` and on a pad or a settlement's
+    // ground past `developed_max`.
+    refuse: (slope_max: 0.35, shore_m: 1.5, cleared_max: 0.25, developed_max: 0.05),
+    // A figure is its type's floor plus a share of the span: `shared` of
+    // one roll the whole deposit has, the rest the attribute's own roll
+    // raised to `spike`, so most deposits are high in one line and plain in
+    // the others.
+    grade: (shared: 0.35, spike: 2),
+    // A deposit is an area round its centre. `radius_m` is the least and the
+    // most a radius may be, `peak` the least and the most its concentration
+    // at the centre may be, in per-mille; each is rolled from the deposit's
+    // cell, and the concentration falls to nothing at the radius.
+    area: (radius_m: (120.0, 260.0), peak: (350, 1000)),
+    // A lot stacks to `stack` units.
+    lots: (stack: 200),
+    // How near a deposit's centre the HUD names the place.
+    place: (place_m: 30.0),
+    // The register lists the nearest `rows` deposits within `range_m`, and
+    // the tracked one whether or not they reach it.
+    register: (range_m: 8000.0, rows: 60),
+    // The names a deposit takes: "Calder salt" from "Calder flats". A square
+    // number of them, dealt so that a name repeats every sixteen cells and
+    // no nearer.
+    roots: [
+        "Calder", "Harrow", "Brack", "Whin", "Kettle", "Anvil", "Oxbow", "Marrow",
+        "Tarn", "Garth", "Aldous", "Arden", "Ashby", "Askew", "Aster", "Auger",
+        "Bale", "Bannock", "Barrow", "Bascom", "Beacon", "Bede", "Bellow", "Birk",
+        "Blane", "Bodkin", "Borran", "Bourne", "Bracken", "Bramble", "Brandt", "Brede",
+        "Brigg", "Brindle", "Brock", "Burl", "Cadby", "Cairn", "Camber", "Carrick",
+        "Caster", "Cawdor", "Chantry", "Clough", "Cobb", "Colby", "Corrie", "Cotter",
+        "Crag", "Crane", "Cribb", "Croft", "Crome", "Cullen", "Dacre", "Dale",
+        "Darrow", "Denby", "Dervish", "Dibble", "Dillon", "Dorn", "Dover", "Drake",
+        "Drummond", "Dunmore", "Durrow", "Eamont", "Easby", "Eddow", "Elder", "Ellery",
+        "Embry", "Ennis", "Esker", "Fallow", "Farrow", "Fenwick", "Ferris", "Fetter",
+        "Finch", "Flint", "Forde", "Fother", "Gable", "Gallow", "Gannet", "Garrow",
+        "Gault", "Gedney", "Gilder", "Glaive", "Glen", "Gorse", "Gower", "Grange",
+        "Greave", "Grimble", "Gullet", "Hadley", "Hale", "Hallow", "Hamble", "Harker",
+        "Hasp", "Hatch", "Hawes", "Hazel", "Hedley", "Helm", "Heron", "Hexby",
+        "Hobb", "Holme", "Hook", "Hopper", "Hythe", "Ingle", "Irby", "Jarrow",
+        "Jessop", "Keld", "Kelby", "Kemble", "Kenrick", "Kerne", "Kilby", "Kirk",
+        "Knott", "Lackey", "Lambert", "Langley", "Larch", "Latch", "Lathe", "Leckie",
+        "Ledger", "Leven", "Linley", "Lorn", "Lowther", "Ludd", "Lynch", "Mallow",
+        "Mander", "Mardle", "Marl", "Masham", "Mellor", "Merrow", "Midge", "Milby",
+        "Morrow", "Mossop", "Muir", "Nab", "Naseby", "Nettle", "Newby", "Noke",
+        "Norrey", "Oakham", "Odell", "Orrin", "Osier", "Otley", "Padley", "Pallet",
+        "Parrock", "Pasco", "Peel", "Pennock", "Perrin", "Pike", "Pinder", "Plover",
+        "Pollard", "Prowse", "Quarrel", "Quill", "Raby", "Ragnall", "Rake", "Ramsey",
+        "Rannoch", "Rathe", "Redmire", "Rigg", "Rillet", "Roke", "Rowan", "Ruddock",
+        "Rushby", "Sable", "Saddler", "Saltby", "Sark", "Scar", "Scobie", "Selby",
+        "Sedge", "Shaw", "Sheaf", "Shiel", "Sibley", "Skell", "Slade", "Sleigh",
+        "Soames", "Sorrel", "Spar", "Sprott", "Stang", "Stobbs", "Stroud", "Sutter",
+        "Swale", "Tabor", "Tallow", "Tansy", "Thacker", "Thane", "Thorby", "Thrush",
+        "Tindal", "Tolley", "Torrin", "Trask", "Trent", "Tully", "Udale", "Ulver",
+        "Varley", "Venn", "Wadby", "Wain", "Wardle", "Warren", "Wath", "Weld",
+        "Wether", "Wick", "Wilby", "Winnow", "Wold", "Wray", "Yarrow", "Yeld",
+        "Yewdale", "Zennor", "Abney", "Brough", "Corby", "Dunn", "Eyre", "Firth",
+    ],
+)

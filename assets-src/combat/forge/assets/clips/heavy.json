@@ -1,0 +1,164 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "heavy",
+  "prompt": "A person swings a two-handed sword in a heavy overhead chop, then recovers to a ready stance.",
+  "tags": [],
+  "created": "2026-10-01",
+  "created_by": "agent:codex",
+  "provenance": "reconstructed",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": null,
+    "commit": null,
+    "model": null,
+    "seed": null,
+    "duration_s": null,
+    "cfg": null,
+    "sample": null,
+    "sweep_take": "sword_chop.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/heavy.npz",
+    "sha256": "sha256:a368913d06b65342979af6dd8eca7dfc2517f3b5a965af4f83865c1cfaa069a5",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 0.0,
+    "trim_end_s": 1.2,
+    "auto_trim": null,
+    "in_place": "strip",
+    "y_mode": "off",
+    "loop": false,
+    "loop_blend_s": 0.0,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": "0:0,0.75:0.32,1.1:0.45,1.75:0.85",
+    "clip": "heavy"
+  },
+  "measured": {
+    "frames": 18,
+    "fps": 20.0,
+    "duration_s": 0.85,
+    "avg_speed_mps": 0.88782865,
+    "root_motion": {
+      "net_m": [
+        0.526,
+        -0.276
+      ],
+      "direction_deg": 57.292,
+      "peak_speed_mps": 3.023,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.002,
+          -0.003
+        ],
+        [
+          0.001,
+          -0.015
+        ],
+        [
+          0.024,
+          -0.037
+        ],
+        [
+          0.076,
+          -0.074
+        ],
+        [
+          0.167,
+          -0.135
+        ],
+        [
+          0.303,
+          -0.202
+        ],
+        [
+          0.438,
+          -0.249
+        ],
+        [
+          0.534,
+          -0.274
+        ],
+        [
+          0.586,
+          -0.291
+        ],
+        [
+          0.597,
+          -0.293
+        ],
+        [
+          0.595,
+          -0.291
+        ],
+        [
+          0.584,
+          -0.29
+        ],
+        [
+          0.568,
+          -0.287
+        ],
+        [
+          0.553,
+          -0.285
+        ],
+        [
+          0.54,
+          -0.282
+        ],
+        [
+          0.532,
+          -0.279
+        ],
+        [
+          0.526,
+          -0.276
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [
+    {
+      "t": 0.32,
+      "t_src": 0.75,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 0.32,
+      "t_src": 0.75,
+      "name": "contact_start",
+      "origin": "agent:codex",
+      "audio": null
+    },
+    {
+      "t": 0.431,
+      "t_src": 1.05,
+      "name": "footstep_l",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 0.45,
+      "t_src": 1.1,
+      "name": "contact_end",
+      "origin": "agent:codex",
+      "audio": null
+    }
+  ],
+  "content_hash": "sha256:4b5136dd9b5b4eaa561c3952f37ed9ba51801f99dd03fc8a96c81c739eae7a7c",
+  "note": "Re-baked existing ARDY take; upstream receipt in assets-src/imported/sword_chop.upstream.json. Timing study, 2026-10-01."
+}

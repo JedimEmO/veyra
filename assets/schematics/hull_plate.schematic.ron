@@ -1,0 +1,22 @@
+// The hull plate (ticket 0009, step 5): 30 units of any structural metal,
+// pressed. Rigidity is the metal's strength and toughness, with how well it
+// works behind them. Taught by Materials 2 of the Fabricator. Read by
+// `strata_registry::schematic`; in no world version and no handshake.
+(
+    id: "veyra:schematic.hull_plate",
+    makes: "veyra:component.hull_plate",
+    complexity: 1,
+    profession: Some("fabricator.materials.2"),
+    licence: None,
+    fixture: None,
+    slots: [
+        (id: "metal", name: "Metal", takes: Class("strata:structural_metal"), units: 30),
+    ],
+    lines: [
+        (line: "rigidity", from: [
+            (slot: "metal", stat: Attribute(Strength), weight: 0.5),
+            (slot: "metal", stat: Attribute(Toughness), weight: 0.3),
+            (slot: "metal", stat: Attribute(Workability), weight: 0.2),
+        ]),
+    ],
+)

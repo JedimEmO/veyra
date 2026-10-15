@@ -1,0 +1,34 @@
+// The patrol carbine's only feed module in `crates/veyra-weapons`
+// (`patrol_extended_feed`, which fits the patrol carbine alone). Its lines
+// are the two properties the module changes there, capacity and reload
+// time, under the names the card gives their quality.
+//
+// The effects are the module's factors there, each driven by the line of
+// its name: a factor is what a bought one (every line 500) does, and the
+// line moves it inside the band of `assets/crafting/fitting.ron`. `part` is
+// the module's key, which its baked picture is filed under.
+(
+    id: "veyra:module.patrol_extended_feed",
+    name: "Patrol extended magazine",
+    maker: "Vigil",
+    kind: Module(
+        slot: "feed",
+        fits: ["veyra:weapon.patrol_carbine"],
+        part: "patrol_extended_feed",
+        effects: [
+            (property: Capacity, factor: 1.2, line: "capacity"),
+            (property: ReloadTime, factor: 1.1, line: "reload_time"),
+        ],
+    ),
+    stack: 20,
+    lines: [
+        (id: "capacity", name: "Capacity"),
+        (id: "reload_time", name: "Handling"),
+    ],
+    icon: (
+        shape: Slab,
+        color: "#7FD1FF",
+        picture: Some("patrol_carbine/feed.patrol_extended_feed.png"),
+        symbol: Some("veyra:icon.module.feed"),
+    ),
+)

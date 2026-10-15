@@ -1,0 +1,129 @@
+{
+  "schema": 2,
+  "kind": "clip",
+  "name": "dodge",
+  "prompt": "A person does a fast combat forward roll over their shoulder, tucking tight, and comes up quickly into a low ready fighting stance.",
+  "tags": [],
+  "created": "2026-10-01",
+  "created_by": "agent:codex",
+  "provenance": "reconstructed",
+  "rig": "humanoid",
+  "generator": {
+    "tool": "ardy",
+    "repo": null,
+    "commit": null,
+    "model": null,
+    "seed": null,
+    "duration_s": null,
+    "cfg": null,
+    "sample": null,
+    "sweep_take": "roll.npz"
+  },
+  "source": {
+    "path": "assets-src/takes/dodge.npz",
+    "sha256": "sha256:d668e874a620f8e89ecbda90c8a7f8bad3434bfacf75a4129b8748e04e2fb766",
+    "skeleton": "cskel27"
+  },
+  "recipe": {
+    "trim_start_s": 0.2,
+    "trim_end_s": 0.0,
+    "auto_trim": null,
+    "in_place": "strip",
+    "y_mode": "off",
+    "loop": false,
+    "loop_blend_s": 0.0,
+    "exaggerate": 1.0,
+    "arm_bend_deg": 0.0,
+    "lean_deg": 0.0,
+    "shoulder_back_deg": 0.0,
+    "retime": "0:0,0.5:0.12,1.05:0.30,1.75:0.48",
+    "clip": "dodge"
+  },
+  "measured": {
+    "frames": 11,
+    "fps": 20.0,
+    "duration_s": 0.5,
+    "avg_speed_mps": 4.781356,
+    "root_motion": {
+      "net_m": [
+        1.438,
+        -1.869
+      ],
+      "direction_deg": 26.748,
+      "peak_speed_mps": 8.244,
+      "track_xz_m": [
+        [
+          -0.0,
+          -0.0
+        ],
+        [
+          0.013,
+          -0.025
+        ],
+        [
+          0.121,
+          -0.094
+        ],
+        [
+          0.292,
+          -0.32
+        ],
+        [
+          0.488,
+          -0.642
+        ],
+        [
+          0.735,
+          -0.972
+        ],
+        [
+          0.908,
+          -1.202
+        ],
+        [
+          1.099,
+          -1.394
+        ],
+        [
+          1.328,
+          -1.585
+        ],
+        [
+          1.422,
+          -1.81
+        ],
+        [
+          1.438,
+          -1.869
+        ]
+      ]
+    },
+    "mesh": null
+  },
+  "body": null,
+  "events": [
+    {
+      "t": 0.096,
+      "t_src": 0.6,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 0.416,
+      "t_src": 1.7,
+      "name": "footstep_l",
+      "origin": "contacts",
+      "audio": null
+    },
+    {
+      "t": 0.416,
+      "t_src": 1.7,
+      "name": "footstep_r",
+      "origin": "contacts",
+      "audio": null
+    }
+  ],
+  "content_hash": "sha256:3ef8756ee1015075168f10eeeffad5b0b9fc5b727d0650f7a6d84beb24966d21",
+  "note": "Re-baked existing ARDY take; upstream receipt in assets-src/imported/roll.upstream.json. Timing study, 2026-10-01."
+}

@@ -1,0 +1,23 @@
+[package]
+name = "veyra-materials"
+description = "Veyra's material definitions and graphs, baked by the content step."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+# The graph engine is a tool's dependency: this crate belongs to `tools/content`
+# and the building preview, never to `game` or `server`, which load the files
+# the content step bakes from it.
+[dependencies]
+ashlar.workspace = true
+ashlar-material.workspace = true
+
+# The review test writes the baked terrain layers as PNGs to look at.
+[dev-dependencies]
+image.workspace = true
+
+[lints]
+workspace = true

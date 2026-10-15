@@ -1,0 +1,68 @@
+// The courier bike, the one vehicle of ticket 0009, step 2 (field-loop.md,
+// section 3). Every dial of the ride is here and read through
+// `strata_registry::vehicle`; none is in code and none is in the combat
+// tables, so none is in a handshake. Speeds are metres a second,
+// accelerations metres a second squared, angles degrees.
+(
+    version: 1,
+    id: "veyra:vehicle.courier_bike",
+    name: "Courier bike",
+    // Top speeds by the ground under it, and the reverse.
+    speed: (road: 30.0, ground: 18.0, reverse: 4.0),
+    // Gathering speed, braking against the throttle, and the slowing with
+    // no throttle at all.
+    accel: 9.0,
+    brake: 16.0,
+    drag: 3.0,
+    // Degrees a second at a crawl and at top speed, straight between; grip
+    // is how fast the velocity swings round to the heading, per second:
+    // lower slides more. Forward is the throttle inside `throttle_arc_deg` of
+    // the heading (seen from the camera) and a stick under `dead_zone` asks
+    // for nothing.
+    turn: (slow: 150.0, fast: 55.0, grip: 6.0, throttle_arc_deg: 100.0, dead_zone: 0.1),
+    // Up to `full_deg` no loss, from `stop_deg` it will not climb, straight
+    // between. Going down costs nothing.
+    slope: (full_deg: 14.0, stop_deg: 36.0),
+    // Water this deep over the ground or less is ridden over at full
+    // speed; between the two the top speed falls to `crawl`; deeper than
+    // `stall_m` throws the rider.
+    water: (ride_m: 0.5, stall_m: 1.1, crawl: 3.0),
+    // What counts as road: the sample's `cleared` at or above this, or a
+    // settlement's ground at or above `developed_min`.
+    road: (cleared_min: 0.5, developed_min: 0.5),
+    // A tick that takes `lost_share` of the speed off against something not
+    // walkable, while faster than `speed_min`, is a crash.
+    crash: (speed_min: 12.0, lost_share: 0.6),
+    // Calling: the channel, in seconds, how far the nearest living hostile
+    // must be, and how far below the player's point their feet are (the
+    // character's half height), which the water a call is refused in is
+    // measured from.
+    call: (channel_s: 1.5, clear_m: 40.0, feet_m: 0.85),
+    // Drawing: how high it hovers, the camera's boom and eye while mounted,
+    // and where the rider sits in the model's frame.
+    // The household's own bike is an item of the same name (`items/
+    // courier_bike.item.ron`). Its lines scale the top speeds and the turn,
+    // the factor at line 0 and at line 1000 and exactly one at 500; the
+    // saddle bags are a grid of cargo; a crash costs `crash` points of
+    // condition at `crash.speed_min`, up to `speed_cap` times that, and below
+    // wear.ron's `slide_below` both top speeds slide to `worst_speed` of
+    // themselves at condition 0. A bike at 0 still rides.
+    lines: (speed: (0.90, 1.10), handling: (0.85, 1.15)),
+    cargo: (columns: 6, rows: 3),
+    wear: (crash: 120, speed_cap: 3.0, worst_speed: 0.6),
+    // The look: the lean into a turn at the slow-turn rate (degrees), the
+    // nose's pitch limit (radians), the bob (metres, seconds), the camera's
+    // pull in seconds and how fast lean and pitch follow, per second.
+    view: (
+        hover_m: 0.9,
+        camera_distance: 6.0,
+        camera_eye: 1.6,
+        seat: (0.0, 0.55, -0.1),
+        lean_deg: 20.0,
+        pitch_max: 0.45,
+        bob_m: 0.03,
+        bob_period_s: 2.6,
+        ease_s: 0.5,
+        follow: 8.0,
+    ),
+)

@@ -1,0 +1,20 @@
+# name|seconds|prompt. The interface's sounds: a helmet display, not a menu.
+# Takes are separate names so each gets its own seed.
+ui_hover_1|0.5|a short high clean digital blip from a helmet display, one quick tick, close, dry
+ui_hover_2|0.5|a short high clean digital blip from a helmet display, one quick tick, close, dry
+ui_click_1|0.5|a crisp short digital confirmation click from a helmet interface, clean, a hint of glass, dry
+ui_click_2|0.5|a crisp short digital confirmation click from a helmet interface, clean, a hint of glass, dry
+ui_open_1|0.7|a glass panel sliding open with a quick airy whoosh and a bright crystalline chime at the end, close, dry
+ui_open_2|0.7|a glass panel sliding open with a quick airy whoosh and a bright crystalline chime at the end, close, dry
+ui_close_1|0.6|a short descending electronic swoosh ending in a soft clean click, a holographic window closing, close, dry
+ui_close_2|0.6|a short descending electronic swoosh ending in a soft clean click, a holographic window closing, close, dry
+ui_toast_1|0.7|a soft two-note electronic notification chime from a helmet display, gentle, clean, dry
+ui_toast_2|0.7|a soft two-note electronic notification chime from a helmet display, gentle, clean, dry
+ui_refuse_1|0.5|a short dull low electronic denial buzz from a helmet display, muted, dry
+ui_refuse_2|0.5|a short dull low electronic denial buzz from a helmet display, muted, dry
+xp_credit_1|0.6|a tiny bright ascending digital sparkle from a helmet display as a counter ticks up, clean, dry
+xp_credit_2|0.6|a tiny bright ascending digital sparkle from a helmet display as a counter ticks up, clean, dry
+skill_learn_1|1.2|a warm resolved rising electronic chord with a soft shimmer, a helmet display confirming an upgrade, clean, dry
+skill_learn_2|1.2|a warm resolved rising electronic chord with a soft shimmer, a helmet display confirming an upgrade, clean, dry
+bench_switch_1|1.4|a sci-fi personal system powering down then powering back up: a short descending hum, a click, then a rising electronic surge that settles, dry
+bench_switch_2|1.4|a sci-fi personal system powering down then powering back up: a short descending hum, a click, then a rising electronic surge that settles, dry

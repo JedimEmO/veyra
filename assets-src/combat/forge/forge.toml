@@ -1,0 +1,40 @@
+# asset-forge project file. This is the root marker: `forge` walks up from the
+# working directory until it finds one, and every path below is relative to
+# it. Convention covers the rest — kind -> directory (bodies | models | clips |
+# audio/sfx | audio/music | audio/voice), sidecar = same stem `.json`,
+# `library.json` at the asset root.
+
+[project]
+name = "veyra-combat"
+library_version = "0.1.2"   # bumped by hand when shipped assets change
+rig = "humanoid"                # the rig profile, by directory name under paths.rigs
+
+[paths]
+assets = "assets"
+sources = "assets-src"
+out = "out"
+rigs = ".forge/rigs"
+
+[studio]
+# stage_body = "vex_runner"    # the body clips are posed on by default
+
+[backends]
+# dir = "/path/to/asset-forge/backends"   # defaults to the toolkit's own
+
+[make]
+# What you make here. Everything after reads this: `forge setup` installs
+# only what a chosen kind needs, and `forge doctor` prints `off` for a kind
+# you did not choose rather than probing it.
+props      = false # trellis2
+characters = true  # trellis2 + skintokens
+clips      = true  # ardy
+sfx        = true  # moss_sfx
+music      = false # acestep
+voice      = false # moss_tts + moss_speech
+
+[hardware]
+# Detected from the card and overridable. Tiers change registers and
+# variants according to backend descriptors; no image generator ships here.
+# Lean lifts at 1024 cubed like full; doctor checks the selected budgets.
+tier = "full"     # a 24 GB card: every model in its full register
+comfy_url = "http://127.0.0.1:8188"   # where the ComfyUI service answers; another machine's is fine

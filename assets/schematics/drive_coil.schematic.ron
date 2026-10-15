@@ -1,0 +1,24 @@
+// The drive coil (ticket 0009, step 5): 20 units of any conductor wound
+// round 10 of any brine. Flux is mostly how well the conductor carries, with
+// its stability and the brine's own conductivity behind it. Taught by
+// Materials 1 of the Fabricator. Read by `strata_registry::schematic`; in
+// no world version and no handshake.
+(
+    id: "veyra:schematic.drive_coil",
+    makes: "veyra:component.drive_coil",
+    complexity: 1,
+    profession: Some("fabricator.materials.1"),
+    licence: None,
+    fixture: None,
+    slots: [
+        (id: "conductor", name: "Conductor", takes: Class("strata:conductor"), units: 20),
+        (id: "brine", name: "Brine", takes: Class("strata:brine"), units: 10),
+    ],
+    lines: [
+        (line: "flux", from: [
+            (slot: "conductor", stat: Attribute(Conductivity), weight: 0.6),
+            (slot: "conductor", stat: Attribute(Stability), weight: 0.2),
+            (slot: "brine", stat: Attribute(Conductivity), weight: 0.2),
+        ]),
+    ],
+)

@@ -1,0 +1,28 @@
+// High ground of any climate. Ridged multifractal over the range's own
+// height (`WorldParams::range_height_m`). The window starts inside the top
+// of the highlands' (ticket 0004), so a range stands on foothills and the
+// mountains keep under a fifth of the land. The relief rises from 0.79,
+// inside the blend, over 0.2 of elevation, eased so that it is a hundredth
+// of itself where the mountains' weight ramps (no scarp) and comes in near
+// the crest (`WorldParams::mountain_rise`). Since step 4 the amplitude is
+// 600 m and there is no lift (1500 and 400 m since step 2b, 1800 and 700
+// before): the height a range had from them came in over a band its flank
+// crossed in a few hundred metres, the wall at every range's foot, and the
+// range's own height, folded out of it, rises over kilometres.
+(
+    id: "strata:mountains",
+    name: "Mountains",
+    climate: (
+        temperature: (min: 0.0, max: 1.0),
+        moisture: (min: 0.0, max: 1.0),
+        elevation: (min: 0.80, max: 1.0),
+    ),
+    relief: (kind: "mountains", amplitude_m: 600.0, wavelength_m: 6000.0, octaves: 6, persistence: 0.42, lift_m: 0.0, erosion: 1.2),
+    surface: (material: "strata:snow", slope_material: "strata:rock", slope_threshold: 0.35),
+    tint: (0.55, 0.52, 0.50),
+    // The ground's palette colour (ticket 0006): a cool blue grey.
+    ground: (0.52, 0.55, 0.60),
+    // Thin cold air: cooler, less colour, brighter snow and sky, so a
+    // range feels remote and high.
+    grade: (temperature: -0.008, saturation: 0.9, gain: 1.03),
+)

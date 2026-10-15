@@ -1,0 +1,36 @@
+// The crafting session's dials (docs/design/crafting.md, 5.3). Read by
+// `strata_registry::schematic` (`SessionRules`); in no world version and
+// no handshake. Until the Weaponsmith tree exists (ticket 0007, step 9)
+// everyone is a journeyman at a plain bench, so the crafter's boxes and the
+// fixture move nothing yet and these are the whole of the rules.
+(
+    version: 1,
+    // The share of its ceiling every line lands at when the product is
+    // assembled, with no roll.
+    assembly: 0.6,
+    // The experimentation points a session has, by the schematic's
+    // complexity, from 1.
+    points: [3, 5, 8],
+    // What each result adds to a line, as a share of its ceiling. A line
+    // never passes its ceiling and never falls under nought.
+    results: [
+        (Exceptional, 0.16),
+        (Good, 0.10),
+        (Fair, 0.06),
+        (Poor, 0.02),
+        (Setback, -0.04),
+    ],
+    // The chance of each result in percent, in the results' order, a row a
+    // standing: the novice's, the journeyman's, the master's. Steady is for
+    // getting there; bold is for reaching a ceiling in fewer points, at the
+    // risk of going backwards.
+    odds: (
+        steady: [[0, 35, 50, 15, 0], [5, 55, 35, 5, 0], [15, 65, 20, 0, 0]],
+        bold: [[15, 20, 25, 22, 18], [25, 25, 25, 15, 10], [38, 27, 20, 10, 5]],
+    ),
+    // The row everyone rolls on: the journeyman's.
+    base_row: 1,
+    // Workable stock moves the odds a row upward: when the average
+    // Workability of the lots in the slots that carry it is this or more.
+    workability: (row_up_from: 700),
+)

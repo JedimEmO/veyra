@@ -1,0 +1,1235 @@
+(
+    schema_version: 1,
+    status: "Procedural authoring catalogue. Module factors are design proposals, not measured combat balance.",
+    manufacturers: [
+        (
+            id: Kestrel,
+            name: "Kestrel",
+            design: "Service plasma equipment with pale shells and inset energy cores.",
+        ),
+        (
+            id: Morrow,
+            name: "Morrow",
+            design: "Slender precision equipment with quiet surfaces and exposed metal.",
+        ),
+        (
+            id: Bracken,
+            name: "Bracken",
+            design: "Industrial field tools with worn casing and tactile fittings.",
+        ),
+        (
+            id: Vigil,
+            name: "Vigil",
+            design: "Dark military equipment with lean receivers, recessed panels and restrained field fittings.",
+        ),
+    ],
+    weapons: [
+        (
+            id: "service_pistol",
+            name: "Service pistol",
+            maker: Kestrel,
+            nominal_length_m: 0.24,
+            slots: [
+                Sight,
+                Feed,
+                Grip,
+            ],
+            role: "Compact plasma weapon for mobile, close-range pressure. Fast handling and a replaceable power cell.",
+        ),
+        (
+            id: "burst_rifle",
+            name: "Burst rifle",
+            maker: Kestrel,
+            nominal_length_m: 0.76,
+            slots: [
+                Sight,
+                Feed,
+                ForeEnd,
+            ],
+            role: "Three-pulse plasma rifle for deliberate medium-range fire. Modular sights, power feed and cooling shroud.",
+        ),
+        (
+            id: "precision_rifle",
+            name: "Precision rifle",
+            maker: Morrow,
+            nominal_length_m: 1.05,
+            slots: [
+                Sight,
+                Feed,
+                Stock,
+            ],
+            role: "Long-range deliberate shots with commitment and poor close handling.",
+        ),
+        (
+            id: "scattergun",
+            name: "Scattergun",
+            maker: Bracken,
+            nominal_length_m: 0.69,
+            slots: [
+                Muzzle,
+                Feed,
+                Grip,
+            ],
+            role: "Close-range spread and front-loaded damage, limited posture and costly reload openings.",
+        ),
+        (
+            id: "support_projector",
+            name: "Support projector",
+            maker: Kestrel,
+            nominal_length_m: 0.98,
+            slots: [
+                Cooling,
+                Feed,
+                Support,
+            ],
+            role: "Direct-fire lane pressure; heat and bracing create a commando playstyle without splash.",
+        ),
+        (
+            id: "field_blade",
+            name: "Field blade",
+            maker: Morrow,
+            nominal_length_m: 0.72,
+            slots: [
+                Edge,
+                Grip,
+            ],
+            role: "Stamina-efficient close pressure, limited reach and modest posture per contact.",
+        ),
+        (
+            id: "heavy_cutter",
+            name: "Heavy cutter",
+            maker: Bracken,
+            nominal_length_m: 1.02,
+            slots: [
+                Head,
+                Power,
+                Grip,
+            ],
+            role: "Committed posture-breaking cut with costly misses.",
+        ),
+        (
+            id: "impact_baton",
+            name: "Impact baton",
+            maker: Bracken,
+            nominal_length_m: 0.52,
+            slots: [
+                Head,
+                Grip,
+            ],
+            role: "Compact impact tool for close-range pressure. A weighted head trades recovery speed for a harder strike.",
+        ),
+        (
+            id: "combat_pistol",
+            name: "Combat pistol",
+            maker: Vigil,
+            nominal_length_m: 0.22,
+            slots: [
+                Sight,
+                Feed,
+                Grip,
+                Muzzle,
+            ],
+            role: "Compact Vigil sidearm with dark service panels and interchangeable field fittings.",
+        ),
+        (
+            id: "patrol_carbine",
+            name: "Patrol carbine",
+            maker: Vigil,
+            nominal_length_m: 0.78,
+            slots: [
+                Sight,
+                Feed,
+                ForeEnd,
+                Stock,
+                Muzzle,
+                Grip,
+            ],
+            role: "Lean Vigil carbine for mobile patrols, with a vented fore-end and a restrained modular stock.",
+        ),
+        (
+            id: "marksman_rifle",
+            name: "Marksman rifle",
+            maker: Vigil,
+            nominal_length_m: 1.03,
+            slots: [
+                Sight,
+                Feed,
+                Stock,
+                Muzzle,
+                Support,
+            ],
+            role: "Long Vigil precision chassis with a narrow receiver, protected sight line and optional field rest.",
+        ),
+        (
+            id: "breacher",
+            name: "Breacher",
+            maker: Vigil,
+            nominal_length_m: 0.68,
+            slots: [
+                Sight,
+                Feed,
+                Grip,
+                Muzzle,
+                Stock,
+            ],
+            role: "Short Vigil scatter weapon with a broad muzzle, compact feed and close handling.",
+        ),
+    ],
+    modules: [
+        (
+            id: "compact_optic",
+            name: "Service compact optic",
+            slot: Sight,
+            weapons: [
+                Pistol,
+                BurstRifle,
+            ],
+            description: "Low enclosed optical hood on the shared service sight interface.",
+            effects: [
+                (
+                    label: "aim spread",
+                    factor: 0.9,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.06,
+                ),
+            ],
+        ),
+        (
+            id: "pistol_extended_cell",
+            name: "Pistol extended cell",
+            slot: Feed,
+            weapons: [
+                Pistol,
+            ],
+            description: "Deeper cell heel with unchanged key and withdrawal axis.",
+            effects: [
+                (
+                    label: "capacity",
+                    factor: 1.25,
+                ),
+                (
+                    label: "reload time",
+                    factor: 1.15,
+                ),
+            ],
+        ),
+        (
+            id: "pistol_stable_grip",
+            name: "Pistol stability grip",
+            slot: Grip,
+            weapons: [
+                Pistol,
+            ],
+            description: "Broader rear grip panel contained inside the original hand envelope.",
+            effects: [
+                (
+                    label: "recoil recovery",
+                    factor: 0.9,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.08,
+                ),
+            ],
+        ),
+        (
+            id: "rifle_extended_cell",
+            name: "Rifle extended cell",
+            slot: Feed,
+            weapons: [
+                BurstRifle,
+            ],
+            description: "Downward extension of the stock power pack, with enlarged reload clearance.",
+            effects: [
+                (
+                    label: "capacity",
+                    factor: 1.25,
+                ),
+                (
+                    label: "reload time",
+                    factor: 1.15,
+                ),
+            ],
+        ),
+        (
+            id: "rifle_cooled_fore_end",
+            name: "Rifle cooled fore-end",
+            slot: ForeEnd,
+            weapons: [
+                BurstRifle,
+            ],
+            description: "Longer ribbed outer cooling sleeve; support hand position unchanged.",
+            effects: [
+                (
+                    label: "repeat interval",
+                    factor: 0.92,
+                ),
+                (
+                    label: "aim move speed",
+                    factor: 0.92,
+                ),
+            ],
+        ),
+        (
+            id: "adapted_morrow_optic",
+            name: "Workshop adapted Morrow optic",
+            slot: Sight,
+            weapons: [
+                BurstRifle,
+            ],
+            description: "Morrow narrow optic on a visible workshop adapter shoe; one assembled sight module.",
+            effects: [
+                (
+                    label: "aim spread",
+                    factor: 0.82,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.15,
+                ),
+                (
+                    label: "aim move speed",
+                    factor: 0.95,
+                ),
+            ],
+        ),
+        (
+            id: "precision_long_optic",
+            name: "Precision long optic",
+            slot: Sight,
+            weapons: [
+                PrecisionRifle,
+            ],
+            description: "Long protected optic aligned with the stock sight centreline.",
+            effects: [
+                (
+                    label: "aim spread",
+                    factor: 0.85,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.12,
+                ),
+            ],
+        ),
+        (
+            id: "precision_compact_feed",
+            name: "Precision compact magazine",
+            slot: Feed,
+            weapons: [
+                PrecisionRifle,
+            ],
+            description: "Shorter box with identical top interface and latch.",
+            effects: [
+                (
+                    label: "capacity",
+                    factor: 0.8,
+                ),
+                (
+                    label: "reload time",
+                    factor: 0.9,
+                ),
+            ],
+        ),
+        (
+            id: "scatter_wide_muzzle",
+            name: "Scatter spread muzzle",
+            slot: Muzzle,
+            weapons: [
+                Scattergun,
+            ],
+            description: "Wide vented muzzle assembly; wider pellet pattern buys faster discharge recovery.",
+            effects: [
+                (
+                    label: "aim spread",
+                    factor: 1.15,
+                ),
+                (
+                    label: "repeat interval",
+                    factor: 0.94,
+                ),
+            ],
+        ),
+        (
+            id: "scatter_extended_feed",
+            name: "Scatter extended magazine",
+            slot: Feed,
+            weapons: [
+                Scattergun,
+            ],
+            description: "Deeper detachable box; tube-fed and per-shell reloads are outside this first chassis.",
+            effects: [
+                (
+                    label: "capacity",
+                    factor: 1.25,
+                ),
+                (
+                    label: "reload time",
+                    factor: 1.15,
+                ),
+            ],
+        ),
+        (
+            id: "support_cooling_jacket",
+            name: "Support cooling jacket",
+            slot: Cooling,
+            weapons: [
+                SupportProjector,
+            ],
+            description: "Larger finned jacket contained away from support grip and exhaust path.",
+            effects: [
+                (
+                    label: "cooling rate",
+                    factor: 1.15,
+                ),
+                (
+                    label: "brace time",
+                    factor: 1.1,
+                ),
+            ],
+        ),
+        (
+            id: "support_stable_rest",
+            name: "Support stabilizing rest",
+            slot: Support,
+            weapons: [
+                SupportProjector,
+            ],
+            description: "Broad fixed underside rest, no folding bipod or terrain lock in the first proof.",
+            effects: [
+                (
+                    label: "recoil recovery",
+                    factor: 0.9,
+                ),
+                (
+                    label: "brace time",
+                    factor: 1.15,
+                ),
+            ],
+        ),
+        (
+            id: "blade_balanced_grip",
+            name: "Blade balanced grip",
+            slot: Grip,
+            weapons: [
+                FieldBlade,
+            ],
+            description: "Inset grip weights and restrained end-cap change; blade profile and palm frame stay fixed.",
+            effects: [
+                (
+                    label: "attack stamina",
+                    factor: 0.9,
+                ),
+                (
+                    label: "hit posture",
+                    factor: 0.94,
+                ),
+            ],
+        ),
+        (
+            id: "cutter_reinforced_head",
+            name: "Cutter reinforced head",
+            slot: Head,
+            weapons: [
+                HeavyCutter,
+            ],
+            description: "Thicker rear head spine; cutting edge endpoints remain fixed.",
+            effects: [
+                (
+                    label: "hit posture",
+                    factor: 1.12,
+                ),
+                (
+                    label: "recovery time",
+                    factor: 1.1,
+                ),
+            ],
+        ),
+        (
+            id: "baton_weighted_head",
+            name: "Baton weighted head",
+            slot: Head,
+            weapons: [
+                ImpactBaton,
+            ],
+            description: "Replaceable blunt head collar inside the approved reach envelope.",
+            effects: [
+                (
+                    label: "hit posture",
+                    factor: 1.1,
+                ),
+                (
+                    label: "hit damage",
+                    factor: 0.9,
+                ),
+            ],
+        ),
+        (
+            id: "pistol_low_optic",
+            name: "Pistol open sight",
+            slot: Sight,
+            weapons: [
+                Pistol,
+            ],
+            description: "Shallow open hood with a clear sight line and little added height.",
+            effects: [
+                (
+                    label: "aim spread",
+                    factor: 0.96,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.02,
+                ),
+            ],
+        ),
+        (
+            id: "pistol_slim_grip",
+            name: "Pistol slim grip",
+            slot: Grip,
+            weapons: [
+                Pistol,
+            ],
+            description: "Thin inset panels keep the grip light and compact.",
+            effects: [
+                (
+                    label: "equip time",
+                    factor: 0.94,
+                ),
+                (
+                    label: "recoil recovery",
+                    factor: 1.06,
+                ),
+            ],
+        ),
+        (
+            id: "rifle_open_fore_end",
+            name: "Rifle open fore-end",
+            slot: ForeEnd,
+            weapons: [
+                BurstRifle,
+            ],
+            description: "Short skeletal sleeve leaves the cooling core visible.",
+            effects: [
+                (
+                    label: "equip time",
+                    factor: 0.95,
+                ),
+                (
+                    label: "cooling rate",
+                    factor: 0.94,
+                ),
+            ],
+        ),
+        (
+            id: "precision_braced_stock",
+            name: "Precision braced stock",
+            slot: Stock,
+            weapons: [
+                PrecisionRifle,
+            ],
+            description: "Narrow triangular rear brace supports a restrained cheek saddle.",
+            effects: [
+                (
+                    label: "aim spread",
+                    factor: 0.96,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.05,
+                ),
+            ],
+        ),
+        (
+            id: "scatter_wrapped_grip",
+            name: "Scatter wrapped grip",
+            slot: Grip,
+            weapons: [
+                Scattergun,
+            ],
+            description: "Segmented rubber bands provide a readable tactile surface.",
+            effects: [
+                (
+                    label: "recoil recovery",
+                    factor: 0.95,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.04,
+                ),
+            ],
+        ),
+        (
+            id: "support_reserve_cell",
+            name: "Support reserve cell",
+            slot: Feed,
+            weapons: [
+                SupportProjector,
+            ],
+            description: "Deeper power pack adds endurance and a slower exchange.",
+            effects: [
+                (
+                    label: "capacity",
+                    factor: 1.2,
+                ),
+                (
+                    label: "reload time",
+                    factor: 1.12,
+                ),
+            ],
+        ),
+        (
+            id: "blade_hooked_edge",
+            name: "Blade hooked edge",
+            slot: Edge,
+            weapons: [
+                FieldBlade,
+            ],
+            description: "Subtle recurved tip stays inside the original reach envelope.",
+            effects: [
+                (
+                    label: "hit posture",
+                    factor: 1.08,
+                ),
+                (
+                    label: "recovery time",
+                    factor: 1.06,
+                ),
+            ],
+        ),
+        (
+            id: "cutter_compact_power",
+            name: "Cutter compact cell",
+            slot: Power,
+            weapons: [
+                HeavyCutter,
+            ],
+            description: "Shorter rear cell reduces the silhouette and reserve.",
+            effects: [
+                (
+                    label: "capacity",
+                    factor: 0.85,
+                ),
+                (
+                    label: "equip time",
+                    factor: 0.95,
+                ),
+            ],
+        ),
+        (
+            id: "cutter_wrapped_grip",
+            name: "Cutter wrapped grip",
+            slot: Grip,
+            weapons: [
+                HeavyCutter,
+            ],
+            description: "Fine rubber bands break up the long handle.",
+            effects: [
+                (
+                    label: "attack stamina",
+                    factor: 0.96,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.03,
+                ),
+            ],
+        ),
+        (
+            id: "baton_wrapped_grip",
+            name: "Baton wrapped grip",
+            slot: Grip,
+            weapons: [
+                ImpactBaton,
+            ],
+            description: "Fine rubber bands and a small inset end cap.",
+            effects: [
+                (
+                    label: "recovery time",
+                    factor: 0.95,
+                ),
+                (
+                    label: "hit posture",
+                    factor: 0.96,
+                ),
+            ],
+        ),
+        (
+            id: "vigil_reflex",
+            name: "Vigil reflex sight",
+            slot: Sight,
+            weapons: [
+                CombatPistol,
+                PatrolCarbine,
+                MarksmanRifle,
+                Breacher,
+            ],
+            description: "Low enclosed hood with a narrow protected lens.",
+            effects: [
+                (
+                    label: "aim spread",
+                    factor: 0.94,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.03,
+                ),
+            ],
+        ),
+        (
+            id: "vigil_prism",
+            name: "Vigil prism sight",
+            slot: Sight,
+            weapons: [
+                PatrolCarbine,
+                MarksmanRifle,
+            ],
+            description: "Compact protected optic on a short saddle.",
+            effects: [
+                (
+                    label: "aim spread",
+                    factor: 0.9,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.07,
+                ),
+            ],
+        ),
+        (
+            id: "vigil_long_optic",
+            name: "Vigil long optic",
+            slot: Sight,
+            weapons: [
+                MarksmanRifle,
+            ],
+            description: "Long narrow optic with separate mounting rings.",
+            effects: [
+                (
+                    label: "aim spread",
+                    factor: 0.86,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.1,
+                ),
+            ],
+        ),
+        (
+            id: "combat_extended_feed",
+            name: "Combat extended magazine",
+            slot: Feed,
+            weapons: [
+                CombatPistol,
+            ],
+            description: "Deeper magazine heel below the main grip.",
+            effects: [
+                (
+                    label: "capacity",
+                    factor: 1.2,
+                ),
+                (
+                    label: "reload time",
+                    factor: 1.1,
+                ),
+            ],
+        ),
+        (
+            id: "patrol_extended_feed",
+            name: "Patrol extended magazine",
+            slot: Feed,
+            weapons: [
+                PatrolCarbine,
+            ],
+            description: "Longer box with restrained ribbing and a narrow base plate.",
+            effects: [
+                (
+                    label: "capacity",
+                    factor: 1.2,
+                ),
+                (
+                    label: "reload time",
+                    factor: 1.1,
+                ),
+            ],
+        ),
+        (
+            id: "marksman_compact_feed",
+            name: "Marksman compact magazine",
+            slot: Feed,
+            weapons: [
+                MarksmanRifle,
+            ],
+            description: "Short low-profile box leaves more space beneath the receiver.",
+            effects: [
+                (
+                    label: "capacity",
+                    factor: 0.85,
+                ),
+                (
+                    label: "reload time",
+                    factor: 0.94,
+                ),
+            ],
+        ),
+        (
+            id: "breacher_extended_feed",
+            name: "Breacher extended magazine",
+            slot: Feed,
+            weapons: [
+                Breacher,
+            ],
+            description: "Deeper detachable box with broad recessed side panels.",
+            effects: [
+                (
+                    label: "capacity",
+                    factor: 1.2,
+                ),
+                (
+                    label: "reload time",
+                    factor: 1.12,
+                ),
+            ],
+        ),
+        (
+            id: "vigil_angled_grip",
+            name: "Vigil angled grip",
+            slot: Grip,
+            weapons: [
+                CombatPistol,
+                PatrolCarbine,
+                Breacher,
+            ],
+            description: "Slim swept grip with recessed side panels.",
+            effects: [
+                (
+                    label: "equip time",
+                    factor: 0.95,
+                ),
+                (
+                    label: "recoil recovery",
+                    factor: 1.05,
+                ),
+            ],
+        ),
+        (
+            id: "vigil_firm_grip",
+            name: "Vigil firm grip",
+            slot: Grip,
+            weapons: [
+                CombatPistol,
+                PatrolCarbine,
+                Breacher,
+            ],
+            description: "Slightly fuller rear insert and fine horizontal rubber ribs.",
+            effects: [
+                (
+                    label: "recoil recovery",
+                    factor: 0.95,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.03,
+                ),
+            ],
+        ),
+        (
+            id: "vigil_shrouded_muzzle",
+            name: "Vigil shrouded muzzle",
+            slot: Muzzle,
+            weapons: [
+                CombatPistol,
+                PatrolCarbine,
+                MarksmanRifle,
+                Breacher,
+            ],
+            description: "Short cylindrical sleeve with a restrained stepped front collar.",
+            effects: [
+                (
+                    label: "aim spread",
+                    factor: 0.97,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.04,
+                ),
+            ],
+        ),
+        (
+            id: "vigil_compensator",
+            name: "Vigil vented muzzle",
+            slot: Muzzle,
+            weapons: [
+                CombatPistol,
+                PatrolCarbine,
+                MarksmanRifle,
+                Breacher,
+            ],
+            description: "Short dark collar with visible side vents.",
+            effects: [
+                (
+                    label: "recoil recovery",
+                    factor: 0.94,
+                ),
+                (
+                    label: "aim move speed",
+                    factor: 0.97,
+                ),
+            ],
+        ),
+        (
+            id: "patrol_vented_fore_end",
+            name: "Patrol vented fore-end",
+            slot: ForeEnd,
+            weapons: [
+                PatrolCarbine,
+            ],
+            description: "Long lean side panels with repeated recessed vents.",
+            effects: [
+                (
+                    label: "cooling rate",
+                    factor: 1.08,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.03,
+                ),
+            ],
+        ),
+        (
+            id: "patrol_guarded_fore_end",
+            name: "Patrol guarded fore-end",
+            slot: ForeEnd,
+            weapons: [
+                PatrolCarbine,
+            ],
+            description: "Short covered sleeve with a fine underside hand guard.",
+            effects: [
+                (
+                    label: "equip time",
+                    factor: 0.97,
+                ),
+                (
+                    label: "cooling rate",
+                    factor: 0.95,
+                ),
+            ],
+        ),
+        (
+            id: "vigil_wire_stock",
+            name: "Vigil open stock",
+            slot: Stock,
+            weapons: [
+                PatrolCarbine,
+                Breacher,
+            ],
+            description: "Two narrow open struts lead to a compact shoulder pad.",
+            effects: [
+                (
+                    label: "equip time",
+                    factor: 0.96,
+                ),
+                (
+                    label: "recoil recovery",
+                    factor: 1.04,
+                ),
+            ],
+        ),
+        (
+            id: "vigil_precision_stock",
+            name: "Vigil supported stock",
+            slot: Stock,
+            weapons: [
+                PatrolCarbine,
+                MarksmanRifle,
+                Breacher,
+            ],
+            description: "Narrow cheek saddle and lower brace add rear support.",
+            effects: [
+                (
+                    label: "aim spread",
+                    factor: 0.97,
+                ),
+                (
+                    label: "equip time",
+                    factor: 1.04,
+                ),
+            ],
+        ),
+        (
+            id: "marksman_field_rest",
+            name: "Marksman field rest",
+            slot: Support,
+            weapons: [
+                MarksmanRifle,
+            ],
+            description: "Paired fixed support legs keep the long silhouette grounded.",
+            effects: [
+                (
+                    label: "aim spread",
+                    factor: 0.97,
+                ),
+                (
+                    label: "brace time",
+                    factor: 1.1,
+                ),
+            ],
+        ),
+    ],
+    presets: [
+        (
+            id: "service_courier",
+            name: "Courier",
+            weapon: Pistol,
+            description: "Low sight and slim grip keep the sidearm unobtrusive.",
+            modules: [
+                "pistol_low_optic",
+                "pistol_slim_grip",
+            ],
+        ),
+        (
+            id: "service_watch",
+            name: "Long watch",
+            weapon: Pistol,
+            description: "Extra cell capacity and a firm grip trade speed for steadiness.",
+            modules: [
+                "compact_optic",
+                "pistol_extended_cell",
+                "pistol_stable_grip",
+            ],
+        ),
+        (
+            id: "service_scout",
+            name: "Scout",
+            weapon: BurstRifle,
+            description: "Open fore-end and a compact sight reduce the forward burden.",
+            modules: [
+                "compact_optic",
+                "rifle_open_fore_end",
+            ],
+        ),
+        (
+            id: "service_overwatch",
+            name: "Workshop overwatch",
+            weapon: BurstRifle,
+            description: "Adapted Morrow optic with the larger cell and cooled shroud.",
+            modules: [
+                "adapted_morrow_optic",
+                "rifle_extended_cell",
+                "rifle_cooled_fore_end",
+            ],
+        ),
+        (
+            id: "morrow_rover",
+            name: "Rover",
+            weapon: PrecisionRifle,
+            description: "Compact feed keeps the long receiver easy to carry.",
+            modules: [
+                "precision_compact_feed",
+            ],
+        ),
+        (
+            id: "morrow_lookout",
+            name: "Lookout",
+            weapon: PrecisionRifle,
+            description: "Long optic and a supported stock suit deliberate shots.",
+            modules: [
+                "precision_long_optic",
+                "precision_braced_stock",
+            ],
+        ),
+        (
+            id: "bracken_trail",
+            name: "Trail gun",
+            weapon: Scattergun,
+            description: "Wrapped forward grip with the standard muzzle and feed.",
+            modules: [
+                "scatter_wrapped_grip",
+            ],
+        ),
+        (
+            id: "bracken_entry",
+            name: "Entry gun",
+            weapon: Scattergun,
+            description: "Wide muzzle and extended feed emphasize short engagements.",
+            modules: [
+                "scatter_wide_muzzle",
+                "scatter_extended_feed",
+            ],
+        ),
+        (
+            id: "kestrel_convoy",
+            name: "Convoy",
+            weapon: SupportProjector,
+            description: "Reserve cell extends time away from resupply.",
+            modules: [
+                "support_reserve_cell",
+            ],
+        ),
+        (
+            id: "kestrel_emplacement",
+            name: "Field support",
+            weapon: SupportProjector,
+            description: "Additional cooling and a wider rest favor a fixed position.",
+            modules: [
+                "support_cooling_jacket",
+                "support_stable_rest",
+            ],
+        ),
+        (
+            id: "morrow_duelist",
+            name: "Balanced blade",
+            weapon: FieldBlade,
+            description: "A balanced grip retains the straight physical cutting edge.",
+            modules: [
+                "blade_balanced_grip",
+            ],
+        ),
+        (
+            id: "morrow_salvager",
+            name: "Salvage blade",
+            weapon: FieldBlade,
+            description: "Hooked tip and balanced grip make a distinct working tool.",
+            modules: [
+                "blade_hooked_edge",
+                "blade_balanced_grip",
+            ],
+        ),
+        (
+            id: "bracken_pack_cutter",
+            name: "Pack cutter",
+            weapon: HeavyCutter,
+            description: "Compact power pack and wrapped handle reduce carrying burden.",
+            modules: [
+                "cutter_compact_power",
+                "cutter_wrapped_grip",
+            ],
+        ),
+        (
+            id: "bracken_work_cutter",
+            name: "Heavy work",
+            weapon: HeavyCutter,
+            description: "Reinforced cutting head keeps the industrial silhouette.",
+            modules: [
+                "cutter_reinforced_head",
+                "cutter_wrapped_grip",
+            ],
+        ),
+        (
+            id: "bracken_watch_baton",
+            name: "Watch baton",
+            weapon: ImpactBaton,
+            description: "Wrapped grip improves purchase while retaining the stock head.",
+            modules: [
+                "baton_wrapped_grip",
+            ],
+        ),
+        (
+            id: "bracken_impact_baton",
+            name: "Weighted baton",
+            weapon: ImpactBaton,
+            description: "More head mass trades recovery for impact.",
+            modules: [
+                "baton_weighted_head",
+                "baton_wrapped_grip",
+            ],
+        ),
+        (
+            id: "vigil_sidearm_patrol",
+            name: "Patrol sidearm",
+            weapon: CombatPistol,
+            description: "Low reflex sight and firm grip for controlled handling.",
+            modules: [
+                "vigil_reflex",
+                "vigil_firm_grip",
+                "vigil_compensator",
+            ],
+        ),
+        (
+            id: "vigil_sidearm_boarding",
+            name: "Boarding sidearm",
+            weapon: CombatPistol,
+            description: "Extended feed and shrouded muzzle on the compact receiver.",
+            modules: [
+                "combat_extended_feed",
+                "vigil_angled_grip",
+                "vigil_shrouded_muzzle",
+            ],
+        ),
+        (
+            id: "vigil_patrol",
+            name: "Patrol kit",
+            weapon: PatrolCarbine,
+            description: "Open stock, reflex sight and ventilated forward housing.",
+            modules: [
+                "vigil_reflex",
+                "patrol_vented_fore_end",
+                "vigil_wire_stock",
+                "vigil_angled_grip",
+                "vigil_compensator",
+            ],
+        ),
+        (
+            id: "vigil_recon",
+            name: "Recon kit",
+            weapon: PatrolCarbine,
+            description: "Prism sight, supported stock and guarded fore-end.",
+            modules: [
+                "vigil_prism",
+                "patrol_extended_feed",
+                "patrol_guarded_fore_end",
+                "vigil_precision_stock",
+                "vigil_shrouded_muzzle",
+            ],
+        ),
+        (
+            id: "vigil_marksman_mobile",
+            name: "Mobile marksman",
+            weapon: MarksmanRifle,
+            description: "Prism sight and compact feed keep the long weapon manageable.",
+            modules: [
+                "vigil_prism",
+                "marksman_compact_feed",
+                "vigil_compensator",
+            ],
+        ),
+        (
+            id: "vigil_marksman_watch",
+            name: "Long watch",
+            weapon: MarksmanRifle,
+            description: "Long optic, field rest and supported stock for patient fire.",
+            modules: [
+                "vigil_long_optic",
+                "vigil_precision_stock",
+                "marksman_field_rest",
+                "vigil_shrouded_muzzle",
+            ],
+        ),
+        (
+            id: "vigil_breacher_entry",
+            name: "Entry kit",
+            weapon: Breacher,
+            description: "Open stock and angled grip on a compact heavy receiver.",
+            modules: [
+                "vigil_reflex",
+                "vigil_wire_stock",
+                "vigil_angled_grip",
+                "vigil_compensator",
+            ],
+        ),
+        (
+            id: "vigil_breacher_hold",
+            name: "Hold kit",
+            weapon: Breacher,
+            description: "Extended feed and supported stock trade speed for endurance.",
+            modules: [
+                "breacher_extended_feed",
+                "vigil_precision_stock",
+                "vigil_firm_grip",
+                "vigil_shrouded_muzzle",
+            ],
+        ),
+    ],
+)

@@ -1,0 +1,22 @@
+// The field repair kit (crafting.md, 4.6): 20 units of structural metal and
+// a seal set. How much it restores in the field is the metal's toughness and
+// how workable it is. Read by `strata_registry::schematic`; in no world
+// version and no handshake.
+(
+    id: "veyra:schematic.field_repair_kit",
+    makes: "veyra:kit.field_repair",
+    complexity: 1,
+    profession: None,
+    licence: None,
+    fixture: None,
+    slots: [
+        (id: "metal", name: "Structural metal", takes: Class("strata:structural_metal"), units: 20),
+        (id: "seals", name: "Seals", takes: Commodity("veyra:commodity.seal_set"), count: 1),
+    ],
+    lines: [
+        (line: "restore", from: [
+            (slot: "metal", stat: Attribute(Toughness), weight: 0.6),
+            (slot: "metal", stat: Attribute(Workability), weight: 0.4),
+        ]),
+    ],
+)

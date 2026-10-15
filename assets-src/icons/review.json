@@ -1,0 +1,1451 @@
+{
+  "veyra:icon.weapon.pistol": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "221cf8067399aa527760160ff38f540e0e18b9dfa34e515a25bd9aa72ad002dc",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.weapon.carbine": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "aaa974a3af970ccd1e930fbe8690ae4be14e42b563ab65c5bc35b4b78d917de8",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.weapon.rifle": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "55a3cc2fe06ee640efa7724023e397b6f3e8885f44feda9e1aeacf90b328d181",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.weapon.scattergun": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "312235f7a76dcd3cae237d83bdc5dad415b8c2a48229fcedd20b85f431f1fd9f",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.weapon.blade": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "98539aa0f32da7e9b226486abc3571ae0d7ee776de29f6c0e01b0a619c0bd8fc",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.weapon.heavy-tool": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "c67f5e9db3377f8ac04466effd2fe135ae8d0c0fe20f0fa27b426e58159045f8",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.equipment.body-armour": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "baa466a8ce6654227706b9233088bf0e3f80340997c08441b700e0c6174ed858",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.equipment.helmet": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "1350e7ceb7004e19b21f3796bde6ca23247c0cafbf3c579b6f2b3b153e2747e9",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.equipment.gloves": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "4194128b3238f0b07339d3f00a433f55bc4a90102b388965d9dce70b8705ce8b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.equipment.boots": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "2ca4360e9c20acab82f24abd47e84a9efe54962e96ffd381c3f2ed782ee2b5e3",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.equipment.pack": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "153d79467cada7a91184a3b990327eccd4f27cf162923929c34d2296b4b6854e",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.equipment.implant": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "bb1cf68e261c5ac44d75d5a229a095401261ad5351e3d84cb43a7cb9a2f7729b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.equipment.belt": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "019db9202df4992eddfa9ff3a578c98ae883148b97da33403e5c69bcad589194",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.equipment.shield-emitter": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "10cff786e52cd3ea59973c5bf1d9067be9e533c08277ec7c96481c402643f968",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.module.optic": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "3ed8f1c38fbbae2da134f464be36e26ea6e00314d296853f5274c039044ec1e9",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.module.feed": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "42ec2dc0ad974e735ee077f6013380fbf62e819c150f38f5ff08c0b3eb41395f",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.module.grip": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "90729276de3bbf06ebca71a33b6f282d4e5bf862f7bf08b16c3e5b9f57fab53b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.module.stock": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "fc1eff518d2f10b58ebf981d54255d05133a9cea92a8faba23a68001139162cd",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.module.muzzle": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "10217401fef60b1982242cc20a00c3f61bdc94a4e2da34c0596d34581c1f7d47",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.module.cell": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "e9391215e2c4f7179af644118081b3906db7f36814f51fea6104aa32a7711e21",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.module.cooler": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "882e0f63b72691f8361be512635b2844e15dc6b34358424314c0a67ea43746c5",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.material.ore": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "7501ef6bb27165169e8f0da86f913a4d9b46dc8de9e38650267632e5269d7c92",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.material.ingot": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "131c9f1709819f2e04643794ac683f06e626f12ab0c2247995b444e481e19d3e",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.material.conductor": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "237220cefd49d8c31c2468c859c12ba3bf8dae1adf41af13fb9e01a79147d2c8",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.material.crystal": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "82275e2bcc6ee7eb0a0e95c7cece9140ceef6fd5189be07fbb42d5c57c9d8f7f",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.material.liquid": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "16c6123e411c9f9294b3dfbfe013cfecce962a5765cbdd2e3a14802640c6da79",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.material.reactive": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "83438b52b439c766e4b979c488ef9f95a2b8d158649120c6853456a35ba78b55",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.material.biological": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "f6380007f76f057092670fd59d32d97698e44c903e22f9d0897535f83a567fdd",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.material.gas": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "bba5024a15af8886d129a51790892a64d98c635f18699c66f5dab7c22856d9af",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.material.scrap": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "373dafa4e55dce6ae26fe9497da4dfc4ad035c6befed7c04e13b6140357f2837",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.crafting.component": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "e3c03be5a9ddbedf114b4106ce98146420d7a5bbede6b4966777b6416c898c7b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.crafting.schematic": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "fa9b97741325a695980110e1763b451ea688a89c851550232c38f2817b8139b1",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.crafting.fabricate": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "47d8a3ed601ca22ffef74a0124c8261b1ef5a5a87c5015040d59da43c133beda",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.crafting.batch": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "8e25cbea548992d29527858851dafbd1033865434c147e7d81af98199d93c78c",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.crafting.workbench": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "10dfb161ffc444e5ae92488c24eb021c3d444a6a107ebeacadc84a0302964e89",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.crafting.factory": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "6b3f6d1881c635d3bdebc8cbad0c0f9730d273bf3aa429972a74835609dea981",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.search": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "a4fbe905e7dd816c15ddde6b671c7b118f6c211318491f470474fb47cd8b6498",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.filter": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "f2ce163d74fb2c0562da3afeef371c06184acaff0b3ac9cdfc6f63029f90191d",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.sort": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "b5c354567fbf240830bd125d0f1a41c579fe77bb5e6bad3ad904da0103b41ccb",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.close": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "cea5afe7852da8da3eb333346b934e6efc41a35f00dc2b659eee043c0482887b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.back": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "b1b011896d22bdd3f44a190c834f000e51fc2e8d7068503642c34718d900993f",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.next": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "a006fe1c2b9b924ef6173ee05068ede3f24bffdb94425d93484be7f0c1e9c882",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.expand": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "a1f7054bde9bc1e36263daa37cc55b9432295fb08777677d7ee5cfbefb01852e",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.collapse": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "6735f8b42c9c223df9402ac722c53d883a68df4e7c8b907c5a12518a95cdb734",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.transfer": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "7744d450959d67d57609f38a4ef8db826d38e3202012b953aa3d5aa93d4b290a",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.repair": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "3c0332ee41819c3dff6ffa3d8f9f9e095df65e55189eea64ea9e82f77512914d",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.inspect": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "fc038fe0ada63492ab9d4c8eeff8499dffe5a25e29f17787b8131ce6b377574d",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.equip": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "7beaea3f429ed4b47b76d386e73be85a8299c736e3da2e143f3d6ebf274fe86e",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.unequip": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "f0fc5b0e43d3d726f78661a00bcafdc0f2833f789a51b3560a22eba941805ce7",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.split-stack": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "2f71e5fe47feb00aeb9bad185ba814e1fa934dc35adfdf61b2f0b0ac0675cc7c",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.combine": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "be1e57c1540335aff91d0b5f56a65610783261a79a7fc44e47cfc62b35beebbd",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.pin": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "1374425f9311ca6c0e0ee09ec70eb36937c78ea32f0bd719d06221a7bbcf76e5",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.favorite": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "c4c750f4efb78555aa01ed7a2d569232bc3d30b2e3070e1c41bcf4fc8f0e1ada",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.settings": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "bcc5cac18ffc2a77635bd9eba3331df17ab409adf0df9f449d0f87b352021206",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.map": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "41e21113f9f35ea8bf2bf1d7988da7eeb71af5eed72f3826fd5a296a62dd0744",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.journal": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "3f6282a78576c545da2a2267f56287950b5cd8a4ebfee486d729063d862b6016",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.character": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "6adbe06bf39e330fbc5d89aedc1f787e10d3df844dbc8baf54ac82e26d0df4f3",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.group": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "a8bbbe6be63a183171edee0d5d3d87ecb732cc1e7858ee1b1b0a4a14a5d21489",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.chat": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "e19cdd602032a49bf74d19b4a6b6d5593bce3f642ac291c4e1b61805a4087ec1",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.trade": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "adc1a81543048c8d28c4b48590550ff4f9977da3f14e38926adfc9248dc919d7",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.credits": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "1e50ba64d0f3534b4c8d1dd9aef9ce50b31a8b88b00275ba3c0f6116d63ce71f",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.confirm": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "1829a0fea19d8991f0111c99cf7c49503e6277e454d1d0aa1215f363f8795488",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.add": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "192c33f94f007294fabd2f176a325c9fd35856f861856e8dfa455f82bc01b828",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.remove": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "a76ad31c4405daaf79ac96d3e81889d2617ba42bb1b1427563263d8a3a048384",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.refresh": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "f42cdba4e3d7b2c2b3db44b9a5ff2c67a2e8eb0bbbe35961c23793b5db243338",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.play": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "b9f1a1814f28756f886f423ca986741a54b167dbebb33d4d684fba1536737f13",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.pause": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "3a26fd8f292f4a82de1aa5a070ab65896ab2234428d1df9f696cb90cdf997e11",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ui.stop": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "ffca40a7eebcfa31c8cf514037047d0c7a21b1097845146cb5f1e899a1c24668",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.locked": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "8522278a2b264a0b5eaf9cc6f7b40f28ec5d0b753e21e8040fe0d45872dd9b42",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.unlocked": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "6f866636f319f01a4de452aa25c64b6078b86146361230f03f02a2dc94fe8764",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.equipped": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "3d81b04718784c2d44c8b5ba8f27404b9a673fb8eedb393544144ca79ab406d7",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.warning": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "72795685f7d70ad6b3dd2ac3a8f5c8d9a664deff5e943f060f50d46505ae59a0",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.info": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "9444d6db358d367683f33e7afb4fc57b6cd9a656ea878a46382db290fdb7655a",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.unavailable": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "248740de23493717e84c26daa6ab6c1ad7553a2621f5b6f0efab6c70984a1608",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.damaged": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "d81668f2beaf8b3e20bb62fc26ea3e0ef32d7f5d9712b74fc7df01f60894a2d9",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.condition": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "33aa19b0e4c0557125facf779f66e35ebb301a0535912898b071991faa54f80f",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.cooldown": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "a61fc6e754d0923efdefbdda982bcd614aea9f593686cf3bbe4cb1749af9c60a",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.charges": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "edb5c177ebd08c4c078d9189362afe9fbc23a5b5c3308c1366d04b37a314c5db",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.health": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "0586f0438e51fcc5ffce3fcbeea1e34296e0ef406539fc70bc349cb1079c5ea7",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.stamina": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "930f6e3046eb49a940f33359723ca8c750b78fa5fbaabf5f9ab5113f90644fcf",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.shield": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "659bce47d37c8c98151672eb30ad81b59f976d94a055e3cbf4a186f3bbb2413f",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.state.connection": {
+    "minimum_px": 16,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "0c193b75ca795851d406449e749922be1ef4922367b5583372c5805e15d6a8c7",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.marksman": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "dc6af7747ba799b603516a42ba65778f30658ef581b6411b3da28fc5b74774a8",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.blade": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "ab5ba219ece2b8c4df53ed6dcc84b4396601e7d8b725ddda4fe9f89e6031fd5b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.guard": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "6fa16a0c3b532c900f0a86d0cd6fd5fbca85fb18679242e19dfef1516cdd60dc",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.footwork": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "0b7aedadaa90ced986d7d853c7a7465923a49ec6dce7811f98f784a515fe4f50",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.survey": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "039073fceeb51979511f2d9eabe97d8abcba5f5077397c7580f2d42c3cfbc0e9",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.runner": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "cfbf8b4c4c0ad70a090638cc761c76d1aeb4ddc9b7d72e882c8882f0c82b8026",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.fabrication": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "1377f579f1bd244f7b5280488d453d42450ba72a4ffe813294a510da1fb8f06a",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.rigger": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "e3a181291aa00c7b3fd605f0f789d03dc9e9fa11f73674bfc97f05852e4453c9",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.medicine": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "d0b884b1be170fc734e6ff65ca6f30c09b3e3918739f1fe7d981564f8f7410a8",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.broker": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "8ea5d640f7b0129061c81d7df1b21ddce21e00f4d2f8cfb31b56bbb14aee5eff",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.warden": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "767bba05469f8437d965b679e71f5bc74b0834ab2d5e8efa768d1b77b1dfa359",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.ranger": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "cac5f54bfb2f7a75e704abf09bfe5d3f378228e8801e66735387078546c1f53a",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.station-engineer": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "be885b4a54115190a88710a486b473bd7d34988a6be65632e7095b3eaa46babf",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.ecologist": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "b31e88ddee068453b4ec31dbce83f413a953869649a507fc6b25a78dc666bdab",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.skill.assembly-agent": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories. Profession symbols identify broad disciplines; the labels carry the exact profession name.",
+    "source_sha256": "411dfa32423d505cee7f79553934d0fd05099c87f40ca19bf47f71f5a3032861",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.waypoint": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "c92b49797b6bdb8e4b25ae32e38af150149600c85abb9fb82d4b035ba6497221",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.home": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "688ca73c5f2bdcff0ad5015d16086b34cc647b77737a7406e86f49ac6dbe0988",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.settlement": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "e8a81cadcd4f4fd8a6a1457487755fc70a0187fb56cde0b74a902788c5dd430a",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.transit": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "59c08994ead3109802e179777994997d24975fb82632ea165a4819d72021bffb",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.workshop": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "a8a39095534d38449de893e1c325bafb9694bd6ce548811a1069700016748baa",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.clinic": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "1658ac02598103ec92e3c39139645e8d5df857e7459a872ec9508609920e5674",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.market": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "84249b72148a74b638d16338a18a68a08f35058c8d39da1f6775be364fb7801b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.deposit": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "1813fc3cf4ec16780e13eb7d45d331774cbbf105101ff3616a34823ecc5942ae",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.water": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "1fec0c2440ddaf03e7c65923f265803b18ee643ea22740aa8134260e5f72e988",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.power": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "304e3bfed0c21a3e2129db62ac17e547f0ce7be2536446dcee1dc12ad72bb207",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.route": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "18b12b23d950d2dfdad6ccd566adfd84d90e10aab193195c84f8e59063a392ab",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.mission": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "de00a3044c97063a7a54830af5b155f9e858b7dc071bbf5d3e15286305a4cc10",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.danger": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "e1ee4d6afa1f1e28fc63240680b9809394b298e106ee1767f1ff81c75eaa05eb",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.map.camp": {
+    "minimum_px": 24,
+    "note": "Reviewed on a dark panel at 16, 24, 32 and 64 px. Use a label for unfamiliar categories.",
+    "source_sha256": "96de511cb8e6e5fc320c6e42d69f875e7cd545811c3ccc5df02f3cb839689d53",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.light-cut": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "253c19172a5501ee97456fec29bf5cea253bb9fee82cd5a185512a3dc4e2f05e",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.return-cut": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "637b3970cd3cb138d28fc8cd166ff5054137a120c0e09e4d6f7f4e15e6e03560",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.heavy-cut": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "d3c065cfd5f1e5ea9659fd0fa8775454a51eef32f35cc40e6dfdcaf52e73fc2e",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.evasive-step": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI. Distinguish curved evasive movement from the two-boot forward sprint.",
+    "source_sha256": "f2f021af1ab98c2127d6bdae15978a496be1096c7f7280e454fc3df508ddd4d5",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.parry": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "4a46755f5dfd4424b8a950a20d688e73f0c496ed7762b856b80035be01e65a44",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.aimed-burst": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI. Keep its label when shown beside other firing actions.",
+    "source_sha256": "8724ce45a1fd6fa1fd3364b4252e3b800298203eeee4e86d0aad04c301b7c5fd",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.precision-shot": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "f5f03dd482159060e3d54deb03312e220d6109c48f277251f74b5095985bbd74",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.rapid-reload": {
+    "minimum_px": 48,
+    "note": "Use at least 48 px to preserve the hand/tool interaction. Keep a label or tooltip, especially beside related actions. Grayscale and partial cooldown reviewed.",
+    "source_sha256": "51969f2585e0394e666f470c282af6e5c9148e45123a446cc121bd717e288b25",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.weapon-swap": {
+    "minimum_px": 48,
+    "note": "Use at least 48 px to preserve the hand/tool interaction. Keep a label or tooltip, especially beside related actions. Grayscale and partial cooldown reviewed.",
+    "source_sha256": "92392e26112a83b48f6b73aaef71c558879f0523df536fe022983989a9d26832",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.shield-recharge": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "14e23334b170e25fcb1e670ccc26f0bae5186ff584d4e1b8be74894d87f396f8",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.field-repair": {
+    "minimum_px": 48,
+    "note": "Use at least 48 px to preserve the hand/tool interaction. Keep a label or tooltip, especially beside related actions. Grayscale and partial cooldown reviewed.",
+    "source_sha256": "9e3b62d570d38d8f5e95a1ca2951a82bc593b9579a97c75f6d7ef65faa3ee6cd",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.arc-weld": {
+    "minimum_px": 48,
+    "note": "Use at least 48 px to preserve the hand/tool interaction. Keep a label or tooltip, especially beside related actions. Grayscale and partial cooldown reviewed.",
+    "source_sha256": "d7d3ab114f1ea834647340221fb04c52b24abcfc3f7b26637f68fde3cdc2120e",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.power-transfer": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "cff8a42f4bf0a7c07d0b83af93cc19c8d6394cc2596bc3766b5c8db270986fd2",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.deploy-drone": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "44facfab30b4d65f0e556e61796542f66c74e9ca89d3bbf4bcd73e68b01a9a39",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.cutting-torch": {
+    "minimum_px": 48,
+    "note": "Use at least 48 px to preserve the hand/tool interaction. Keep a label or tooltip, especially beside related actions. Grayscale and partial cooldown reviewed.",
+    "source_sha256": "811717829d253f61145aa7383e1149e0e90da58ce46f7980c16a14c268c5c93e",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.refine-material": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "fea75ae9b842e955d6935e0bd46a1550c0c1f63da51936c9553f8c35dc356a41",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.survey-pulse": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "8d5242fc53e11f3186e72fce668f6059ed9057caac8e39a6a24535132d5dc333",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.extract-core": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "cc602885ba347cc29d9f2187c7b10e5460a6c1c3a6bbd2651121823aadf0202f",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.trace-route": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "4dde7ef76ed443be1a08a53a9436ed086f056dba758330c498b3deab3e5213cc",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.track-creature": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "30e932b81f62292d294aec21e1fa4df1e432b33d8666ba9566e8d65b5c4b9654",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.sample-organism": {
+    "minimum_px": 48,
+    "note": "Use at least 48 px to preserve the hand/tool interaction. Keep a label or tooltip, especially beside related actions. Grayscale and partial cooldown reviewed.",
+    "source_sha256": "f5bcc8e02473cfc9d8b16a46260437d395ebd72d5d4d055fcdee3b03bab0fe9b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.analyse-water": {
+    "minimum_px": 48,
+    "note": "Use at least 48 px to preserve the hand/tool interaction. Keep a label or tooltip, especially beside related actions. Grayscale and partial cooldown reviewed.",
+    "source_sha256": "55235f1b684a9f40bdf979826f22383892d3e0405a3ff59333daa20c8ace7bd0",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.trauma-patch": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "00118e71ea780afbf8742148f1b244c3db8537637ee0abe1dc651ca7dc7f2e74",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.inject-stimulant": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "53dc05e03a99048d3120b19a0305556660601df09b128eb420c5e4163d17718d",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.cleanse-toxin": {
+    "minimum_px": 48,
+    "note": "Use at least 48 px to preserve the hand/tool interaction. Keep a label or tooltip, especially beside related actions. Grayscale and partial cooldown reviewed.",
+    "source_sha256": "82714564d5ababccc11e4018ba8a49b2e2a908d155095d1e59acb73b1a90770b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.revive": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "1891ae58ba2aa91f87266b4dba5c98991d2e78be5255b59d1e390959afc71c70",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.suppress-fire": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI. Keep its label when shown beside other firing actions.",
+    "source_sha256": "223bba77c20de9d8005d30d2bc1209bc3362867189b8de433363bb630b0cdd94",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.braced-guard": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "a2d3e3ed097965e4198ad77b1682214e42e299d2522955116d666898a89035de",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.sprint": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI. Distinguish curved evasive movement from the two-boot forward sprint.",
+    "source_sha256": "023ec856c62524c509bb3e9e245100130905f459519992e73401ff3be346ea09",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.overload": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "92ba3a2f9ca2b44da731dc18f199dd977c25ebcf6929ccf68f48054bc8b25e78",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.staggered": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "079cf07ff8f30b8440ea10f3e00a71e4dbfd15d43952ccfe764346b12678e50e",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.bleeding": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "0eefb8886e3eb65279386685df33a95b683644f9285beaa3454e1d7a294300da",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.negotiate-contract": {
+    "minimum_px": 48,
+    "note": "Use at least 48 px to preserve the hand/tool interaction. Keep a label or tooltip, especially beside related actions. Grayscale and partial cooldown reviewed.",
+    "source_sha256": "665b195aa9e479120ca9e8bc326531329081d6e298ae5246e33ec7304c34b623",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.coordinate-crew": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px, with grayscale and partial cooldown previews. Verify in the target UI.",
+    "source_sha256": "a1e7ef814a66628dacb49ac92cc1ec61b0a733b005ff840b4ec5a5a31afbbdfd",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.seal-leak": {
+    "minimum_px": 48,
+    "note": "Use at least 48 px to preserve the hand/tool interaction. Keep a label or tooltip, especially beside related actions. Grayscale and partial cooldown reviewed.",
+    "source_sha256": "cfa4262b01d3ac5b4afb7768a7db9a617f1adb28c96fed7f1a9c9260d72b563d",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.diagnose-machinery": {
+    "minimum_px": 48,
+    "note": "Use at least 48 px to preserve the hand/tool interaction. Keep a label or tooltip, especially beside related actions. Grayscale and partial cooldown reviewed.",
+    "source_sha256": "125cb4ad7b9ae7597e76fda55ed5b7e8e11c6fbbedc2293fc0f1786f5e11e158",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.thrust": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "66aecfd316a3a3c07f689ae24eaad3aeab529a0e57cc3bf7f6ff2e7ea480aa7e",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.sweeping-cut": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "034551dbf05360b0ba047a21ca6892e70093fc8dac0c7e1c25460d559bdf0dbf",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.pommel-strike": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "9c7132b407d601e974520646188544825bae9ab0fe1e640aed6da44afb1b62c3",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.disarm": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "392ce4edb64792beb6570f3566d4dd3a9ead2c0cdfd637a867835c700b14c5a9",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.armour-break": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "47e7bc2dffc390c4ce04d624d87c2ee51771fb2eba54cda79da3ab74a2818afd",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.charged-shot": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "6a799724c3bc5e8d2c063a229c46e29f30f999ff61483ed94c113aabde6537d8",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.scatter-blast": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "2a5ab7be389cb7944b531a0488d1e5dc1ac380d884d901097a3a86580dd0e530",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.ricochet": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "3a37ad47cd2e7711bd1ee4bf75b5c9bcd95af5657c6d5088c216e53c6b10a71e",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.explosive-shot": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "0c51ed01afc87c0579b98344a2df3f5b4994fcdde83c1ab41e18b43948dc0593",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.shock-grenade": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "d9c5c90336851bf653065b78b17c2104e5210b1fcb79da001a19d818d5d2cec1",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.smoke-screen": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "f665906c4f85615c4b65153be92c01717af3738cc7d52f8e9aad83054e777214",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.flash-burst": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "6be1ecf10b76a8870732902d5a73385d9cbb68fbede7773534b8436711749f38",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.barrier-dome": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "5938cdfe1d8022cea488e4c2dde4f9ab3b81a64524136550ddb5a5e534a2c633",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.intercept-projectile": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "f546d6e622e734c572952ee3a0a768be00cc98cb08dad7902f921325893e6442",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.reflect-shot": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "5113047e9a953578f1eb8c339f64fb38569298a1189d4caa7a3cd7a9371fe60b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.fortify-armour": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "826451c760144777da2dd0569de69336461bd3b9a08d9511af16b2c84d29e53b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.kinetic-absorb": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "27dee3f07a055b8565cb2249482bc96a318fdfb1ff9351c1e97b9c32fbf05008",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.emergency-cover": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "0bd0529a1f1253305487b709b48ea5da9e5f80ad139ee2b90728ca9e444018e0",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.grappling-line": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "fc8313909609b7d427a6430e79d75ef8ba8de31e184217665d9292708d83371a",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.jump-jets": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "3f40a179def502e9264dd2b5197b8fe4df3c34a6f8174934b3011bf0f2447b32",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.combat-slide": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "eb7012ed901e3fe48670c869352f3676841feb875ba2714896d5c13ce20c917c",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.vault-obstacle": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "a848482f3076e2bffecea65515e5ae2fe4050fbee7e3bc915e85dceb68ced937",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.magnetic-grip": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "f491bd44e3699103fc640fcdd85d5897ca76f9bae744c53da159f8b43f1b943d",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.silent-step": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "2763ef1b24552fbdac64b4165907af10d873dd90aba28c08f5fd7dd2a023ce8d",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.deploy-turret": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "04a18957bf87e3dcd2624c08104e38fb3f426d6aafe1cbde24fd710da422aecc",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.deploy-mine": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "a81d16769f21cae2e2cea58a8a966ca9f13597346bdc88827a2d11d9e7451f15",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.hack-terminal": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "08e33f6855f3919a96cec9b475e289f4c4cdbdeb2b194d47264d06a78f07e4a0",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.disrupt-signal": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "6543da60da07638655e800b67bfd2adbf7cab2e457c6edf2708d6b1a911cf1e8",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.decoy-beacon": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "5528936220f6f99011872989fa108bae7db0b805370a94ad878772855291d627",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.remote-detonate": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "f2ac598eaf648a925c4c75d99fac0acd2a5e76784fa7d485840133c600d099fc",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.calibrate-optic": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "7558d31d6b828c30dc32b689b216ebc01df4e384fd0fed922e8337a591d4ed38",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.forge-part": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "7eb44e90096f166a90da1d770d7567479c41179b150b2e6a74b36bfdd5fa5f90",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.assemble-module": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "852111a0e430b9e3c52411f37ecf9dd9fbc9fc36df16a71b49f7ba041ca36724",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.salvage-parts": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "816c6d6901891dd15aaeed37d01d76e6fb1de047c996007f184092165867999a",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.recycle-scrap": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "4bfbe87cf94245acf81bff2cdf60a36dfb783a809e5b584e5e907a64a981c0a3",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.overclock-machine": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "e727302fa511a77df4986f1dfa6095a90ac6f7cba3c3af1d4300b2dca6acd7bd",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.bandage-wound": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "270fb0c44b0475438f76df9ce59a65759d937917f896741c1d87fa3b50030e6b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.splint-limb": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "d55f51dba00cee9166d232348bf6594a5c15b05df9804c602e6d670d95c471ec",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.oxygen-boost": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "1dff6180b4f6277aa7f7d7814b621e758169684248c0c05280fe786250d94ff0",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.cooling-injection": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "db716678bfe99f755ea18ab1cb9d387a2c2a970bb80f61887c5c74fcba33ddbf",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.radiation-cleanse": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "932d847d2538f9aa7d52f45c6b68e9cccce3e323a73786bb62d49323cbb97c07",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.med-drone": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "daab5aaa9fcfb3a69aee1e9da9c9810a5fe811df79dda6f90bb6dcf94bf98e1f",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.camouflage": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "ddf8988aac855808b3814d9a0fd76e8f5a01d1ea02dfb4f72ca0ab8636f3ee23",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.harvest-fibre": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "4c5952062c0e95c48e2c7b6e4a3cd2fd3e2a96388d90cc89abe17fd0b6deff77",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.purify-water": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "f62bfc248d26e0fa9574053d4f1ff1e48b85209c440c223560109870ec6381c7",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.cook-ration": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "4bfabb2d908d9c2dabd1df2513f6d876a1cd58cf3366ab60c4718938846ccf05",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.light-flare": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "68462952f00e10390180e3751c2e45ac56ad8af940ddd45138ecd7a58b188478",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.pitch-shelter": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "878ec93318843ff838aead219d64f7cf13aa8236dde0d9b8c134099cedddef0b",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.burning": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "ecd31834b9369005e4cd1f77e69be233202cf6385efddd24326b15bb5c46ed0f",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.chilled": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "0218ff2536ccf64a1a26f79be768b36dae2babea91a6eaced53ae37a872f1b62",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.poisoned": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "0944121e396f209b0341e3db830d7464bb2efebf1903c047d28a73004b7d8dd4",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.irradiated": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "79409f4b8f2eb591d4dc034d52347f334da2fe69accae8356190a80a5c1b87da",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.shocked": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "6fb505e4f0861f8dcf8b20f745332e71b985cf4dfeab6d8c94fb973dde1b4d9d",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.shield-broken": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "60b8790f106943e9e5ddec2ec86c0afb3948693d26c19300858748e8ae4a6222",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.slowed": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "27b1f7fd9aaadff56e485fa427b1aad4f6654741dd12b2b48add1a25ee9d8975",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.rooted": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "fef0b5f7fa3ea5ddff470be4c5c8c8a5d8e1b1d0484dfdfa68bd4a67e392aeff",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.blinded": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "46c583bf83b36f341bda876e3414648197463e3a359760613033e7c2ae270475",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.silenced": {
+    "minimum_px": 48,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. Use at least 48 px to retain the relationship between the tool, hand and target; provide a label or tooltip.",
+    "source_sha256": "c19309c919c7bae388f94cc429d7152e07deea9602919d03c4b106beb37b4424",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.focused": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "c990ea8ff57998d95d5f67e5f33fbc52665e58eaf0ca393f35c551403f55dd62",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  },
+  "veyra:icon.ability.fortified": {
+    "minimum_px": 32,
+    "note": "Reviewed at 32, 48 and 64 px with grayscale and partial cooldown previews. The main silhouette remains readable at 32 px; provide a label or tooltip for the precise action or condition.",
+    "source_sha256": "615cab7723f62f00b52925ae84c04f7c9ac97de0c08ba6f218fec531ae7ea25d",
+    "reviewed_on": "2026-10-11",
+    "context": "Agent visual review of exported contact sheets; not an in-engine usability test"
+  }
+}

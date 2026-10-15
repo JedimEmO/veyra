@@ -1,0 +1,1593 @@
+{
+  "version": 1,
+  "icons": [
+    {
+      "id": "veyra:icon.weapon.pistol",
+      "stem": "weapon.pistol",
+      "label": "Pistol",
+      "group": "weapons",
+      "tags": [
+        "pistol",
+        "sidearm",
+        "handgun",
+        "ranged"
+      ],
+      "meaning": "Pistol",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.weapon.carbine",
+      "stem": "weapon.carbine",
+      "label": "Carbine",
+      "group": "weapons",
+      "tags": [
+        "carbine",
+        "rifle",
+        "ranged",
+        "automatic"
+      ],
+      "meaning": "Carbine",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.weapon.rifle",
+      "stem": "weapon.rifle",
+      "label": "Precision rifle",
+      "group": "weapons",
+      "tags": [
+        "marksman",
+        "rifle",
+        "sniper",
+        "ranged",
+        "long"
+      ],
+      "meaning": "Precision rifle",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.weapon.scattergun",
+      "stem": "weapon.scattergun",
+      "label": "Scattergun",
+      "group": "weapons",
+      "tags": [
+        "scattergun",
+        "shotgun",
+        "breacher",
+        "ranged"
+      ],
+      "meaning": "Scattergun",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.weapon.blade",
+      "stem": "weapon.blade",
+      "label": "Blade",
+      "group": "weapons",
+      "tags": [
+        "blade",
+        "knife",
+        "melee",
+        "cuts"
+      ],
+      "meaning": "Blade",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.weapon.heavy-tool",
+      "stem": "weapon.heavy-tool",
+      "label": "Heavy cutter",
+      "group": "weapons",
+      "tags": [
+        "cutter",
+        "heavy",
+        "tool",
+        "plasma",
+        "industrial"
+      ],
+      "meaning": "Heavy cutter",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.equipment.body-armour",
+      "stem": "equipment.body-armour",
+      "label": "Body armour",
+      "group": "equipment",
+      "tags": [
+        "armour",
+        "armor",
+        "torso",
+        "chest",
+        "vest"
+      ],
+      "meaning": "Body armour",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.equipment.helmet",
+      "stem": "equipment.helmet",
+      "label": "Helmet",
+      "group": "equipment",
+      "tags": [
+        "helmet",
+        "head",
+        "armour",
+        "armor"
+      ],
+      "meaning": "Helmet",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.equipment.gloves",
+      "stem": "equipment.gloves",
+      "label": "Gloves",
+      "group": "equipment",
+      "tags": [
+        "gloves",
+        "hands",
+        "armour",
+        "armor"
+      ],
+      "meaning": "Gloves",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.equipment.boots",
+      "stem": "equipment.boots",
+      "label": "Boots",
+      "group": "equipment",
+      "tags": [
+        "boots",
+        "feet",
+        "footwear",
+        "armour",
+        "armor"
+      ],
+      "meaning": "Boots",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.equipment.pack",
+      "stem": "equipment.pack",
+      "label": "Carry pack",
+      "group": "equipment",
+      "tags": [
+        "pack",
+        "bag",
+        "inventory",
+        "carry",
+        "storage"
+      ],
+      "meaning": "Carry pack",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.equipment.implant",
+      "stem": "equipment.implant",
+      "label": "Implant",
+      "group": "equipment",
+      "tags": [
+        "implant",
+        "cybernetic",
+        "chip",
+        "body",
+        "augmentation"
+      ],
+      "meaning": "Implant",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.equipment.belt",
+      "stem": "equipment.belt",
+      "label": "Utility belt",
+      "group": "equipment",
+      "tags": [
+        "belt",
+        "utility",
+        "carry",
+        "waist"
+      ],
+      "meaning": "Utility belt",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.equipment.shield-emitter",
+      "stem": "equipment.shield-emitter",
+      "label": "Shield emitter",
+      "group": "equipment",
+      "tags": [
+        "shield",
+        "emitter",
+        "protection",
+        "defence",
+        "defense"
+      ],
+      "meaning": "Shield emitter",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.module.optic",
+      "stem": "module.optic",
+      "label": "Optic",
+      "group": "modules",
+      "tags": [
+        "scope",
+        "optic",
+        "sight",
+        "attachment",
+        "module"
+      ],
+      "meaning": "Optic",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.module.feed",
+      "stem": "module.feed",
+      "label": "Feed",
+      "group": "modules",
+      "tags": [
+        "feed",
+        "magazine",
+        "ammunition",
+        "cell",
+        "module"
+      ],
+      "meaning": "Feed",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.module.grip",
+      "stem": "module.grip",
+      "label": "Grip",
+      "group": "modules",
+      "tags": [
+        "grip",
+        "foregrip",
+        "handling",
+        "module"
+      ],
+      "meaning": "Grip",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.module.stock",
+      "stem": "module.stock",
+      "label": "Stock",
+      "group": "modules",
+      "tags": [
+        "stock",
+        "shoulder",
+        "support",
+        "brace",
+        "module"
+      ],
+      "meaning": "Stock",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.module.muzzle",
+      "stem": "module.muzzle",
+      "label": "Muzzle",
+      "group": "modules",
+      "tags": [
+        "muzzle",
+        "barrel",
+        "suppressor",
+        "module"
+      ],
+      "meaning": "Muzzle",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.module.cell",
+      "stem": "module.cell",
+      "label": "Power cell",
+      "group": "modules",
+      "tags": [
+        "power",
+        "cell",
+        "battery",
+        "energy",
+        "module"
+      ],
+      "meaning": "Power cell",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.module.cooler",
+      "stem": "module.cooler",
+      "label": "Cooling unit",
+      "group": "modules",
+      "tags": [
+        "cooler",
+        "cooling",
+        "radiator",
+        "heatsink",
+        "module"
+      ],
+      "meaning": "Cooling unit",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.material.ore",
+      "stem": "material.ore",
+      "label": "Ore",
+      "group": "materials",
+      "tags": [
+        "ore",
+        "mineral",
+        "geology",
+        "rock"
+      ],
+      "meaning": "Ore",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.material.ingot",
+      "stem": "material.ingot",
+      "label": "Metal ingot",
+      "group": "materials",
+      "tags": [
+        "ingot",
+        "metal",
+        "alloy",
+        "structural",
+        "ferrous"
+      ],
+      "meaning": "Metal ingot",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.material.conductor",
+      "stem": "material.conductor",
+      "label": "Conductor",
+      "group": "materials",
+      "tags": [
+        "conductor",
+        "wire",
+        "copper",
+        "spool",
+        "harness",
+        "electricity"
+      ],
+      "meaning": "Conductor",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.material.crystal",
+      "stem": "material.crystal",
+      "label": "Crystal",
+      "group": "materials",
+      "tags": [
+        "crystal",
+        "salt",
+        "evaporite",
+        "mineral"
+      ],
+      "meaning": "Crystal",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.material.liquid",
+      "stem": "material.liquid",
+      "label": "Liquid sample",
+      "group": "materials",
+      "tags": [
+        "liquid",
+        "fluid",
+        "brine",
+        "water",
+        "sample"
+      ],
+      "meaning": "Liquid sample",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.material.reactive",
+      "stem": "material.reactive",
+      "label": "Reactive material",
+      "group": "materials",
+      "tags": [
+        "reactive",
+        "sulphur",
+        "reagent",
+        "chemical"
+      ],
+      "meaning": "Reactive material",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.material.biological",
+      "stem": "material.biological",
+      "label": "Biological material",
+      "group": "materials",
+      "tags": [
+        "biological",
+        "organic",
+        "plant",
+        "sample",
+        "ecology"
+      ],
+      "meaning": "Biological material",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.material.gas",
+      "stem": "material.gas",
+      "label": "Gas canister",
+      "group": "materials",
+      "tags": [
+        "gas",
+        "canister",
+        "pressure",
+        "atmosphere"
+      ],
+      "meaning": "Gas canister",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.material.scrap",
+      "stem": "material.scrap",
+      "label": "Scrap",
+      "group": "materials",
+      "tags": [
+        "scrap",
+        "salvage",
+        "waste",
+        "recycle"
+      ],
+      "meaning": "Scrap",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.crafting.component",
+      "stem": "crafting.component",
+      "label": "Component",
+      "group": "crafting",
+      "tags": [
+        "component",
+        "part",
+        "socket",
+        "mechanical",
+        "crafting"
+      ],
+      "meaning": "Component",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.crafting.schematic",
+      "stem": "crafting.schematic",
+      "label": "Schematic",
+      "group": "crafting",
+      "tags": [
+        "schematic",
+        "recipe",
+        "blueprint",
+        "plan",
+        "drawing"
+      ],
+      "meaning": "Schematic",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.crafting.fabricate",
+      "stem": "crafting.fabricate",
+      "label": "Fabricate",
+      "group": "crafting",
+      "tags": [
+        "fabricate",
+        "press",
+        "assembly",
+        "manufacture",
+        "build"
+      ],
+      "meaning": "Fabricate",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.crafting.batch",
+      "stem": "crafting.batch",
+      "label": "Batch",
+      "group": "crafting",
+      "tags": [
+        "batch",
+        "production",
+        "multiple",
+        "queue",
+        "factory"
+      ],
+      "meaning": "Batch",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.crafting.workbench",
+      "stem": "crafting.workbench",
+      "label": "Workbench",
+      "group": "crafting",
+      "tags": [
+        "workbench",
+        "station",
+        "fixture",
+        "crafting"
+      ],
+      "meaning": "Workbench",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.crafting.factory",
+      "stem": "crafting.factory",
+      "label": "Factory",
+      "group": "crafting",
+      "tags": [
+        "factory",
+        "production",
+        "industry",
+        "building"
+      ],
+      "meaning": "Factory",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.search",
+      "stem": "ui.search",
+      "label": "Search",
+      "group": "controls",
+      "tags": [
+        "search",
+        "find",
+        "magnify"
+      ],
+      "meaning": "Search",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.filter",
+      "stem": "ui.filter",
+      "label": "Filter",
+      "group": "controls",
+      "tags": [
+        "filter",
+        "funnel",
+        "restrict"
+      ],
+      "meaning": "Filter",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.sort",
+      "stem": "ui.sort",
+      "label": "Sort",
+      "group": "controls",
+      "tags": [
+        "sort",
+        "order",
+        "ascending",
+        "descending"
+      ],
+      "meaning": "Sort",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.close",
+      "stem": "ui.close",
+      "label": "Close",
+      "group": "controls",
+      "tags": [
+        "close",
+        "cancel",
+        "dismiss",
+        "cross"
+      ],
+      "meaning": "Close",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.back",
+      "stem": "ui.back",
+      "label": "Back",
+      "group": "controls",
+      "tags": [
+        "back",
+        "previous",
+        "left"
+      ],
+      "meaning": "Back",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.next",
+      "stem": "ui.next",
+      "label": "Next",
+      "group": "controls",
+      "tags": [
+        "next",
+        "forward",
+        "right"
+      ],
+      "meaning": "Next",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.expand",
+      "stem": "ui.expand",
+      "label": "Expand",
+      "group": "controls",
+      "tags": [
+        "expand",
+        "fullscreen",
+        "enlarge"
+      ],
+      "meaning": "Expand",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.collapse",
+      "stem": "ui.collapse",
+      "label": "Collapse",
+      "group": "controls",
+      "tags": [
+        "collapse",
+        "shrink",
+        "minimize"
+      ],
+      "meaning": "Collapse",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.transfer",
+      "stem": "ui.transfer",
+      "label": "Transfer",
+      "group": "controls",
+      "tags": [
+        "transfer",
+        "move",
+        "swap",
+        "exchange",
+        "inventory"
+      ],
+      "meaning": "Transfer",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.repair",
+      "stem": "ui.repair",
+      "label": "Repair",
+      "group": "controls",
+      "tags": [
+        "repair",
+        "maintenance",
+        "wrench",
+        "fix"
+      ],
+      "meaning": "Repair",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.inspect",
+      "stem": "ui.inspect",
+      "label": "Inspect",
+      "group": "controls",
+      "tags": [
+        "inspect",
+        "view",
+        "examine",
+        "eye"
+      ],
+      "meaning": "Inspect",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.equip",
+      "stem": "ui.equip",
+      "label": "Equip",
+      "group": "controls",
+      "tags": [
+        "equip",
+        "wear",
+        "insert",
+        "slot"
+      ],
+      "meaning": "Equip",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.unequip",
+      "stem": "ui.unequip",
+      "label": "Unequip",
+      "group": "controls",
+      "tags": [
+        "unequip",
+        "remove",
+        "slot"
+      ],
+      "meaning": "Unequip",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.split-stack",
+      "stem": "ui.split-stack",
+      "label": "Split stack",
+      "group": "controls",
+      "tags": [
+        "split",
+        "stack",
+        "divide",
+        "quantity"
+      ],
+      "meaning": "Split stack",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.combine",
+      "stem": "ui.combine",
+      "label": "Combine",
+      "group": "controls",
+      "tags": [
+        "combine",
+        "merge",
+        "join",
+        "stack"
+      ],
+      "meaning": "Combine",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.pin",
+      "stem": "ui.pin",
+      "label": "Pin",
+      "group": "controls",
+      "tags": [
+        "pin",
+        "track",
+        "sticky",
+        "keep"
+      ],
+      "meaning": "Pin",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.favorite",
+      "stem": "ui.favorite",
+      "label": "Favourite",
+      "group": "controls",
+      "tags": [
+        "favorite",
+        "favourite",
+        "star",
+        "bookmark"
+      ],
+      "meaning": "Favourite",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.settings",
+      "stem": "ui.settings",
+      "label": "Settings",
+      "group": "controls",
+      "tags": [
+        "settings",
+        "options",
+        "gear",
+        "configuration"
+      ],
+      "meaning": "Settings",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.map",
+      "stem": "ui.map",
+      "label": "Map",
+      "group": "controls",
+      "tags": [
+        "map",
+        "chart",
+        "navigation"
+      ],
+      "meaning": "Map",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.journal",
+      "stem": "ui.journal",
+      "label": "Journal",
+      "group": "controls",
+      "tags": [
+        "journal",
+        "missions",
+        "quest",
+        "log",
+        "book"
+      ],
+      "meaning": "Journal",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.character",
+      "stem": "ui.character",
+      "label": "Character",
+      "group": "controls",
+      "tags": [
+        "character",
+        "player",
+        "profile",
+        "person"
+      ],
+      "meaning": "Character",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.group",
+      "stem": "ui.group",
+      "label": "Group",
+      "group": "controls",
+      "tags": [
+        "group",
+        "party",
+        "people",
+        "crew"
+      ],
+      "meaning": "Group",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.chat",
+      "stem": "ui.chat",
+      "label": "Chat",
+      "group": "controls",
+      "tags": [
+        "chat",
+        "talk",
+        "dialogue",
+        "message"
+      ],
+      "meaning": "Chat",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.trade",
+      "stem": "ui.trade",
+      "label": "Trade",
+      "group": "controls",
+      "tags": [
+        "trade",
+        "buy",
+        "sell",
+        "market",
+        "exchange"
+      ],
+      "meaning": "Trade",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.credits",
+      "stem": "ui.credits",
+      "label": "Credits",
+      "group": "controls",
+      "tags": [
+        "credits",
+        "currency",
+        "money",
+        "price"
+      ],
+      "meaning": "Credits",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.confirm",
+      "stem": "ui.confirm",
+      "label": "Confirm",
+      "group": "controls",
+      "tags": [
+        "confirm",
+        "accept",
+        "check",
+        "yes",
+        "done"
+      ],
+      "meaning": "Confirm",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.add",
+      "stem": "ui.add",
+      "label": "Add",
+      "group": "controls",
+      "tags": [
+        "add",
+        "plus",
+        "increase"
+      ],
+      "meaning": "Add",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.remove",
+      "stem": "ui.remove",
+      "label": "Remove",
+      "group": "controls",
+      "tags": [
+        "remove",
+        "minus",
+        "decrease"
+      ],
+      "meaning": "Remove",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.refresh",
+      "stem": "ui.refresh",
+      "label": "Refresh",
+      "group": "controls",
+      "tags": [
+        "refresh",
+        "reload",
+        "update",
+        "sync"
+      ],
+      "meaning": "Refresh",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.play",
+      "stem": "ui.play",
+      "label": "Start",
+      "group": "controls",
+      "tags": [
+        "start",
+        "play",
+        "resume",
+        "production"
+      ],
+      "meaning": "Start",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.pause",
+      "stem": "ui.pause",
+      "label": "Pause",
+      "group": "controls",
+      "tags": [
+        "pause",
+        "suspend",
+        "stop",
+        "temporary"
+      ],
+      "meaning": "Pause",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.ui.stop",
+      "stem": "ui.stop",
+      "label": "Stop",
+      "group": "controls",
+      "tags": [
+        "stop",
+        "end",
+        "cancel",
+        "production"
+      ],
+      "meaning": "Stop",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.locked",
+      "stem": "state.locked",
+      "label": "Locked",
+      "group": "states",
+      "tags": [
+        "locked",
+        "access",
+        "restriction",
+        "padlock"
+      ],
+      "meaning": "Locked",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.unlocked",
+      "stem": "state.unlocked",
+      "label": "Unlocked",
+      "group": "states",
+      "tags": [
+        "unlocked",
+        "access",
+        "open",
+        "available"
+      ],
+      "meaning": "Unlocked",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.equipped",
+      "stem": "state.equipped",
+      "label": "Equipped",
+      "group": "states",
+      "tags": [
+        "equipped",
+        "worn",
+        "active",
+        "slot"
+      ],
+      "meaning": "Equipped",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.warning",
+      "stem": "state.warning",
+      "label": "Warning",
+      "group": "states",
+      "tags": [
+        "warning",
+        "attention",
+        "caution",
+        "danger"
+      ],
+      "meaning": "Warning",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.info",
+      "stem": "state.info",
+      "label": "Information",
+      "group": "states",
+      "tags": [
+        "info",
+        "information",
+        "help",
+        "hint"
+      ],
+      "meaning": "Information",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.unavailable",
+      "stem": "state.unavailable",
+      "label": "Unavailable",
+      "group": "states",
+      "tags": [
+        "unavailable",
+        "forbidden",
+        "denied",
+        "blocked"
+      ],
+      "meaning": "Unavailable",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.damaged",
+      "stem": "state.damaged",
+      "label": "Damaged",
+      "group": "states",
+      "tags": [
+        "damaged",
+        "broken",
+        "condition",
+        "wear"
+      ],
+      "meaning": "Damaged",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.condition",
+      "stem": "state.condition",
+      "label": "Condition",
+      "group": "states",
+      "tags": [
+        "condition",
+        "durability",
+        "gauge",
+        "quality"
+      ],
+      "meaning": "Condition",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.cooldown",
+      "stem": "state.cooldown",
+      "label": "Cooldown",
+      "group": "states",
+      "tags": [
+        "cooldown",
+        "timer",
+        "time",
+        "wait"
+      ],
+      "meaning": "Cooldown",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.charges",
+      "stem": "state.charges",
+      "label": "Charges",
+      "group": "states",
+      "tags": [
+        "charges",
+        "uses",
+        "remaining",
+        "ammunition"
+      ],
+      "meaning": "Charges",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.health",
+      "stem": "state.health",
+      "label": "Health",
+      "group": "states",
+      "tags": [
+        "health",
+        "life",
+        "heart",
+        "vitality"
+      ],
+      "meaning": "Health",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.stamina",
+      "stem": "state.stamina",
+      "label": "Stamina",
+      "group": "states",
+      "tags": [
+        "stamina",
+        "endurance",
+        "energy",
+        "exertion"
+      ],
+      "meaning": "Stamina",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.shield",
+      "stem": "state.shield",
+      "label": "Shield",
+      "group": "states",
+      "tags": [
+        "shield",
+        "defence",
+        "defense",
+        "protection"
+      ],
+      "meaning": "Shield",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.state.connection",
+      "stem": "state.connection",
+      "label": "Connection",
+      "group": "states",
+      "tags": [
+        "connection",
+        "signal",
+        "network",
+        "online",
+        "ping"
+      ],
+      "meaning": "Connection",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.marksman",
+      "stem": "skill.marksman",
+      "label": "Marksman",
+      "group": "professions",
+      "tags": [
+        "marksman",
+        "ranged",
+        "aim",
+        "profession"
+      ],
+      "meaning": "Marksman",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.blade",
+      "stem": "skill.blade",
+      "label": "Blade discipline",
+      "group": "professions",
+      "tags": [
+        "blade",
+        "melee",
+        "discipline",
+        "profession"
+      ],
+      "meaning": "Blade discipline",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.guard",
+      "stem": "skill.guard",
+      "label": "Guard",
+      "group": "professions",
+      "tags": [
+        "guard",
+        "block",
+        "blade",
+        "skill",
+        "defence"
+      ],
+      "meaning": "Guard",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.footwork",
+      "stem": "skill.footwork",
+      "label": "Footwork",
+      "group": "professions",
+      "tags": [
+        "footwork",
+        "movement",
+        "dodge",
+        "skill"
+      ],
+      "meaning": "Footwork",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.survey",
+      "stem": "skill.survey",
+      "label": "Surveyor",
+      "group": "professions",
+      "tags": [
+        "surveyor",
+        "geology",
+        "prospect",
+        "deposits",
+        "profession"
+      ],
+      "meaning": "Surveyor",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.runner",
+      "stem": "skill.runner",
+      "label": "Runner",
+      "group": "professions",
+      "tags": [
+        "runner",
+        "logistics",
+        "transport",
+        "loads",
+        "profession"
+      ],
+      "meaning": "Runner",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.fabrication",
+      "stem": "skill.fabrication",
+      "label": "Fabricator",
+      "group": "professions",
+      "tags": [
+        "fabricator",
+        "fixtures",
+        "crafting",
+        "profession"
+      ],
+      "meaning": "Fabricator",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.rigger",
+      "stem": "skill.rigger",
+      "label": "Rigger",
+      "group": "professions",
+      "tags": [
+        "rigger",
+        "crane",
+        "rigging",
+        "extraction",
+        "profession"
+      ],
+      "meaning": "Rigger",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.medicine",
+      "stem": "skill.medicine",
+      "label": "Medic",
+      "group": "professions",
+      "tags": [
+        "medic",
+        "medicine",
+        "treatment",
+        "profession"
+      ],
+      "meaning": "Medic",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.broker",
+      "stem": "skill.broker",
+      "label": "Broker",
+      "group": "professions",
+      "tags": [
+        "broker",
+        "prices",
+        "trade",
+        "money",
+        "contracts",
+        "profession"
+      ],
+      "meaning": "Broker",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.warden",
+      "stem": "skill.warden",
+      "label": "Warden",
+      "group": "professions",
+      "tags": [
+        "warden",
+        "escort",
+        "security",
+        "protection",
+        "profession"
+      ],
+      "meaning": "Warden",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.ranger",
+      "stem": "skill.ranger",
+      "label": "Ranger",
+      "group": "professions",
+      "tags": [
+        "ranger",
+        "wilderness",
+        "tracking",
+        "profession"
+      ],
+      "meaning": "Ranger",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.station-engineer",
+      "stem": "skill.station-engineer",
+      "label": "Station engineer",
+      "group": "professions",
+      "tags": [
+        "station",
+        "engineer",
+        "infrastructure",
+        "processor",
+        "profession"
+      ],
+      "meaning": "Station engineer",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.ecologist",
+      "stem": "skill.ecologist",
+      "label": "Ecologist",
+      "group": "professions",
+      "tags": [
+        "ecologist",
+        "ecology",
+        "species",
+        "environment",
+        "profession"
+      ],
+      "meaning": "Ecologist",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.skill.assembly-agent",
+      "stem": "skill.assembly-agent",
+      "label": "Assembly agent",
+      "group": "professions",
+      "tags": [
+        "assembly",
+        "civic",
+        "commons",
+        "council",
+        "vote",
+        "profession"
+      ],
+      "meaning": "Assembly agent",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.waypoint",
+      "stem": "map.waypoint",
+      "label": "Waypoint",
+      "group": "places",
+      "tags": [
+        "waypoint",
+        "location",
+        "destination",
+        "marker"
+      ],
+      "meaning": "Waypoint",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.home",
+      "stem": "map.home",
+      "label": "Home",
+      "group": "places",
+      "tags": [
+        "home",
+        "household",
+        "base",
+        "house"
+      ],
+      "meaning": "Home",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.settlement",
+      "stem": "map.settlement",
+      "label": "Settlement",
+      "group": "places",
+      "tags": [
+        "settlement",
+        "city",
+        "town",
+        "buildings"
+      ],
+      "meaning": "Settlement",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.transit",
+      "stem": "map.transit",
+      "label": "Transit",
+      "group": "places",
+      "tags": [
+        "transit",
+        "terminal",
+        "travel",
+        "train",
+        "bench"
+      ],
+      "meaning": "Transit",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.workshop",
+      "stem": "map.workshop",
+      "label": "Workshop",
+      "group": "places",
+      "tags": [
+        "workshop",
+        "crafting",
+        "station",
+        "building"
+      ],
+      "meaning": "Workshop",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.clinic",
+      "stem": "map.clinic",
+      "label": "Clinic",
+      "group": "places",
+      "tags": [
+        "clinic",
+        "medicine",
+        "treatment",
+        "facility"
+      ],
+      "meaning": "Clinic",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.market",
+      "stem": "map.market",
+      "label": "Market",
+      "group": "places",
+      "tags": [
+        "market",
+        "vendor",
+        "trade",
+        "shop",
+        "facility"
+      ],
+      "meaning": "Market",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.deposit",
+      "stem": "map.deposit",
+      "label": "Deposit",
+      "group": "places",
+      "tags": [
+        "deposit",
+        "resource",
+        "mining",
+        "minerals",
+        "site"
+      ],
+      "meaning": "Deposit",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.water",
+      "stem": "map.water",
+      "label": "Water",
+      "group": "places",
+      "tags": [
+        "water",
+        "lake",
+        "river",
+        "pump",
+        "supply"
+      ],
+      "meaning": "Water",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.power",
+      "stem": "map.power",
+      "label": "Power station",
+      "group": "places",
+      "tags": [
+        "power",
+        "station",
+        "grid",
+        "utility",
+        "electricity"
+      ],
+      "meaning": "Power station",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.route",
+      "stem": "map.route",
+      "label": "Route",
+      "group": "places",
+      "tags": [
+        "route",
+        "road",
+        "travel",
+        "path",
+        "transport"
+      ],
+      "meaning": "Route",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.mission",
+      "stem": "map.mission",
+      "label": "Mission",
+      "group": "places",
+      "tags": [
+        "mission",
+        "job",
+        "quest",
+        "task",
+        "objective"
+      ],
+      "meaning": "Mission",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.danger",
+      "stem": "map.danger",
+      "label": "Hazard area",
+      "group": "places",
+      "tags": [
+        "hazard",
+        "danger",
+        "area",
+        "restricted"
+      ],
+      "meaning": "Hazard area",
+      "family": "symbol"
+    },
+    {
+      "id": "veyra:icon.map.camp",
+      "stem": "map.camp",
+      "label": "Camp",
+      "group": "places",
+      "tags": [
+        "camp",
+        "rest",
+        "shelter",
+        "wilderness"
+      ],
+      "meaning": "Camp",
+      "family": "symbol"
+    }
+  ]
+}
