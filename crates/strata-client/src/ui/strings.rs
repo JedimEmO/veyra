@@ -41,12 +41,17 @@ pub fn english(key: &str) -> Option<&'static str> {
         .or_else(|| board_english(key))
         .or_else(|| harvester_english(key))
         .or_else(|| loot_english(key))
+        .or_else(|| quest_english(key))
     {
         return Some(label);
     }
     Some(match key {
         TITLE => "sci-fi-scrolls",
         "strata.settings.display" => "Display",
+        "strata.settings.graphics" => "Graphics",
+        "strata.settings.graphics.low" => "Low",
+        "strata.settings.graphics.medium" => "Medium",
+        "strata.settings.graphics.high" => "High",
         "strata.settings.fov" => "Field of view",
         "strata.settings.foliage_distance" => "Foliage render distance",
         "strata.settings.show_hud" => "Show HUD",
@@ -1372,6 +1377,7 @@ fn loot_english(key: &str) -> Option<&'static str> {
         "strata.cache.name.strata:wreck" => "Salvage",
         "strata.cache.name.strata:wreck_works" => "Machine parts",
         "strata.prompt.cache" => "Open the cache",
+        "strata.prompt.person" => "Talk",
         "strata.cache.toast" => "Cache: {what}",
         "strata.cache.left" => "The pack is full: {n} stacks stay in the cache.",
         "strata.cache.why.player" => "Nobody is there to take it",
@@ -1451,6 +1457,58 @@ impl Localizer for StrataStrings {
 /// `Startup`: pushes the fallback.
 pub fn install(mut localization: ResMut<Localization>) {
     localization.push_fallback(StrataStrings);
+}
+
+// ---- the questline's screens (dialogue.rs, journal.rs) ----
+
+/// The words of the conversation and the journal. The quest's own lines are
+/// data; these are the screen's.
+fn quest_english(key: &str) -> Option<&'static str> {
+    Some(match key {
+        "strata.dialogue.why.not_yet" => "Not yet.",
+        "strata.dialogue.why.done" => "That is already settled.",
+        "strata.dialogue.why.credits" => "You need {n} credits.",
+        "strata.dialogue.why.holds" => "You are not carrying what that needs.",
+        "strata.dialogue.why.learned" => "You have not learned that yet.",
+        "strata.dialogue.why.room" => "There is no room to carry it.",
+        "strata.dialogue.why.made" => "It needs something made at a bench, in your pack.",
+        "strata.dialogue.keys" => "1 to 4 choose",
+        "strata.dialogue.leave" => "Leave",
+        "strata.menu.journal" | "strata.journal.title" => "Journal",
+        "strata.journal.empty" => "Nothing in your journal yet.",
+        "strata.journal.objectives" => "WHAT IS ASKED",
+        "strata.journal.choices" => "WHAT YOU DECIDED",
+        "strata.journal.tick.done" => "[x]",
+        "strata.journal.tick.open" => "[ ]",
+        "strata.journal.place.quay" => "the quay",
+        "strata.journal.place.exchange" => "the Exchange",
+        "strata.journal.place.board" => "the board",
+        "strata.journal.place.station" => "the monitoring station",
+        "strata.journal.place.channel" => "Wim's channel",
+        "strata.journal.place.training" => "the training ground",
+        "strata.journal.foe.sentry" => "the training sentry",
+        "strata.journal.foe.rusher" => "a rusher",
+        "strata.journal.foe.marksman" => "a marksman",
+        "strata.journal.foe.duelist" => "a duelist",
+        "strata.journal.foe.bulwark" => "a bulwark",
+        "strata.journal.talk" => "Talk to {name}",
+        "strata.journal.reach" => "Go to {place}",
+        "strata.journal.beat" => "Beat {name}",
+        "strata.journal.beat_crew" => "Beat {name}'s crew",
+        "strata.journal.learn" => "Learn a box from a trainer",
+        "strata.journal.ping" => "Ping the ground",
+        "strata.journal.sample" => "Sample {class}: {have} of {units}",
+        "strata.journal.craft" => "Make a {item} at a workbench",
+        "strata.journal.sell" => "Sell the {item} at the board",
+        "strata.journal.buy" => "Buy a {item} at the board",
+        "strata.journal.stable" => "Take the bike as your ride",
+        "strata.journal.recruit" => "Take {name} onto the bench",
+        "strata.journal.switch" => "Switch to {name} at the terminal",
+        "strata.journal.deliver" => "Fit the {item} to the {name}",
+        "strata.map.panel.quest" => "Objective",
+        "strata.map.panel.quest.kind" => "Where your journal points",
+        _ => return None,
+    })
 }
 
 // ---- the map (map.rs) ----

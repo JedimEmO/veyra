@@ -115,3 +115,57 @@ Suspect: about twice the Streaming section's GPU means, taken minutes before an 
 | dawn | 6.63 | 7.44 | 4.25 |
 | dusk-street | 7.53 | 7.34 | 5.41 |
 | coast | 7.07 | 4.22 | 3.40 |
+
+## Graphics low
+
+2026-10-16, NVIDIA GeForce RTX 4090, Linux, 1600x900, release, `baseline` look, graphics `low`, virtual display (wall clock not meaningful), 400 frames, 5 s warm-up. Captures in scratch/look/graphics-low-*.png.
+
+| Fixture | GPU mean ms | Render p95 ms | Main p95 ms |
+| --- | --- | --- | --- |
+| canopy | 2.67 | 7.22 | 5.60 |
+| dawn | 2.87 | 8.39 | 5.96 |
+| dusk-street | 2.21 | 8.57 | 6.64 |
+| coast | 1.76 | 4.54 | 4.63 |
+
+## Graphics medium
+
+2026-10-16, NVIDIA GeForce RTX 4090, Linux, 1600x900, release, `baseline` look, graphics `medium`, virtual display (wall clock not meaningful), 400 frames, 5 s warm-up. Captures in scratch/look/graphics-medium-*.png.
+
+| Fixture | GPU mean ms | Render p95 ms | Main p95 ms |
+| --- | --- | --- | --- |
+| canopy | 3.02 | 8.48 | 5.89 |
+| dawn | 3.19 | 9.84 | 6.28 |
+| dusk-street | 2.39 | 8.73 | 6.88 |
+| coast | 1.92 | 4.93 | 4.90 |
+
+## Graphics high
+
+2026-10-16, NVIDIA GeForce RTX 4090, Linux, 1600x900, release, `baseline` look, graphics `high`, virtual display (wall clock not meaningful), 400 frames, 5 s warm-up. Captures in scratch/look/graphics-high-*.png.
+
+| Fixture | GPU mean ms | Render p95 ms | Main p95 ms |
+| --- | --- | --- | --- |
+| canopy | 3.34 | 8.10 | 5.98 |
+| dawn | 3.63 | 9.72 | 5.84 |
+| dusk-street | 2.69 | 8.91 | 6.73 |
+| coast | 2.04 | 5.25 | 5.21 |
+
+## Graphics presets, one cost at a time
+
+2026-10-16, NVIDIA GeForce RTX 4090 held at maximum performance (`tools/bench.py`'s `hold_gpu_clock`; without it the governor made two runs of one frame differ by 1 to 2 ms), Linux, 1600x900, release, `baseline` look, 400 frames, 5 s warm-up. GPU mean ms of the canopy / dusk street / dawn fixtures (`scratch/combat/gfx/measure.py`, results in `res*.txt`); the run to run spread is 0.03 ms. This is a discrete card at about 3 ms a frame: the integrated laptop the presets are for is not here, so the claim is each lever's share, not its milliseconds there.
+
+| Lever | canopy | dusk street | dawn | Chosen for |
+| --- | --- | --- | --- | --- |
+| nothing (High) | 3.30 | 2.68 | 3.62 | |
+| shadows off | 2.88 | 2.27 | 2.67 | kept: the look is flat without them |
+| shadow map 2048 | 3.19 | 2.44 | 3.48 | Medium |
+| two cascades | 3.22 | 2.57 | 3.37 | Medium, Low |
+| shadow distance 1000 m | 3.31 | 2.73 | 3.51 | Low (1500 m) |
+| no antialiasing | 2.94 | 2.55 | 3.38 | Low |
+| TAA against MSAA 4x | 3.33 | 2.67 | 3.62 | same cost |
+| foliage distance 50 % | 3.12 | 2.66 | 3.48 | Medium 75 %, Low 50 % |
+| no foliage | 1.92 | 2.40 | 2.46 | (render p95 7.6 to 4.0 ms on the canopy) |
+| far paint off | 3.30 | 2.68 | 3.60 | none: under 0.05 |
+| clouds off | 3.28 | 2.64 | 3.57 | none |
+| sky map 128 | 3.31 | 2.66 | 3.61 | none |
+| valley fog (dawn, `gpu_valley_fog_ms`) | | | 0.06 | none |
+| 70 % of the pixels (1120x630) | 2.85 | 2.40 | 3.13 | not built: Bevy 0.19 has no upscaler |

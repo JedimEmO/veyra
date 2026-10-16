@@ -1927,6 +1927,7 @@ fn build(world: &mut World) -> Option<ScreenDef> {
             | InteractionKind::Board { .. }
             | InteractionKind::Guard { .. }
             | InteractionKind::Cache { .. }
+            | InteractionKind::Person { .. }
             | InteractionKind::Harvester { .. } => None,
         })
         .collect();
@@ -2044,6 +2045,10 @@ pub fn toggle(keys: Res<ButtonInput<KeyCode>>, stack: Res<ScreenStack>, mut comm
 /// `Update`: a tab, a card, Learn or Forget. The two rules are the sim's;
 /// what this adds is the sentence shown for the answer and the refit of
 /// the actor, so the box is felt on the next tick.
+#[allow(
+    clippy::too_many_arguments,
+    reason = "the choice, the data, the world's reach, the sheet's state and what the lesson tells the cue and the questline"
+)]
 pub fn answer_choices(
     mut choices: MessageReader<MenuChoice>,
     registries: Option<Res<Registries>>,
@@ -2052,6 +2057,9 @@ pub fn answer_choices(
     mut state: ResMut<SheetState>,
     mut players: Query<(&mut CharacterSheet, &mut Combatant), With<LocalPlayer>>,
     mut cues: MessageWriter<super::progress::ProgressCue>,
+    // The questline's objective "learn a box" (ticket 0014); absent in an
+    // app that has no sim plugin.
+    mut quest: Option<ResMut<Messages<strata_sim::quests::QuestEvent>>>,
 ) {
     for choice in choices.read() {
         if choice.screen != kind() {
@@ -2099,6 +2107,9 @@ pub fn answer_choices(
                 Ok(()) => {
                     actor.fit(graph, &sheet);
                     cues.write(super::progress::ProgressCue::Learned);
+                    if let Some(quest) = quest.as_mut() {
+                        quest.write(strata_sim::quests::QuestEvent::Learned(id.clone()));
+                    }
                     format!("Learned {name}. {} points free.", sheet.points_free(graph))
                 }
                 Err(refused) => capitalised(&format!("Not learned: {refused}.")),
@@ -3077,5 +3088,56 @@ mod tests {
                 .all(|id| !id.starts_with("medic.")),
             "a placeholder tree never hints"
         );
+    }
+
+    /// Learn on the sheet raises the questline's `Learned` with the box's id
+    /// (ticket 0014): the objective "learn a box" is met by the screen's own
+    /// answer.
+    #[test]
+    fn learning_on_the_sheet_raises_learned_for_the_questline() {
+        use bevy::ecs::message::Messages;
+        use bevy::ecs::system::RunSystemOnce;
+        use strata_sim::quests::QuestEvent;
+        let registries =
+            strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+                .unwrap();
+        let graph = registries.progression.clone();
+        let mut sheet = arrival();
+        for kind in XpKind::ALL {
+            sheet.credit(kind, 10_000);
+        }
+        let learnable = graph
+            .boxes()
+            .map(|each| each.id.clone())
+            .find(|id| sheet.clone().learn(&graph, id, true).is_ok())
+            .unwrap();
+        let tree = graph.tree_of(&learnable).unwrap().id.clone();
+        let mut world = World::new();
+        world.init_resource::<Messages<MenuChoice>>();
+        world.init_resource::<Messages<super::super::progress::ProgressCue>>();
+        world.init_resource::<Messages<QuestEvent>>();
+        world.insert_resource(Registries(Arc::new(registries)));
+        let mut reach = Reach::default();
+        reach.trees.insert(tree);
+        world.insert_resource(reach);
+        world.insert_resource(SheetState {
+            selected: Some(learnable.clone()),
+            ..SheetState::default()
+        });
+        world.spawn((LocalPlayer, sheet, Combatant::default()));
+        let button = world.spawn_empty().id();
+        world
+            .resource_mut::<Messages<MenuChoice>>()
+            .write(MenuChoice {
+                id: LEARN.to_owned(),
+                screen: kind(),
+                entity: button,
+            });
+        world.run_system_once(answer_choices).unwrap();
+        let raised: Vec<QuestEvent> = world
+            .resource_mut::<Messages<QuestEvent>>()
+            .drain()
+            .collect();
+        assert_eq!(raised, [QuestEvent::Learned(learnable)]);
     }
 }

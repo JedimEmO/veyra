@@ -886,6 +886,7 @@ fn an_upgrade_short_of_a_lot_waits_for_a_later_start() {
         harvester: false,
         harvest_hours: None,
         open_harvester: false,
+        quest_stage: None,
     });
     world.insert_resource(SaveHeld);
     world.run_system_once(save_on_change).unwrap();
@@ -1376,6 +1377,7 @@ fn a_refused_file_is_copied_before_the_first_day() {
         harvester: false,
         harvest_hours: None,
         open_harvester: false,
+        quest_stage: None,
     });
     world.insert_resource(SaveHeld);
     world.run_system_once(save_on_change).unwrap();

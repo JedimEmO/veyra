@@ -686,7 +686,12 @@ pub(crate) fn register(app: &mut App) {
         .add_systems(Startup, setup)
         .add_systems(
             Update,
-            (toggle, actions, apply_values, status)
+            (
+                toggle,
+                actions,
+                apply_values.after(super::graphics::resolve),
+                status,
+            )
                 .chain()
                 .in_set(super::ScreenWork),
         )
@@ -971,6 +976,7 @@ fn actions(
 
 fn apply_values(
     mut state: ResMut<PanelState>,
+    graphics: Res<super::graphics::Active>,
     mut store: ResMut<ValueStore>,
     mut sky: ResMut<SkySettings>,
     mut look: ResMut<RenderLook>,
@@ -1022,11 +1028,13 @@ fn apply_values(
         .get("render.compare")
         .and_then(Value::as_bool)
         .unwrap_or(false);
-    let effective = if compare {
+    let mut effective = if compare {
         LookFile::default()
     } else {
         state.edited.clone()
     };
+    // The graphics preset limits what the panel edits, never its own copy.
+    graphics.preset.limit(&mut effective);
     if *sky != effective.sky {
         *sky = effective.sky;
     }

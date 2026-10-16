@@ -1,0 +1,35 @@
+// Maren Coyle, the arrivals warden of the nearest assembly: the first person
+// a new household meets, on Port Serein's quay (ticket 0014). Warm, quick,
+// practical, a little tired, proud of the city. Her conversation changes as
+// the questline moves.
+(
+    version: 1,
+    id: "veyra:person.maren_coyle",
+    name: "Maren Coyle",
+    title: "Arrivals warden, {assembly}",
+    role: Assembly,
+    tint: (214, 167, 96),
+    stand: Quay,
+    facing: 3.14159,
+    conversations: [
+        (when: [QuestDone("arrival"), Flag("ending_assembly"), Flag("wim_fallen")], node: "maren.after_own_fallen"),
+        (when: [QuestDone("arrival"), Flag("ending_assembly"), Flag("pump_shut")], node: "maren.after_own_shut"),
+        (when: [QuestDone("arrival"), Flag("ending_assembly")], node: "maren.after_own"),
+        (when: [QuestDone("arrival"), Flag("ending_keepers")], node: "maren.after_keepers"),
+        (when: [QuestDone("arrival"), Flag("ending_holder"), Flag("wim_fallen")], node: "maren.after_holder_fallen"),
+        (when: [QuestDone("arrival"), Flag("ending_holder")], node: "maren.after_holder"),
+        (when: [QuestDone("arrival")], node: "maren.after_skip"),
+        (when: [QuestAt("arrival", "who_hears"), Flag("wim_fallen")], node: "maren.hears_fallen"),
+        (when: [QuestAt("arrival", "who_hears")], node: "maren.hears"),
+        (when: [QuestAt("arrival", "selling")], node: "maren.selling"),
+        (when: [QuestAt("arrival", "landfall")], node: "maren.hub"),
+        (when: [QuestAt("arrival", "steady_hand")], node: "maren.reminder"),
+        (when: [QuestAt("arrival", "quiet_station")], node: "maren.reminder_out"),
+        (when: [QuestAt("arrival", "pell")], node: "maren.reminder_out"),
+        (when: [QuestAt("arrival", "pell_fight")], node: "maren.reminder_out"),
+        (when: [QuestAt("arrival", "mending")], node: "maren.reminder_out"),
+        (when: [QuestAt("arrival", "upstream")], node: "maren.reminder_out"),
+        (when: [QuestAt("arrival", "wim_fight")], node: "maren.reminder_out"),
+        (node: "maren.welcome"),
+    ],
+)

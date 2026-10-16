@@ -43,6 +43,7 @@ pub mod pictures;
 pub mod posting;
 pub mod procurement;
 pub mod progression;
+pub mod quest;
 pub mod registries;
 pub mod resource;
 pub mod rework;
@@ -106,6 +107,7 @@ pub use progression::{
     AuthoredSheets, BoxDef, BranchDef, Effect, Op, ProgressionError, SheetDef, SkillGraph, TreeDef,
     XpKind, XpRates,
 };
+pub use quest::{QuestDef, QuestSet};
 pub use registries::{BiomeSurface, FloraFit, FreezeError, GameRegistries, OpenRegistries};
 pub use resource::{
     AreaDef, Attribute, CLASSES_FILE, ClassDef, ClassTree, DEPOSITS_FILE, DepositRules, FamilyDef,

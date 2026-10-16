@@ -19,29 +19,70 @@
 <script type="module">
   const loading = document.getElementById("loading");
   const say = (text) => { loading.textContent = text; };
+  // Times in seconds from the page's own start (the same clock the wasm's
+  // `phase` lines read), so a load is read off the console by phase.
+  const phase = (name) => console.log("phase " + name + ": " + (performance.now() / 1000).toFixed(2) + " s");
+  phase("page script");
   // The wasm calls this on its first drawn frame.
   window.veyraReady = () => loading.remove();
   // The wasm calls this with an error that ended its start-up.
   window.veyraFailed = (text) => { if (loading.isConnected) say("Veyra could not start: " + text); };
+  // A browser grants the pointer lock only inside a user gesture's own
+  // handler, never in the game's frame, so the page asks for it on the
+  // click. The game sets `veyraWantsLock` while its camera wants the lock
+  // (no screen open), reads `document.pointerLockElement` back and lets go
+  // of the lock itself when a screen opens.
+  const canvas = document.getElementById("veyra");
+  window.veyraWantsLock = false;
+  window.addEventListener("pointerdown", () => {
+    if (window.veyraWantsLock && document.pointerLockElement !== canvas) {
+      try {
+        const asked = canvas.requestPointerLock();
+        if (asked && asked.catch) asked.catch((error) => console.log("pointer lock refused: " + error));
+      } catch (error) {
+        console.log("pointer lock refused: " + error);
+      }
+    }
+  }, true);
   try {
     // The game draws with WebGPU alone; say so before 120 MB are fetched.
     if (!navigator.gpu) {
       throw new Error("this browser has no WebGPU; a current Chrome or Edge has it");
     }
+    // What the adapter is, for the game's default graphics preset: wgpu on
+    // the web cannot tell an integrated GPU from a discrete one.
+    try {
+      const adapter = await navigator.gpu.requestAdapter();
+      if (adapter && adapter.info) {
+        // A software adapter is the slowest case: the game starts it on Low.
+        window.veyraAdapter = adapter.info.isFallbackAdapter ? "fallback/" : adapter.info.vendor + "/" + adapter.info.architecture;
+      }
+    } catch (error) {
+      console.log("no adapter info: " + error);
+    }
+    // The wasm downloads and compiles while the data bundle downloads and
+    // unzips, not after it.
+    const compiled = WebAssembly.compileStreaming(fetch("veyra_bg.wasm"));
+    compiled.catch(() => {});
     const response = await fetch("data.bundle.gz");
     if (!response.ok) throw new Error("data.bundle.gz: " + response.status);
     let bytes = new Uint8Array(await response.arrayBuffer());
+    phase("bundle fetched");
     // A server that already unzipped it on the way needs no second pass.
     if (bytes[0] === 0x1f && bytes[1] === 0x8b) {
       const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
       bytes = new Uint8Array(await new Response(stream).arrayBuffer());
     }
+    phase("bundle unzipped");
     window.VEYRA_BUNDLE = bytes;
-    say("Veyra is baking its world, this takes a minute or two.");
-    // Let the line paint before the wasm takes the thread for the bake.
+    say("Veyra is loading its world.");
+    // Let the line paint before the wasm takes the thread.
     await new Promise((resolve) => setTimeout(resolve, 100));
     const { default: init } = await import("./veyra.js");
-    await init();
+    // A server that does not call it application/wasm leaves the plain path.
+    const module_or_path = await compiled.catch(() => undefined);
+    phase("wasm compiled");
+    await init(module_or_path ? { module_or_path } : undefined);
   } catch (error) {
     // Winit ends its start-up with an exception on purpose.
     if (!String(error).includes("Using exceptions for control flow")) {

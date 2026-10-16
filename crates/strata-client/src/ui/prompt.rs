@@ -129,6 +129,7 @@ pub fn words(
         // The chip of a guard needs the books, so `guard_words` words it.
         InteractionKind::Guard { .. } => String::new(),
         InteractionKind::Cache { .. } => english("strata.prompt.cache"),
+        InteractionKind::Person { .. } => english("strata.prompt.person"),
         InteractionKind::Harvester { id } => match harvesters.and_then(|all| all.get(*id)) {
             Some(machine) => english(if machine.is_full() {
                 "strata.harvester.chip.full"
@@ -277,6 +278,7 @@ mod tests {
             fabricator: false,
             board: None,
             guards: std::collections::BTreeSet::default(),
+            people: std::collections::BTreeSet::default(),
         };
         assert_eq!(
             words(&reach, Some(&graph), None).as_deref(),
@@ -294,6 +296,7 @@ mod tests {
             fabricator: false,
             board: None,
             guards: std::collections::BTreeSet::default(),
+            people: std::collections::BTreeSet::default(),
         };
         assert_eq!(
             words(&reach, Some(&graph), None).as_deref(),
@@ -311,6 +314,7 @@ mod tests {
             fabricator: false,
             board: None,
             guards: std::collections::BTreeSet::default(),
+            people: std::collections::BTreeSet::default(),
         };
         assert_eq!(
             words(&reach, Some(&graph), None).as_deref(),
@@ -323,6 +327,7 @@ mod tests {
             fabricator: false,
             board: None,
             guards: std::collections::BTreeSet::default(),
+            people: std::collections::BTreeSet::default(),
         };
         assert_eq!(
             words(&reach, Some(&graph), None).as_deref(),

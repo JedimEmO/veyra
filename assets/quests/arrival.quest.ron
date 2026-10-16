@@ -1,0 +1,96 @@
+// The first questline (ticket 0014): landfall, a steady hand, the quiet
+// station, mending the mast, upstream and who hears it. One file for the
+// whole line, its words final since step 2.
+//
+// Branch A (Pell) is in his conversation at `pell`, or at `quiet_station`
+// for a household that walked out before buying the bike: fight sends the
+// quest to `pell_fight`, pay and talk end the conversation and the quest
+// moves on to `mending`. Branch B (Wim) is in his conversation at
+// `upstream`, where a threat sends it to `wim_fight`, and at the pump once
+// `who_hears` begins. The endings are chosen by whom the record goes to:
+// Teague's and Maren's are a reply each; Corin's opens `selling`, and the
+// sale at the board ends the quest.
+//
+// Every key a journal line names is in brackets, one a line at most.
+(
+    version: 1,
+    id: "arrival",
+    title: "The quiet station",
+    crews: [
+        (id: "pell", at: Station, roster: [(kind: Rusher, count: 2)], gone: Some("core"),
+         hand: Some((name: "Salvager", tint: (150, 112, 90)))),
+        // Wim alone: a crew of one so that once he has fallen he stays down.
+        (id: "wim_larrow", at: Channel, roster: [(kind: Rusher, count: 1)], gone: Some("wim_fallen")),
+    ],
+    stages: [
+        (id: "landfall",
+         journal: "Maren Coyle, the arrivals warden for {assembly}, is getting you settled on the quay. Your journal keeps track of where you are [J].",
+         objectives: [Talk("veyra:person.maren_coyle")],
+         on_done: (next: Some("steady_hand"))),
+        (id: "steady_hand",
+         journal: "Find Dr Anouk Teague at the Exchange. She wants proof of a steady hand: the sentry on the training ground at the city's edge beaten, and a box learned from a trainer [C].",
+         objectives: [
+            Talk("veyra:person.anouk_teague"),
+            Defeat(Opponent(Sentry)),
+            Learn,
+         ],
+         on_done: (next: Some("quiet_station"))),
+        (id: "quiet_station",
+         journal: "Hear Teague's orders, then buy a courier bike at the board, make it your ride from your pack and call it [V]. The station lies far past the road's end.",
+         objectives: [
+            Talk("veyra:person.anouk_teague"),
+            Buy("veyra:vehicle.courier_bike"),
+            Stable,
+            Reach(Station, 80),
+         ],
+         on_done: (next: Some("pell"))),
+        (id: "pell",
+         journal: "Pell's crew is stripping the station's mast, and Pell has the data core. Talk to him [F]: buy it, talk him round or take it.",
+         objectives: [Talk("veyra:person.pell")],
+         on_done: (next: Some("mending"))),
+        (id: "pell_fight",
+         journal: "Pell's crew has turned on you. Beat them and take back the data core.",
+         objectives: [Defeat(Crew("pell"))],
+         on_done: (effects: [SetFlag("core")], next: Some("mending"))),
+        (id: "mending",
+         journal: "The mast's harness is burnt out. Sample 45 units of a conductor near the station [G], then in Teague's camp beside the mast take Ilse Marrow onto the bench and send out Tovan Reyes at the terminal, make a harness at the workbench and fit it to the mast.",
+         objectives: [
+            Sample(class: "strata:conductor", units: 45),
+            Recruit("Ilse Marrow"),
+            Switch("Tovan Reyes"),
+            Craft("veyra:component.harness"),
+            Deliver("veyra:component.harness", "veyra:person.station_mast"),
+         ],
+         on_done: (next: Some("upstream"))),
+        (id: "upstream",
+         journal: "The station's record points to a cut in the riverbank upstream [M]. Find out who made it.",
+         objectives: [Talk("veyra:person.wim_larrow")],
+         on_done: (next: Some("who_hears"))),
+        (id: "wim_fight",
+         journal: "Wim Larrow will not let his channel go without a fight. Settle it.",
+         objectives: [Defeat(Crew("wim_larrow"))],
+         on_done: (effects: [SetFlag("wim_fallen"), Deed(Assembly, Killed, 1)], next: Some("who_hears"))),
+        (id: "who_hears",
+         journal: "Take the station's record back to the city and decide who hears it: Teague at the Exchange, Maren on the quay or Corin at the board. Wim's pump can still be shut.",
+         objectives: [],
+         on_done: ()),
+        (id: "selling",
+         journal: "Corin has opened a line for the station's record on the board. Sell it there to close the deal.",
+         objectives: [Sell("veyra:item.station_record")],
+         on_done: (effects: [
+            Ending("holder"),
+            Deed(Holder, JobDone, 2),
+            Deed(Keepers, Hurt, 2),
+         ])),
+    ],
+    endings: [
+        (id: "keepers",
+         journal: "Teague published the record, and Wim's channel must close. The rest is yours: the board's postings, the deposits out in the basin and the fabricator by the bench [M]."),
+        (id: "assembly",
+         journal: "The record went to the borough, and Wim's channel goes before the council. The rest is yours: the board's postings, the deposits out in the basin and the fabricator by the bench [M]."),
+        (id: "holder",
+         journal: "{holder} bought the record, and the station reports on its firmware now. The rest is yours: the board's postings, the deposits out in the basin and the fabricator by the bench [M]."),
+        (id: "skip",
+         journal: "You know your way. The board and the bench's terminal are on the Exchange square, the trainers stand along the same row, and the basin holds deposits for anyone who reads it [G]."),
+    ],
+)

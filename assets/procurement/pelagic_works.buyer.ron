@@ -35,5 +35,15 @@
                 (id: "intake_metal", wants: Class("strata:structural_metal"), grade: Attribute(Strength), min: 650, quantity: 2000, price: 4, refill: None),
             ],
         ),
+        // The first questline's company ending (ticket 0014, step 2): the
+        // monitoring station's record, bought once at the ending's price, so
+        // the sale is the household's first at the board. Sized against the
+        // first hour: about what a harvester or a better survey tool is worth.
+        (
+            id: "station_record", name: "The station's record", kind: Project,
+            lines: [
+                (id: "station_record", wants: Item("veyra:item.station_record"), grade: Line("readings"), min: 500, quantity: 1, price: 350, refill: None),
+            ],
+        ),
     ],
 )

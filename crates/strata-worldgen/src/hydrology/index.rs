@@ -1061,6 +1061,25 @@ impl Shore {
         Self { nodes }
     }
 
+    /// Every node the shore holds, `(node, lake, ground)`, in node order:
+    /// what a saved network writes.
+    pub fn entries(&self) -> Vec<([i32; 2], u32, f32)> {
+        let mut all: Vec<_> = self
+            .nodes
+            .iter()
+            .map(|(&n, &(id, ground))| (n, id, ground))
+            .collect();
+        all.sort_by_key(|&(n, _, _)| n);
+        all
+    }
+
+    /// The shore [`entries`](Self::entries) wrote.
+    pub fn from_entries(entries: &[([i32; 2], u32, f32)]) -> Self {
+        Self {
+            nodes: entries.iter().map(|&(n, id, g)| (n, (id, g))).collect(),
+        }
+    }
+
     /// Whether node `n` is under a lake.
     pub fn has_lake(&self, n: [i32; 2]) -> bool {
         self.nodes.get(&n).is_some_and(|&(id, _)| id != NONE)

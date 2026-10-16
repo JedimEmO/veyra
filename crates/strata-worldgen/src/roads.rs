@@ -16,6 +16,7 @@
 //! on any machine and thread count and are folded into its content hash, so
 //! into the world's version through the canaries.
 
+use serde::{Deserialize, Serialize};
 pub use strata_registry::RoadClass;
 
 use crate::hydrology::NodeMap;
@@ -67,7 +68,7 @@ pub const fn spec(class: RoadClass) -> ClassSpec {
 }
 
 /// A point of a road's centreline.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct RoadPoint {
     /// World metres.
     pub x: f64,
@@ -81,7 +82,7 @@ pub struct RoadPoint {
 }
 
 /// How a road gets over a river.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum CrossingKind {
     /// A deck on piers and abutments over a straight reach with firm banks.
     Bridge,
@@ -94,7 +95,7 @@ pub enum CrossingKind {
 }
 
 /// Where a road crosses a river, as the crossing's kit (step 7) needs it.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Crossing {
     /// What kind.
     pub kind: CrossingKind,
@@ -134,7 +135,7 @@ pub struct Crossing {
 }
 
 /// Where a road ends.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum RoadEnd {
     /// At a procedural site's [`arrival`](crate::sites::ProceduralSite::arrival).
     Site(SiteId),
@@ -150,7 +151,7 @@ pub enum RoadEnd {
 }
 
 /// A point where a road ends on another one.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Junction {
     /// World `(x, z)`, on the through road's centreline.
     pub at: [f64; 2],
@@ -161,7 +162,7 @@ pub struct Junction {
 }
 
 /// One road of the network.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Road {
     /// Its class.
     pub class: RoadClass,

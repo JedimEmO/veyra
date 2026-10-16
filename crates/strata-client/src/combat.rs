@@ -165,11 +165,37 @@ pub fn hud_only(app: &mut App) {
     crate::combat_hud::install(app);
 }
 
-/// Present where the platform grants the pointer lock only to a click (a
-/// browser), so the combat camera asks for it after the first one. The
-/// entry inserts it; nothing else decides the platform.
+/// Present where the platform grants the pointer lock only inside a user
+/// gesture's own handler (a browser: Firefox and Safari refuse one asked for
+/// in a later frame, Chrome after a few seconds), so the camera does not
+/// grab the cursor itself. It says whether it wants the lock and the entry
+/// hands that to the page, whose click handler asks for it, and reads the
+/// lock back: the state here is what the platform holds, never what was
+/// asked, so a lock the browser dropped (Escape, a lost focus) is simply
+/// not held and the next click takes it again. The entry inserts it;
+/// nothing else decides the platform.
 #[derive(Resource, Debug, Clone, Copy, Default)]
-pub struct PointerLockOnClick;
+pub struct PointerLockOnClick {
+    /// Set by the camera's input each frame it runs, that is while no screen
+    /// is open and the window has focus; the entry clears it after reading.
+    pub wanted: bool,
+    /// Set by the entry: the platform holds the lock now.
+    pub held: bool,
+}
+
+/// The cursor grabbed and hidden, or free and shown, written only on a
+/// change: `bevy_winit` applies every field of the component on any change.
+fn set_cursor(cursor: &mut Mut<CursorOptions>, grabbed: bool) {
+    let (mode, visible) = if grabbed {
+        (CursorGrabMode::Locked, false)
+    } else {
+        (CursorGrabMode::None, true)
+    };
+    if cursor.grab_mode != mode || cursor.visible != visible {
+        cursor.grab_mode = mode;
+        cursor.visible = visible;
+    }
+}
 
 #[allow(
     clippy::too_many_arguments,
@@ -184,8 +210,7 @@ fn read_input(
     reach: Res<Reach>,
     mut interactions: MessageWriter<Interact>,
     mut windows: Query<(&Window, &mut CursorOptions), With<PrimaryWindow>>,
-    lock_on_click: Option<Res<PointerLockOnClick>>,
-    mut clicked: Local<bool>,
+    mut lock_on_click: Option<ResMut<PointerLockOnClick>>,
     mut cameras: Query<(&mut OrbitCamera, &Transform), With<CombatCamera>>,
     mut players: Query<
         (Entity, &mut PlayerIntent, &mut CombatIntent, &Combatant),
@@ -206,28 +231,30 @@ fn read_input(
         movement.move_dir = Vec2::ZERO;
         movement.jump = false;
         movement.sprint = false;
-        cursor.grab_mode = CursorGrabMode::None;
-        cursor.visible = true;
-        // The browser dropped the lock with the focus, and grants it again
-        // only to a new click.
-        *clicked = false;
+        set_cursor(&mut cursor, false);
         return;
     }
-    // A browser grants the pointer lock only to a click, and rejects an
-    // earlier request with an error; elsewhere there is nothing to wait for.
-    // A screen (the pause) that released the lock needs a new click too.
-    if cursor.grab_mode == CursorGrabMode::None {
-        *clicked = false;
-    }
-    *clicked |= lock_on_click.is_none() || mouse.just_pressed(MouseButton::Left);
-    if *clicked {
-        cursor.grab_mode = CursorGrabMode::Locked;
-        cursor.visible = false;
-    }
+    // Elsewhere the camera grabs the cursor itself; where the platform wants
+    // a gesture it only says so, and turns with the mouse while it is held.
+    let turn = match lock_on_click.as_deref_mut() {
+        None => {
+            cursor.grab_mode = CursorGrabMode::Locked;
+            cursor.visible = false;
+            motion.delta
+        }
+        Some(lock) => {
+            lock.wanted = true;
+            // The cursor component is left alone here: the window applies it
+            // whole when any of it changes, which asks the browser for a lock
+            // outside a click (refused where a gesture is demanded), and the
+            // browser hides the cursor under a lock itself.
+            if lock.held { motion.delta } else { Vec2::ZERO }
+        }
+    };
     // Turned slower through a scope by the factor the view is magnified.
     let sensitivity = camera.sensitivity * crate::scope::look_factor(actor);
-    camera.yaw -= motion.delta.x * sensitivity;
-    camera.pitch = (camera.pitch - motion.delta.y * sensitivity).clamp(-1.25, 1.15);
+    camera.yaw -= turn.x * sensitivity;
+    camera.pitch = (camera.pitch - turn.y * sensitivity).clamp(-1.25, 1.15);
     movement.yaw = camera.yaw;
     input.fire = mouse.pressed(MouseButton::Left);
     input.aim = mouse.pressed(MouseButton::Right);

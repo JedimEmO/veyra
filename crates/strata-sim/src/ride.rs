@@ -1081,7 +1081,7 @@ mod tests {
         assert!(app.world().get::<Calling>(player).is_none());
         let riding = app.world().get::<Riding>(player).unwrap();
         assert_eq!(riding.vehicle, bike());
-        assert!((riding.dials.speed.road - 30.0).abs() < 1e-6);
+        assert!((riding.dials.speed.road - 60.0).abs() < 1e-6);
         assert_eq!(told.last().unwrap().result, Ok(RideDone::Mounted));
         assert_eq!(
             ask(&mut app, RideRequest::Call),
@@ -1281,33 +1281,33 @@ mod tests {
         );
         let near = |a: f32, b: f32| assert!((a - b).abs() < 1e-3, "{a} vs {b}");
         let worst = read(0, 0, rules.full);
-        near(worst.speed.road, 30.0 * 0.90);
-        near(worst.speed.ground, 18.0 * 0.90);
+        near(worst.speed.road, 60.0 * 0.90);
+        near(worst.speed.ground, 36.0 * 0.90);
         near(worst.turn.slow, 150.0 * 0.85);
-        near(worst.turn.fast, 55.0 * 0.85);
-        near(worst.turn.grip, 6.0 * 0.85);
-        near(worst.speed.reverse, 4.0);
+        near(worst.turn.fast, 85.0 * 0.85);
+        near(worst.turn.grip, 8.0 * 0.85);
+        near(worst.speed.reverse, 6.0);
         let best = read(1000, 1000, rules.full);
-        near(best.speed.road, 30.0 * 1.10);
-        near(best.speed.ground, 18.0 * 1.10);
+        near(best.speed.road, 60.0 * 1.10);
+        near(best.speed.ground, 36.0 * 1.10);
         near(best.turn.slow, 150.0 * 1.15);
-        near(best.turn.grip, 6.0 * 1.15);
+        near(best.turn.grip, 8.0 * 1.15);
         let half = read(750, 250, rules.full);
-        near(half.speed.road, 30.0 * 1.05);
-        near(half.turn.fast, 55.0 * 0.925);
+        near(half.speed.road, 60.0 * 1.05);
+        near(half.turn.fast, 85.0 * 0.925);
         // Wear: nothing at slide_below, straight down to worst_speed.
         assert_eq!(read(500, 500, rules.slide_below), file);
         let half_worn = read(500, 500, rules.slide_below / 2);
-        near(half_worn.speed.road, 30.0 * 0.8);
-        near(half_worn.speed.ground, 18.0 * 0.8);
+        near(half_worn.speed.road, 60.0 * 0.8);
+        near(half_worn.speed.ground, 36.0 * 0.8);
         near(half_worn.turn.slow, 150.0);
         let broken = read(500, 500, 0);
-        near(broken.speed.road, 30.0 * 0.6);
-        near(broken.speed.ground, 18.0 * 0.6);
+        near(broken.speed.road, 60.0 * 0.6);
+        near(broken.speed.ground, 36.0 * 0.6);
         assert!(broken.speed.road > 0.0, "a bike at nothing still rides");
         // The order: the lines, then the wear, multiply.
         let both = read(0, 500, 0);
-        near(both.speed.road, 30.0 * 0.9 * 0.6);
+        near(both.speed.road, 60.0 * 0.9 * 0.6);
     }
 
     /// A crash costs the vehicle's points at its minimum speed, more with

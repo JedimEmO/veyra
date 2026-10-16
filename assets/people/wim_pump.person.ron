@@ -1,0 +1,19 @@
+// Wim's pump on the cut channel, a thing and not a body: F shuts it
+// (ticket 0014, branch B).
+(
+    version: 1,
+    id: "veyra:person.wim_pump",
+    name: "Irrigation pump",
+    title: "Wim's channel",
+    role: Assembly,
+    tint: (170, 176, 184),
+    stand: Channel,
+    facing: 0.0,
+    prop: true,
+    conversations: [
+        (when: [Flag("wim_fallen")], node: "pump.fallen"),
+        (when: [QuestAt("arrival", "who_hears"), NotFlag("pump_shut")], node: "pump.shut"),
+        (when: [Flag("pump_shut")], node: "pump.closed"),
+        (node: "pump.idle"),
+    ],
+)

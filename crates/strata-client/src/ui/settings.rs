@@ -23,6 +23,7 @@ use slotted::ui::{
 
 use crate::flycam::FlyCam;
 use crate::orbit::OrbitCamera;
+use crate::ui::graphics::Graphics;
 
 /// The generated settings screen's kind.
 pub const KIND: &str = "strata:settings";
@@ -48,6 +49,8 @@ pub mod keys {
     pub const UI_SCALE: &str = "settings.ui_scale";
     /// The camera shakes a little when the member is hurt (`Bool`).
     pub const CAMERA_SHAKE: &str = "settings.camera_shake";
+    /// The graphics preset (`Text`): one of [`crate::ui::graphics::Graphics`]'s ids.
+    pub const GRAPHICS: &str = "settings.graphics";
 }
 
 /// The field of view the cameras start with: Bevy's own default, so the
@@ -140,6 +143,12 @@ fn key(s: &str) -> LocKey {
 pub fn spec() -> SettingsSpec {
     SettingsSpec::new(kind())
         .tab("display", "strata.settings.display")
+        .row(SettingsRow::Select {
+            key: keys::GRAPHICS.into(),
+            label: key("strata.settings.graphics"),
+            options: graphics_options(),
+            default: Graphics::High.id().into(),
+        })
         .row(SettingsRow::Slider {
             key: keys::FIELD_OF_VIEW.into(),
             label: key("strata.settings.fov"),
@@ -211,6 +220,17 @@ pub fn spec() -> SettingsSpec {
             opts: TextOpts::default(),
             tags: Tags::new().with(Tags::TEST_ID, "audio_note"),
         }))
+}
+
+/// The graphics presets, Low first.
+fn graphics_options() -> Vec<SelectOption> {
+    Graphics::ALL
+        .into_iter()
+        .map(|graphics| SelectOption {
+            id: graphics.id().to_owned(),
+            label: key(&format!("strata.settings.graphics.{}", graphics.id())),
+        })
+        .collect()
 }
 
 /// The UI scale's choices, Auto first: the one that is right on any
@@ -331,6 +351,7 @@ pub fn apply_camera_shake(
 )]
 pub fn apply_foliage_distance(
     store: Res<ValueStore>,
+    graphics: Res<crate::ui::graphics::Active>,
     config: Option<ResMut<strata_foliage::FoliageConfig>>,
     mut previous: Local<Option<f32>>,
     mut ranges: Query<
@@ -345,7 +366,7 @@ pub fn apply_foliage_distance(
     if !percent.is_finite() {
         return;
     }
-    let scale = percent.clamp(25.0, 200.0) as f32 / 100.0;
+    let scale = percent.clamp(25.0, 200.0) as f32 / 100.0 * graphics.preset.foliage_scale();
     let old = previous.unwrap_or(1.0);
     if (scale - old).abs() < f32::EPSILON {
         return;
@@ -374,7 +395,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn the_spec_declares_the_eight_keys_with_their_defaults() {
+    fn the_spec_declares_the_nine_keys_with_their_defaults() {
         let defaults = spec().defaults();
         assert_eq!(
             defaults.get(keys::FIELD_OF_VIEW),
@@ -400,7 +421,11 @@ mod tests {
             Some(&Value::Bool(true)),
             "the shake is on until the member turns it off"
         );
-        assert_eq!(defaults.len(), 8);
+        assert_eq!(
+            defaults.get(keys::GRAPHICS),
+            Some(&Value::Text("high".to_owned()))
+        );
+        assert_eq!(defaults.len(), 9);
     }
 
     #[test]

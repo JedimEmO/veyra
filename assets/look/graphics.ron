@@ -1,0 +1,43 @@
+// The graphics presets of the Display tab (ticket 0015, step 3), read by
+// `strata_client::ui::graphics` at startup (a copy is compiled in). A preset
+// is a set of limits laid over whatever look is in force, so High, which
+// limits nothing, is the look as it is and an explicit `--no-shadows` or an
+// F6 edit stays honoured under every preset. A field left out is not limited.
+//
+// What each limit is worth was measured on the look fixtures (RTX 4090, GPU
+// mean ms of 1600x900, canopy / dusk street / dawn, 2026-10-16,
+// `docs/perf/look-ledger.md`): the shadow pass is 0.27 / 0.49 / 0.65 of
+// 3.3 / 2.7 / 3.6 and a 2048 map or two cascades take about two fifths of it;
+// no antialiasing saves 0.35 / 0.12 / 0.24; half the foliage distance
+// 0.18 / 0 / 0.14 on the GPU and about as much again on the render thread;
+// the fog pass, the far paint, the clouds, the sky map and the shadow
+// distance are each under 0.1 and are left alone, except that Low also
+// limits the shadow distance (a cheap ceiling that costs no look near the
+// player).
+(
+    // For an integrated GPU: small shadows near the player only, no antialiasing, half the foliage.
+    low: (
+        shadow_map_size: Some(1024),
+        shadow_cascades: Some(2),
+        shadow_distance: Some(1500.0),
+        antialiasing: false,
+        foliage_percent: 50.0,
+    ),
+    // A lighter shadow, the same antialiasing, three quarters of the foliage.
+    medium: (
+        shadow_map_size: Some(2048),
+        shadow_cascades: Some(2),
+        foliage_percent: 75.0,
+    ),
+    // Today's look.
+    high: (),
+    // A browser reports `vendor/architecture` of its adapter, which wgpu
+    // cannot turn into a device type: these prefixes are integrated parts
+    // (`fallback/` is the page's mark for a software adapter). An AMD part
+    // is RDNA 2 or 3 in both the integrated 680M and 780M and the discrete
+    // 6000 and 7000 series, and a browser cannot say which; Medium is the
+    // start there, since a discrete card's owner raises it once and it is
+    // kept, while an integrated laptop meeting High is the reported failure.
+    web_integrated: ["intel/gen-", "intel/xe-lp", "intel/xe-lpg", "fallback/"],
+    web_uncertain: ["amd/rdna-2", "amd/rdna-3"],
+)

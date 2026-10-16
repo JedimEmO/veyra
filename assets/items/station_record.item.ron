@@ -1,0 +1,16 @@
+// The monitoring station's record on a company slate (ticket 0014, step 2):
+// what the first questline's company ending sells at the board, once, to
+// the buyer's `station_record` project line. Nobody makes it and no shelf
+// sells it; Corin Hale hands it over when the household agrees to sell. A
+// component for its one line, the reading the line is graded on.
+(
+    id: "veyra:item.station_record",
+    name: "Station record",
+    maker: "the station",
+    kind: Component,
+    stack: 1,
+    lines: [
+        (id: "readings", name: "Readings"),
+    ],
+    icon: (shape: Slab, color: "#7FC8D8", symbol: Some("veyra:icon.ability.analyse-water")),
+)

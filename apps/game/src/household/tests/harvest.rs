@@ -86,6 +86,7 @@ fn file(harvester: bool, hours: Option<f64>) -> HouseholdFile {
         harvester,
         harvest_hours: hours,
         open_harvester: false,
+        quest_stage: None,
     }
 }
 

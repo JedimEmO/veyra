@@ -1,0 +1,25 @@
+// Corin Hale, works steward for the company that holds the city, by its
+// board (ticket 0014). Easy, generous, always speaking for the company; the
+// edge shows only when pushed.
+(
+    version: 1,
+    id: "veyra:person.corin_hale",
+    name: "Corin Hale",
+    title: "Works steward, {holder}",
+    role: Holder,
+    tint: (206, 176, 64),
+    stand: Board,
+    facing: 3.14159,
+    conversations: [
+        (when: [QuestDone("arrival"), Flag("ending_holder")], node: "corin.after_own"),
+        (when: [QuestDone("arrival"), Flag("ending_keepers")], node: "corin.after_keepers"),
+        (when: [QuestDone("arrival"), Flag("ending_assembly"), Flag("wim_fallen")], node: "corin.after_assembly_fallen"),
+        (when: [QuestDone("arrival"), Flag("ending_assembly")], node: "corin.after_assembly"),
+        (when: [QuestDone("arrival")], node: "corin.after_skip"),
+        (when: [QuestAt("arrival", "who_hears")], node: "corin.hears"),
+        (when: [QuestAt("arrival", "selling")], node: "corin.selling"),
+        (when: [QuestAt("arrival", "quiet_station"), NotFlag("newcomer_credit")], node: "corin.bike"),
+        (when: [QuestAt("arrival", "quiet_station")], node: "corin.bike_credited"),
+        (node: "corin.idle"),
+    ],
+)

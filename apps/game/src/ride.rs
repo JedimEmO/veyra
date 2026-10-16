@@ -36,6 +36,15 @@ const STALLED_BELOW: f64 = 2.0;
 /// they go.
 const LOOK_AHEAD_M: f64 = 25.0;
 const LOOK_AHEAD_S: f64 = 0.6;
+/// How near a vertex counts as reached: a fixed stretch and a share of the
+/// speed, metres and seconds, since a bike at road speed cannot turn inside a
+/// tight circle and would wheel round a corner it never touches.
+const ADVANCE_M: f64 = 12.0;
+const ADVANCE_S: f64 = 0.5;
+/// How near the road's far end counts as reached, metres. A bike at road
+/// speed overshoots a tighter circle and wheels round the end for the rest of
+/// the ride, which is no road speed and risks a crash.
+const END_REACHED_M: f64 = 80.0;
 /// The ground under the player settles for this long before the call.
 const SETTLE_SECONDS: f32 = 3.0;
 
@@ -282,7 +291,7 @@ fn drive_ride(
     // Advance to the next segment once its projection is nearer.
     if seg + 2 < script.line.len() {
         let a = script.line[seg + 1];
-        if (here.0 - a.0).hypot(here.1 - a.1) < 12.0 {
+        if (here.0 - a.0).hypot(here.1 - a.1) < ADVANCE_M + ADVANCE_S * speed_now {
             script.seg = seg + 1;
         }
     }
@@ -355,7 +364,7 @@ fn drive_ride(
                 );
             }
             script.report.seconds = f64::from(script.since);
-            script.report.reached_end = to_end < 30.0;
+            script.report.reached_end = to_end < END_REACHED_M;
             if script.since >= RIDE_SECONDS || script.report.reached_end || riding.is_none() {
                 intent.0.move_dir = Vec2::ZERO;
                 finish(&mut script);

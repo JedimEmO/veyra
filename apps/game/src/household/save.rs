@@ -260,6 +260,7 @@ impl Household {
             caches: Caches::default(),
             jobs: Jobs::default(),
             known: Known::default(),
+            quests: strata::sim::quests::QuestLog::default(),
         };
         household.give(grants, &registries.items);
         household
@@ -754,6 +755,7 @@ impl Household {
             caches: Caches::default(),
             jobs: Jobs::default(),
             known: Known::default(),
+            quests: strata::sim::quests::QuestLog::default(),
         }
     }
 

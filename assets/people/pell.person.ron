@@ -1,0 +1,21 @@
+// Pell, who leads the scavengers stripping the monitoring station (ticket
+// 0014). Not an outlaw, not a friend: a living. The crew is the quest's
+// `pell` crew, neutral until a reply turns it. He will deal at
+// `quiet_station` too, so a household that walked out without the bike is
+// not turned away.
+(
+    version: 1,
+    id: "veyra:person.pell",
+    name: "Pell",
+    title: "Salvage lead",
+    role: Unaligned,
+    tint: (150, 112, 90),
+    stand: Station,
+    facing: 1.5708,
+    conversations: [
+        (when: [QuestAt("arrival", "pell")], node: "pell.hub"),
+        (when: [QuestAt("arrival", "quiet_station")], node: "pell.hub"),
+        (when: [QuestAt("arrival", "pell_fight")], node: "pell.angry"),
+        (node: "pell.idle"),
+    ],
+)

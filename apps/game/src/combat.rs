@@ -244,6 +244,7 @@ fn setup(
     origin: Res<RenderOrigin>,
     spatial: SpatialQuery,
     registries: Res<strata::sim::Registries>,
+    staging: Option<Res<StagingSpawn>>,
 ) {
     if encounter.started {
         return;
@@ -251,7 +252,13 @@ fn setup(
     let Ok((player, position, heading)) = players.single() else {
         return;
     };
-    let target = position.0;
+    // A household that starts on the quay (ticket 0014) fights at the
+    // training ground all the same: the fight stands where it always did.
+    let (target, yaw) = staging
+        .as_deref()
+        .map_or((position.0, heading.yaw), |staging| {
+            (staging.at, staging.yaw)
+        });
     let mut placements = Vec::new();
     // The marksman stands ahead at the range it holds, the far side of the
     // staging ground from the bench props behind the start; it is engaged by
@@ -289,15 +296,15 @@ fn setup(
         let filter = SpatialQueryFilter::from_excluded_entities([player]);
         for dx in [0., -4., 4., -8., 8.] {
             for dz in [0., -4., 4.] {
-                let offset = Quat::from_rotation_y(heading.yaw) * Vec3::new(x + dx, 0., z + dz);
-                let x = position.0.x() + f64::from(offset.x);
-                let z = position.0.z() + f64::from(offset.z);
+                let offset = Quat::from_rotation_y(yaw) * Vec3::new(x + dx, 0., z + dz);
+                let x = target.x() + f64::from(offset.x);
+                let z = target.z() + f64::from(offset.z);
                 let Some(ground) =
                     super::household::ground_at(x, z, &source, &origin, &spatial, &filter)
                 else {
                     continue;
                 };
-                let eye = origin.to_render(position.0) + Vec3::Y * 0.45;
+                let eye = origin.to_render(target) + Vec3::Y * 0.45;
                 let chest = origin.to_render(WorldPos::new(x, ground + 1.1, z));
                 let line = chest - eye;
                 let Ok(direction) = Dir3::new(line) else {
@@ -338,7 +345,7 @@ fn setup(
     }
     encounter.started = true;
     status.ready = true;
-    commands.entity(player).insert(ResetPosition(position.0));
+    commands.entity(player).insert(ResetPosition(target));
     if encounter.scripted {
         commands.entity(player).insert(ScriptedIntent::default());
     }
@@ -361,6 +368,15 @@ fn setup(
     info!(
         "combat: 60 Hz study ready; passive target, melee rusher, ranged sentry, bulwark, far marksman"
     );
+}
+
+/// Where the staging fight stands when the household does not start beside
+/// it: the default spawn and its heading, which the fight is placed from and
+/// F5 returns the player to (ticket 0014, a new household starts on the quay).
+#[derive(Resource, Debug, Clone, Copy)]
+pub(crate) struct StagingSpawn {
+    pub(crate) at: WorldPos,
+    pub(crate) yaw: f32,
 }
 
 /// What a hostile is born as: the staging fight's people and a camp's are
@@ -408,6 +424,12 @@ pub(crate) fn spawn_hostile<'a>(
         Opponent {
             passive,
             brain: OpponentBrain::new(kind, opponents),
+        },
+        // What the questline counts a defeat by (ticket 0014); a crew's
+        // members are marked again by the game that stands them.
+        strata::sim::quests::QuestFoe {
+            kind: strata::sim::quests::foe_kind(kind),
+            crew: None,
         },
         id,
         allegiance,

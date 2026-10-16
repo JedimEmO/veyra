@@ -14,6 +14,9 @@ anyhow = { workspace = true }
 image = { workspace = true }
 # The bundle format, shared with the game that reads it.
 strata-registry = { workspace = true }
+# The browser's baked rivers file (`bundle` writes it).
+strata-sim = { workspace = true }
+strata-core = { workspace = true }
 
 [lints]
 workspace = true

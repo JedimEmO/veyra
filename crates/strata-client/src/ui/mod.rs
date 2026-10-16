@@ -34,7 +34,9 @@
 //! baked, with the same pieces turning on a stage of their own
 //! ([`weapon_stage`], ticket 0007 step 8). The terminal's
 //! second tab is the survey register ([`mod@bench`]), and the deposit
-//! tracked there has a marker on the HUD ([`tracker`]).
+//! tracked there has a marker on the HUD ([`tracker`]), as has the
+//! questline's current objective. A person's F opens their conversation
+//! ([`dialogue`]) and J the journal ([`journal`]).
 //!
 //! The simulation does not pause. This is an MMO: the world goes on for
 //! everyone else while one player reads a menu, so the pause screen is a
@@ -49,14 +51,17 @@ pub mod board;
 pub mod card;
 pub mod claims;
 pub mod crafting;
+pub mod dialogue;
 pub mod factory;
 pub mod fitting;
 pub mod harvester;
 pub mod icons;
+pub mod journal;
 pub mod loot;
 // The combat HUD's shared typefaces (combat_hud.rs, combat_text.rs, the
 // game's prop labels).
 pub mod fonts;
+pub mod graphics;
 pub mod map;
 pub mod pause;
 pub mod place;
@@ -141,6 +146,7 @@ pub(crate) fn register(app: &mut App) -> bool {
         app.insert_resource(SettingsStorage::new(settings::StoredSettings::new(&path)));
     }
     app.configure_sets(Update, ScreenWork.after(SlottedUiSet::Semantics));
+    graphics::register(app);
     app.insert_resource(MenuConfig {
         settings_kind: settings::kind(),
         title: LocKey(strings::TITLE.to_owned()),
@@ -171,7 +177,10 @@ pub(crate) fn register(app: &mut App) -> bool {
                 settings::apply_hud_toggle,
                 settings::apply_camera_shake,
                 scale::apply_ui_scale,
-                settings::apply_foliage_distance.before(strata_foliage::FoliageSet::Dispatch),
+                settings::apply_foliage_distance
+                    .after(graphics::resolve)
+                    .before(strata_foliage::FoliageSet::Dispatch),
+                graphics::apply_shadow_map,
             ),
         ),
     );
@@ -207,6 +216,8 @@ pub(crate) fn register(app: &mut App) -> bool {
     survey::register(app);
     map::register(app);
     ride::register(app);
+    dialogue::register(app);
+    journal::register(app);
     true
 }
 
@@ -239,6 +250,7 @@ fn inject_pause_buttons(mut injections: ResMut<Injections>) {
                 button("loadout", "strata.menu.loadout"),
                 button("bench", "strata.menu.bench"),
                 button("map", "strata.menu.map"),
+                button("journal", "strata.menu.journal"),
                 button("inventory", "strata.menu.inventory"),
             ],
             tags: Tags::new().with(Tags::TEST_ID, "strata.pause.buttons"),
@@ -262,6 +274,7 @@ fn open_on_pause_choice(mut choices: MessageReader<MenuChoice>, mut commands: Co
             "loadout" => sheet::open_loadout(&mut commands),
             "bench" => bench::open(&mut commands, false),
             "map" => map::open(&mut commands),
+            "journal" => journal::open(&mut commands),
             "inventory" => stores::open(&mut commands, false),
             _ => {}
         }
@@ -280,9 +293,11 @@ fn open_on_interact(
     mut commands: Commands,
     inbox: Option<ResMut<strata_sim::procurement::ProcurementInbox>>,
     caches: Option<ResMut<strata_sim::loot::CacheInbox>>,
+    talk: Option<ResMut<strata_sim::quests::DialogueInbox>>,
 ) {
     let mut inbox = inbox;
     let mut caches = caches;
+    let mut talk = talk;
     for interaction in interactions.read() {
         match &interaction.kind {
             InteractionKind::Terminal => bench::open(&mut commands, true),
@@ -300,6 +315,14 @@ fn open_on_interact(
                     caches
                         .0
                         .push(strata_sim::loot::CacheRequest::Take { key: *key });
+                }
+            }
+            // A person's F opens their conversation; the sim answers with a
+            // `DialogueView`, which `dialogue` draws.
+            InteractionKind::Person { id } => {
+                if let Some(talk) = talk.as_mut() {
+                    talk.0
+                        .push(strata_sim::quests::DialogueRequest::Open(id.clone()));
                 }
             }
             // A guard's F buys its faction's lease, through the request the

@@ -130,10 +130,12 @@ mod bench;
 mod cache;
 mod fall;
 mod harvesters;
+pub(crate) mod people;
 mod props;
 mod save;
 mod script;
 mod script_crafting;
+pub(crate) mod script_quest;
 mod shots;
 #[cfg(test)]
 mod tests;
@@ -556,6 +558,12 @@ pub(super) struct Household {
     /// The camps found, stamped like `jobs`.
     #[serde(default)]
     pub known: Known,
+    /// The first questline (ticket 0014): every quest's stage, the flags set
+    /// and the choices made. Added with a serde default and no version
+    /// change: a file without it has an empty log, and is offered the
+    /// questline at Maren's desk.
+    #[serde(default)]
+    pub quests: strata::sim::quests::QuestLog,
 }
 
 /// The world a household's survey record belongs to.
@@ -622,6 +630,8 @@ pub(super) struct HouseholdFile {
     pub harvest_hours: Option<f64>,
     /// `--open-harvester`: the nearest machine's screen opens.
     pub open_harvester: bool,
+    /// `--quest-stage quest:stage`: the quest starts at that stage.
+    pub quest_stage: Option<(String, String)>,
 }
 
 impl HouseholdFile {
@@ -653,6 +663,7 @@ impl HouseholdFile {
             harvester: cli.harvester,
             harvest_hours: cli.harvest_hours,
             open_harvester: cli.open_harvester,
+            quest_stage: cli.quest_stage.clone(),
         }
     }
 }
@@ -660,7 +671,7 @@ impl HouseholdFile {
 /// Marks the first day: the household was started, not loaded, so the
 /// player has never seen the bench place. Removed once said.
 #[derive(Resource, Debug, Default, Clone, Copy)]
-struct FirstDay;
+pub(crate) struct FirstDay;
 
 /// The household's survey record is this world's, and the sim's to change:
 /// present when the file's record was made in the world this run is in (or
@@ -901,6 +912,14 @@ pub(super) fn init(
     commands.insert_resource(jobs);
     commands.insert_resource(known);
     commands.insert_resource(household.procurement.clone());
+    let mut quests = household.quests.clone();
+    if let Some((quest, stage)) = &file.quest_stage {
+        if let Err(reason) = start_quest_at(&mut quests, &registries.0, quest, stage) {
+            error!("household: --quest-stage {quest}:{stage}: {reason}");
+        }
+        household.quests.clone_from(&quests);
+    }
+    commands.insert_resource(quests);
     commands.insert_resource(household);
 }
 
@@ -958,8 +977,35 @@ fn install_fall(app: &mut App) {
     );
 }
 
+/// The questline's people, in every mode: a headless run stands them as a
+/// window does. The cast and the places are found before the player spawns
+/// ([`people::locate`], in the start chain).
+fn install_people(app: &mut App, cli: &super::Cli) {
+    app.init_resource::<people::Stands>().add_systems(
+        Update,
+        (
+            people::stand_people,
+            people::stand_camp,
+            people::turn_hostile,
+            people::sync_quest_teams,
+            people::catch_up,
+            people::log_dialogue,
+        )
+            .chain()
+            .run_if(resource_exists::<Household>)
+            .run_if(in_state(AppState::InWorld)),
+    );
+    if let Some(ending) = &cli.script_quest {
+        script_quest::install(app, cli, ending);
+    }
+}
+
 /// The household's systems, in combat play only: a connected client or a
 /// flycam has no household.
+#[allow(
+    clippy::too_many_lines,
+    reason = "one list of every system the household adds, and the scripts'"
+)]
 pub(super) fn install(app: &mut App, cli: &super::Cli) {
     if !cli.combat {
         return;
@@ -988,7 +1034,13 @@ pub(super) fn install(app: &mut App, cli: &super::Cli) {
         // is in the file by the time its outcome can be read.
         .add_systems(
             Update,
-            (track_sheet, track_bar, track_stock, save_on_change)
+            (
+                track_sheet,
+                track_bar,
+                track_stock,
+                track_quests,
+                save_on_change,
+            )
                 .chain()
                 .run_if(resource_exists::<Household>)
                 .run_if(in_state(AppState::InWorld))
@@ -1006,6 +1058,7 @@ pub(super) fn install(app: &mut App, cli: &super::Cli) {
     install_harvesters(app, cli);
     install_factory_shots(app, cli);
     install_fall(app);
+    install_people(app, cli);
     if cli.script_progression {
         app.insert_resource(ProgressionScript {
             open_sheet: cli.open_sheet,
@@ -1068,4 +1121,39 @@ pub(super) fn install(app: &mut App, cli: &super::Cli) {
                     .run_if(in_state(AppState::InWorld)),
             );
     }
+}
+
+/// The questline's log, copied into the household when the sim moved it.
+fn track_quests(log: Res<strata::sim::quests::QuestLog>, mut household: ResMut<Household>) {
+    if log.is_changed() && household.quests != *log {
+        household.quests.clone_from(&log);
+    }
+}
+
+/// `--quest-stage`: put `quest` at `stage` in the log, for a still.
+fn start_quest_at(
+    log: &mut strata::sim::quests::QuestLog,
+    registries: &GameRegistries,
+    quest: &str,
+    stage: &str,
+) -> Result<(), String> {
+    let def = registries
+        .quests
+        .quest(quest)
+        .ok_or_else(|| format!("no quest `{quest}`"))?;
+    def.stage(stage)
+        .ok_or_else(|| format!("`{quest}` has no stage `{stage}`"))?;
+    // A household already at the stage keeps what it has done there, so a
+    // still can show a stage part way through.
+    if log.stage_of(quest) == Some(stage) {
+        return Ok(());
+    }
+    log.quests.insert(
+        quest.to_owned(),
+        strata::sim::quests::QuestState {
+            stage: Some(stage.to_owned()),
+            ..Default::default()
+        },
+    );
+    Ok(())
 }

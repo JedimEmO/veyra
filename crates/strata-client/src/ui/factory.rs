@@ -43,9 +43,9 @@ use slotted::menu::MenuChoice;
 use slotted::registry::Value;
 use slotted::theme::Role;
 use slotted::ui::def::{
-    Align, ButtonOpts, Justify, Layout, LayoutDirection, Length, LocKey, Overflow, Padding,
-    Presentation, PresentationMode, ScreenDef, ScreenKind, Tags, TextOpts, TextRole, Transition,
-    UiNodeDef, WidgetKind,
+    Align, ButtonOpts, Justify, Layout, LayoutDirection, Length, LocKey, Padding, Presentation,
+    PresentationMode, ScreenDef, ScreenKind, Tags, TextOpts, TextRole, Transition, UiNodeDef,
+    WidgetKind,
 };
 use slotted::ui::{LocText, ScreenStack, TestId, push_screen, replace_screen};
 use strata_registry::item::{QUALITY_MAX, Record};
@@ -1800,20 +1800,20 @@ pub fn screen_def(view: &FactoryView) -> ScreenDef {
                 // The columns scroll inside the panel on a window too
                 // short for them, so the footer and its Close stay inside
                 // the border.
-                panel(
-                    "invisible",
-                    Layout {
+                // A scroll panel, not a clipped one: the wheel and the bar move it.
+                UiNodeDef::Scroll {
+                    layout: Layout {
                         align: Some(Align::Stretch),
                         grow: 1.,
                         min_height: Some(Length::Px(0.)),
-                        overflow: Overflow::Scroll,
                         ..Layout {
                             direction: LayoutDirection::Row,
                             gap: 2.6,
                             ..Layout::default()
                         }
                     },
-                    vec![
+                    scrollbar: true,
+                    children: vec![
                         panel(
                             "invisible",
                             Layout {
@@ -1834,7 +1834,8 @@ pub fn screen_def(view: &FactoryView) -> ScreenDef {
                             right,
                         ),
                     ],
-                ),
+                    tags: Tags::new(),
+                },
                 footer(view),
             ],
             tags: Tags::new().with(Tags::TEST_ID, ROOT_ID),

@@ -248,6 +248,8 @@ pub enum MarkKey {
     Heard(u64),
     /// The last ping's strongest point.
     Lead,
+    /// Where the questline's current objective leads.
+    Quest,
 }
 
 impl MarkKey {
@@ -262,6 +264,7 @@ impl MarkKey {
             Self::Bench(at) => format!("bench:{at}"),
             Self::Heard(key) => format!("heard:{key}"),
             Self::Lead => "lead".to_owned(),
+            Self::Quest => "quest".to_owned(),
         };
         format!("{MARK_TAG}{tail}")
     }
@@ -496,6 +499,8 @@ struct Gathered {
     benches: Vec<[i64; 2]>,
     /// The work taken and the camps found, which decide what a camp shows.
     camps: (Jobs, Known),
+    /// Where the journal's current objective leads.
+    quest: Option<super::journal::QuestTarget>,
 }
 
 /// The harvesters as the map shows them. A machine's `carry` moves every
@@ -1092,6 +1097,40 @@ fn unit(chart: &Chart, at: [f64; 2]) -> [f32; 2] {
     [x as f32, y as f32]
 }
 
+/// The mark of the objective the journal points to, or none when it lies
+/// outside the picture.
+fn quest_mark(
+    chart: &Chart,
+    from: [f64; 2],
+    target: &super::journal::QuestTarget,
+) -> Option<MarkView> {
+    if !chart.touches(target.at[0], target.at[1], 0.0) {
+        return None;
+    }
+    let metres = (target.at[0] - from[0]).hypot(target.at[1] - from[1]);
+    Some(MarkView {
+        key: MarkKey::Quest,
+        at: unit(chart, target.at),
+        symbol: "veyra:icon.map.mission",
+        label: String::new(),
+        colour: [1., 0.71, 0.33, 1.],
+        disc: None,
+        tracked: false,
+        turn: None,
+        label_left: false,
+        words: Words {
+            title: words("strata.map.panel.quest").to_owned(),
+            lines: [
+                words("strata.map.panel.quest.kind").to_owned(),
+                target.name.clone(),
+                String::new(),
+                where_words(metres, Compass::of(from, target.at)),
+                String::new(),
+            ],
+        },
+    })
+}
+
 /// The view of what was gathered. Marks are asked of the sim on this thread:
 /// they are lookups over the baked network, and the game bakes it before it
 /// starts.
@@ -1301,6 +1340,11 @@ fn view_of(world: &mut World, g: &Gathered) -> MapView {
             },
         });
     }
+    marks.extend(
+        g.quest
+            .as_ref()
+            .and_then(|target| quest_mark(&chart, from, target)),
+    );
     for each in &marked.harvesters {
         let metres = (each.at[0] - from[0]).hypot(each.at[1] - from[1]);
         let place = lookup(each.deposit).map(|deposit| deposit.place);
@@ -1510,6 +1554,22 @@ fn gather(world: &mut World) -> Option<Gathered> {
         .collect();
     #[allow(clippy::cast_possible_truncation, reason = "degrees to a step")]
     let heading = (heading / HEADING_STEP_DEG).round() as i32 * HEADING_STEP_DEG as i32;
+    let quest = {
+        let registries = world.resource::<Registries>().0.clone();
+        let places = world.get_resource::<strata_sim::quests::QuestPlaces>();
+        let log = world.get_resource::<strata_sim::quests::QuestLog>();
+        log.zip(places).and_then(|(log, places)| {
+            super::journal::target_of(
+                &registries,
+                log,
+                places,
+                world
+                    .get_resource::<NearDeposits>()
+                    .zip(world.get_resource::<Surveyed>()),
+                here,
+            )
+        })
+    };
     Some(Gathered {
         scale,
         holders,
@@ -1535,6 +1595,7 @@ fn gather(world: &mut World) -> Option<Gathered> {
             world.get_resource::<Jobs>().cloned().unwrap_or_default(),
             world.get_resource::<Known>().cloned().unwrap_or_default(),
         ),
+        quest,
     })
 }
 
@@ -1907,7 +1968,7 @@ fn make_button(world: &mut World, entity: Entity, mark: &MarkView) {
             key: mark.key.clone(),
             base: match mark.key {
                 MarkKey::Site(_) if mark.symbol == "veyra:icon.map.settlement" => 3,
-                MarkKey::Deposit(_) | MarkKey::Away(_) | MarkKey::Lead => 2,
+                MarkKey::Deposit(_) | MarkKey::Away(_) | MarkKey::Lead | MarkKey::Quest => 2,
                 _ => 1,
             },
         },
@@ -2481,6 +2542,20 @@ mod tests {
         let (shown, heard) = camp_marks(&sites, &kinds, &known, &jobs);
         assert_eq!(shown.len(), 3);
         assert!(heard.is_empty());
+    }
+
+    #[test]
+    fn the_objective_is_marked_when_it_lies_in_the_picture() {
+        use crate::ui::journal::QuestTarget;
+        let chart = Chart::square([0.0, 0.0], REGION_SPAN_M, PICTURE_PX);
+        let target = |at: [f64; 2]| QuestTarget {
+            at,
+            name: "Station mast".to_owned(),
+        };
+        let mark = quest_mark(&chart, [0.0, 0.0], &target([500.0, 500.0])).unwrap();
+        assert_eq!(mark.key, MarkKey::Quest);
+        assert_eq!(mark.words.lines[1], "Station mast");
+        assert!(quest_mark(&chart, [0.0, 0.0], &target([1.0e7, 0.0])).is_none());
     }
 
     fn view(holders: bool, legend: &[&str]) -> MapView {

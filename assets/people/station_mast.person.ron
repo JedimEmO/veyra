@@ -1,0 +1,19 @@
+// The station's mast, a thing and not a body: the harness is fitted here
+// with F (ticket 0014). The game stands a prop in its place.
+(
+    version: 1,
+    id: "veyra:person.station_mast",
+    name: "Station mast",
+    title: "Monitoring station",
+    role: Keepers,
+    tint: (180, 184, 190),
+    stand: Station,
+    facing: 0.0,
+    prop: true,
+    conversations: [
+        (when: [Flag("harness_fitted")], node: "mast.reading"),
+        (when: [QuestAt("arrival", "mending")], node: "mast.fit"),
+        (when: [Flag("station_restored")], node: "mast.reading"),
+        (node: "mast.idle"),
+    ],
+)

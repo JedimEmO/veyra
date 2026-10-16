@@ -1,0 +1,45 @@
+// The station's mast and Wim's pump, the two things that answer F (ticket
+// 0014). Their lines are what the household sees, not what anyone says.
+(
+    version: 1,
+    nodes: [
+        (id: "mast.idle", speaker: "veyra:person.station_mast",
+         line: "The mast stands dark, stripped back to its frame.",
+         replies: []),
+        (id: "mast.fit", speaker: "veyra:person.station_mast",
+         line: "The data core sits back in its cradle, but the harness that feeds it is burnt through. Nothing on the mast is lit.",
+         replies: [
+            (text: "Fit the harness you made.",
+             when: [CarriesMade("veyra:component.harness", 1)],
+             why: Some("Store stock won't carry the load. It needs a harness made at a bench, such as the camp's, in your pack."),
+             effects: [TakeMade("veyra:component.harness", 1), SetFlag("harness_fitted")], next: Node("mast.fitted")),
+            (text: "Leave it for now.", next: End),
+        ]),
+        (id: "mast.fitted", speaker: "veyra:person.station_mast",
+         line: "The harness takes, and lights crawl up the mast. The station reads the river: the flow below the bend down by a third, the water downstream turning brackish. The record points upstream, to a cut in the bank.",
+         replies: [(text: "Copy the readings.", effects: [SetFlag("station_restored")], next: End)]),
+        (id: "mast.reading", speaker: "veyra:person.station_mast",
+         line: "The mast hums to itself, counting the river.",
+         replies: []),
+        (id: "pump.shut", speaker: "veyra:person.wim_pump",
+         line: "Wim's pump thuds away on the bank, pulling river water into his channel. A valve wheel sits on the intake pipe.",
+         replies: [
+            (text: "Close the valve. Wim's trees go without.",
+             effects: [
+                SetFlag("pump_shut"),
+                Deed(Assembly, Hurt, 1),
+                Deed(Keepers, JobDone, 1),
+             ], next: Node("pump.closed")),
+            (text: "Leave it running.", next: End),
+        ]),
+        (id: "pump.fallen", speaker: "veyra:person.wim_pump",
+         line: "Wim's pump thuds away on the bank, and no one is left to mind it.",
+         replies: []),
+        (id: "pump.closed", speaker: "veyra:person.wim_pump",
+         line: "The pump coughs and stops. The channel runs slow, then still.",
+         replies: []),
+        (id: "pump.idle", speaker: "veyra:person.wim_pump",
+         line: "Wim's pump thuds away, pulling river water into his channel.",
+         replies: []),
+    ],
+)

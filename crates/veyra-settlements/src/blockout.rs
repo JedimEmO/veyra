@@ -109,6 +109,12 @@ const PIPE_X: f64 = 150.0;
 /// bay, and sees the station at the stair's foot.
 const TRANSIT_CONTOUR_M: f64 = 22.0;
 const TRANSIT_CLEARANCE_M: f64 = 8.0;
+/// The deck's width, and how far its slab hangs under its level, metres.
+const TRANSIT_WIDTH_M: f64 = 7.0;
+const TRANSIT_SLAB_M: f64 = 0.4;
+/// The room a walker on a stair under the deck has to its slab, metres: a
+/// tall walker and a hand.
+const TRANSIT_HEADROOM_M: f64 = 2.3;
 
 /// The blockout of Port Serein over `ground`.
 ///
@@ -202,6 +208,33 @@ struct City {
     /// and the level of the terrace below, for the verges planted there
     /// once the houses stand.
     feet: Vec<([f64; 2], [f64; 2], f64)>,
+    /// The walked surface of every stair so far, a piece a landing and a
+    /// piece a flight, for what is built over them to leave a walker room.
+    walks: Vec<Walk>,
+}
+
+/// A piece of a stair's walked surface: over `x`, from `z[0]` to `z[1]` down
+/// the frame's `+z`, its height running from `y[0]` to `y[1]`.
+#[derive(Clone, Copy, Debug)]
+struct Walk {
+    x: [f64; 2],
+    z: [f64; 2],
+    y: [f64; 2],
+}
+
+impl Walk {
+    /// Its highest point between `z0` and `z1`, if it reaches them.
+    fn highest(&self, z0: f64, z1: f64) -> Option<f64> {
+        let (a, b) = (z0.max(self.z[0]), z1.min(self.z[1]));
+        if a > b {
+            return None;
+        }
+        let at = |z: f64| {
+            let t = (z - self.z[0]) / (self.z[1] - self.z[0]).max(1e-9);
+            self.y[0] + (self.y[1] - self.y[0]) * t
+        };
+        Some(at(a).max(at(b)))
+    }
 }
 
 impl City {
@@ -437,6 +470,17 @@ fn stair(
         let run_end = landing + count as f64 * TREAD;
         let fall = count as f64 * riser;
         let bottom = (base - y).min(-fall - 0.5);
+        let across = [x - width * 0.5, x + width * 0.5];
+        city.walks.push(Walk {
+            x: across,
+            z: [z, z + landing],
+            y: [y, y],
+        });
+        city.walks.push(Walk {
+            x: across,
+            z: [z + landing, z + run_end],
+            y: [y, y - fall],
+        });
         profile.push([run_end, -fall]);
         profile.push([run_end, bottom]);
         profile.push([0.0, bottom]);
@@ -657,11 +701,14 @@ fn exchange(city: &mut City, g: &Ground<'_>) -> anyhow::Result<()> {
         awning: true,
         dome: false,
     };
+    // Two metres further out than the clinic's mirror was: the game's bench
+    // row stands its foreman at frame (-52, 58), and a canteen nearer than
+    // this put him on its roof (the walkability audit in the game's tests).
     place_kit(
         city,
         "exchange-market",
         Kit::Module(canteen),
-        [STAIR_X - 20.0, cz + hz - 8.0],
+        [STAIR_X - 22.0, cz + hz - 8.0],
         y,
         std::f64::consts::PI + 0.05,
         9.0,
@@ -962,37 +1009,196 @@ fn cargo(city: &mut City, g: &Ground<'_>, dice: &mut Dice) {
     }
 }
 
-/// The main stair from the Exchange's downhill edge to the quay, its
-/// landings stretched so it meets the quay where the ground does rather than
-/// digging into it.
-#[allow(clippy::cast_precision_loss, reason = "step counts of a few hundred")]
+/// The shortest landing between a main stair's flights, metres: two treads,
+/// so a flight of three metres still pauses.
+const MAIN_LANDING_MIN: f64 = 0.8;
+
+/// How far the ground may stand over a main stair's flight, metres: where a
+/// platform's edge rounds off over the first treads, the walker crosses that
+/// ground and steps down onto the stair, which a step this high allows.
+const MAIN_BURIED_MAX: f64 = 0.4;
+
+/// A straight flight's run down the frame's `+z` from `(top, z)`, `drop`
+/// metres with `landing` before each flight, as [`stair`] lays it, and the
+/// height of its walked surface at `at`: the landing, then the line of its
+/// nosings, which is the top of the flight's hull.
+#[allow(
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::cast_precision_loss,
+    reason = "step counts of a few hundred"
+)]
+fn flight_profile(top: f64, z: f64, drop: f64, landing: f64) -> (f64, impl Fn(f64) -> f64) {
+    let steps = (drop / RISER).ceil().max(1.0) as usize;
+    let riser = drop / steps as f64;
+    let per_flight = (3.0 / riser).round().max(1.0) as usize;
+    let flights = steps.div_ceil(per_flight);
+    let run = flights as f64 * landing + steps as f64 * TREAD;
+    let surface = move |at: f64| {
+        let (mut from, mut y, mut left) = (z, top, steps);
+        while left > 0 {
+            let count = per_flight.min(left);
+            left -= count;
+            let fall = count as f64 * riser;
+            let to = from + landing + count as f64 * TREAD;
+            if at <= from + landing {
+                return y;
+            }
+            if at <= to {
+                return y - (at - from - landing) / (count as f64 * TREAD) * fall;
+            }
+            from = to;
+            y -= fall;
+        }
+        y
+    };
+    (run, surface)
+}
+
+/// The main stair from the Exchange's downhill edge to the quay, fitted to
+/// the terraces it crosses: a flight over each bank, from the upper
+/// terrace's edge to the lower terrace's level, and a landing across each
+/// terrace flush with its lane, so every terrace it crosses can step onto it
+/// and it never runs into a bank. A terrace too short to land on is passed
+/// over; the landings of a flight are stretched so it lands where the
+/// ground does.
+#[allow(
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::cast_precision_loss,
+    reason = "step counts of a few hundred"
+)]
 fn main_stair(city: &mut City, g: &Ground<'_>) {
     let ([_, cz], [_, hz], top) = g.exchange;
     let start = cz + hz;
-    let drop = top - g.quay;
+    let shore = shoreline(g, STAIR_X).unwrap_or(start + 400.0);
+    let runs: Vec<(f64, f64, f64)> = level_runs(g, STAIR_X, start, shore)
+        .into_iter()
+        .filter(|&(from, to, level)| {
+            from > start && to > from + 1.0 && level < top - 0.5 && level > g.quay - 0.1
+        })
+        .collect();
+    // The flight's surface stands on the ground or over it everywhere across
+    // the stair, or under it by no more than a step.
+    let over_ground = |z0: f64, z1: f64, surface: &dyn Fn(f64) -> f64| {
+        let mut z = z0;
+        while z <= z1 {
+            let ok = [-0.45, 0.0, 0.45].into_iter().all(|side| {
+                (g.height)(STAIR_X + side * STAIR_WIDTH, z) <= surface(z) + MAIN_BURIED_MAX
+            });
+            if !ok {
+                return false;
+            }
+            z += 0.5;
+        }
+        true
+    };
+    let (mut leave, mut level) = (start, top);
+    let mut next = 0;
     let mut foot = start;
-    while foot < start + 600.0 && (g.height)(STAIR_X, foot) > g.quay + 0.05 {
-        foot += 1.0;
+    while next < runs.len() {
+        // The nearest terrace below that a flight from here lands on.
+        let landed = runs[next..]
+            .iter()
+            .enumerate()
+            .find_map(|(k, &(from, to, lower))| {
+                let drop = level - lower;
+                let steps = (drop / RISER).ceil().max(1.0);
+                let per_flight = (3.0 / (drop / steps)).round().max(1.0);
+                let flights = (steps / per_flight).ceil();
+                // Stretched to land a little past the bank's foot, never less
+                // than the shortest landing.
+                let landing =
+                    ((from + 0.5 - leave - steps * TREAD) / flights).max(MAIN_LANDING_MIN);
+                let (run, surface) = flight_profile(level, leave, drop, landing);
+                let land = leave + run;
+                (land >= from && land + 1.0 <= to && over_ground(leave, land, &surface))
+                    .then_some((next + k, drop, landing, land))
+            });
+        let Some((k, drop, landing, land)) = landed else {
+            break;
+        };
+        stair(
+            city,
+            "stair",
+            "company",
+            [STAIR_X, level, leave],
+            drop,
+            STAIR_WIDTH,
+            landing,
+            g.quay - 1.0,
+        );
+        let (_, to, lower) = runs[k];
+        level = lower;
+        foot = land;
+        // Across the terrace on its own level to its downhill edge, where
+        // the next flight leaves; on the quay, a step past the foot.
+        leave = if k + 1 < runs.len() {
+            to - 0.25
+        } else {
+            land + 2.0
+        };
+        landing_slab(city, [STAIR_X, level, land], leave - land, g.quay - 1.0);
+        next = k + 1;
     }
-    let steps = (drop / RISER).ceil();
-    let flights = (steps * RISER / 3.0).ceil();
-    let landing = ((foot - start - steps * TREAD) / flights).max(2.0);
-    stair(
-        city,
-        "stair",
-        "company",
-        [STAIR_X, top, start],
-        drop,
-        STAIR_WIDTH,
-        landing,
-        g.quay - 1.0,
-    );
+    // Ground no flight fits: the rest straight down to the quay, its landings
+    // stretched so it meets the quay where the ground does.
+    if level > g.quay + 0.1 {
+        let mut quay = leave;
+        while quay < leave + 600.0 && (g.height)(STAIR_X, quay) > g.quay + 0.05 {
+            quay += 1.0;
+        }
+        let drop = level - g.quay;
+        let steps = (drop / RISER).ceil();
+        let flights = (steps * RISER / 3.0).ceil();
+        let landing = ((quay - leave - steps * TREAD) / flights).max(2.0);
+        foot = stair(
+            city,
+            "stair",
+            "company",
+            [STAIR_X, level, leave],
+            drop,
+            STAIR_WIDTH,
+            landing,
+            g.quay - 1.0,
+        );
+    }
     city.open.push([
         STAIR_X - STAIR_WIDTH,
         start - 4.0,
         STAIR_X + STAIR_WIDTH,
         foot + 4.0,
     ]);
+}
+
+/// The main stair's paving across a terrace it crosses: flush with the
+/// terrace's own level, `length` metres down the frame's `+z` from `(x,
+/// level, z)`, filled down to `base`, with no rails, so the terrace's lane
+/// walks straight across it.
+fn landing_slab(city: &mut City, [x, level, z]: [f64; 3], length: f64, base: f64) {
+    if length < 0.1 {
+        return;
+    }
+    let depth = level + PROUD - base;
+    city.walks.push(Walk {
+        x: [x - STAIR_WIDTH * 0.5, x + STAIR_WIDTH * 0.5],
+        z: [z, z + length],
+        y: [level, level],
+    });
+    city.push(
+        "stair",
+        Mass {
+            geometry: Geometry::cuboid([STAIR_WIDTH, depth, length]).placed(Pose::at([
+                -STAIR_WIDTH * 0.5,
+                -depth,
+                0.0,
+            ])),
+            pose: Pose::at([x, level + PROUD, z]),
+            slot: "company",
+            footprint: [x - STAIR_WIDTH * 0.5, z, x + STAIR_WIDTH * 0.5, z + length],
+            details: Vec::new(),
+        },
+    );
 }
 
 /// Where the water starts along the frame's `x`: the first `z` downhill of
@@ -1252,7 +1458,6 @@ fn processor(city: &mut City, g: &Ground<'_>) -> anyhow::Result<()> {
 /// piers to the ground, bending with the contour round the headland, and a
 /// station where the main stair passes under it.
 fn transit(city: &mut City, g: &Ground<'_>) {
-    let deck = TRANSIT_CONTOUR_M + TRANSIT_CLEARANCE_M;
     // The first point downhill of the platforms where the ground falls to
     // the contour.
     let contour = |x: f64| {
@@ -1265,10 +1470,30 @@ fn transit(city: &mut City, g: &Ground<'_>) {
         }
         None
     };
+    // High enough over every stair it crosses for a walker to pass under its
+    // slab, which hangs `TRANSIT_SLAB_M` under the deck's level.
+    let deck = city
+        .walks
+        .iter()
+        .filter_map(|walk| {
+            let z = contour(f64::midpoint(walk.x[0], walk.x[1]))?;
+            let half = TRANSIT_WIDTH_M * 0.5 + 0.5;
+            walk.highest(z - half, z + half)
+        })
+        .map(|top| top + TRANSIT_HEADROOM_M + TRANSIT_SLAB_M)
+        .fold(TRANSIT_CONTOUR_M + TRANSIT_CLEARANCE_M, f64::max);
+    // No pier on a stair's treads.
+    let walks = city.walks.clone();
+    let on_stair = |x: f64, z: f64| {
+        walks.iter().any(|walk| {
+            x > walk.x[0] - 1.5 && x < walk.x[1] + 1.5 && z > walk.z[0] - 1.5 && z < walk.z[1] + 1.5
+        })
+    };
     let mut previous: Option<DVec3> = None;
     let mut x = -280.0;
     while x <= 280.0 {
         match contour(x).filter(|&z| (g.owns)(x, z)) {
+            Some(z) if on_stair(x, z) => {}
             Some(z) => {
                 let here = DVec3::new(x, deck, z);
                 let ground = (g.height)(x, z);
@@ -1282,7 +1507,7 @@ fn transit(city: &mut City, g: &Ground<'_>) {
                 );
                 city.block(
                     "transit",
-                    [x, deck - 1.4, z],
+                    [x, deck - TRANSIT_SLAB_M - 1.0, z],
                     [2.0, 1.0, 8.0],
                     0.0,
                     "company",
@@ -1294,8 +1519,8 @@ fn transit(city: &mut City, g: &Ground<'_>) {
                     let length = along.length() + 0.4;
                     city.block(
                         "transit",
-                        [mid.x, deck - 0.4, mid.z],
-                        [length, 1.6, 7.0],
+                        [mid.x, deck - TRANSIT_SLAB_M, mid.z],
+                        [length, 1.6, TRANSIT_WIDTH_M],
                         yaw,
                         "company",
                     );
@@ -1483,6 +1708,14 @@ fn lane_stairs(city: &mut City, g: &Ground<'_>) {
                 );
                 city.open.push(spot);
             }
+            // The upper lane before the stair's head, kept as its foot's is,
+            // so a row along that terrace does not close it.
+            city.open.push([
+                x - LANE_STAIR_WIDTH * 0.5 - 0.3,
+                top - 4.0,
+                x + LANE_STAIR_WIDTH * 0.5 + 0.3,
+                top,
+            ]);
             // A cypress beside some stairs' feet, marking the way up.
             if dice.unit() < 0.35 {
                 let side = if dice.unit() < 0.5 { -3.4 } else { 3.4 };

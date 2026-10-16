@@ -4,7 +4,8 @@
 //!
 //! What is tracked is the sim's (`strata_sim::deposits::Surveyed`), set
 //! from the survey register and saved with the household; this only draws
-//! it. Like a nameplate the marker keeps its anchor in the world, a little
+//! it. The questline's current objective has a third marker of the same
+//! make ([`super::journal::target_of`]). Like a nameplate the marker keeps its anchor in the world, a little
 //! over the survey post's lit top, and is projected through this frame's
 //! camera in `PostUpdate`. A deposit is seldom in view, so a marker whose
 //! place is off the screen or behind the camera is held just inside the
@@ -23,6 +24,7 @@ use slotted::ui::ScreenStack;
 use strata_core::WorldPos;
 use strata_sim::combat::Combatant;
 use strata_sim::deposits::{NearDeposits, Surveyed};
+use strata_sim::quests::{QuestLog, QuestPlaces};
 use strata_sim::{LocalPlayer, Observers, Registries, RenderOrigin, WorldPosition};
 
 use crate::ClientSet;
@@ -117,7 +119,12 @@ pub struct TrackerMarker {
     /// Whether it is the lead marker (the strongest point of the last ping)
     /// and not the tracked deposit's.
     pub lead: bool,
+    /// Whether it is the questline's objective marker.
+    pub quest: bool,
 }
+
+/// The name of the objective marker's root node.
+pub const QUEST_NAME: &str = "hud.quest";
 
 /// The name of the lead marker's root node.
 pub const LEAD_NAME: &str = "hud.lead";
@@ -148,7 +155,7 @@ fn spawn_marker(
     if !markers.is_empty() {
         return;
     }
-    for lead in [false, true] {
+    for (lead, quest) in [(false, false), (true, false), (false, true)] {
         let text = commands
             .spawn((
                 Painted::new("strata.tracker.text"),
@@ -196,11 +203,18 @@ fn spawn_marker(
         let diamond = diamond.id();
         commands
             .spawn((
-                Name::new(if lead { LEAD_NAME } else { MARKER_NAME }),
+                Name::new(if quest {
+                    QUEST_NAME
+                } else if lead {
+                    LEAD_NAME
+                } else {
+                    MARKER_NAME
+                }),
                 TrackerMarker {
                     text,
                     held: false,
                     lead,
+                    quest,
                 },
                 Node {
                     position_type: PositionType::Absolute,
@@ -241,6 +255,8 @@ fn place_marker(
     surveyed: Option<Res<Surveyed>>,
     near: Option<Res<NearDeposits>>,
     registries: Option<Res<Registries>>,
+    quests: Option<Res<QuestLog>>,
+    quest_places: Option<Res<QuestPlaces>>,
     origin: Option<Res<RenderOrigin>>,
     observers: Option<Res<Observers>>,
     stack: Option<Res<ScreenStack>>,
@@ -307,6 +323,32 @@ fn place_marker(
                 words: lead_words(metres),
             }
         });
+    // The objective stands down within the same distance as a deposit's
+    // marker: there the person's chip or the place card says it.
+    let quest = registries
+        .as_deref()
+        .zip(quests.as_deref())
+        .zip(quest_places.as_deref())
+        .zip(from)
+        .and_then(|(((registries, log), places), from)| {
+            let target = super::journal::target_of(
+                &registries.0,
+                log,
+                places,
+                near.as_deref().zip(surveyed.as_deref()),
+                [from.x(), from.z()],
+            )?;
+            let rise_m = registries
+                .0
+                .quests
+                .rules()
+                .map_or(0.0, |rules| rules.marker_rise_m);
+            let metres = (target.at[0] - from.x()).hypot(target.at[1] - from.z());
+            (allowed && !arrived(Some(metres), place_m)).then(|| Target {
+                anchor: WorldPos::new(target.at[0], from.y() + rise_m, target.at[1]),
+                words: marker_words(&target.name, metres),
+            })
+        });
     let scale = ui_scale(ui_scale_res.as_deref());
     let camera = cameras
         .iter()
@@ -319,7 +361,13 @@ fn place_marker(
         .or_else(|| windows.iter().next().map(Window::size))
         .map_or(Vec2::new(1280.0, 720.0), |size| ui_point(size, scale));
     for (mut marker, mut node, mut transform, mut visibility) in &mut markers {
-        let target = if marker.lead { &lead } else { &tracked };
+        let target = if marker.quest {
+            &quest
+        } else if marker.lead {
+            &lead
+        } else {
+            &tracked
+        };
         let wanted = if target.is_some() {
             Visibility::Inherited
         } else {

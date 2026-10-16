@@ -164,6 +164,10 @@ and physics headless, sweeps a grid of table values and checks the feel
 contracts of `assets/combat/contracts.ron` (`just balance-check`, and the
 `contracts` test in `just test`); `docs/balance/README.md` is the procedure.
 
+Port Serein's walkability is held by `port_serein_is_walked_from_the_quay` in `apps/game/src/household/tests/nav.rs` (ticket 0015,
+step 2): a half-metre grid walk over the colliders the game builds, from the quay arrival to every bench place and the training ground,
+with every stair checked clear foot to head; it writes `scratch/combat/nav/audit.png`, and `content --city-only` bakes the city alone.
+
 Procedural sites (ADR 0012, ticket 0005 step 4): site kinds are
 `assets/sites/*.site.ron`, loaded and checked by `strata_registry::site`;
 the bake places them per land mass after its rivers
@@ -753,6 +757,26 @@ apps/game has default `net` and empty `web` features. The wasm32 check:
 reads it natively and `strata_sim::store::LocalStorage` (wasm) keeps saves under `veyra/*.ron`.
 The page's query string is the command line (`?fresh&at=city`). `just web` builds `dist/`
 (about 10 min); serve it with `python3 -m http.server` and open Chrome under `xvfb-run`.
+In the browser the page takes the pointer lock in its own `pointerdown` handler (`window.veyraWantsLock`, read back
+through `document.pointerLockElement`; `CursorOptions` is left alone); the bundle holds the 128 km rivers baked natively
+by `xtask bundle` (`generated/hydrology/water.bin`, `hydrology::persist`, 108 MB gzipped), so the first frame is 7 s
+on localhost, and the ahead bake runs a cell a frame (ticket 0015, step 3).
+The graphics preset Low, Medium or High is `settings.graphics` on the Display tab (`assets/look/graphics.ron`,
+`ui::graphics`, `--graphics low|medium|high` for a run); Low is the default on an integrated adapter.
+
+The first questline (ticket 0014, step 1): `assets/quests`, `assets/dialogue` and `assets/people` (RON, one
+conversation file a person) are loaded and checked by `strata_registry::quest` into `GameRegistries.quests`, in no
+world version. `strata_sim::quests` has `QuestLog`, `QuestEvent` (raised beside the existing answers), `advance`,
+`DialogueRequest` in `DialogueInbox`, `replies`, `apply`, `fill` and `places` (the station and Wim's channel, a pure
+function of the world). People are bodies in `apps/game/src/household/people.rs` with `InteractionKind::Person`; a
+new household starts on the quay facing Maren Coyle; the log is saved with the household. `--script-quest
+<keepers|assembly|holder>`, `--script-pell <fight|pay|talk>` and `--quest-stage <quest>:<stage>` are for the script and stills.
+Step 2: the client's `ui::dialogue` (F at a person: numbered replies, keys 1 to 4, a greyed reply's reason) and
+`ui::journal` (J, the pause button: stage line, ticked objectives, decisions) decide no rule; `journal::target_of`
+gives the first unmet objective with a place, which `ui::tracker` marks with its distance and the map marks
+(`MarkKey::Quest`). `--open-dialogue <person>` and `--open-journal` (with `--quest-stage`) are for stills in
+`docs/design/quests/`. The bike is bought at the board and stabled in the questline; endings give a tool, a harvester or a sale. Teague's field camp (ticket 0015: a terminal and a workbench 16 m
+back from the mast, `strata_sim::quests::camp`) is where the mending stage is done; the station stands 900 m from the city.
 
 ## Commands
 

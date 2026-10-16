@@ -16,9 +16,9 @@ own character.
 ## Play in the browser
 
 **[Play Veyra](https://jedimemo.github.io/veyra/)** in a browser with WebGPU
-(a current Chrome or Edge on a desktop). The page fetches about 120 MB before it
-starts, then bakes the world's rivers for a minute or two on one thread; the
-city streams in after that. Click the picture to take the mouse and Escape to
+(a current Chrome or Edge on a desktop). The page fetches about 140 MB before it
+starts (the first frame is about 20 s on a 100 Mbit line, longer on a slower one);
+the city streams in after that. Click the picture to take the mouse and Escape to
 free it; F1 shows the controls. The household is
 saved in the browser's own storage (`localStorage`), so it is there on the next
 visit from the same browser. The page takes the game's options from its

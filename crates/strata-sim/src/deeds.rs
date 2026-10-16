@@ -475,12 +475,24 @@ impl Ledger<'_> {
 
     /// One `kind` deed against `faction`, written now.
     pub fn deed(&mut self, registries: &GameRegistries, faction: FactionId, kind: DeedKind) {
+        self.deed_units(registries, faction, kind, 1);
+    }
+
+    /// `units` of a `kind` deed for or against `faction`, written now: what
+    /// a quest's reply writes (ticket 0014).
+    pub fn deed_units(
+        &mut self,
+        registries: &GameRegistries,
+        faction: FactionId,
+        kind: DeedKind,
+        units: u32,
+    ) {
         let Some(rules) = Rules::of(registries) else {
             return;
         };
         let now = self.now();
         if let Some(deeds) = self.deeds.as_mut() {
-            deeds.write(faction, kind, 1, now, rules.deeds);
+            deeds.write(faction, kind, units, now, rules.deeds);
         }
     }
 

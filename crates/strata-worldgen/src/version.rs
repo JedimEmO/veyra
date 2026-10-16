@@ -320,6 +320,26 @@ pub(crate) fn network_key(
     hash.0
 }
 
+/// What a baked rivers file is stamped with
+/// ([`Hydrology::save`](crate::hydrology::Hydrology::save)): the network
+/// key, which holds everything the bake reads, the generator's version and
+/// the hydrology's fixed numbers. Not [`world_version`], whose canary bakes would cost a browser
+/// the seconds the file is there to save.
+#[must_use]
+pub fn water_stamp(
+    seed: strata_core::Seed,
+    params: &WorldParams,
+    registries: &GameRegistries,
+) -> u64 {
+    let mut hash = Fnv(network_key(seed, params, registries));
+    hash.bytes(&GENERATOR_VERSION.to_le_bytes());
+    // The hydrology's own fixed numbers, which `world_version` also folds
+    // in: a bundle from a checkout that moved one without a version bump is
+    // refused here too.
+    hash.ron(&crate::hydrology::fixed_inputs());
+    hash.0
+}
+
 /// FNV-1a, 64 bits.
 struct Fnv(u64);
 

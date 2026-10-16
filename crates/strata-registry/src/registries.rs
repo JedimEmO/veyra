@@ -877,6 +877,11 @@ pub struct GameRegistries {
     /// (`procurement/postings.ron`). `None` for a data set without the file:
     /// then no board posts work. In no world version and no handshake.
     pub postings: Option<crate::posting::PostingRules>,
+    /// The people, what they say and the quests (`people/`, `dialogue/`,
+    /// `quests/`), checked against the items, the skill graph, the resources
+    /// and the bench. Empty for a data set without them. In no world
+    /// version and no handshake.
+    pub quests: crate::quest::QuestSet,
 }
 
 impl GameRegistries {

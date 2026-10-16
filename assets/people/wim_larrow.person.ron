@@ -1,0 +1,26 @@
+// Wim Larrow, a borough grower upstream whose orchard is dying and who has
+// cut a channel off the river to save it (ticket 0014). He leads the
+// `wim_larrow` crew of one, so a threat turns him and his fall keeps him
+// down.
+(
+    version: 1,
+    id: "veyra:person.wim_larrow",
+    name: "Wim Larrow",
+    title: "Grower, {assembly}",
+    role: Assembly,
+    tint: (122, 150, 92),
+    stand: Channel,
+    facing: 0.0,
+    conversations: [
+        (when: [QuestAt("arrival", "upstream")], node: "wim.hub"),
+        (when: [QuestAt("arrival", "wim_fight")], node: "wim.angry"),
+        (when: [Flag("ending_assembly"), Flag("pump_shut")], node: "wim.after_assembly_shut"),
+        (when: [Flag("ending_assembly")], node: "wim.after_assembly"),
+        (when: [Flag("ending_keepers")], node: "wim.after_keepers"),
+        (when: [Flag("ending_holder")], node: "wim.after_holder"),
+        (when: [Flag("pump_shut")], node: "wim.after_shut"),
+        (when: [Flag("pump_left")], node: "wim.after_left"),
+        (when: [QuestAt("arrival", "who_hears")], node: "wim.waiting"),
+        (node: "wim.idle"),
+    ],
+)

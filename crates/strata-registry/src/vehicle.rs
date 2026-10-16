@@ -518,15 +518,15 @@ mod tests {
         let id = Namespaced::parse("veyra:vehicle.courier_bike").unwrap();
         let bike = registries.vehicles.get(&id).expect("the bike is there");
         assert_eq!(bike.name, "Courier bike");
-        assert!((bike.speed.road - 30.0).abs() < 1e-6);
+        assert!((bike.speed.road - 60.0).abs() < 1e-6);
         assert_eq!(registries.vehicles.iter().len(), 1);
     }
 
     #[test]
     fn a_dial_out_of_order_is_refused() {
         refused(
-            "slow: 150.0, fast: 55.0",
-            "slow: 50.0, fast: 55.0",
+            "slow: 150.0, fast: 85.0",
+            "slow: 50.0, fast: 85.0",
             "turn.slow",
         );
         refused(
@@ -540,11 +540,11 @@ mod tests {
             "water.ride_m",
         );
         refused(
-            "road: 30.0, ground: 18.0",
-            "road: 10.0, ground: 18.0",
+            "road: 60.0, ground: 36.0",
+            "road: 10.0, ground: 36.0",
             "speed.road",
         );
-        refused("accel: 9.0", "accel: 0.0", "accel");
+        refused("accel: 16.0", "accel: 0.0", "accel");
         refused("version: 1", "version: 2", "version 2");
     }
 

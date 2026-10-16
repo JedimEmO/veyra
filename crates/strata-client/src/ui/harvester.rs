@@ -15,8 +15,8 @@ use bevy::ecs::prelude::*;
 use slotted::menu::MenuChoice;
 use slotted::theme::Role;
 use slotted::ui::def::{
-    Align, ButtonOpts, Justify, Layout, Length, Overflow, Padding, Presentation, PresentationMode,
-    ScreenDef, ScreenKind, Tags, TextRole, Transition, UiNodeDef, WidgetKind,
+    Align, ButtonOpts, Justify, Layout, Length, Padding, Presentation, PresentationMode, ScreenDef,
+    ScreenKind, Tags, TextRole, Transition, UiNodeDef, WidgetKind,
 };
 use slotted::ui::{ScreenStack, pop_screen, push_screen, replace_screen};
 use strata_registry::GameRegistries;
@@ -395,17 +395,18 @@ pub fn screen_def(view: &HarvesterView, focus: &str) -> ScreenDef {
                     text_in(view.title.clone(), TextRole::Title, "panel.title"),
                     TITLE_ID,
                 ),
-                panel(
-                    "invisible",
-                    Layout {
+                // A scroll panel, not a clipped one: the wheel and the bar move it.
+                UiNodeDef::Scroll {
+                    layout: Layout {
                         align: Some(Align::Stretch),
                         grow: 1.,
                         min_height: Some(Length::Px(0.)),
-                        overflow: Overflow::Scroll,
                         ..column(1.2)
                     },
-                    body,
-                ),
+                    scrollbar: true,
+                    children: body,
+                    tags: Tags::new(),
+                },
                 panel(
                     "invisible",
                     row(2.),

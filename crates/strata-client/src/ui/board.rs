@@ -19,8 +19,8 @@ use bevy::ecs::prelude::*;
 use slotted::menu::MenuChoice;
 use slotted::theme::Role;
 use slotted::ui::def::{
-    Align, ButtonOpts, Justify, Layout, Length, Overflow, Padding, Presentation, PresentationMode,
-    ScreenDef, ScreenKind, Tags, TextRole, Transition, UiNodeDef, WidgetKind,
+    Align, ButtonOpts, Justify, Layout, Length, Padding, Presentation, PresentationMode, ScreenDef,
+    ScreenKind, Tags, TextRole, Transition, UiNodeDef, WidgetKind,
 };
 use slotted::ui::{ScreenStack, push_screen, replace_screen};
 use strata_core::Seed;
@@ -1313,6 +1313,13 @@ pub fn screen_def(view: &BoardView) -> ScreenDef {
         }
         body.extend(work.iter().map(work_row));
     }
+    // What the buyer sells next, above its orders: a household sent to the
+    // board for its bike (ticket 0014) should not have to scroll past every
+    // line it could sell to find it.
+    if !view.sells.is_empty() {
+        body.push(line_in(words("strata.board.sale"), HEAD_ROLE));
+        body.extend(view.sells.iter().map(sale_row));
+    }
     for order in &view.orders {
         body.push(line_in(order.head.clone(), HEAD_ROLE));
         body.extend(order.lines.iter().map(line_row));
@@ -1320,10 +1327,6 @@ pub fn screen_def(view: &BoardView) -> ScreenDef {
     if let Some(lease) = &view.lease {
         body.push(line_in(lease.head.clone(), HEAD_ROLE));
         body.push(lease_row(lease));
-    }
-    if !view.sells.is_empty() {
-        body.push(line_in(words("strata.board.sale"), HEAD_ROLE));
-        body.extend(view.sells.iter().map(sale_row));
     }
     body.push(sold_here(view));
     ScreenDef {
@@ -1367,17 +1370,18 @@ pub fn screen_def(view: &BoardView) -> ScreenDef {
                 with_id(line_in(view.stance.clone(), SUB_ROLE), STANCE_ID),
                 // The rows scroll inside the panel on a window too short
                 // for them, so Close stays inside the border.
-                panel(
-                    "invisible",
-                    Layout {
+                // A scroll panel, not a clipped one: the wheel and the bar move it.
+                UiNodeDef::Scroll {
+                    layout: Layout {
                         align: Some(Align::Stretch),
                         grow: 1.,
                         min_height: Some(Length::Px(0.)),
-                        overflow: Overflow::Scroll,
                         ..column(1.2)
                     },
-                    body,
-                ),
+                    scrollbar: true,
+                    children: body,
+                    tags: Tags::new(),
+                },
                 panel(
                     "invisible",
                     row(2.),

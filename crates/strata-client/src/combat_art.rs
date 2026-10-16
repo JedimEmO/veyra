@@ -99,6 +99,11 @@ pub(crate) fn shown_weapon(actor: &Combatant) -> Option<strata_sim::combat::Weap
     in_hand_shown(actor).filter(|weapon| !weapon.is_melee())
 }
 
+/// How far above the capsule centre (`WorldPosition`) the aim pitch is
+/// measured from: the shoulder the sim fires from (`strata-physics` combat),
+/// so the barrel pitches as steeply as the shot goes.
+const SHOULDER_HEIGHT_M: f64 = 0.45;
+
 /// Where the blade's grip sits along the hand bone's length, metres.
 const BLADE_GRIP: f32 = 0.05;
 /// The one blade shape's length at reach one, metres.
@@ -924,13 +929,17 @@ fn pose_upper_body(
         };
         let tilt = match actor.action {
             Action::Ready if (input.aim || input.fire) && !actor.weapon.is_melee() => {
-                let delta = input.aim_point.0 - position.0.0 - bevy::math::DVec3::Y * 0.45;
+                let delta =
+                    input.aim_point.0 - position.0.0 - bevy::math::DVec3::Y * SHOULDER_HEIGHT_M;
                 #[allow(
                     clippy::cast_possible_truncation,
                     reason = "local clamped aiming angle"
                 )]
                 let pitch = delta.y.atan2(delta.x.hypot(delta.z)) as f32;
-                pitch.clamp(-0.8, 0.8) * 0.65
+                // Measured in a focused window: the spine bones carry only
+                // about 0.55 of a 0.65 gain's pitch to the gun, so the gain
+                // is raised to make the barrel follow the aim.
+                pitch.clamp(-0.8, 0.8) * 1.15
             }
             Action::Reload => {
                 -0.25
@@ -954,8 +963,11 @@ fn pose_upper_body(
                 reaction.offset.y * bone.share,
             )
         });
+        // The spine bones' X axis points the other way from the terms'
+        // sign: a positive turn there leans the body forward and down, so
+        // the one negation sits here and every term reads as its author meant.
         transform.rotation *=
-            Quat::from_rotation_x(tilt * bone.aim + pitch) * Quat::from_rotation_z(roll);
+            Quat::from_rotation_x(-(tilt * bone.aim + pitch)) * Quat::from_rotation_z(roll);
     }
     for (bone, mut transform) in &mut arms {
         let Ok((actor, _, _, _)) = actors.get(bone.actor) else {

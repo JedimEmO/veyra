@@ -80,6 +80,7 @@ pub mod position;
 pub mod postings;
 pub mod procurement;
 pub mod progression;
+pub mod quests;
 pub mod rework;
 pub mod ride;
 pub mod roadside;
@@ -104,9 +105,9 @@ use strata_registry::GameRegistries;
 pub use authority::{Authority, Intent, IntentRejected, LocalAuthority, SimAuthority};
 pub use load::{
     GeneratedRoot, PREPARE_WATER_RADIUS_M, PlacedSettlement, PrepareWater, ProceduralWorldRes,
-    Settlements, TreeLibraryRes, WorldAssetRoot, WorldLoadPlugin, WorldSourceRes,
-    prepare_water_before_start, prepare_water_before_start_from, world_params, world_version,
-    world_version_from,
+    Settlements, TreeLibraryRes, WATER_FILE, WorldAssetRoot, WorldLoadPlugin, WorldSourceRes,
+    bake_water_file, prepare_water_before_start, prepare_water_before_start_from, world_params,
+    world_version, world_version_from,
 };
 pub use origin::{LastSynced, OriginConfig, OriginSet, RenderOrigin, RenderOriginChanged};
 pub use player::{
@@ -326,6 +327,7 @@ impl Plugin for SimPlugin {
             deeds::DeedsPlugin,
             loot::LootPlugin,
             postings::PostingsPlugin,
+            quests::QuestsPlugin,
         ));
         if !app.is_plugin_added::<StatesPlugin>() {
             app.add_plugins(StatesPlugin);

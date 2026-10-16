@@ -162,6 +162,22 @@ struct Cli {
     /// With `--script-ride`: write what the ride measured to this file.
     #[arg(long, value_name = "PATH")]
     script_report: Option<PathBuf>,
+    /// Headless (ticket 0014): walk the first questline to one of its
+    /// endings (`keepers`, `assembly` or `holder`): talk to each person and
+    /// choose the replies the ending needs, and meet each objective through
+    /// the requests the sim answers. What it did goes to the log and to
+    /// `--script-report`. It changes the household it is run on, so it is
+    /// refused on the default `--household`.
+    #[arg(long, value_name = "ENDING", value_parser = ["keepers", "assembly", "holder"], conflicts_with_all = ["connect", "flycam", "flight", "route", "grounding_study", "study_scene", "auto_walk", "no_combat", "script_progression", "script_crafting", "combat_script", "script_ride", "script_survey", "at", "spawn"])]
+    script_quest: Option<String>,
+    /// With `--script-quest`: how Pell's crew is met, `fight`, `pay` or
+    /// `talk`.
+    #[arg(long, value_name = "BRANCH", value_parser = ["fight", "pay", "talk"], default_value = "pay", requires = "script_quest")]
+    script_pell: String,
+    /// Start the questline's `quest` at `stage` (`arrival:pell`), beside the
+    /// place it names, for a still.
+    #[arg(long, value_name = "QUEST:STAGE", value_parser = parse_quest_stage)]
+    quest_stage: Option<(String, String)>,
     /// The household owns a courier bike (ticket 0009, step 2), which V
     /// calls. It changes the household it is run on, so it is refused on
     /// the default `--household`.
@@ -599,6 +615,14 @@ struct Cli {
     /// screenshot: no fabricator need be in reach.
     #[arg(long)]
     open_factory: bool,
+    /// Open the journal on frame 120, for a screenshot; with `--quest-stage`
+    /// the stage it shows.
+    #[arg(long)]
+    open_journal: bool,
+    /// Start before a person of the questline (`maren_coyle`, `pell`) and
+    /// open their conversation once they are in reach, for a screenshot.
+    #[arg(long, value_name = "PERSON")]
+    open_dialogue: Option<String>,
     /// Open Pelagic Works' procurement board on frame 120, as a board's F
     /// does, for a screenshot: no board need be in reach.
     #[arg(long)]
@@ -832,6 +856,10 @@ struct Cli {
     /// Anti-aliasing: `auto` follows the preset; explicit choices override it.
     #[arg(long, default_value = "auto", value_parser = ["auto", "msaa4", "off", "taa"])]
     aa: String,
+    /// The graphics preset for this run, for stills and the bench: it wins
+    /// over the saved choice and is not kept.
+    #[arg(long, value_parser = ["low", "medium", "high"])]
+    graphics: Option<String>,
     /// Ground fog (ticket 0003): scale on the fog field's density. `0`
     /// draws none and registers no fog pass and no fog system (what the
     /// benches run with). The render look can also leave it out (F6,
@@ -1109,6 +1137,10 @@ impl Cli {
             "--ping"
         } else if self.script_survey.is_some() {
             "--script-survey"
+        } else if self.script_quest.is_some() {
+            "--script-quest"
+        } else if self.quest_stage.is_some() {
+            "--quest-stage"
         } else if self.open_crafting.is_some()
             && !self.script_crafting
             && matches!(
@@ -1176,6 +1208,14 @@ fn parse_at(text: &str) -> Result<String, String> {
                 .to_owned(),
         )
     }
+}
+
+/// `--quest-stage`'s value: a quest's id and one of its stages.
+fn parse_quest_stage(text: &str) -> Result<(String, String), String> {
+    text.split_once(':')
+        .filter(|(quest, stage)| !quest.is_empty() && !stage.is_empty())
+        .map(|(quest, stage)| (quest.to_owned(), stage.to_owned()))
+        .ok_or_else(|| "expected `<quest>:<stage>`, as `arrival:pell`".to_owned())
 }
 
 /// `--stores-filter`'s value: a filter chip of the stores screen, by the
@@ -1276,7 +1316,11 @@ fn main() -> AppExit {
     #[cfg(not(target_arch = "wasm32"))]
     install_files(&cli);
     #[cfg(target_arch = "wasm32")]
-    web::install_ports();
+    {
+        web::phase("wasm started");
+        web::install_ports();
+        web::phase("bundle read");
+    }
     if let Err(error) = install_combat_tables(&cli) {
         fail(&error);
         return AppExit::error();
@@ -1298,6 +1342,8 @@ fn main() -> AppExit {
             return AppExit::error();
         }
     }
+    #[cfg(target_arch = "wasm32")]
+    web::phase("rivers ready");
     let prepared = if cli.grounding_study.is_some() {
         match grounding::prepare(&mut cli) {
             Ok(value) => Some(value),
@@ -1416,7 +1462,8 @@ fn build(cli: Cli, prepared: Option<grounding::Prepared>) -> Result<App, String>
     if cli.headless {
         // A scripted run's clock is manual (one tick a frame), so pacing
         // the loop would only make it slower.
-        let wait = if cli.combat_script || cli.script_survey.is_some() {
+        let wait = if cli.combat_script || cli.script_survey.is_some() || cli.script_quest.is_some()
+        {
             Duration::ZERO
         } else {
             Duration::from_secs_f64(1.0 / 60.0)
@@ -1434,6 +1481,7 @@ fn build(cli: Cli, prepared: Option<grounding::Prepared>) -> Result<App, String>
                 factions::init,
                 camps::resolve_at,
                 household::init.run_if(resource_exists::<household::HouseholdFile>),
+                household::people::locate.run_if(resource_exists::<household::HouseholdFile>),
                 spawn_headless_player,
             )
                 .chain(),
@@ -1460,6 +1508,13 @@ fn build(cli: Cli, prepared: Option<grounding::Prepared>) -> Result<App, String>
             ..default()
         });
         app.insert_resource(ground_fog(&cli));
+        if let Some(graphics) = cli
+            .graphics
+            .as_deref()
+            .and_then(strata::client::ui::graphics::Graphics::from_id)
+        {
+            app.insert_resource(strata::client::ui::graphics::Forced(graphics));
+        }
         // Before `StrataPlugins::client()` reads the settings path.
         #[cfg(target_arch = "wasm32")]
         web::insert_resources(&mut app);
@@ -1523,6 +1578,7 @@ fn build(cli: Cli, prepared: Option<grounding::Prepared>) -> Result<App, String>
                 factions::init,
                 camps::resolve_at,
                 household::init.run_if(resource_exists::<household::HouseholdFile>),
+                household::people::locate.run_if(resource_exists::<household::HouseholdFile>),
                 spawn_camera,
             )
                 .chain(),
@@ -1533,6 +1589,7 @@ fn build(cli: Cli, prepared: Option<grounding::Prepared>) -> Result<App, String>
                 take_screenshots,
                 open_pause_for_shot,
                 open_screens_for_shot,
+                open_dialogue_for_shot,
                 open_render_for_shot,
                 track_for_shot,
                 ping_for_shot,
@@ -1609,6 +1666,8 @@ fn build(cli: Cli, prepared: Option<grounding::Prepared>) -> Result<App, String>
                     || cli.open_inventory
                     || cli.open_survey
                     || cli.open_map.is_some()
+                    || cli.open_journal
+                    || cli.open_dialogue.is_some()
                     || cli.open_register
                     || cli.open_fitting.is_some()
                     || cli.open_crafting.is_some()
@@ -1741,6 +1800,11 @@ const CAMERA_ALTITUDE: f64 = 120.0;
 /// Height of the player's feet above the ground at spawn: a short drop, so
 /// the first thing the character does is land.
 const PLAYER_DROP: f64 = 2.0;
+
+/// The player's capsule height in the combat build, metres: a head taller
+/// than the controller's default, which the city's walkability audit stands
+/// in every doorway and stair as the player would.
+pub(crate) const PLAYER_HEIGHT_M: f32 = 1.8;
 
 /// Where `--spawn` (or dry land near the origin) puts things: the dry
 /// point and the ground height there.
@@ -1879,15 +1943,28 @@ fn spawn_player(
     registries: &strata::sim::Registries,
     household: Option<&household::Household>,
     survey: Option<&strata::sim::deposits::Survey>,
+    quest: Option<&household::people::QuestStart>,
     scripted: bool,
     held: bool,
 ) {
-    let (x, ground, z) = spawn_point(cli, source, settlements, survey);
+    let (x, ground, z) = if let Some(start) = quest {
+        let ground = f64::from(
+            source
+                .source()
+                .sample(start.at.0, start.at.1)
+                .height
+                .max(source.source().sea_level()),
+        );
+        (start.at.0, ground, start.at.1)
+    } else {
+        spawn_point(cli, source, settlements, survey)
+    };
+    let heading = quest.map_or_else(|| initial_heading(cli, settlements), |start| start.yaw);
     let controller = if cli.combat {
         let actor = &strata::sim::combat_tables::current().actor;
         CharacterController {
             responsive: true,
-            height: 1.8,
+            height: PLAYER_HEIGHT_M,
             walk_speed: actor.walk_speed,
             sprint_speed: actor.sprint_speed,
             jump_speed: actor.jump_speed,
@@ -1906,8 +1983,21 @@ fn spawn_player(
     if cli.combat {
         // The staging bench place stands relative to the default start;
         // the city's is the city's.
-        let staging = (cli.at.is_none() && cli.spawn.is_none())
-            .then(|| ((x, z), initial_heading(cli, settlements)));
+        let staging = if quest.is_some() {
+            // The questline places the household on the quay, and the
+            // training ground stays where it always was.
+            combat::default_spawn(source, settlements).map(|(sx, sg, sz)| {
+                let yaw = initial_heading(cli, settlements);
+                commands.insert_resource(combat::StagingSpawn {
+                    at: WorldPos::new(sx, sg, sz),
+                    yaw,
+                });
+                ((sx, sz), yaw)
+            })
+        } else {
+            (cli.at.is_none() && cli.spawn.is_none())
+                .then(|| ((x, z), initial_heading(cli, settlements)))
+        };
         commands.insert_resource(household::sites(staging, settlements));
     }
     let mut player = commands.spawn((
@@ -1916,7 +2006,7 @@ fn spawn_player(
         controller,
         WorldPosition(at),
         PlayerIntent {
-            yaw: initial_heading(cli, settlements),
+            yaw: heading,
             ..default()
         },
     ));
@@ -1938,6 +2028,10 @@ fn spawn_player(
 /// physics builds the ground under it, and the terrain crate is absent, so
 /// the sim, the loader, the streamer and the physics run the same path a
 /// dedicated server would.
+#[allow(
+    clippy::too_many_arguments,
+    reason = "a Bevy system's parameters are its dependencies"
+)]
 fn spawn_headless_player(
     mut commands: Commands,
     cli: Res<Cli>,
@@ -1946,6 +2040,7 @@ fn spawn_headless_player(
     registries: Res<strata::sim::Registries>,
     household: Option<Res<household::Household>>,
     survey: Option<Res<strata::sim::deposits::Survey>>,
+    quest: Option<Res<household::people::QuestStart>>,
 ) {
     spawn_player(
         &mut commands,
@@ -1955,6 +2050,7 @@ fn spawn_headless_player(
         &registries,
         household.as_deref(),
         survey.as_deref(),
+        quest.as_deref(),
         true,
         false,
     );
@@ -2007,6 +2103,7 @@ fn spawn_camera(
     household: Option<Res<household::Household>>,
     survey: Option<Res<strata::sim::deposits::Survey>>,
     hold: Option<Res<MotionHold>>,
+    quest: Option<Res<household::people::QuestStart>>,
 ) {
     // The streamer's horizon is 48 km and the sea plane reaches 200 km so
     // it meets the sky past the planet's horizon; the far plane only culls.
@@ -2051,6 +2148,7 @@ fn spawn_camera(
             &registries,
             household.as_deref(),
             survey.as_deref(),
+            quest.as_deref(),
             cli.auto_walk || cli.route,
             motion_held(hold.as_deref()),
         );
@@ -2073,7 +2171,10 @@ fn spawn_camera(
             },
             OrbitCamera {
                 pitch: cli.orbit_pitch.map_or(-0.16, f32::to_radians),
-                yaw: initial_heading(&cli, settlements.as_deref()),
+                yaw: quest.as_deref().map_or_else(
+                    || initial_heading(&cli, settlements.as_deref()),
+                    |start| start.yaw,
+                ),
                 ..default()
             },
         ));
@@ -2752,6 +2853,34 @@ fn open_screens_for_shot(
     if cli.open_board {
         strata::client::ui::board::open(&mut commands, household::pelagic_works());
     }
+    if cli.open_journal {
+        strata::client::ui::journal::open(&mut commands);
+    }
+}
+
+/// `--open-dialogue`: ask for the person's conversation once the household
+/// is in their reach, as their F does, on or after frame 120.
+fn open_dialogue_for_shot(
+    cli: Res<Cli>,
+    frames: Res<FrameCount>,
+    reach: Option<Res<strata::sim::progression::Reach>>,
+    inbox: Option<ResMut<strata::sim::quests::DialogueInbox>>,
+    mut opened: Local<bool>,
+) {
+    let (Some(name), Some(reach), Some(mut inbox)) = (cli.open_dialogue.as_deref(), reach, inbox)
+    else {
+        return;
+    };
+    if *opened || frames.0 < OPEN_PAUSE_FRAME {
+        return;
+    }
+    let Ok(id) = format!("veyra:person.{name}").parse() else {
+        return;
+    };
+    if reach.people.contains(&id) {
+        inbox.0.push(strata::sim::quests::DialogueRequest::Open(id));
+        *opened = true;
+    }
 }
 
 /// Screenshot bookkeeping: how many were requested and how many are on
@@ -2842,13 +2971,14 @@ fn exit_when_done(
     script: Option<Res<household::ProgressionScript>>,
     // What the benchmark summary reads when the run ends, and the scripted
     // ride's report.
-    (loaded, bench, entities, clock, ride, survey): (
+    (loaded, bench, entities, clock, ride, survey, quest): (
         Option<Res<LoadedRegions>>,
         Option<Res<BenchRecorder>>,
         Query<Entity>,
         Option<Res<strata::client::stats::WorkClock>>,
         Option<Res<ride::ScriptRide>>,
         Option<Res<survey_script::ScriptSurvey>>,
+        Option<Res<household::script_quest::QuestScript>>,
     ),
     mut exit: MessageWriter<AppExit>,
 ) {
@@ -2880,6 +3010,10 @@ fn exit_when_done(
     if cli.script_survey.is_some() && cli.frames.is_none() {
         asked = true;
         done &= survey.is_some_and(|survey| survey.done());
+    }
+    if cli.script_quest.is_some() && cli.frames.is_none() {
+        asked = true;
+        done &= quest.is_some_and(|quest| quest.done());
     }
     if let Some(wanted) = cli.bench_frames {
         asked = true;

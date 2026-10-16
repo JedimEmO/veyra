@@ -1,0 +1,92 @@
+// Corin Hale's conversations (ticket 0014): the works steward of the
+// company that holds the city, by its board. Easy, generous, and never says
+// anything the company would not; the edge shows only when pushed. He sends
+// the household to the board for a bike, puts a newcomer's credit toward
+// it, and is one of the three the questline can end with.
+(
+    version: 1,
+    nodes: [
+        (id: "corin.idle", speaker: "veyra:person.corin_hale",
+         line: "Corin Hale, works steward for {holder}. The board's open to anyone with something to sell, and the company likes a household that works. Anything I can do?",
+         replies: [
+            (text: "What does the company do here?", next: Node("corin.company")),
+            (text: "Not today.", next: End),
+        ]),
+        (id: "corin.company", speaker: "veyra:person.corin_hale",
+         line: "We keep Port Serein running: power, water, the processor's upkeep. Long contracts and steady work. Ask anyone who remembers what it was like before.",
+         replies: [
+            (text: "And the people who'd rather run it themselves?", next: Node("corin.edge")),
+            (text: "Good to know.", next: End),
+        ]),
+        (id: "corin.edge", speaker: "veyra:person.corin_hale",
+         line: "They're welcome to build their own processor. Most of them find the contract easier.",
+         replies: [(text: "We see.", next: End)]),
+        (id: "corin.bike", speaker: "veyra:person.corin_hale",
+         line: "Heading out to the old station? That's a long walk, and the company likes its newcomers to arrive in one piece. Buy a courier bike at the board and I'll put a newcomer's hundred and fifty toward it.",
+         replies: [
+            (text: "We'll take the newcomer's credit.",
+             effects: [Earn(150), SetFlag("newcomer_credit")], next: Node("corin.credit")),
+            (text: "How does the bike work?", next: Node("corin.how")),
+            (text: "We'll manage on foot.", next: End),
+        ]),
+        (id: "corin.credit", speaker: "veyra:person.corin_hale",
+         line: "Done, it's on your account. Buy the bike at the board and make it your ride from your pack. Call it whenever you need it and it'll find you.",
+         replies: [(text: "Thanks, Corin.", next: End)]),
+        (id: "corin.how", speaker: "veyra:person.corin_hale",
+         line: "It sits in your pack until you make it your ride. After that you call it and it comes to you, wherever you're standing. It carries saddle bags too.",
+         replies: [
+            (text: "We'll take the newcomer's credit.",
+             when: [NotFlag("newcomer_credit")], hidden: true,
+             effects: [Earn(150), SetFlag("newcomer_credit")], next: Node("corin.credit")),
+            (text: "Thanks, Corin.", next: End),
+        ]),
+        (id: "corin.bike_credited", speaker: "veyra:person.corin_hale",
+         line: "The credit's on your account and the bikes are on the board. The company doesn't hold an offer open forever, but for you it'll wait.",
+         replies: [
+            (text: "How does the bike work?", next: Node("corin.how")),
+            (text: "Thanks, Corin.", next: End),
+        ]),
+        (id: "corin.hears", speaker: "veyra:person.corin_hale",
+         line: "I hear you're carrying a record from the old station. The company would like to buy it, and keep the station reporting on our own firmware. Nothing changes for anyone, except that you're paid.",
+         replies: [
+            (text: "Sell it to {holder}. Teague doesn't see it.",
+             effects: [
+                Give("veyra:item.station_record", 1),
+                SetStage("arrival", "selling"),
+             ], next: Node("corin.closing")),
+            (text: "What happens to Teague's readings?", next: Node("corin.readings")),
+            (text: "We haven't decided who gets it yet.", next: End),
+        ]),
+        (id: "corin.readings", speaker: "veyra:person.corin_hale",
+         line: "They'll be read properly, by people qualified to read them. The company doesn't publish half a picture and let a town panic. That's all it is.",
+         replies: [
+            (text: "Sell it to {holder}. Teague doesn't see it.",
+             effects: [
+                Give("veyra:item.station_record", 1),
+                SetStage("arrival", "selling"),
+             ], next: Node("corin.closing")),
+            (text: "We haven't decided who gets it yet.", next: End),
+        ]),
+        (id: "corin.closing", speaker: "veyra:person.corin_hale",
+         line: "Good choice. Load it onto this company slate and put it through the board; the line's open and pays on the spot. Accounts like things done properly.",
+         replies: [(text: "We'll take it to the board.", next: End)]),
+        (id: "corin.selling", speaker: "veyra:person.corin_hale",
+         line: "The line's open on the board whenever you're ready. Don't keep accounts waiting.",
+         replies: [(text: "On our way.", next: End)]),
+        (id: "corin.after_own", speaker: "veyra:person.corin_hale",
+         line: "Pleasure doing business. The station's reporting again, and the board remembers who helps it. Bring us what you make first.",
+         replies: [(text: "We'll keep it in mind.", next: End)]),
+        (id: "corin.after_keepers", speaker: "veyra:person.corin_hale",
+         line: "Teague published, I see. The company wishes you'd come to us first, but it bears no grudges. The board's still open to you.",
+         replies: [(text: "Good to hear.", next: End)]),
+        (id: "corin.after_assembly", speaker: "veyra:person.corin_hale",
+         line: "The borough has the record, I hear, and Wim Larrow's channel is in front of the council. The company would have paid better. It usually does.",
+         replies: [(text: "Maybe so.", next: End)]),
+        (id: "corin.after_assembly_fallen", speaker: "veyra:person.corin_hale",
+         line: "The borough has the record, and Wim Larrow's family has our sympathy. The company would have paid better. It usually does.",
+         replies: [(text: "Maybe so.", next: End)]),
+        (id: "corin.after_skip", speaker: "veyra:person.corin_hale",
+         line: "Making your own way, I hear. The board's open whenever you've something to sell.",
+         replies: [(text: "Thanks.", next: End)]),
+    ],
+)

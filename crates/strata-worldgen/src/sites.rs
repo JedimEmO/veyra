@@ -58,7 +58,7 @@ pub struct SiteKind {
 /// kind, the land mass it stands on (the mass's key) and the lattice node
 /// its search started from. A generator change that moves the site moves
 /// its id, as it moves a river.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub struct SiteId {
     /// The kind.
     pub kind: SiteKindId,
@@ -101,7 +101,7 @@ impl std::fmt::Display for SiteId {
 }
 
 /// A placed site.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProceduralSite {
     /// Its identity.
     pub id: SiteId,

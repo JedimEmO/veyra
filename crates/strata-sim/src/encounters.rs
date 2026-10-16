@@ -68,6 +68,9 @@ pub enum EncounterId {
     Camp(u64),
     /// A claim's post, by [`post_key`] of its deposit.
     Post(u64),
+    /// A person or crew of the first questline (ticket 0014), by a hash of
+    /// its id: neutral until a reply turns it, then fought as a camp.
+    Quest(u64),
 }
 
 /// The key of the post at `deposit`, in the space [`Cleared`] shares with

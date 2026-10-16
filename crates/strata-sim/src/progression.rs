@@ -649,6 +649,12 @@ pub enum InteractionKind {
         /// The camp's key in `Caches`.
         key: u64,
     },
+    /// A person of the questline (ticket 0014), or a thing that answers like
+    /// one: F opens their conversation. Teaches nothing.
+    Person {
+        /// The person's id, `veyra:person.maren_coyle`.
+        id: Namespaced,
+    },
 }
 
 /// A prop a character can use: a terminal, a trainer, a locker, a
@@ -688,6 +694,9 @@ pub struct Reach {
     /// The factions whose guard is within reach: the rule a lease bought
     /// from a guard is held to.
     pub guards: BTreeSet<FactionId>,
+    /// The people of the questline within reach: the rule a conversation is
+    /// opened by.
+    pub people: BTreeSet<Namespaced>,
 }
 
 impl Reach {
@@ -735,6 +744,9 @@ pub fn find_reach(
                 InteractionKind::Board { buyer } => next.board = Some(buyer.clone()),
                 InteractionKind::Guard { faction } => {
                     next.guards.insert(*faction);
+                }
+                InteractionKind::Person { id } => {
+                    next.people.insert(id.clone());
                 }
                 InteractionKind::Terminal
                 | InteractionKind::Locker

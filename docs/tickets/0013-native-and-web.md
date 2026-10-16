@@ -1,6 +1,6 @@
 # 0013: Native and web
 
-Status: designed 2026-10-15; steps 1 (the rename), 2 (the ports) and 3 (the web build) built.
+Status: done 2026-10-15; steps 1 (the rename), 2 (the ports), 3 (the web build) and 4 (the public repository) built; full `just ci` green.
 
 ## What the user said (2026-10-14, night)
 
@@ -146,3 +146,16 @@ system knows which it runs on.
   after wasm-opt (9 min); `dist/` 684 MB. Stills: `docs/design/web/`.
 - Left rough: stills not like for like (camera, time; web facades read bluer, PCSS off is
   a candidate); audio and the impostor shader's native GPU cost unmeasured; foliage is slow.
+
+### Step 4: the public repository
+
+- `.github/workflows/pages.yml` bakes the content, runs `just web` (binaryen
+  `version_119`, the lock's wasm-bindgen) and publishes `dist/`; the README links
+  https://jedimemo.github.io/veyra/ and the licence files the manifest names.
+- https://github.com/JedimEmO/veyra is one squashed commit exported from this tree:
+  no `AGENTS.md` or `.agents/`, no home paths, docs images at 1024 px and the icon
+  masters at 512 px (681 MB of images to 123 MB, out of LFS), ashlar and slotted as git
+  dependencies at their pushed revs with this lock's other pins, its `ci.yml` by hand
+  only. A secret scan found nothing.
+- The first Pages run passed in 44 minutes; its bake matches this machine's file for
+  file. The live page starts in Chrome at 78 s (72 s of river bake) and draws the city.

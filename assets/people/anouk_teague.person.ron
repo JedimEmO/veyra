@@ -1,0 +1,31 @@
+// Dr Anouk Teague, field officer of the nearest conservation body, at the
+// Exchange (ticket 0014). Precise, dry, impatient with waste, honest about
+// what she does not know; her station has gone dark and nobody will lend
+// her hands.
+(
+    version: 1,
+    id: "veyra:person.anouk_teague",
+    name: "Dr Anouk Teague",
+    title: "Field officer, {keepers}",
+    role: Keepers,
+    tint: (110, 170, 150),
+    stand: Exchange,
+    facing: 0.0,
+    conversations: [
+        (when: [QuestDone("arrival"), Flag("ending_keepers")], node: "teague.after_own"),
+        (when: [QuestDone("arrival"), Flag("ending_assembly"), Flag("wim_fallen")], node: "teague.after_assembly_fallen"),
+        (when: [QuestDone("arrival"), Flag("ending_assembly")], node: "teague.after_assembly"),
+        (when: [QuestDone("arrival"), Flag("ending_holder")], node: "teague.after_holder"),
+        (when: [QuestDone("arrival")], node: "teague.after_skip"),
+        (when: [QuestAt("arrival", "who_hears")], node: "teague.hears"),
+        (when: [QuestAt("arrival", "selling")], node: "teague.selling"),
+        (when: [QuestAt("arrival", "steady_hand")], node: "teague.test"),
+        (when: [QuestAt("arrival", "quiet_station")], node: "teague.mission"),
+        (when: [QuestAt("arrival", "pell")], node: "teague.waiting"),
+        (when: [QuestAt("arrival", "pell_fight")], node: "teague.waiting"),
+        (when: [QuestAt("arrival", "mending")], node: "teague.mending"),
+        (when: [QuestAt("arrival", "upstream")], node: "teague.upstream"),
+        (when: [QuestAt("arrival", "wim_fight")], node: "teague.upstream"),
+        (node: "teague.idle"),
+    ],
+)

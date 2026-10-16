@@ -729,6 +729,9 @@ fn the_parts_chip_shows_parts() {
                 "veyra:component.mount_blank",
                 HARNESS,
                 SEALS,
+                // The questline's slate (ticket 0014): a component for the
+                // one line the board grades it on.
+                "veyra:item.station_record",
             ]
             .contains(&def.id.to_string().as_str()),
             "{}",

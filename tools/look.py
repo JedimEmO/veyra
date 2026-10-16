@@ -98,6 +98,8 @@ def run(fixture, args, config):
     ]
     if "--fog" not in command:
         command += ["--fog", "0"]
+    if args.graphics:
+        command += ["--graphics", args.graphics]
     width, height = args.window.split("x")
     command = ["xvfb-run", "-a", "-s", f"-screen 0 {width}x{height}x24", *command]
     env = dict(os.environ, XDG_CONFIG_HOME=str(config))
@@ -135,7 +137,7 @@ def capture(args):
     header = (
         f"\n## {args.label}\n\n"
         f"{datetime.date.today().isoformat()}, {gpu.stdout.strip() or 'GPU unknown'}, {platform.system()}, "
-        f"{args.window}, release, `{args.render_look}` look, virtual display (wall clock not meaningful), "
+        f"{args.window}, release, `{args.render_look}` look{f', graphics `{args.graphics}`' if args.graphics else ''}, virtual display (wall clock not meaningful), "
         f"{FRAMES} frames, {args.warmup:.0f} s warm-up. Captures in scratch/look/{slug(args.label)}-*.png.\n\n"
     )
     text = header + "\n".join(lines) + "\n"
@@ -187,6 +189,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--label", help="Name of this capture; the ledger section and the PNG prefix")
     parser.add_argument("--render-look", default="baseline", help="Look preset (see `game --render-look`)")
+    parser.add_argument("--graphics", choices=["low", "medium", "high"], help="Graphics preset for the run (the Display tab's)")
     parser.add_argument("--fixtures", nargs="+", default=list(FIXTURES), choices=list(FIXTURES))
     parser.add_argument("--compare", nargs=2, metavar=("A", "B"), help="Print the per-fixture GPU delta between two ledger labels")
     parser.add_argument("--binary", type=Path, default=ROOT / "target/release/game")
@@ -198,7 +201,16 @@ def main():
         return
     if not args.label:
         parser.error("--label is required")
-    capture(args)
+    # The card's governor drops its clocks under a virtual display; bench.py
+    # holds them for its runs and so do these, or two labels do not compare.
+    sys.path.insert(0, str(ROOT / "tools"))
+    import bench
+
+    restore = bench.hold_gpu_clock()
+    try:
+        capture(args)
+    finally:
+        restore()
 
 
 if __name__ == "__main__":

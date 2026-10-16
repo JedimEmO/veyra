@@ -27,39 +27,39 @@ Minutes are the clock after the step; a switch of member (20 s) is left out.
 | Min | What | Purse | Result |
 | --- | --- | --- | --- |
 | 0.7 | Buy courier_bike *bike* | 2050 | Courier bike for 450 |
-| 1.9 | Ride to nearest conductor | 2050 | Scobie red conductor, 988 m from the city |
-| 2.8 | Find *first_find* | 2050 | 4 pings and 267 m of walking to the lead |
-| 3.4 | Sample 45 | 2050 | 45 units at 550 per-mille |
-| 3.7 | Ride to nearest structural_metal | 2050 | Fallow light alloy, 964 m from the city |
-| 4.6 | Find | 2050 | 4 pings and 267 m of walking to the lead |
-| 5.7 | Sample 80 | 2050 | 80 units at 550 per-mille |
-| 7.4 | Home | 2050 | home |
-| 8.5 | Craft harness | 2050 | Harness conductance 694 |
-| 9.2 | Craft patrol_carbine *first_made_carbine* | 2050 | interval 596, durability 331, moddability 480; 4/6 mounts open, interval x1.06 |
-| 13.0 | Craft cell_core x5 | 2050 | Cell core charge_density 573, stability 216 |
-| 13.3 | Sell 5 cell_core *first_sale* | 2690 | 5 sold to Pelagic Works for 640 |
-| 13.6 | Learn fabricator.batches.1 *fabricator_first_box* | 2690 | Tovan Reyes learns fabricator.batches.1 |
-| 14.3 | Learn surveyor.deposits.2 *surveyor_second_box* | 2690 | Ilse Marrow learns surveyor.deposits.2 |
-| 14.6 | Buy field_harvester | 2390 | Field harvester for 300 |
-| 16.9 | Ride to nearest structural_metal with moddability 600+ | 2390 | Selby ferrous ore, 1851 m from the city |
-| 17.8 | Find | 2390 | 4 pings and 267 m of walking to the lead |
-| 18.8 | Sample 80 | 2390 | 84 units at 545 per-mille |
-| 19.1 | Plant | 2390 | 654 units an hour, 1000 in the hopper |
-| 22.0 | Home | 2390 | home |
-| 23.1 | Craft harness | 2390 | Harness conductance 723 |
-| 23.8 | Craft patrol_carbine *muzzle_carbine* | 2390 | interval 547, durability 419, moddability 691; 5/6 mounts open, interval x1.08 |
-| 30.0 | Ride to nearest structural_metal with moddability 800+ | 2390 | Blane ferrous ore, 4527 m from the city |
-| 31.0 | Find | 2390 | 4 pings and 267 m of walking to the lead |
-| 31.9 | Sample 80 | 2390 | 84 units at 550 per-mille |
-| 36.0 | Collect *first_harvest* | 2390 | 184 units after 17 min |
-| 38.9 | Home | 2390 | home |
-| 40.0 | Craft harness | 2390 | Harness conductance 723 |
-| 40.8 | Craft patrol_carbine *fore_end_carbine* | 2390 | interval 569, durability 420, moddability 833; 6/6 mounts open, interval x1.07 |
+| 1.3 | Ride to nearest conductor | 2050 | Scobie red conductor, 988 m from the city |
+| 2.2 | Find *first_find* | 2050 | 4 pings and 267 m of walking to the lead |
+| 2.8 | Sample 45 | 2050 | 45 units at 550 per-mille |
+| 3.0 | Ride to nearest structural_metal | 2050 | Fallow light alloy, 964 m from the city |
+| 3.9 | Find | 2050 | 4 pings and 267 m of walking to the lead |
+| 5.0 | Sample 80 | 2050 | 80 units at 550 per-mille |
+| 6.0 | Home | 2050 | home |
+| 7.1 | Craft harness | 2050 | Harness conductance 694 |
+| 7.8 | Craft patrol_carbine *first_made_carbine* | 2050 | interval 596, durability 331, moddability 480; 4/6 mounts open, interval x1.06 |
+| 11.6 | Craft cell_core x5 | 2050 | Cell core charge_density 573, stability 216 |
+| 11.9 | Sell 5 cell_core *first_sale* | 2690 | 5 sold to Pelagic Works for 640 |
+| 12.2 | Learn fabricator.batches.1 *fabricator_first_box* | 2690 | Tovan Reyes learns fabricator.batches.1 |
+| 12.9 | Learn surveyor.deposits.2 *surveyor_second_box* | 2690 | Ilse Marrow learns surveyor.deposits.2 |
+| 13.2 | Buy field_harvester | 2390 | Field harvester for 300 |
+| 14.4 | Ride to nearest structural_metal with moddability 600+ | 2390 | Selby ferrous ore, 1851 m from the city |
+| 15.3 | Find | 2390 | 4 pings and 267 m of walking to the lead |
+| 16.3 | Sample 80 | 2390 | 84 units at 545 per-mille |
+| 16.6 | Plant | 2390 | 654 units an hour, 1000 in the hopper |
+| 18.2 | Home | 2390 | home |
+| 19.3 | Craft harness | 2390 | Harness conductance 723 |
+| 20.1 | Craft patrol_carbine *muzzle_carbine* | 2390 | interval 547, durability 419, moddability 691; 5/6 mounts open, interval x1.08 |
+| 23.3 | Ride to nearest structural_metal with moddability 800+ | 2390 | Blane ferrous ore, 4527 m from the city |
+| 24.3 | Find | 2390 | 4 pings and 267 m of walking to the lead |
+| 25.2 | Sample 80 | 2390 | 84 units at 550 per-mille |
+| 27.5 | Collect *first_harvest* | 2390 | 118 units after 11 min |
+| 29.1 | Home | 2390 | home |
+| 30.2 | Craft harness | 2390 | Harness conductance 723 |
+| 30.9 | Craft patrol_carbine *fore_end_carbine* | 2390 | interval 569, durability 420, moddability 833; 6/6 mounts open, interval x1.07 |
 
 
-Bands, minute reached (by): bike 0.7 (3); first find 2.8 (8); first made
-carbine 9.2 (25); muzzle 23.8 (45); fore end 40.8 (75); Surveyor second box 14.3
-(20); Fabricator first box 13.6 (30); first sale 13.3 (30); first harvest 36.1
+Bands, minute reached (by): bike 0.7 (3); first find 2.2 (8); first made
+carbine 7.8 (25); muzzle 20.1 (45); fore end 30.9 (75); Surveyor second box 12.9
+(20); Fabricator first box 12.3 (30); first sale 11.9 (30); first harvest 27.5
 (60). All held, none waived. Lowest purse 2050.
 
 ## Before
@@ -89,17 +89,17 @@ own prerequisites kept on both sides (Learn steps left out of both).
 
 | Box | Without | With | Saved |
 | --- | --- | --- | --- |
-| surveyor.deposits.1 | 42.1 | 40.4 | 1.7 |
-| surveyor.deposits.2 | 40.4 | 39.9 | 0.5 |
-| surveyor.deposits.3 | 39.9 | 38.3 | 1.6 |
-| surveyor.deposits.4 | 38.3 | 36.9 | 1.4 |
-| surveyor.reading.4 | 40.4 | 36.1 | 4.2 |
-| surveyor.routes.2 | 40.3 | 38.5 | 1.8 |
-| surveyor.routes.4 | 38.5 | 38.5 | 0.0 |
+| surveyor.deposits.1 | 32.3 | 30.5 | 1.7 |
+| surveyor.deposits.2 | 30.5 | 30.1 | 0.5 |
+| surveyor.deposits.3 | 30.1 | 28.5 | 1.6 |
+| surveyor.deposits.4 | 28.5 | 27.1 | 1.4 |
+| surveyor.reading.4 | 30.5 | 26.3 | 4.2 |
+| surveyor.routes.2 | 30.4 | 29.5 | 0.9 |
+| surveyor.routes.4 | 29.5 | 29.5 | 0.0 |
 
-Reading 4 matters most, 4.2 minutes of 41: it reads a deposit's peak, so a find
-is one ping and no walk. Deposits 1, 3 and 4 and Routes 2 save one and a half to
-two minutes each; Deposits 2 half a minute. Routes 4 saves nothing: it speeds
+Reading 4 matters most, 4.2 minutes of 31: it reads a deposit's peak, so a find
+is one ping and no walk. Deposits 1, 3 and 4 save one and a half to
+two minutes each, Routes 2 nearly one; Deposits 2 half a minute. Routes 4 saves nothing: it speeds
 roads and the path rides open ground. A box is a minute or two in an hour, not
 a different game. Reading 4 assumes nobody walks from a deposit's edge to its
 centre.
@@ -108,9 +108,9 @@ centre.
 
 | Mark | Minute | Made: mounts open, interval factor | Bought: mounts open, interval factor | Bought still worse |
 | --- | --- | --- | --- | --- |
-| first_made_carbine | 9.2 | 4/6, x1.06, 331 | 4/6, x1.10, 500 | no |
-| muzzle_carbine | 23.8 | 5/6, x1.08, 419 | 4/6, x1.10, 500 | no |
-| fore_end_carbine | 40.8 | 6/6, x1.07, 420 | 4/6, x1.10, 500 | no |
+| first_made_carbine | 7.8 | 4/6, x1.06, 331 | 4/6, x1.10, 500 | no |
+| muzzle_carbine | 20.1 | 5/6, x1.08, 419 | 4/6, x1.10, 500 | no |
+| fore_end_carbine | 30.9 | 6/6, x1.07, 420 | 4/6, x1.10, 500 | no |
 
 Each cell is mounts open, interval factor (lower fires faster), durability. A
 bought carbine opens four of six, fires at 1.10 and has durability 500. The made
@@ -122,19 +122,20 @@ bought one lacks. The muzzle needs a metal 1.9 km out, the fore end 4.5 km.
 
 ## Where it still drags
 
-- It is short: 41 minutes against a 75 minute band, so the bands hold nothing
+- It is short: 31 minutes against a 75 minute band, so the bands hold nothing
   but the harvester. Tightening them is the user's call.
-- Riding is 21 of the 41 minutes. The worst stretch is minute 24 to 39: 12 of
-  14 minutes in the saddle with nothing to decide. The off-road ride speed (0.85
-  of 18 m/s, detour 1.25) is an assumption: the only scripted ride is on a road.
+- Riding is about 9 of the 31 minutes since the bike doubled (ticket 0015); the
+  longest ride is the 4.5 km one to the fore end's metal, 3.0 minutes. The
+  off-road ride speed (0.85 of 36 m/s, detour 1.25) is an assumption: the only
+  scripted ride is on a road.
 - Five cell cores in a row is 3.75 minutes of the same click.
 - The first made carbine is no reward: the first day's store holds what one
-  needs, it opens the same four mounts and lasts less. The muzzle at 24 minutes
+  needs, it opens the same four mounts and lasts less. The muzzle at 20 minutes
   is the first real one.
 - No box changes what the player does inside the hour. Tovan starts with 900
   Fabrication XP and Batches 1 needs 150, so `fabricator_first_box` measures
   nothing. Ilse reaches Deposits 3 near minute 30 and the path never learns it.
-- The harvester is not worth its trip: 184 units after 17 minutes is about two
+- The harvester is not worth its trip: 118 units after 11 minutes is about two
   minutes of Ilse's own sampling, and nothing on the path uses or sells it.
 
 ## Where the model is thin

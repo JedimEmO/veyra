@@ -8,18 +8,18 @@
     id: "veyra:vehicle.courier_bike",
     name: "Courier bike",
     // Top speeds by the ground under it, and the reverse.
-    speed: (road: 30.0, ground: 18.0, reverse: 4.0),
+    speed: (road: 60.0, ground: 36.0, reverse: 6.0),
     // Gathering speed, braking against the throttle, and the slowing with
     // no throttle at all.
-    accel: 9.0,
-    brake: 16.0,
-    drag: 3.0,
+    accel: 16.0,
+    brake: 28.0,
+    drag: 5.0,
     // Degrees a second at a crawl and at top speed, straight between; grip
     // is how fast the velocity swings round to the heading, per second:
     // lower slides more. Forward is the throttle inside `throttle_arc_deg` of
     // the heading (seen from the camera) and a stick under `dead_zone` asks
     // for nothing.
-    turn: (slow: 150.0, fast: 55.0, grip: 6.0, throttle_arc_deg: 100.0, dead_zone: 0.1),
+    turn: (slow: 150.0, fast: 85.0, grip: 8.0, throttle_arc_deg: 100.0, dead_zone: 0.1),
     // Up to `full_deg` no loss, from `stop_deg` it will not climb, straight
     // between. Going down costs nothing.
     slope: (full_deg: 14.0, stop_deg: 36.0),

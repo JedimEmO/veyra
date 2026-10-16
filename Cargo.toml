@@ -141,6 +141,9 @@ web-sys = { version = "0.3", default-features = false }
 # The web entry's glue (ticket 0013, step 3).
 wasm-bindgen = { version = "0.2", default-features = false }
 js-sys = { version = "0.3", default-features = false }
+# strata-worldgen: the baked river networks as a file the browser loads instead
+# of baking (ticket 0015, step 3); the version the graph already holds.
+postcard = { version = "1.1.3", default-features = false, features = ["alloc"] }
 
 # Bevy is slow in a plain dev profile; optimise dependencies as slotted does.
 # Keep dev builds fast to run but small on disk: dependencies optimised, and

@@ -3276,9 +3276,9 @@ mod tests {
         assert_eq!(
             figures,
             vec![
-                ("Top speed, road", "108 km/h", ""),
-                ("Top speed, off road", "65 km/h", ""),
-                ("Turn", "150 to 55\u{b0}/s", ""),
+                ("Top speed, road", "216 km/h", ""),
+                ("Top speed, off road", "130 km/h", ""),
+                ("Turn", "150 to 85\u{b0}/s", ""),
                 ("Saddle bags", "18 cells (6 x 3)", ""),
             ]
         );
@@ -3291,11 +3291,11 @@ mod tests {
         let road = &card.effects[0];
         assert_eq!(
             (road.value.as_str(), road.change.as_str()),
-            ("119 km/h", "+11 km/h")
+            ("238 km/h", "+22 km/h")
         );
         assert_eq!(road.better, Some(true));
         let turn = &card.effects[2];
-        assert_eq!(turn.change, "\u{2212}8\u{b0}/s worse");
+        assert_eq!(turn.change, "\u{2212}13\u{b0}/s worse");
         assert_eq!(turn.better, Some(false));
         other.condition = Some(0);
         let worn = CardParams::of(&other, &registries, false, None).expect("a known item");

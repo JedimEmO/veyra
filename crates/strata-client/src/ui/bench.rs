@@ -44,9 +44,9 @@ use bevy::window::CursorMoved;
 use slotted::menu::{MenuChoice, ToastLevel, ToastSpec, toast};
 use slotted::theme::Role;
 use slotted::ui::def::{
-    Align, ButtonOpts, ButtonVariant, Justify, Layout, LayoutDirection, Length, LocKey, Overflow,
-    Padding, Presentation, PresentationMode, ScreenDef, ScreenKind, Tags, TextOpts, TextRole,
-    Transition, UiNodeDef, WidgetKind,
+    Align, ButtonOpts, ButtonVariant, Justify, Layout, LayoutDirection, Length, LocKey, Padding,
+    Presentation, PresentationMode, ScreenDef, ScreenKind, Tags, TextOpts, TextRole, Transition,
+    UiNodeDef, WidgetKind,
 };
 use slotted::ui::{
     InputMode, LocText, ScreenStack, TestId, pop_screen, push_screen, replace_screen, zbands,
@@ -801,15 +801,14 @@ pub fn screen_def(
     }
     // The cards scroll inside the panel on a short window, so the footer
     // and its Close stay inside the border at 720 tall.
-    let scrolling = UiNodeDef::Panel {
-        role: Role::new("invisible"),
+    let scrolling = UiNodeDef::Scroll {
         layout: Layout {
             align: Some(Align::Stretch),
             grow: 1.,
             min_height: Some(Length::Px(0.)),
-            overflow: Overflow::Scroll,
             ..column(2.)
         },
+        scrollbar: true,
         children: body,
         tags: Tags::new(),
     };

@@ -33,6 +33,9 @@
 //! encounters/*.encounter.ron                  one EncounterDef per file: who stands at a place
 //! loot/*.loot.ron                            one LootDef per file: what a cleared place leaves
 //! household/fall.ron                         what a fall in the world costs
+//! people/*.person.ron                        one PersonDef per file: who stands where and what they open
+//! dialogue/*.dialogue.ron                    nodes of what is said, with replies, conditions and effects
+//! quests/*.quest.ron                         one QuestDef per file: stages, objectives, endings
 //! procurement/postings.ron                   what a board posts about the camps near it
 //! ```
 //!
@@ -71,6 +74,10 @@ use crate::material::TerrainMaterialDef;
 use crate::posting::{POSTINGS_FILE, PostingRules};
 use crate::procurement::{BUYER_SUFFIX, BUYERS_DIR, BuyerDef, BuyerError, BuyerSet};
 use crate::progression::{AuthoredSheets, SkillGraph};
+use crate::quest::{
+    DIALOGUE_DIR, DIALOGUE_SUFFIX, PEOPLE_DIR, PERSON_SUFFIX, PLACES_FILE, PlaceRules,
+    QUEST_SUFFIX, QUESTS_DIR, QuestContext, QuestError, QuestFiles, QuestSet,
+};
 use crate::registries::{FreezeError, GameRegistries, OpenRegistries};
 use crate::resource::{
     CLASSES_FILE, ClassTree, DEPOSITS_FILE, DepositRules, HARVEST_FILE, HarvestRules,
@@ -273,6 +280,14 @@ pub enum LoadError {
         /// What is wrong with it.
         source: Box<LootError>,
     },
+    /// A person, a conversation or a quest does not parse or breaks a rule.
+    #[error("`{path}`: {source}")]
+    Quests {
+        /// The file.
+        path: String,
+        /// What is wrong with it.
+        source: Box<QuestError>,
+    },
     /// The fall's dials do not parse or break a rule.
     #[error("`{path}`: {reason}")]
     Fall {
@@ -442,7 +457,74 @@ fn after_play(source: &dyn AssetSource, frozen: &mut GameRegistries) -> Result<(
     frozen.loot = loot(source, frozen)?;
     frozen.fall = fall(source)?;
     frozen.postings = postings(source)?;
+    frozen.quests = quests(source, frozen)?;
     Ok(())
+}
+
+/// The people, their conversations and the quests, checked against the
+/// items, the skill graph, the resources and the bench. No directory is no
+/// questline.
+fn quests(source: &dyn AssetSource, frozen: &GameRegistries) -> Result<QuestSet, LoadError> {
+    let mut files = QuestFiles::default();
+    let list = |dir: &str| match source.list(dir) {
+        Ok(paths) => Ok(paths),
+        Err(SourceError::NotFound(_)) => Ok(Vec::new()),
+        Err(err) => Err(LoadError::from(err)),
+    };
+    let ron_error = |path: &str, error: ron::error::SpannedError| LoadError::Quests {
+        path: path.to_owned(),
+        source: Box::new(QuestError::Ron(error.to_string())),
+    };
+    for path in list(PEOPLE_DIR)? {
+        if path.ends_with(PERSON_SUFFIX) {
+            let text = read_utf8(source, &path)?;
+            let def = ron::from_str(&text).map_err(|e| ron_error(&path, e))?;
+            files.people.push((path, def));
+        }
+    }
+    for path in list(DIALOGUE_DIR)? {
+        if path.ends_with(DIALOGUE_SUFFIX) {
+            let text = read_utf8(source, &path)?;
+            let def = ron::from_str(&text).map_err(|e| ron_error(&path, e))?;
+            files.dialogues.push((path, def));
+        }
+    }
+    for path in list(QUESTS_DIR)? {
+        if path.ends_with(QUEST_SUFFIX) {
+            let text = read_utf8(source, &path)?;
+            let def = ron::from_str(&text).map_err(|e| ron_error(&path, e))?;
+            files.quests.push((path, def));
+        }
+    }
+    let members: Vec<String> = frozen
+        .sheets
+        .household
+        .as_ref()
+        .map(|household| household.recruits.iter().map(|m| m.name.clone()).collect())
+        .unwrap_or_default();
+    QuestSet::build(
+        files,
+        &QuestContext {
+            items: &frozen.items,
+            graph: &frozen.progression,
+            resources: &frozen.resources,
+            members: &members,
+        },
+    )
+    .map_err(|(path, source)| LoadError::Quests {
+        path,
+        source: Box::new(source),
+    })
+    .and_then(|set| match read_utf8(source, PLACES_FILE) {
+        Ok(text) => PlaceRules::parse(&text)
+            .map(|rules| set.with_rules(rules))
+            .map_err(|reason| LoadError::Quests {
+                path: PLACES_FILE.to_owned(),
+                source: Box::new(QuestError::Ron(reason)),
+            }),
+        Err(LoadError::Source(SourceError::NotFound(_))) => Ok(set),
+        Err(err) => Err(err),
+    })
 }
 
 /// The loot tables, checked against the encounters, the items and the

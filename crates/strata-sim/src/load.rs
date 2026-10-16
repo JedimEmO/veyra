@@ -189,8 +189,17 @@ pub fn prepare_water_before_start(
     Ok((masses, started.elapsed().as_secs_f64()))
 }
 
+/// Where the baked rivers file lives in a source that has one (the web's
+/// data bundle; `xtask bundle` writes it), under the logical root of the
+/// source `Files` is over.
+pub const WATER_FILE: &str = "generated/hydrology/water.bin";
+
 /// [`prepare_water_before_start`] over a source with the logical root
-/// `assets/`, the installed one in the game.
+/// `assets/`, the installed one in the game. A source that holds
+/// [`WATER_FILE`] for this world has its masses read from it first, which
+/// is what makes the browser's start-up seconds and not a minute: the bake
+/// then only finds what the file did not hold (a spawn elsewhere). A file
+/// for another world is refused and the bake runs as it always did.
 ///
 /// # Errors
 /// The registries did not load.
@@ -201,9 +210,41 @@ pub fn prepare_water_before_start_from(
 ) -> Result<(usize, f64), LoadError> {
     let started = strata_core::platform::time::Instant::now();
     let registries = strata_registry::load_from_source(&files.under("assets"))?;
-    let world = ProceduralWorld::with_params(seed, &registries, world_params());
+    let params = world_params();
+    let world = ProceduralWorld::with_params(seed, &registries, params);
+    if let Ok(bytes) = files.read(WATER_FILE) {
+        let stamp = strata_worldgen::version::water_stamp(seed, &params, &registries);
+        let threads = strata_worldgen::hydrology::MAX_THREADS;
+        match world.hydrology().load(&world, &bytes, stamp, threads) {
+            Ok(masses) => info!(
+                masses,
+                seconds = started.elapsed().as_secs_f64(),
+                "the rivers read from the baked file"
+            ),
+            Err(error) => warn!(%error, "the baked rivers file is not used, baking"),
+        }
+    }
     let masses = prepare_round(&world, prepare, strata_worldgen::hydrology::MAX_THREADS);
     Ok((masses, started.elapsed().as_secs_f64()))
+}
+
+/// The baked rivers file for [`WATER_FILE`]: the bake [`prepare_water_before_start_from`]
+/// would run, written out, with how many masses it holds. A tool runs it
+/// natively on every thread; the browser reads the result.
+///
+/// # Errors
+/// The registries did not load.
+pub fn bake_water_file(
+    files: &Files,
+    seed: Seed,
+    prepare: &PrepareWater,
+) -> Result<(Vec<u8>, usize), LoadError> {
+    let registries = strata_registry::load_from_source(&files.under("assets"))?;
+    let params = world_params();
+    let world = ProceduralWorld::with_params(seed, &registries, params);
+    let masses = prepare_round(&world, prepare, strata_worldgen::hydrology::MAX_THREADS);
+    let stamp = strata_worldgen::version::water_stamp(seed, &params, &registries);
+    Ok((world.hydrology().save(stamp), masses))
 }
 
 /// The rivers baked ahead of the observers as they move: the load baked
@@ -217,9 +258,52 @@ struct WaterAhead {
     centres: Vec<(f64, f64)>,
     radius_m: f64,
     task: Option<Task<(f64, f64)>>,
+    /// The browser's bake in slices (ticket 0015, step 3): the square being
+    /// baked, its centre, and the cells not yet baked, the nearest to the
+    /// observer last (popped from the back). Empty on a native build, which
+    /// bakes the round whole on a task.
+    #[cfg_attr(
+        not(target_arch = "wasm32"),
+        allow(dead_code, reason = "only the browser's bake reads it")
+    )]
+    slices: Option<((f64, f64), Vec<(f64, f64)>)>,
+}
+
+/// Cells a round's side is cut into when the browser bakes it, one cell a
+/// frame.
+#[cfg(any(target_arch = "wasm32", test))]
+const AHEAD_CELLS: u32 = 8;
+
+/// The cells of the square of half-side `radius_m` round `(x, z)` that no
+/// square of `baked` covers, as their centres, farthest from `(x, z)` first.
+/// The browser has one thread, so a bake that runs in one poll would stall
+/// a frame for as long as every unbaked mass of the round takes; a cell is
+/// the smallest area one frame's bake is asked for.
+#[cfg(any(target_arch = "wasm32", test))]
+fn ahead_cells(x: f64, z: f64, radius_m: f64, baked: &[(f64, f64)]) -> Vec<(f64, f64)> {
+    let side = 2.0 * radius_m / f64::from(AHEAD_CELLS);
+    let mut cells = Vec::new();
+    for i in 0..AHEAD_CELLS {
+        for j in 0..AHEAD_CELLS {
+            let cx = x - radius_m + side * (f64::from(i) + 0.5);
+            let cz = z - radius_m + side * (f64::from(j) + 0.5);
+            let covered = baked.iter().any(|&(bx, bz)| {
+                (cx - bx).abs() + side / 2.0 <= radius_m && (cz - bz).abs() + side / 2.0 <= radius_m
+            });
+            if !covered {
+                cells.push((cx, cz));
+            }
+        }
+    }
+    cells.sort_by(|a, b| {
+        let far = |c: &(f64, f64)| (c.0 - x).abs().max((c.1 - z).abs());
+        far(b).total_cmp(&far(a))
+    });
+    cells
 }
 
 /// Threads a bake ahead of an observer runs on, beside the game.
+#[cfg(not(target_arch = "wasm32"))]
 const AHEAD_THREADS: usize = 2;
 
 /// How far from every centre baked round an observer may go before the
@@ -231,6 +315,22 @@ const AHEAD_SHARE: f64 = 0.25;
 /// Sets off a bake round the first observer that has moved far enough from
 /// every square baked, and records one that finished.
 fn prepare_water_ahead(mut ahead: ResMut<WaterAhead>, observers: Res<crate::Observers>) {
+    #[cfg(target_arch = "wasm32")]
+    if let Some(((x, z), cells)) = ahead.slices.as_mut() {
+        // One cell a frame, on the one thread there is.
+        if let Some((cx, cz)) = cells.pop() {
+            let (world, side) = (
+                Arc::clone(&ahead.world),
+                ahead.radius_m / f64::from(AHEAD_CELLS),
+            );
+            world.prepare_water_on(cx, cz, side, 1);
+        } else {
+            let centre = (*x, *z);
+            ahead.centres.push(centre);
+            ahead.slices = None;
+        }
+        return;
+    }
     if let Some(task) = ahead.task.as_mut() {
         let Some(centre) = block_on(poll_once(task)) else {
             return;
@@ -249,13 +349,21 @@ fn prepare_water_ahead(mut ahead: ResMut<WaterAhead>, observers: Res<crate::Obse
         return;
     };
     let (x, z) = (at.x(), at.z());
-    let world = Arc::clone(&ahead.world);
-    let radius = ahead.radius_m;
     info!(x, z, "baking the rivers ahead of an observer");
-    ahead.task = Some(AsyncComputeTaskPool::get().spawn(async move {
-        world.prepare_water_on(x, z, radius, AHEAD_THREADS);
-        (x, z)
-    }));
+    #[cfg(target_arch = "wasm32")]
+    {
+        let cells = ahead_cells(x, z, ahead.radius_m, &ahead.centres);
+        ahead.slices = Some(((x, z), cells));
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        let world = Arc::clone(&ahead.world);
+        let radius = ahead.radius_m;
+        ahead.task = Some(AsyncComputeTaskPool::get().spawn(async move {
+            world.prepare_water_on(x, z, radius, AHEAD_THREADS);
+            (x, z)
+        }));
+    }
 }
 
 /// Loads the registries from [`WorldAssetRoot`], builds a
@@ -632,6 +740,7 @@ fn finish_world_load(
                     radius_m: prepare.radius_m,
                     world: Arc::clone(&world.procedural),
                     task: None,
+                    slices: None,
                 });
             }
             if let Some(library) = &world.library {
@@ -668,6 +777,23 @@ fn finish_world_load(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn the_browser_bakes_only_cells_nothing_has_covered() {
+        let r = 128_000.0;
+        // Nothing baked: every cell, the near ones last.
+        let all = ahead_cells(0.0, 0.0, r, &[]);
+        assert_eq!(all.len(), (AHEAD_CELLS * AHEAD_CELLS) as usize);
+        let far = |c: &(f64, f64)| c.0.abs().max(c.1.abs());
+        assert!(far(&all[0]) >= far(all.last().expect("cells")));
+        // A round 32 km east of a baked one: the strip beyond the old edge.
+        let strip = ahead_cells(32_000.0, 0.0, r, &[(0.0, 0.0)]);
+        assert!(!strip.is_empty() && strip.len() < all.len());
+        assert!(strip.iter().all(|c| c.0 + r / f64::from(AHEAD_CELLS) > r));
+        // Inside a baked square: nothing.
+        assert!(ahead_cells(0.0, 0.0, r, &[(0.0, 0.0)]).is_empty());
+    }
+
     use crate::SimPlugin;
     use bevy::state::state::State;
 

@@ -541,6 +541,7 @@ pub(super) fn answer_bench(
     mut players: Query<PlayerParts, With<LocalPlayer>>,
     riders: Query<Entity, With<LocalPlayer>>,
     mut commands: Commands,
+    mut quest: MessageWriter<strata::sim::quests::QuestEvent>,
 ) {
     for request in requests.read() {
         let at_terminal = matches!(reach.nearest, Some((_, InteractionKind::Terminal)));
@@ -573,6 +574,9 @@ pub(super) fn answer_bench(
                         out!(player),
                     )
                     .map(|()| {
+                        quest.write(strata::sim::quests::QuestEvent::Switched(
+                            household.active().name.clone(),
+                        ));
                         // The incoming character is not on the bike.
                         if let Ok(rider) = riders.single() {
                             commands
@@ -583,9 +587,10 @@ pub(super) fn answer_bench(
                         format!("{} is out", household.active().name)
                     })
                 }
-                BenchRequest::Join(index) => {
-                    join(&mut household, index).map(|name| format!("{name} joined the bench"))
-                }
+                BenchRequest::Join(index) => join(&mut household, index).map(|name| {
+                    quest.write(strata::sim::quests::QuestEvent::Recruited(name.clone()));
+                    format!("{name} joined the bench")
+                }),
             }
         } else {
             Err("not at a terminal".to_owned())

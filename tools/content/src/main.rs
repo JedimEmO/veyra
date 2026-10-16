@@ -4,6 +4,7 @@
 //! ```text
 //! just content                     # everything, each material at its own resolution
 //! just content --resolution 256    # a quick pass while iterating
+//! just content --city-only         # the buildings and the city's layout, no weapons or plants
 //! just content --weapon-sheets scratch/review/weapons    # and the weapon pictures' contact sheets
 //! ```
 //!
@@ -64,6 +65,11 @@ struct Cli {
     /// Bake only the vehicle prop, its icon and their index.
     #[arg(long)]
     vehicles_only: bool,
+    /// Bake the buildings, their materials and the city's layout and
+    /// skyline, and leave the weapons, the vehicle and the plants as they
+    /// are, so a change to the city's plan does not regrow every tree.
+    #[arg(long)]
+    city_only: bool,
 }
 
 #[allow(
@@ -186,6 +192,10 @@ fn main() -> Result<()> {
         roadside_kit.files().len(),
         strata_worldgen::roadside::ROADSIDE_PATH
     );
+    if cli.city_only {
+        println!("wrote {} in {:.1?}", cli.out.display(), started.elapsed());
+        return Ok(());
+    }
     weapons(&content, cli.weapon_sheets.as_deref())?;
     weapon_models(&content)?;
     vehicle_models(&content)?;

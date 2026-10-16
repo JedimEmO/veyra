@@ -249,31 +249,36 @@ fn speed_of(app: &App, e: Entity) -> f32 {
 
 #[test]
 fn on_open_ground_the_bike_reaches_its_ground_speed_and_holds_it() {
+    let ground = dials().speed.ground;
     let source = world(|_, _| 0.0, 0.0);
     let (mut app, player) = rider(&source, 0.0, 0.0, 0.0, |_| {});
     throttle(player, &mut app, 0.0);
     run(&mut app, 100);
     assert!(
-        (speed_of(&app, player) - 18.0).abs() < 0.01,
+        (speed_of(&app, player) - ground).abs() < 0.01,
         "{}",
         speed_of(&app, player)
     );
     let before = position(&app, player);
     run(&mut app, 40);
     let after = position(&app, player);
-    assert!((speed_of(&app, player) - 18.0).abs() < 0.01);
+    assert!((speed_of(&app, player) - ground).abs() < 0.01);
     let covered = before.z() - after.z();
-    assert!((covered - 36.0).abs() < 1.0, "{covered} m in two seconds");
+    assert!(
+        (covered - 2.0 * f64::from(ground)).abs() < 1.0,
+        "{covered} m in two seconds"
+    );
 }
 
 #[test]
 fn on_a_road_the_bike_reaches_the_road_speed() {
+    let road = dials().speed.road;
     let source = world(|_, _| 0.0, 1.0);
     let (mut app, player) = rider(&source, 0.0, 0.0, 0.0, |_| {});
     throttle(player, &mut app, 0.0);
     run(&mut app, 120);
     assert!(
-        (speed_of(&app, player) - 30.0).abs() < 0.01,
+        (speed_of(&app, player) - road).abs() < 0.01,
         "{}",
         speed_of(&app, player)
     );
@@ -311,18 +316,27 @@ fn a_slope_at_the_full_angle_costs_nothing_and_at_the_stop_angle_stops_it() {
     throttle(player, &mut app, up);
     run(&mut app, 100);
     assert!(
-        (speed_of(&app, player) - 18.0).abs() < 0.05,
+        (speed_of(&app, player) - dials().speed.ground).abs() < 0.05,
         "{}",
         speed_of(&app, player)
     );
 
-    let source = ramp(36.0);
+    // The bike may slide back down and put its rider off (who may then walk
+    // up, a walker's slope being steeper): the claim is only that no tick
+    // ridden gains ground uphill.
+    let source = ramp(f64::from(dials().slope.stop_deg));
     let (mut app, player) = rider(&source, 0.0, 0.0, up, |_| {});
     let start = position(&app, player);
     throttle(player, &mut app, up);
-    run(&mut app, 100);
-    let moved = position(&app, player).x() - start.x();
-    assert!(moved.abs() < 0.5, "moved {moved} m up a wall of a slope");
+    let mut climbed: f64 = 0.0;
+    for _ in 0..100 {
+        run(&mut app, 1);
+        if app.world().get::<Riding>(player).is_none() {
+            break;
+        }
+        climbed = climbed.max(position(&app, player).x() - start.x());
+    }
+    assert!(climbed < 0.5, "rode {climbed} m up a wall of a slope");
 }
 
 #[test]
@@ -360,7 +374,15 @@ fn a_wall_at_twenty_metres_a_second_is_a_crash_and_at_eight_is_not() {
 fn shallow_water_is_ridden_deeper_slows_and_the_deep_throws() {
     // The sea stands at 0: the ground at -0.3, -0.8 and -3 puts that much
     // water over the feet.
-    for (bed, want) in [(-0.3, Some(18.0)), (-0.8, Some(10.5)), (-3.0, None)] {
+    // At -0.8 the water stands halfway from ride_m to stall_m, so the top
+    // speed is halfway from the ground speed to the crawl.
+    let dials = dials();
+    let half = f32::midpoint(dials.speed.ground, dials.water.crawl);
+    for (bed, want) in [
+        (-0.3, Some(dials.speed.ground)),
+        (-0.8, Some(half)),
+        (-3.0, None),
+    ] {
         let source = world(move |_, _| bed, 0.0);
         let (mut app, player) = rider(&source, 0.0, 0.0, 0.0, |_| {});
         throttle(player, &mut app, 0.0);
@@ -368,8 +390,11 @@ fn shallow_water_is_ridden_deeper_slows_and_the_deep_throws() {
         match want {
             Some(top) => {
                 let speed = speed_of(&app, player);
-                // The feet hover a skin above the bed, so the wading is a hair under.
-                assert!((speed - top).abs() < 0.4, "bed {bed}: {speed}");
+                // The feet hover a skin above the bed, so the wading is a
+                // hair under: allow 2.5 cm of depth, in metres a second.
+                let per_m = (dials.speed.ground - dials.water.crawl)
+                    / (dials.water.stall_m - dials.water.ride_m);
+                assert!((speed - top).abs() < 0.025 * per_m, "bed {bed}: {speed}");
             }
             None => assert!(
                 app.world().get::<Riding>(player).is_none(),

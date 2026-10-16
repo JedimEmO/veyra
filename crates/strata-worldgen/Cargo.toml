@@ -21,6 +21,8 @@ ron = { workspace = true }
 # One warning, once a world: a sample that met a land mass no one had baked
 # (ADR 0010; the game and the server prepare the water before they sample).
 tracing = { workspace = true }
+# The baked river networks as one file (`hydrology::persist`).
+postcard = { workspace = true }
 
 [dev-dependencies]
 proptest = { workspace = true }

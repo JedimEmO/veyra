@@ -49,6 +49,9 @@ enum Command {
         /// The checkout holding `assets/` and `generated/`.
         #[arg(long)]
         root: Option<PathBuf>,
+        /// The seed whose rivers are baked into the bundle (the game's default).
+        #[arg(long, default_value_t = 42)]
+        seed: u64,
     },
 }
 
@@ -63,10 +66,15 @@ fn main() -> Result<()> {
             output,
             width,
         }) => shrink(&input, &output, width)?,
-        Some(Command::Bundle { output, raw, root }) => {
+        Some(Command::Bundle {
+            output,
+            raw,
+            root,
+            seed,
+        }) => {
             let root =
                 root.unwrap_or_else(|| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../.."));
-            bundle(&root, &output, raw.as_deref())?;
+            bundle(&root, &output, raw.as_deref(), seed)?;
         }
     }
     Ok(())
@@ -151,7 +159,12 @@ fn collect(
 
 /// Packs the bundle and gzips it with the `gzip` program, which keeps a
 /// codec crate out of the workspace.
-fn bundle(root: &std::path::Path, output: &PathBuf, raw: Option<&std::path::Path>) -> Result<()> {
+fn bundle(
+    root: &std::path::Path,
+    output: &PathBuf,
+    raw: Option<&std::path::Path>,
+    seed: u64,
+) -> Result<()> {
     use std::io::Write;
     use std::process::{Command, Stdio};
 
@@ -159,6 +172,25 @@ fn bundle(root: &std::path::Path, output: &PathBuf, raw: Option<&std::path::Path
     for (logical, extensions) in BUNDLED {
         collect(root, logical, extensions, &mut entries)?;
     }
+    // The bake a browser could not afford, done here on every thread (ticket
+    // 0015, step 3): the spawn's rivers and the settlements', as the game
+    // would bake them before it starts.
+    let started = std::time::Instant::now();
+    let (water, masses) = strata_sim::bake_water_file(
+        &strata_registry::files::Files::dir(root),
+        strata_core::Seed(seed),
+        &strata_sim::PrepareWater {
+            places: vec![(0.0, 0.0)],
+            radius_m: strata_sim::PREPARE_WATER_RADIUS_M,
+        },
+    )
+    .context("baking the rivers")?;
+    println!(
+        "rivers: {masses} masses, {} MB, baked in {:.1} s",
+        water.len() / 1_000_000,
+        started.elapsed().as_secs_f64()
+    );
+    entries.push((strata_sim::WATER_FILE.to_owned(), water));
     let blob = strata_registry::bundle::write(&entries);
     if let Some(raw) = raw {
         std::fs::write(raw, &blob).with_context(|| format!("writing {}", raw.display()))?;

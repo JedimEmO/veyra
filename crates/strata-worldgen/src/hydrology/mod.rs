@@ -121,6 +121,7 @@ mod field;
 pub(crate) mod grade;
 mod index;
 mod mass;
+mod persist;
 mod place;
 mod rivers;
 mod roads;
@@ -500,7 +501,7 @@ pub struct Water {
 }
 
 /// Where a reach ends.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum RiverEnd {
     /// In the sea: its last vertex where the coarse ground crosses sea
     /// level between its last land node and the sea node beyond, at least a
@@ -517,7 +518,7 @@ pub enum RiverEnd {
 }
 
 /// One vertex of a reach.
-#[derive(Debug, Clone, Copy, PartialEq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct RiverVertex {
     /// World metres.
     pub x: f64,
@@ -553,7 +554,7 @@ pub struct RiverVertex {
 
 /// A reach: a river from a source or a confluence to the next confluence,
 /// a lake or the sea.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct River {
     /// Downstream order.
     pub vertices: Vec<RiverVertex>,
@@ -684,7 +685,7 @@ impl River {
 }
 
 /// A lake: a pit deeper than its province keeps, filled to its spill.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Lake {
     /// The water's level, metres.
     pub level_m: f32,
@@ -706,7 +707,7 @@ pub struct Lake {
 }
 
 /// A fall: where a river's surface steps down.
-#[derive(Debug, Clone, Copy, PartialEq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Fall {
     /// The lip, world `(x, surface, z)`.
     pub top: [f64; 3],
@@ -721,7 +722,7 @@ pub struct Fall {
 }
 
 /// How a bake went: not part of the network or its hash.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct BakeStats {
     /// Lattice nodes in the mass, settlement ground included.
     pub nodes: usize,
@@ -777,6 +778,20 @@ pub struct Network {
     road_index: crate::roads::RoadIndex,
 }
 
+/// Per lattice cell, the sites whose ground reaches it.
+fn pads_of(sites: &[crate::sites::ProceduralSite]) -> NodeMap<Vec<u32>> {
+    let mut pads: NodeMap<Vec<u32>> = NodeMap::default();
+    for (k, site) in sites.iter().enumerate() {
+        let outer = site.outer_m();
+        for j in node_of(site.centre[1] - outer)..=node_of(site.centre[1] + outer) {
+            for i in node_of(site.centre[0] - outer)..=node_of(site.centre[0] + outer) {
+                pads.entry([i, j]).or_default().push(local(k));
+            }
+        }
+    }
+    pads
+}
+
 impl Network {
     /// The procedural sites on the mass, in the order they were placed:
     /// kinds in rank order, each kind's best first.
@@ -789,15 +804,7 @@ impl Network {
     /// into the content hash. A network with none hashes as it did before
     /// sites existed.
     fn set_sites(&mut self, sites: Vec<crate::sites::ProceduralSite>) {
-        let mut pads: NodeMap<Vec<u32>> = NodeMap::default();
-        for (k, site) in sites.iter().enumerate() {
-            let outer = site.outer_m();
-            for j in node_of(site.centre[1] - outer)..=node_of(site.centre[1] + outer) {
-                for i in node_of(site.centre[0] - outer)..=node_of(site.centre[0] + outer) {
-                    pads.entry([i, j]).or_default().push(local(k));
-                }
-            }
-        }
+        let pads = pads_of(&sites);
         if !sites.is_empty() {
             let mut hash = Fnv(self.hash);
             for site in &sites {
@@ -1830,6 +1837,12 @@ pub(crate) fn version_inputs(world: &ProceduralWorld, window: &Hydrology) -> Ver
         fixed: FIXED,
         canaries: canary_hashes(world, window),
     }
+}
+
+/// The hydrology's fixed numbers, for a stamp that cannot afford the
+/// canaries (see [`crate::version::water_stamp`]).
+pub(crate) fn fixed_inputs() -> impl Serialize {
+    FIXED
 }
 
 /// The river network's share of the world's version.

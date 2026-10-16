@@ -123,6 +123,10 @@ pub struct RenderLook {
     pub agx: bool,
     /// Default antialiasing when the camera has no explicit override.
     pub taa: bool,
+    /// No antialiasing unless the camera's own override asks for one. Only
+    /// the graphics preset writes it (`strata_client::ui::graphics`): MSAA
+    /// or TAA is the one cost the presets can drop that no other field says.
+    pub no_aa: bool,
     /// Contrast around middle grey, before tonemapping.
     pub contrast: f32,
     /// Saturation after tonemapping.
@@ -361,6 +365,7 @@ impl Default for RenderLook {
             // more than any geometry does, and Bevy's needs TAA in place of
             // MSAA (chosen 2026-09-27).
             taa: true,
+            no_aa: false,
             contrast: 1.0,
             saturation: 1.0,
             contact_shadows: false,
@@ -699,7 +704,9 @@ pub enum AaOverride {
 
 /// Resolves the same compatibility rule for the renderer and the tuning UI.
 pub fn effective_aa(look: &RenderLook, choice: Option<AaOverride>) -> (Msaa, bool, bool) {
-    let choice = choice.unwrap_or(if look.taa {
+    let choice = choice.unwrap_or(if look.no_aa {
+        AaOverride::Off
+    } else if look.taa {
         AaOverride::Taa
     } else {
         AaOverride::Msaa4

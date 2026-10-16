@@ -48,9 +48,9 @@ use crate::combat::CombatCamera;
 use slotted::menu::{MenuChoice, ToastLevel, ToastSpec, toast};
 use slotted::theme::Role;
 use slotted::ui::def::{
-    Align, ButtonOpts, ButtonVariant, Justify, Layout, LayoutDirection, Length, LocKey, Overflow,
-    Padding, Presentation, PresentationMode, ScreenDef, ScreenKind, Tags, TextAlign, TextOpts,
-    TextRole, Transition, UiNodeDef, WidgetKind,
+    Align, ButtonOpts, ButtonVariant, Justify, Layout, LayoutDirection, Length, LocKey, Padding,
+    Presentation, PresentationMode, ScreenDef, ScreenKind, Tags, TextAlign, TextOpts, TextRole,
+    Transition, UiNodeDef, WidgetKind,
 };
 use slotted::ui::{
     HudAnchor, HudLayerDef, HudLayerId, HudLayers, NineAnchor, ScreenStack, TestId, pop_screen,
@@ -1195,15 +1195,16 @@ pub fn screen_def(view: &SurveyView) -> ScreenDef {
             PLANT_WHY_ID,
         ));
     }
-    let body = panel(
-        Layout {
+    // A scroll panel, not a clipped one: the wheel and the bar move it.
+    let body = UiNodeDef::Scroll {
+        layout: Layout {
             align: Some(Align::Start),
             grow: 1.,
             min_height: Some(Length::Px(0.)),
-            overflow: Overflow::Scroll,
             ..row(3.)
         },
-        vec![
+        scrollbar: true,
+        children: vec![
             left,
             panel(
                 Layout {
@@ -1214,7 +1215,8 @@ pub fn screen_def(view: &SurveyView) -> ScreenDef {
                 right,
             ),
         ],
-    );
+        tags: Tags::new(),
+    };
     let footer = panel(
         row(2.),
         vec![

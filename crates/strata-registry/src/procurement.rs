@@ -386,7 +386,9 @@ mod tests {
         let id = Namespaced::parse("veyra:buyer.pelagic_works").unwrap();
         let buyer = registries.buyers.get(&id).expect("Pelagic Works is there");
         assert_eq!(buyer.name, "Pelagic Works");
-        assert_eq!(buyer.lines().count(), 4);
+        // The upkeep's three, the east intake and the station's record
+        // (ticket 0014).
+        assert_eq!(buyer.lines().count(), 5);
         let (order, line) = buyer.line("intake_metal").unwrap();
         assert_eq!((order.kind, line.refill), (OrderKind::Project, None));
         assert_eq!(registries.buyers.iter().len(), 1);

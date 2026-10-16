@@ -1,0 +1,65 @@
+// Where the first questline's two places stand (ticket 0014). Both are a
+// pure function of the world and these dials, found when the quest starts;
+// neither is a site kind, so no world version moves.
+(
+    version: 1,
+    // The station: dry, gentle ground off the road, this far from the city or
+    // farther (up to the slack) where no water lies in the channel's reach. The
+    // station reads the river from its mast, so it does not have to stand by
+    // it: the only river of seed 42 lies 2.4 km out, and the channel is
+    // what stretches to reach it (ticket 0015).
+    station_m: 900.0,
+    station_slack_m: 600.0,
+    station_step_m: 50.0,
+    bearings: 72,
+    max_slope: 0.12,
+    min_height_m: 3.0,
+    road_gap_m: 40.0,
+    road_reach_m: 400.0,
+    // The channel: the nearest bank of a river, upstream where it can be, this far from the station.
+    channel_near_m: 400.0,
+    channel_far_m: 2000.0,
+    scan_step_m: 40.0,
+    refine_step_m: 6.0,
+    bank_margin_m: 14.0,
+    // How far from the city the assembly and the keepers are looked for.
+    cast_reach_m: 60000.0,
+    // Where the household arrives on Port Serein's quay: along the strip
+    // from the stair's foot, and back from the water's edge. The quay is
+    // stacked with cargo; on seed 42 this gap is four metres clear of every
+    // crate round the household and Maren both, and ten metres from the main
+    // stair's foot, so the way up is the first thing behind the household.
+    quay_along_m: -10.0,
+    quay_inset_m: 12.0,
+    // How far down the stair the water's edge is looked for, and how near the
+    // sea the ground is when it is the edge. With no edge in reach the
+    // household arrives at the Exchange.
+    quay_search_m: 400.0,
+    shore_m: 1.0,
+    // The household arrives facing the sea, and Maren stands ahead of it and
+    // to its right, facing back: the camera behind the household sees her
+    // face and the water past her, never her back.
+    greeter_ahead_m: 2.0,
+    greeter_aside_m: 1.0,
+    // Teague stands this far before the Exchange's bench place; Corin this
+    // far along the row from the board, so his plate and the board's prompt
+    // are two things.
+    exchange_before_m: 5.0,
+    board_along_m: 1.2,
+    // A person stands once the household is this near and folds past the
+    // second distance; people of one place stand a spread apart, a crew's
+    // nameless bodies on a ring round their leader.
+    stand_m: 160.0,
+    fold_m: 320.0,
+    spread_m: 3.0,
+    crew_ring_m: 2.5,
+    // Teague's field camp (ticket 0015): a bench terminal and a workbench this
+    // far back from the mast toward the city, a spacing apart, so the mending
+    // is done at the station, clear of the mast and Pell's crew.
+    camp_back_m: 16.0,
+    camp_spacing_m: 3.5,
+    // A `--quest-stage` still starts this far north of the place it shows.
+    still_m: 2.0,
+    // The HUD's objective marker stands this far over the household's height.
+    marker_rise_m: 3.0,
+)

@@ -36,6 +36,10 @@ pub(super) enum Prop {
     Foreman,
     Harvester,
     Cache,
+    /// The monitoring station's mast (ticket 0014), stood by `people`.
+    Mast,
+    /// Wim's pump on the cut channel (ticket 0014), stood by `people`.
+    Pump,
 }
 
 /// The nine props of a bench place, around a point and heading: the
@@ -223,6 +227,31 @@ pub(super) fn city_place(
     ))
 }
 
+/// The camp's two props, for [`PropSites`], where [`strata::sim::quests::camp`]
+/// finds firm ground for them.
+pub(super) fn camp_sites(camp: Option<strata::sim::quests::Camp>) -> Vec<PropSite> {
+    let Some(camp) = camp else {
+        return Vec::new();
+    };
+    let facing = camp.yaw + std::f32::consts::PI;
+    vec![
+        PropSite {
+            kind: InteractionKind::Terminal,
+            name: "Camp terminal",
+            x: camp.terminal[0],
+            z: camp.terminal[1],
+            yaw: facing,
+        },
+        PropSite {
+            kind: InteractionKind::Workbench,
+            name: "Camp workbench",
+            x: camp.bench[0],
+            z: camp.bench[1],
+            yaw: facing,
+        },
+    ]
+}
+
 /// How far before the props `--at bench` stands, metres: near enough that
 /// the workbench's and the fabricator's own shapes are read, with the
 /// locker beside them whole in the frame.
@@ -388,7 +417,10 @@ pub(super) fn place_props(
             InteractionKind::Harvester { .. } => Prop::Harvester,
             // A guard is a person of a post, never a household prop.
             // A cache is its own prop, stood by the camps, never a bench place.
-            InteractionKind::Guard { .. } | InteractionKind::Cache { .. } => continue,
+            // A person of the questline is stood by `people.rs`, not a bench prop.
+            InteractionKind::Guard { .. }
+            | InteractionKind::Cache { .. }
+            | InteractionKind::Person { .. } => continue,
         };
         info!(
             "household: {} placed at ({:.1}, {:.1}, {:.1})",
@@ -600,6 +632,33 @@ pub(super) fn prop_parts(prop: Prop) -> (usize, Vec<(Vec3, Vec3, bool)>) {
                     Vec3::new(0.12, 0.2, 0.03),
                     true,
                 ),
+            ],
+        ),
+        // The station's mast: a hut, a tall mast on it and a dish at its
+        // head, with its lamp unlit and a dark band where a harness was. Lit
+        // teal, the terminal's, so it is told from the ground at a distance.
+        Prop::Mast => (
+            0,
+            vec![
+                (Vec3::new(0., 0.9, 0.), Vec3::new(2.2, 1.8, 1.6), false),
+                (Vec3::new(0., 1.85, 0.), Vec3::new(2.4, 0.1, 1.8), false),
+                (Vec3::new(0., 4.4, 0.), Vec3::new(0.18, 5.0, 0.18), false),
+                (Vec3::new(0., 6.4, -0.2), Vec3::new(1.2, 1.2, 0.08), false),
+                (Vec3::new(0., 6.4, -0.26), Vec3::new(0.4, 0.4, 0.02), true),
+                (Vec3::new(0., 1.1, -0.82), Vec3::new(1.2, 0.5, 0.03), true),
+            ],
+        ),
+        // The pump: a squat engine on a skid, a pipe running down to the
+        // water and a lit gauge, in the workbench's cold white.
+        Prop::Pump => (
+            4,
+            vec![
+                (Vec3::new(0., 0.1, 0.), Vec3::new(1.6, 0.2, 1.2), false),
+                (Vec3::new(0., 0.65, 0.), Vec3::new(1.0, 0.7, 0.8), false),
+                (Vec3::new(0., 1.15, 0.), Vec3::new(0.7, 0.3, 0.6), false),
+                (Vec3::new(1.1, 0.3, 0.), Vec3::new(0.35, 0.6, 0.35), false),
+                (Vec3::new(1.9, 0.12, 0.), Vec3::new(1.6, 0.2, 0.3), false),
+                (Vec3::new(0., 0.75, -0.41), Vec3::new(0.5, 0.2, 0.02), true),
             ],
         ),
         Prop::Fabricator => (5, fabricator_parts()),

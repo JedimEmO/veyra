@@ -152,8 +152,8 @@ fn a_file_that_contradicts_the_data_is_refused() {
 /// a conductor 1000 m east whose area is 100 m across, finds it, samples
 /// fifteen units and makes a harness.
 ///
-/// Bike: ground 18 m/s times 0.85 is 15.3; the way is (1000 - 100) times
-/// 1.25 = 1125 m, so 1125 / 15.3 + the call's 1.5 s. Find: five pings of
+/// Bike: ground 36 m/s times 0.85 is 30.6; the way is (1000 - 100) times
+/// 1.25 = 1125 m, so 1125 / 30.6 + the call's 1.5 s. Find: five pings of
 /// 2.5 s and 400 m at 5.5 m/s. Sample: 8 units at 550 per-mille is 4.4, four
 /// units a 4 s cycle, so four cycles. Home is the same way back (1250 m, the
 /// rider ended at the centre) and a screen to stow the lot. A session is
@@ -176,10 +176,10 @@ fn a_tiny_path_is_worked_by_hand() {
     let secs: Vec<f64> = line.rows.iter().map(|r| r.secs).collect();
     let near = |a: f64, b: f64| (a - b).abs() < 1e-3;
     assert!(near(secs[0], 20.0), "{secs:?}");
-    assert!(near(secs[1], 1.5 + 1125.0 / 15.3), "{secs:?}");
+    assert!(near(secs[1], 1.5 + 1125.0 / 30.6), "{secs:?}");
     assert!(near(secs[2], 12.5 + 400.0 / 5.5), "{secs:?}");
     assert!(near(secs[3], 16.0), "{secs:?}");
-    assert!(near(secs[4], 1.5 + 1250.0 / 15.3 + 20.0), "{secs:?}");
+    assert!(near(secs[4], 1.5 + 1250.0 / 30.6 + 20.0), "{secs:?}");
     assert!(near(secs[5], 45.0), "{secs:?}");
     // 2500 less the bike's 450.
     assert_eq!(line.rows[0].purse, 2050);
