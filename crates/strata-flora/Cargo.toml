@@ -9,7 +9,7 @@ authors.workspace = true
 
 [dependencies]
 strata-core = { workspace = true }
-strata-registry = { workspace = true }
+strata-data = { workspace = true }
 strata-worldgen = { workspace = true }
 serde = { workspace = true }
 ron = { workspace = true }

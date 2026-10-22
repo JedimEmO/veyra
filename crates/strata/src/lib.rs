@@ -8,6 +8,10 @@
 //! The `net-replicon` feature adds the replication adapter for either end
 //! of a wire; without it every build is `NetRole::Standalone`.
 //!
+//! The sim re-exported as `sim` is `veyra-sim`, the game's: the engine-only
+//! facade (without the game's rules) is the target of the review's step seven
+//! but not of this crate yet.
+//!
 //! The crates are re-exported under short names so a game can reach any
 //! layer, and the [`prelude`] carries what an app touches every day.
 
@@ -17,10 +21,12 @@ pub use strata_net as net;
 pub use strata_net_replicon as net_replicon;
 pub use strata_physics as physics;
 pub use strata_registry as registry;
-pub use strata_sim as sim;
 pub use strata_stream as stream;
 pub use strata_weather as weather;
 pub use strata_worldgen as worldgen;
+pub use veyra_physics;
+pub use veyra_sim as sim;
+pub use veyra_world;
 
 #[cfg(feature = "client")]
 pub use strata_atmosphere as atmosphere;
@@ -30,6 +36,11 @@ pub use strata_client as client;
 pub use strata_foliage as foliage;
 #[cfg(feature = "client")]
 pub use strata_terrain as terrain;
+
+#[cfg(feature = "net-replicon")]
+mod versions;
+#[cfg(feature = "net-replicon")]
+pub use versions::game_version_parts;
 
 mod plugins;
 pub use plugins::{HeadlessPlugins, StrataPlugins};
@@ -46,14 +57,14 @@ pub mod prelude {
         CharacterController, PhysicsPlugin, PhysicsSet, TerrainCollider, TerrainColliderStats,
     };
     pub use strata_registry::{BiomeId, BiomeStore, GameRegistries};
-    pub use strata_sim::{
+    pub use strata_stream::{LoadedRegions, StreamConfig, StreamPlugin, StreamSet};
+    pub use strata_worldgen::{Sample, WorldSource, find_land_near};
+    pub use veyra_sim::{
         AppState, DayLength, DayStart, LocalPlayer, Player, PlayerCommand, PlayerId, PlayerIntent,
         PreviousWorldPosition, PrimaryObserver, RenderOrigin, ScriptedIntent, SimClock, SimPlugin,
         SimSet, SimTick, TimeOfDay, WorldLoadPlugin, WorldObserver, WorldPosition, WorldSeed,
         WorldSourceRes,
     };
-    pub use strata_stream::{LoadedRegions, StreamConfig, StreamPlugin, StreamSet};
-    pub use strata_worldgen::{Sample, WorldSource, find_land_near};
 
     #[cfg(feature = "net-replicon")]
     pub use strata_net_replicon::{

@@ -39,10 +39,9 @@
 mod camps;
 mod combat;
 mod crossings;
-mod deposits;
-mod factions;
 mod grounding;
 mod household;
+mod pieces;
 #[cfg_attr(
     not(target_arch = "wasm32"),
     allow(
@@ -51,19 +50,19 @@ mod household;
     )
 )]
 mod query;
-mod ride;
 mod roadside;
 mod route;
 mod settlement;
 mod shutdown;
 mod sites;
-mod standing;
-mod survey_script;
+mod water_fetch;
 #[cfg(target_arch = "wasm32")]
 mod web;
 
 use std::net::SocketAddr;
-use std::path::{Path, PathBuf};
+#[cfg(feature = "dev-tools")]
+use std::path::Path;
+use std::path::PathBuf;
 use std::time::Duration;
 
 use ashlar_bevy::prelude::AshlarPlugin;
@@ -81,17 +80,18 @@ use strata::atmosphere::{
     study::{StudySettings, location},
 };
 
-use bevy::render::view::screenshot::{Screenshot, ScreenshotCaptured, save_to_disk};
+use bevy::window::ExitSystems;
 use bevy::window::{MonitorSelection, PresentMode, WindowMode, WindowResolution};
 use clap::Parser;
 use strata::client::flight::{MotionHold, motion_held};
-use strata::client::stats::BenchRecorder;
 use strata::foliage::FoliageConfig;
 use strata::prelude::*;
 use strata::registry::files::Files;
 use strata::registry::progression::SkillGraph;
 use strata::sim::Wind;
 use strata::sim::combat_tables::CombatTables;
+use veyra_game::deposit_start as deposits;
+use veyra_game::{GamePlugin, GameSet, Launch};
 
 /// The workspace `assets/` directory, for development runs from any
 /// working directory; on the web the page's own `assets/` URL.
@@ -127,196 +127,8 @@ struct Cli {
     #[arg(long, conflicts_with_all = ["connect", "flycam", "flight", "route", "grounding_study", "study_scene", "auto_walk"])]
     combat: bool,
     /// Use the original controller without the local combat encounter.
-    #[arg(long, conflicts_with_all = ["combat", "combat_script", "combat_trace"])]
+    #[arg(long, conflicts_with_all = ["combat"])]
     no_combat: bool,
-    /// Reproduce the combat timing capture with scripted inputs and a 60 Hz frame clock.
-    #[arg(long, conflicts_with_all = ["connect", "flycam", "flight", "route", "grounding_study", "study_scene", "auto_walk"])]
-    combat_script: bool,
-    /// Record the local combatant's fixed-tick state to CSV for feel analysis.
-    #[arg(long, conflicts_with_all = ["connect", "flycam", "flight", "route", "grounding_study", "study_scene", "auto_walk"])]
-    combat_trace: Option<PathBuf>,
-    /// The combat script, then the household's path by script: the
-    /// rusher is taken with the blade, the player walks to the blade
-    /// trainer, learns One hand 1 if the fight earned it, walks to the
-    /// terminal, the recruits join and the pistol marksman comes out.
-    /// Implies `--combat-script`; without `--frames` the run exits when
-    /// the path is walked.
-    #[arg(long, conflicts_with_all = ["connect", "flycam", "flight", "route", "grounding_study", "study_scene", "auto_walk", "no_combat"])]
-    script_progression: bool,
-    /// The scripted path with a stop at the workbench after the lesson:
-    /// the carbine is drawn and fired, the store's patrol magazine fitted,
-    /// the weapon reloaded and fired again, and the magazine taken off;
-    /// then a cell core is made from the first lots, the patrol magazine
-    /// made from it and fitted, and a second core made from the same lots,
-    /// which is recorded as a blueprint; a batch of three is started off
-    /// it at the fabricator and waited for at the path's end, all by the
-    /// requests a screen would send. Implies `--script-progression`.
-    #[arg(long, conflicts_with_all = ["connect", "flycam", "flight", "route", "grounding_study", "study_scene", "auto_walk", "no_combat"])]
-    script_crafting: bool,
-    /// With `--script-crafting`: write what the `Combatant` read at the
-    /// workbench (the carbine's row bare, fitted and restored, and the
-    /// rounds either side of the fit and the removal) and what was made
-    /// there (each finished thing's lines, and the made magazine's rounds
-    /// as the bench showed them and as the `Combatant` read them) to this
-    /// file, as RON.
-    /// With `--script-ride`: write what the ride measured to this file.
-    #[arg(long, value_name = "PATH")]
-    script_report: Option<PathBuf>,
-    /// Headless (ticket 0014): walk the first questline to one of its
-    /// endings (`keepers`, `assembly` or `holder`): talk to each person and
-    /// choose the replies the ending needs, and meet each objective through
-    /// the requests the sim answers. What it did goes to the log and to
-    /// `--script-report`. It changes the household it is run on, so it is
-    /// refused on the default `--household`.
-    #[arg(long, value_name = "ENDING", value_parser = ["keepers", "assembly", "holder"], conflicts_with_all = ["connect", "flycam", "flight", "route", "grounding_study", "study_scene", "auto_walk", "no_combat", "script_progression", "script_crafting", "combat_script", "script_ride", "script_survey", "at", "spawn"])]
-    script_quest: Option<String>,
-    /// With `--script-quest`: how Pell's crew is met, `fight`, `pay` or
-    /// `talk`.
-    #[arg(long, value_name = "BRANCH", value_parser = ["fight", "pay", "talk"], default_value = "pay", requires = "script_quest")]
-    script_pell: String,
-    /// Start the questline's `quest` at `stage` (`arrival:pell`), beside the
-    /// place it names, for a still.
-    #[arg(long, value_name = "QUEST:STAGE", value_parser = parse_quest_stage)]
-    quest_stage: Option<(String, String)>,
-    /// The household owns a courier bike (ticket 0009, step 2), which V
-    /// calls. It changes the household it is run on, so it is refused on
-    /// the default `--household`.
-    #[arg(long)]
-    bike: bool,
-    /// With `--bike`, or a household that has one: start with the stabled
-    /// bike worn to this condition (0 to 1000), for a still. It is refused
-    /// on the default `--household`.
-    #[arg(long, value_name = "N")]
-    bike_condition: Option<u16>,
-    /// Start with this many credits in the purse, for a still. It changes
-    /// the household it is run on, so it is refused on the default
-    /// `--household`.
-    #[arg(long, value_name = "CREDITS")]
-    purse: Option<u32>,
-    /// With a bike: start with three lots and a part in the saddle bags,
-    /// copied from the store, for a still. It is refused on the default
-    /// `--household`.
-    #[arg(long)]
-    saddle_stock: bool,
-    /// Plant a field harvester where the run starts (`--at deposit`), on the
-    /// richest deposit there, for the member who is out and ignoring their
-    /// count and the least reading, for a still. It changes the household it is run on, so it is
-    /// refused on the default `--household`.
-    #[arg(long)]
-    harvester: bool,
-    /// Advance every planted field harvester by this many played hours at
-    /// startup, for a still. It changes the household it is run on, so it
-    /// is refused on the default `--household`.
-    #[arg(long, value_name = "HOURS")]
-    harvest_hours: Option<f64>,
-    /// Open the nearest planted field harvester's screen on frame 120, as
-    /// its F does.
-    #[arg(long)]
-    open_harvester: bool,
-    /// Start mounted on the bike, without the call.
-    #[arg(long, requires = "bike")]
-    mounted: bool,
-    /// Headless or windowed: start at the road's far end (`--at road`, the
-    /// default here), call the bike, ride the road in for forty seconds and
-    /// write what was measured to the log and to `--script-report`.
-    #[arg(long, requires = "bike", conflicts_with_all = ["connect", "flycam", "flight", "route", "grounding_study", "study_scene", "auto_walk", "no_combat", "script_progression", "script_crafting", "combat_script"])]
-    script_ride: bool,
-    /// Headless or windowed (ticket 0009, step 3): start on dry ground a few
-    /// hundred metres from the nearest deposit of this resource class
-    /// (`conductor` when none is named, or a full id), walk a straight
-    /// heading pinging with the survey tool every hundred metres until a
-    /// ping meets something, walk to the strongest point of each ping
-    /// until it is under the player's feet, and sample fifteen units. What
-    /// it did goes to the log and to `--script-report`.
-    #[arg(long, value_name = "CLASS", num_args = 0..=1, default_missing_value = "conductor", conflicts_with_all = ["connect", "flycam", "flight", "route", "grounding_study", "study_scene", "auto_walk", "no_combat", "script_progression", "script_crafting", "combat_script", "script_ride", "at"])]
-    script_survey: Option<String>,
-    /// Start with a bought example of this module (an item id,
-    /// `veyra:module.patrol_extended_feed`) fitted to the weapon in hand
-    /// it is made for, taken from the household's store as a workbench
-    /// would take it; repeatable. For a still of a fitted weapon: it
-    /// changes the household it is run on.
-    #[arg(long, value_name = "ITEM")]
-    fitted: Vec<String>,
-    /// Start with store grade weapons of these items (comma separated, an
-    /// item id each, `-` leaves a slot as it is) in weapon slot one and
-    /// slot two of whoever starts out, for a still of a blade in hand. The
-    /// member out must be certified on each, or the flag says why not and
-    /// changes nothing. It changes the household it is run on, so it is
-    /// refused on the default `--household`.
-    #[arg(long, value_name = "ITEM", value_delimiter = ',')]
-    in_hand: Vec<String>,
-    /// Start with whoever starts out having learned these boxes (comma
-    /// separated ids), past their prerequisites and without spending
-    /// anything, so a still can show a weapon nobody starts certified on
-    /// (`blade.breaking.1` for the greatblade). It changes the household
-    /// it is run on, so it is refused on the default `--household`.
-    #[arg(long, value_name = "BOX", value_delimiter = ',')]
-    learn: Vec<String>,
-    /// Start with whoever starts out knowing these abilities (comma
-    /// separated ids of `assets/combat/abilities.ron`) and having them
-    /// slotted on the bar, where the sim puts a newly known one, for the
-    /// stills of the bar and a headless run that presses one
-    /// (`precision_shot`). It changes the household it is run on, so it is
-    /// refused on the default `--household`.
-    #[arg(long, value_name = "ABILITY", value_delimiter = ',')]
-    grant: Vec<String>,
-    /// Press a place of the bar at a frame, `place@frame` (comma
-    /// separated): 0 to 2 are the weapon in hand's places and 3 and 4 the
-    /// utility's, written where the keys write them. It changes the
-    /// household it is run on (what it spends), so it is refused on the
-    /// default `--household`.
-    #[arg(long, value_name = "PLACE@FRAME", value_delimiter = ',', value_parser = parse_press)]
-    press: Vec<(usize, u32)>,
-    /// Start with the carbine in hand worn down to this condition (0 to
-    /// 1000), for a still of the wear. It changes the household it is run
-    /// on, so it is refused on the default `--household`.
-    #[arg(long, value_name = "POINTS")]
-    condition: Option<u16>,
-    /// Start with this recruit (`"Tovan Reyes"`) joined to the bench and
-    /// out, for a still of what a member who knows a trade sees. It changes
-    /// the household it is run on, so it is refused on the default
-    /// `--household`.
-    #[arg(long = "as", value_name = "MEMBER")]
-    member: Option<String>,
-    /// Start with a patrol carbine made by Tovan Reyes (batch 7, this
-    /// moddability, the other lines 650) in the arrival's pack; with
-    /// `--open-fitting` it is in hand instead, the bought one in the pack.
-    /// It changes the household it is run on, so it is refused on the
-    /// default `--household`.
-    #[arg(long, value_name = "MODDABILITY")]
-    crafted_carbine: Option<u16>,
-    /// Start with this many store-grade mount blanks in the pack of
-    /// whoever starts out, for a still of a rework. It changes the
-    /// household it is run on, so it is refused on the default
-    /// `--household`.
-    #[arg(long, value_name = "N")]
-    blanks: Option<u32>,
-    /// Start with one of each of these items (comma separated, an item id
-    /// each) in the pack of whoever starts out, for a still of the pack
-    /// with every kind of stack in it. A lot is copied from the store when
-    /// the store holds one. It changes the household it is run on, so it
-    /// is refused on the default `--household`.
-    #[arg(long, value_name = "ITEM", value_delimiter = ',')]
-    give: Vec<String>,
-    /// With `--open-fitting`: rework the weapon in the first hand once, by
-    /// the request the screen's button sends, before the screen opens. It
-    /// spends a blank, so it is refused on the default `--household`.
-    #[arg(long, requires = "open_fitting")]
-    rework_first: bool,
-    /// Hold the combat camera this many metres behind the character, for a
-    /// still of what is in the hand.
-    #[arg(long, value_name = "METRES")]
-    orbit_distance: Option<f32>,
-    /// Turn the combat camera this many degrees round the character from
-    /// behind it at startup, for a still from the side. The character keeps
-    /// facing the view's heading.
-    #[arg(long, value_name = "DEGREES")]
-    orbit_yaw: Option<f32>,
-    /// Start the combat camera at this pitch in degrees (negative looks
-    /// down; the default is about -9), for a still of something far off on
-    /// ground the default pitch looks over.
-    #[arg(long, value_name = "DEGREES", allow_hyphen_values = true)]
-    orbit_pitch: Option<f32>,
     /// Where the household (the bench, every sheet and its XP, who is
     /// out) is saved on every change and read from at startup. Singleplayer
     /// and local: nothing of it is replicated.
@@ -352,24 +164,12 @@ struct Cli {
     /// Freeze only the preview sun at this day fraction, without pausing the sim.
     #[arg(long, conflicts_with_all = ["connect", "headless"])]
     visual_time: Option<f64>,
-    /// Open the live rendering panel on frame 120.
-    #[arg(long)]
-    open_render_panel: bool,
     /// Run the simulation with no window, no renderer.
     #[arg(long)]
     headless: bool,
     /// Exit after this many frames.
     #[arg(long)]
     frames: Option<u32>,
-    /// Save screenshots here. `{frame}` in the name is replaced by the
-    /// frame number, which `--shot-frames` needs to keep them apart.
-    /// Implies a window; the app exits once every shot is on disk.
-    #[arg(long)]
-    screenshot: Option<PathBuf>,
-    /// Frames to capture on, comma separated. Defaults to `--frames`, or
-    /// 60.
-    #[arg(long, value_delimiter = ',')]
-    shot_frames: Vec<u32>,
     /// Where to start, as `x,z` metres. Defaults to dry land near the
     /// origin.
     #[arg(long, value_parser = parse_xz, allow_hyphen_values = true)]
@@ -441,57 +241,15 @@ struct Cli {
     /// Read every file of `assets/` and `generated/` that the game loads
     /// through the files port from this uncompressed data bundle
     /// (`cargo run -p xtask -- bundle <out.gz> --raw <file>`) instead of
-    /// the two directories: how the web build's data is checked natively.
+    /// the two directories: how the web build's data is checked natively. The
+    /// rivers it does not carry are fetched from `--generated` as the browser
+    /// fetches them from the page.
     #[arg(long)]
     data_bundle: Option<PathBuf>,
     /// Window size in pixels, as `WxH`. The Phase 2 and 3 targets are
     /// measured at 1440p.
     #[arg(long, default_value = "2560x1440", value_parser = parse_size)]
     window: (u32, u32),
-    /// Write a benchmark summary here as JSON when the run finishes: every
-    /// frame after `--bench-warmup`, as percentiles, with the GPU time and
-    /// what was loaded. `just bench` reads it.
-    #[arg(long)]
-    bench_out: Option<PathBuf>,
-    /// Seconds of real time a benchmark ignores while the world streams in;
-    /// with `--bench-warm idle`, the least it waits.
-    #[arg(long, default_value_t = 10.0)]
-    bench_warmup: f64,
-    /// When a benchmark starts measuring: `fixed` after `--bench-warmup`
-    /// seconds, `idle` once the foliage streamer has nothing in flight and
-    /// has placed nothing for two seconds (after `--bench-warmup`, and by
-    /// `--bench-warm-ceiling` at the latest). A static view takes about
-    /// 50 s to fill its far trees, so `fixed` measures that streaming.
-    /// `hold`, for a moving fixture (`--flight`, `--auto-walk`, `--route`):
-    /// the motion waits at its start until terrain (no region waiting for a
-    /// mesh, no meshing task held) and foliage are idle, within the same
-    /// floor and ceiling, then starts, and measuring begins
-    /// `--bench-lead` seconds later.
-    #[arg(long, default_value = "fixed", value_parser = ["fixed", "idle", "hold"])]
-    bench_warm: String,
-    /// The most seconds `--bench-warm idle` or `hold` waits for the
-    /// streamers before it goes on anyway; the summary then says `ceiling`.
-    #[arg(long, default_value_t = 90.0)]
-    bench_warm_ceiling: f64,
-    /// With `--bench-warm hold`: seconds the motion runs before measuring,
-    /// so the walker is up to speed and the streamers have met the first
-    /// ground the motion brings.
-    #[arg(long, default_value_t = 5.0)]
-    bench_lead: f64,
-    /// Exit once a benchmark has measured this many frames after its
-    /// warm-up, whatever the warm-up took; `--frames` counts from the start.
-    #[arg(long)]
-    bench_frames: Option<usize>,
-    /// Exit once a benchmark has measured this many seconds of real time
-    /// after its warm-up. A walk's length is distance, which a frame count
-    /// is not at a frame rate that varies.
-    #[arg(long)]
-    bench_secs: Option<f64>,
-    /// Add Bevy's wireframe plugin, so F4 draws wireframes. Off by default:
-    /// the plugin checks every mesh entity every frame for specialization
-    /// whether or not F4 is ever pressed.
-    #[arg(long)]
-    wireframe: bool,
     /// Borderless fullscreen on the primary monitor, for native-resolution captures.
     #[arg(long)]
     fullscreen: bool,
@@ -509,298 +267,14 @@ struct Cli {
     /// ones.
     #[arg(long)]
     no_shadows: bool,
-    /// Open the pause menu once the world has been drawn for a while
-    /// (frame 120), for a screenshot of the screens over it.
-    #[arg(long)]
-    open_pause: bool,
-    /// Open the character sheet on frame 120 (or, with
-    /// `--script-progression`, at the blade trainer instead of the lesson,
-    /// where the path then ends), for a screenshot.
-    #[arg(long)]
-    open_sheet: bool,
-    /// Open the character sheet on its Loadout tab on frame 120, for a
-    /// screenshot.
-    #[arg(long)]
-    open_loadout: bool,
-    /// Open the bench on frame 120 (or, with `--script-progression`, at
-    /// the terminal once the recruits joined, instead of the swap), for a
-    /// screenshot.
-    #[arg(long)]
-    open_bench: bool,
-    /// Open the stores on frame 120 with the household's store beside the
-    /// pack, as a locker's F does, for a screenshot. No locker need be in
-    /// reach: the run reaches the store from where it stands.
-    #[arg(long)]
-    open_stores: bool,
-    /// Open the pack on frame 120 without the household's store, as key I
-    /// does, for a screenshot.
-    #[arg(long)]
-    open_inventory: bool,
-    /// Open the fitting screen on frame 120 with this mount in focus (the
-    /// feed when none is named), with its buttons live as at a workbench,
-    /// for a screenshot: no workbench need be in reach. With
-    /// `--script-crafting` the script walks to the workbench and uses it as
-    /// F would instead, where the path then ends.
-    #[arg(long, value_name = "MOUNT", num_args = 0..=1, default_missing_value = "feed")]
-    open_fitting: Option<String>,
-    /// With `--open-fitting`: the hand whose weapon is on the bench, 0 the
-    /// carbine's and 1 the pistol's; the weapon in hand when not given.
-    #[arg(long, value_name = "HAND", requires = "open_fitting")]
-    fitting_hand: Option<usize>,
-    /// With `--open-fitting`: pick the first part the stock has for the
-    /// mount, so the still shows what fitting it would do.
-    #[arg(long, requires = "open_fitting")]
-    fitting_pick: bool,
-    /// How the fitting screen draws its weapon: `model`, the baked pieces
-    /// turning on their stage, or `diagram`, the flat one. For a still of
-    /// either; the model needs `just content` to have run.
-    #[arg(long, value_name = "VIEW", default_value = "model", value_parser = ["model", "diagram"])]
-    fitting_view: String,
-    /// Open the workbench's crafting tab on frame 120 on this schematic
-    /// (`cell_core` when none is named, or a full id), with its buttons
-    /// live as at a workbench, for a screenshot: no workbench need be in
-    /// reach. With `--script-crafting` the script walks to the workbench
-    /// and opens it there instead, where the path then ends.
-    #[arg(long, value_name = "SCHEMATIC", num_args = 0..=1, default_missing_value = "cell_core")]
-    open_crafting: Option<String>,
-    /// With `--open-crafting`: which of the screen's states the still
-    /// shows. `pick` is the slots with the best stock in them and what
-    /// comes out, as the screen opens; `empty` is the same with nothing
-    /// picked; `hand` assembles the best stock first, for the bench hand;
-    /// `done` also spends the points and finishes, for the finished card;
-    /// `record` is that card with Record as blueprint open at
-    /// `--record-derate`. The last three change the household they are run
-    /// on, so they are refused on the default `--household`: name another.
-    #[arg(
-        long,
-        value_name = "STATE",
-        value_enum,
-        default_value_t,
-        requires = "open_crafting"
-    )]
-    crafting_state: CraftingShot,
-    /// With `--open-crafting`: what the schematics list shows, as its chips
-    /// do (Known is the default).
-    #[arg(long, value_name = "FILTER", value_enum, requires = "open_crafting")]
-    crafting_filter: Option<CraftingListShot>,
-    /// Before a still's screen opens, make one of this schematic
-    /// (`cell_core`, or a full id) from the best stock, every point spent
-    /// steady, by the requests a screen would send: so a still of the
-    /// magazine's schematic has a core to pick, and one of the stores a
-    /// made thing to pin. It changes the household it is run on, so it is
-    /// refused on the default `--household`: name another.
-    #[arg(long, value_name = "SCHEMATIC", conflicts_with = "script_crafting")]
-    craft_first: Option<String>,
-    /// With `--open-crafting --crafting-state record`: what the blueprint
-    /// is drafted at, percent of the prototype, one of the dial's steps.
-    #[arg(
-        long,
-        value_name = "PERCENT",
-        default_value_t = 85,
-        requires = "open_crafting"
-    )]
-    record_derate: u16,
-    /// With `--craft-first`: record what it made as a blueprint at this
-    /// percent of it (85 when none is named), by the request the Record
-    /// box would send, so a still of the factory has a blueprint to show.
-    #[arg(
-        long,
-        value_name = "PERCENT",
-        num_args = 0..=1,
-        default_missing_value = "85",
-        requires = "craft_first"
-    )]
-    record_first: Option<u16>,
-    /// Open the factory on frame 120, as a fabricator's F does, for a
-    /// screenshot: no fabricator need be in reach.
-    #[arg(long)]
-    open_factory: bool,
-    /// Open the journal on frame 120, for a screenshot; with `--quest-stage`
-    /// the stage it shows.
-    #[arg(long)]
-    open_journal: bool,
-    /// Start before a person of the questline (`maren_coyle`, `pell`) and
-    /// open their conversation once they are in reach, for a screenshot.
-    #[arg(long, value_name = "PERSON")]
-    open_dialogue: Option<String>,
-    /// Open Pelagic Works' procurement board on frame 120, as a board's F
-    /// does, for a screenshot: no board need be in reach.
-    #[arg(long)]
-    open_board: bool,
-    /// Before a still's board opens, put 100 cell cores of batch 412 by
-    /// Tovan Reyes at charge density 724 in the store, so the board has
-    /// something to quote. It changes the household it is run on, so it is
-    /// refused on the default `--household`: name another.
-    #[arg(long, requires = "open_board", conflicts_with = "script_crafting")]
-    board_stock: bool,
-    /// With `--open-board`: a few frames after the board opens, its first
-    /// row's sale is sent, by the request its button would send. It
-    /// changes the household it is run on, so it is refused on the default
-    /// `--household`: name another.
-    #[arg(long, requires = "open_board", conflicts_with = "script_crafting")]
-    board_sell: bool,
-    /// Before a still's screen opens, start a run of this many (20 when
-    /// none is named, and no more than the stock feeds) of the first
-    /// blueprint in reach from the cheapest stock that meets it, by the
-    /// request a screen would send: so a still of the factory or of the
-    /// bench has a run on. It changes the household it is run on, so it is
-    /// refused on the default `--household`: name another.
-    #[arg(
-        long,
-        value_name = "N",
-        num_args = 0..=1,
-        default_missing_value = "20",
-        conflicts_with = "script_crafting"
-    )]
-    factory_run: Option<u32>,
-    /// With `--factory-run`: somebody on the bench works the run, the
-    /// first recruit joining when nobody is there to.
-    #[arg(long, requires = "factory_run")]
-    factory_worker: bool,
-    /// With `--factory-run`: the still's screen opens once the run has
-    /// finished and not when it has started, for a still of what it made.
-    /// The run takes its played time, so the screenshot's frame must be
-    /// late enough for it.
-    #[arg(long, requires = "factory_run")]
-    factory_finish: bool,
-    /// With `--factory-run`: once the run has started, every empty cell of
-    /// the store is taken, so the run stands for want of room when its
-    /// first unit is made, for a still of the factory paused. The
-    /// screenshot's frame must be a unit's played time after the start.
-    #[arg(long, requires = "factory_run", conflicts_with = "factory_finish")]
-    factory_full_store: bool,
-    /// Before a still's screen opens, everyone who can joins the bench, as
-    /// at a terminal: so a still of the bench has more than one member on
-    /// it. It changes the household it is run on, so it is refused on the
-    /// default `--household`: name another.
-    #[arg(long, conflicts_with = "script_crafting")]
-    join_all: bool,
-    /// Before a still of the factory opens, put in the store sixty units
-    /// of the nearest deposit's lot that fits a slot of the first
-    /// blueprint in reach and does not meet it, so the still shows a lot
-    /// refused in place with its number. It changes the household it is
-    /// run on, so it is refused on the default `--household`: name
-    /// another.
-    #[arg(long, conflicts_with = "script_crafting")]
-    factory_poor_lot: bool,
-    /// With `--open-stores` or `--open-inventory`: the filter chip in
-    /// force (`all`, `lots`, `parts`, `mods`, `blueprints`, `gear`, `bags`),
-    /// with the first stack it shows pinned, for a screenshot of one kind
-    /// of stock.
-    #[arg(long, value_name = "FILTER", value_parser = parse_filter)]
-    stores_filter: Option<strata::client::ui::stores::Filter>,
-    /// With `--stores-filter`: pin the stack this many after the first the
-    /// filter shows, in the order of the screen's cells (the last when
-    /// there are fewer), for a still of a stack that is not the first of
-    /// its kind.
-    #[arg(
-        long,
-        value_name = "N",
-        default_value_t = 0,
-        requires = "stores_filter"
-    )]
-    stores_pin: usize,
-    /// Open the survey screen on frame 120, for a screenshot: the tool's
-    /// ping, its last grid and the deposits it met.
-    #[arg(long)]
-    open_survey: bool,
-    /// Open the map on frame 120 at a scale (`near`, `region` or `far`;
-    /// the region's when none is named), for a screenshot.
-    #[arg(long, value_name = "SCALE", num_args = 0..=1, default_missing_value = "region")]
-    open_map: Option<String>,
-    /// Lay the map's Holders layer on, for a screenshot of whose ground it is.
-    #[arg(long, requires = "open_map")]
-    map_holders: bool,
-    /// Ping for a class of resource (`conductor`, or a full id) once the
-    /// player stands in the world, as the survey screen's Ping would, so a
-    /// still has a grid to show. The channel plays out in the first
-    /// seconds; the household finds what it meets.
-    #[arg(long, value_name = "CLASS")]
-    ping: Option<String>,
-    /// Start sampling where the player stands once a ping has found a
-    /// deposit there (`--ping`), as Sample here would. It puts lots in the
-    /// pack, so it is refused on the default `--household`.
-    #[arg(long)]
-    sampling: bool,
-    /// Open the terminal's survey register on frame 120, read-only as the
-    /// pause's Bench button gives it, for a screenshot.
-    #[arg(long)]
-    open_register: bool,
-    /// Track the nearest deposit of this resource type to the default
-    /// start (`light_alloy_ore`, or a full id), as Accept on its row of
-    /// the register does, so the HUD's marker is up for a screenshot.
-    #[arg(long, value_name = "TYPE")]
-    track: Option<String>,
-    /// Hold the trigger down from frame 120 for this many seconds, as the
-    /// left button would, for a screenshot of the reticle as the cone
-    /// grows. It fires the player's rounds, so it is refused on the
-    /// default `--household`: name another.
-    #[arg(long, value_name = "SECONDS")]
-    hold_fire: Option<f32>,
-    /// Hold the player's guard (the aim button with a melee weapon in
-    /// hand) for this many seconds from frame 120, for a screenshot of the
-    /// raised blade. With `--script-progression --script-hurt n` a hostile's
-    /// blow meets it. Refused on the default `--household`: name another.
-    #[arg(long, value_name = "SECONDS")]
-    hold_guard: Option<f32>,
-    /// Hold the player's aim button for this many seconds from frame 120,
-    /// for a screenshot of a cone closing and of the scoped view. With a
-    /// melee weapon in hand it is the guard. Refused on the default
-    /// `--household`: name another.
-    #[arg(long, value_name = "SECONDS")]
-    hold_aim: Option<f32>,
     /// Every outlaw camp stands up at this tier whatever its distance from
     /// Port Serein, for a still of the bigger crowd.
     #[arg(long, value_name = "TIER", value_parser = clap::value_parser!(u8).range(1..=3))]
     camp_tier: Option<u8>,
-    /// The camp nearest the start is cleared from the first frame, for a
-    /// still of the card on a quiet camp. It writes the household, so it is
-    /// refused on the default `--household`.
-    #[arg(long)]
-    cleared: bool,
-    /// The camp nearest the start is cleared from the first frame with its
-    /// cache standing, for a still of the chest and its F chip. It writes
-    /// the household, so it is refused on the default `--household`.
-    #[arg(long)]
-    cache: bool,
-    /// Take this posting (1 is the board's first) of Pelagic's board from the
-    /// first frame, for a still of the work and of the area heard of. It
-    /// writes the household, so it is refused on the default `--household`.
-    #[arg(long, value_name = "N", value_parser = clap::value_parser!(usize))]
-    take_job: Option<usize>,
-    /// With `--take-job`: the taken job's camp counts cleared after the take,
-    /// for a still of the board's Collect.
-    #[arg(long, requires = "take_job")]
-    job_done: bool,
-    /// The camp of this name, or the nearest to the start, starts found, for
-    /// a still of its point on the map. It writes the household, so it is
-    /// refused on the default `--household`.
-    #[arg(long, value_name = "NAME|nearest")]
-    found: Option<String>,
-    /// The member who is out is carried home at frame 200 wherever they are,
-    /// through the path a fall in the world takes. It writes the household,
-    /// so it is refused on the default `--household`.
-    #[arg(long)]
-    fall: bool,
-    /// This member starts injured for the fall's hours, for a still of the
-    /// bench card. It writes the household, so it is refused on the default
-    /// `--household`.
-    #[arg(long, value_name = "MEMBER")]
-    injured: Option<String>,
-    /// Start with a faction's stance set, `name=welcoming|wary|hostile`, by
-    /// a deed written at the start so the score sits in the band. Repeat for
-    /// more. Refused on the default `--household`: name another.
-    #[arg(long, value_name = "FACTION=STANCE")]
-    stance: Vec<String>,
-    /// Start with a live lease of Pelagic Works' concessions, for a still of
-    /// the board and of working a concession lawfully. Refused on the
-    /// default `--household`: name another.
-    #[arg(long)]
-    lease: bool,
     /// Start the encounter with no hostiles in it: the character, the
     /// household and the world as they are, with no fight and no
     /// nameplates, for a screenshot of a place.
-    #[arg(long, conflicts_with_all = ["no_combat", "script_progression", "combat_script"])]
+    #[arg(long, conflicts_with_all = ["no_combat"])]
     no_hostiles: bool,
     /// Replace the encounter's hostiles with these, `kind[@metres]` each,
     /// comma separated: `marksman@60`, `duelist@6`, `sentry,rusher@10`.
@@ -810,21 +284,9 @@ struct Cli {
         long,
         value_delimiter = ',',
         value_parser = combat::parse_hostile,
-        conflicts_with_all = ["no_hostiles", "no_combat", "script_progression", "combat_script"],
+        conflicts_with_all = ["no_hostiles", "no_combat"],
     )]
     hostiles: Vec<combat::HostileSpec>,
-    /// With `--script-progression`: the nearest hostile lands this many
-    /// hits on the player from four seconds into the fight, a second
-    /// apart, which no scripted run otherwise does. One shows the hurt
-    /// path for a screenshot; eight bring the low-health pulse and the
-    /// fall.
-    #[arg(long, default_value_t = 0)]
-    script_hurt: u32,
-    /// Start with the debug statistics shown (F3 toggles them either
-    /// way). Off by default so a screenshot is of the game; the numbers
-    /// reach the log and `--bench-out` without the overlay.
-    #[arg(long)]
-    stats: bool,
     /// Connect to a server at `host:port` instead of running the
     /// simulation locally: the server owns the world and spawns the
     /// player, this process renders and predicts it. `--seed` must match
@@ -860,6 +322,12 @@ struct Cli {
     /// over the saved choice and is not kept.
     #[arg(long, value_parser = ["low", "medium", "high"])]
     graphics: Option<String>,
+    /// The share of the window's width and height the 3D camera renders at,
+    /// 0.5 to 1 (the look's `render_scale`); a graphics preset's ceiling
+    /// still applies. The UI stays at the window's size and a screenshot is
+    /// the window as presented.
+    #[arg(long, value_parser = parse_render_scale)]
+    render_scale: Option<f32>,
     /// Ground fog (ticket 0003): scale on the fog field's density. `0`
     /// draws none and registers no fog pass and no fog system (what the
     /// benches run with). The render look can also leave it out (F6,
@@ -877,6 +345,11 @@ struct Cli {
     /// steps", which are Bevy's volumetric fog's in the study scenes.
     #[arg(long, value_parser = clap::value_parser!(u32).range(1..=128))]
     fog_steps: Option<u32>,
+    /// The development flags: stills, scripts, the benchmark and the look lab
+    /// (`veyra-dev`), absent from a build that leaves `dev-tools` off.
+    #[cfg(feature = "dev-tools")]
+    #[command(flatten)]
+    dev: veyra_dev::DevArgs,
 }
 
 /// The ground fog's settings from the command line. Inserted before the
@@ -895,6 +368,18 @@ fn ground_fog(cli: &Cli) -> GroundFog {
         fog.steps = steps;
     }
     fog
+}
+
+fn parse_render_scale(s: &str) -> Result<f32, String> {
+    let v = s
+        .trim()
+        .parse::<f32>()
+        .map_err(|e| format!("{s:?} is not a number: {e}"))?;
+    if (0.5..=1.0).contains(&v) {
+        Ok(v)
+    } else {
+        Err(format!("the render scale is 0.5 to 1, not {v}"))
+    }
 }
 
 fn parse_fog_scale(s: &str) -> Result<f32, String> {
@@ -996,162 +481,19 @@ fn resolve_render_look_at(cli: &Cli, saved_path: &std::path::Path) -> Result<Loo
     if cli.no_shadows {
         file.sky.shadows = false;
     }
+    if let Some(scale) = cli.render_scale {
+        file.look.render_scale = scale;
+    }
     file.validate()?;
     Ok(file)
 }
 
-/// `--crafting-state`: the state of the crafting screen a still is of.
-#[derive(clap::ValueEnum, Debug, Clone, Copy, PartialEq, Eq, Default)]
-enum CraftingShot {
-    /// The slots with nothing picked.
-    Empty,
-    /// The slots, their candidates and what comes out.
-    #[default]
-    Pick,
-    /// After Assemble: the bench hand.
-    Hand,
-    /// After Finish: the finished card.
-    Done,
-    /// The finished card with Record as blueprint open.
-    Record,
-}
-
-/// `--crafting-filter`: the chip of the crafting list a still is of.
-#[derive(clap::ValueEnum, Debug, Clone, Copy, PartialEq, Eq)]
-enum CraftingListShot {
-    /// What the member was taught.
-    Known,
-    /// What can be made now.
-    Ready,
-    /// Everything.
-    All,
-}
-
-impl CraftingListShot {
-    /// The list's filter this stands for.
-    const fn filter(self) -> strata::client::ui::crafting::ListFilter {
-        use strata::client::ui::crafting::ListFilter;
-        match self {
-            Self::Known => ListFilter::Known,
-            Self::Ready => ListFilter::Ready,
-            Self::All => ListFilter::All,
-        }
-    }
-}
-
-impl CraftingShot {
-    /// What the screen is asked to bring itself to; `derate` is what a
-    /// Record box opens at, percent of the prototype.
-    const fn still(self, derate: u16) -> strata::client::ui::crafting::Still {
-        use strata::client::ui::crafting::Still;
-        match self {
-            Self::Empty => Still::Empty,
-            Self::Pick => Still::Pick,
-            Self::Hand => Still::Hand,
-            Self::Done => Still::Done,
-            // The sim counts a share in per-mille.
-            Self::Record => Still::Record(derate.saturating_mul(10)),
-        }
-    }
-}
-
 impl Cli {
-    /// `--crafting-state` as the crafting screen takes it.
-    const fn crafting_still(&self) -> strata::client::ui::crafting::Still {
-        self.crafting_state.still(self.record_derate)
-    }
-
-    /// Why this run may not start, when it is a still that spends stock
-    /// (assembles, rolls, finishes, starts a run) on the household the
-    /// game is played from: the flags send the requests a player's presses
-    /// would, and what they do is saved. The scripted walk is no still and
-    /// is not held to this.
+    /// Why this run may not start, when it is a still that spends stock on
+    /// the household the game is played from.
+    #[cfg(feature = "dev-tools")]
     fn spends_the_played_household(&self) -> Option<String> {
-        let flag = if self.craft_first.is_some() {
-            "--craft-first"
-        } else if self.factory_run.is_some() {
-            "--factory-run"
-        } else if self.factory_poor_lot {
-            "--factory-poor-lot"
-        } else if self.cleared {
-            "--cleared"
-        } else if self.cache {
-            "--cache"
-        } else if self.take_job.is_some() {
-            "--take-job"
-        } else if self.found.is_some() {
-            "--found"
-        } else if self.fall {
-            "--fall"
-        } else if self.injured.is_some() {
-            "--injured"
-        } else if !self.stance.is_empty() {
-            "--stance"
-        } else if self.lease {
-            "--lease"
-        } else if self.hold_fire.is_some() {
-            "--hold-fire"
-        } else if self.hold_guard.is_some() {
-            "--hold-guard"
-        } else if self.hold_aim.is_some() {
-            "--hold-aim"
-        } else if self.board_stock {
-            "--board-stock"
-        } else if self.board_sell {
-            "--board-sell"
-        } else if self.join_all {
-            "--join-all"
-        } else if !self.learn.is_empty() {
-            "--learn"
-        } else if !self.in_hand.is_empty() {
-            "--in-hand"
-        } else if !self.grant.is_empty() {
-            "--grant"
-        } else if !self.press.is_empty() {
-            "--press"
-        } else if self.condition.is_some() {
-            "--condition"
-        } else if self.member.is_some() {
-            "--as"
-        } else if self.crafted_carbine.is_some() {
-            "--crafted-carbine"
-        } else if self.blanks.is_some() {
-            "--blanks"
-        } else if !self.give.is_empty() {
-            "--give"
-        } else if self.purse.is_some() {
-            "--purse"
-        } else if self.saddle_stock {
-            "--saddle-stock"
-        } else if self.harvester {
-            "--harvester"
-        } else if self.harvest_hours.is_some() {
-            "--harvest-hours"
-        } else if self.bike_condition.is_some() {
-            "--bike-condition"
-        } else if self.rework_first {
-            "--rework-first"
-        } else if self.sampling {
-            "--sampling"
-        } else if self.ping.is_some() {
-            "--ping"
-        } else if self.script_survey.is_some() {
-            "--script-survey"
-        } else if self.script_quest.is_some() {
-            "--script-quest"
-        } else if self.quest_stage.is_some() {
-            "--quest-stage"
-        } else if self.open_crafting.is_some()
-            && !self.script_crafting
-            && matches!(
-                self.crafting_state,
-                CraftingShot::Hand | CraftingShot::Done | CraftingShot::Record
-            )
-        {
-            "--crafting-state hand|done|record"
-        } else {
-            return None;
-        };
+        let flag = self.dev.spends_stock()?;
         (self.household == Path::new(WORKSPACE_HOUSEHOLD)).then(|| {
             format!(
                 "{flag} spends the stock of the household it is run on and moves its roll and batch counters: pass --household <path> (with --fresh for a first day), not the default {WORKSPACE_HOUSEHOLD}"
@@ -1159,19 +501,103 @@ impl Cli {
         })
     }
 
+    /// Whether `--script-survey` is on.
+    #[cfg_attr(
+        not(feature = "dev-tools"),
+        allow(
+            clippy::unused_self,
+            reason = "the flags it reads are the development half's"
+        )
+    )]
+    fn script_survey_class(&self) -> Option<&str> {
+        #[cfg(feature = "dev-tools")]
+        return self.dev.script_survey.as_deref();
+        #[cfg(not(feature = "dev-tools"))]
+        None
+    }
+
+    fn script_survey(&self) -> bool {
+        self.script_survey_class().is_some()
+    }
+
+    /// `--orbit-distance`, `--orbit-yaw` and `--orbit-pitch`, for stills.
+    #[cfg_attr(
+        not(feature = "dev-tools"),
+        allow(
+            clippy::unused_self,
+            reason = "the flags it reads are the development half's"
+        )
+    )]
+    fn orbit(&self) -> (Option<f32>, Option<f32>, Option<f32>) {
+        #[cfg(feature = "dev-tools")]
+        return (
+            self.dev.orbit_distance,
+            self.dev.orbit_yaw,
+            self.dev.orbit_pitch,
+        );
+        #[cfg(not(feature = "dev-tools"))]
+        (None, None, None)
+    }
+
+    /// Whether a screenshot or a benchmark summary is being taken.
+    #[cfg_attr(
+        not(feature = "dev-tools"),
+        allow(
+            clippy::unused_self,
+            reason = "the flags it reads are the development half's"
+        )
+    )]
+    fn recorded(&self) -> bool {
+        #[cfg(feature = "dev-tools")]
+        return self.dev.screenshot.is_some() || self.dev.bench_out.is_some();
+        #[cfg(not(feature = "dev-tools"))]
+        false
+    }
+
+    /// `--cache`: a cleared camp leaves its cache.
+    #[cfg_attr(
+        not(feature = "dev-tools"),
+        allow(
+            clippy::unused_self,
+            reason = "the flags it reads are the development half's"
+        )
+    )]
+    fn cache(&self) -> bool {
+        #[cfg(feature = "dev-tools")]
+        return self.dev.cache;
+        #[cfg(not(feature = "dev-tools"))]
+        false
+    }
+
+    /// Whether a script drives the run on a manual clock, one tick a frame, so
+    /// pacing the loop would only make it slower.
+    #[cfg_attr(
+        not(feature = "dev-tools"),
+        allow(
+            clippy::unused_self,
+            reason = "the flags it reads are the development half's"
+        )
+    )]
+    fn scripted_clock(&self) -> bool {
+        #[cfg(feature = "dev-tools")]
+        return self.dev.combat_script
+            || self.dev.script_survey.is_some()
+            || self.dev.script_quest.is_some();
+        #[cfg(not(feature = "dev-tools"))]
+        false
+    }
+
     fn resolve_play_mode(&mut self) {
-        if self.script_survey.is_some() {
-            // Nobody to fight on the way: the script is about the ground.
-            self.no_hostiles = true;
-        }
-        if self.script_ride && self.at.is_none() {
-            self.at = Some("road".to_owned());
-        }
-        if self.script_crafting {
-            self.script_progression = true;
-        }
-        if self.script_progression {
-            self.combat_script = true;
+        #[cfg(feature = "dev-tools")]
+        {
+            if self.dev.script_survey.is_some() {
+                // Nobody to fight on the way: the script is about the ground.
+                self.no_hostiles = true;
+            }
+            if self.dev.script_ride && self.at.is_none() {
+                self.at = Some("road".to_owned());
+            }
+            self.dev.resolve();
         }
         self.combat = !self.no_combat
             && self.connect.is_none()
@@ -1183,7 +609,6 @@ impl Cli {
             && self.study_scene.is_none();
     }
 }
-
 /// `--at`'s value: one of the settlement's places, or a deposit.
 fn parse_at(text: &str) -> Result<String, String> {
     if matches!(
@@ -1208,27 +633,6 @@ fn parse_at(text: &str) -> Result<String, String> {
                 .to_owned(),
         )
     }
-}
-
-/// `--quest-stage`'s value: a quest's id and one of its stages.
-fn parse_quest_stage(text: &str) -> Result<(String, String), String> {
-    text.split_once(':')
-        .filter(|(quest, stage)| !quest.is_empty() && !stage.is_empty())
-        .map(|(quest, stage)| (quest.to_owned(), stage.to_owned()))
-        .ok_or_else(|| "expected `<quest>:<stage>`, as `arrival:pell`".to_owned())
-}
-
-/// `--stores-filter`'s value: a filter chip of the stores screen, by the
-/// word in its tag.
-fn parse_filter(text: &str) -> Result<strata::client::ui::stores::Filter, String> {
-    use strata::client::ui::stores::Filter;
-    Filter::ALL
-        .into_iter()
-        .find(|filter| filter.id() == text)
-        .ok_or_else(|| {
-            let known: Vec<&str> = Filter::ALL.iter().map(|filter| filter.id()).collect();
-            format!("expected one of {}", known.join(", "))
-        })
 }
 
 /// `--at bench` and `--at terminal`: where to stand and which way to look.
@@ -1259,7 +663,7 @@ fn initial_heading(cli: &Cli, settlements: Option<&strata::sim::Settlements>) ->
         reason = "camera heading is render-space f32"
     )]
     cli.look.unwrap_or_else(|| {
-        if at_deposit(cli).is_some() || cli.script_survey.is_some() {
+        if at_deposit(cli).is_some() || cli.script_survey() {
             // A start at a deposit is south of it and looks north.
             std::f32::consts::PI
         } else if let Some((_, yaw)) = at_bench(cli, settlements) {
@@ -1280,6 +684,7 @@ fn main() -> AppExit {
     #[cfg(target_arch = "wasm32")]
     let mut cli = web::cli();
     cli.resolve_play_mode();
+    #[cfg(feature = "dev-tools")]
     if let Some(refused) = cli.spends_the_played_household() {
         fail(&refused);
         return AppExit::error();
@@ -1331,6 +736,7 @@ fn main() -> AppExit {
         &Files::installed(),
         Seed(cli.seed),
         &prepare_water(&cli),
+        water_cache(&cli).as_deref(),
     ) {
         Ok((masses, seconds)) => {
             report(&format!(
@@ -1374,6 +780,17 @@ fn fail(line: &str) {
     eprintln!("{line}");
     #[cfg(target_arch = "wasm32")]
     web::fail(line);
+}
+
+/// Where a native start keeps the baked rivers, a directory beside the
+/// generated assets (an index and a file a mass; gitignored, regenerated,
+/// shared with the server). None in the browser and with a data bundle, which
+/// carries its own.
+fn water_cache(cli: &Cli) -> Option<std::path::PathBuf> {
+    if cfg!(target_arch = "wasm32") || cli.data_bundle.is_some() {
+        return None;
+    }
+    Some(cli.generated.join("hydrology"))
 }
 
 /// Install the native adapters of the two ports the game reads and writes
@@ -1462,8 +879,7 @@ fn build(cli: Cli, prepared: Option<grounding::Prepared>) -> Result<App, String>
     if cli.headless {
         // A scripted run's clock is manual (one tick a frame), so pacing
         // the loop would only make it slower.
-        let wait = if cli.combat_script || cli.script_survey.is_some() || cli.script_quest.is_some()
-        {
+        let wait = if cli.scripted_clock() {
             Duration::ZERO
         } else {
             Duration::from_secs_f64(1.0 / 60.0)
@@ -1477,14 +893,12 @@ fn build(cli: Cli, prepared: Option<grounding::Prepared>) -> Result<App, String>
         .add_systems(
             OnEnter(AppState::InWorld),
             (
-                deposits::init,
-                factions::init,
-                camps::resolve_at,
-                household::init.run_if(resource_exists::<household::HouseholdFile>),
-                household::people::locate.run_if(resource_exists::<household::HouseholdFile>),
-                spawn_headless_player,
-            )
-                .chain(),
+                (camps::resolve_at, camps::sync_launch)
+                    .chain()
+                    .after(GameSet::World)
+                    .before(GameSet::Household),
+                spawn_headless_player.after(GameSet::Household),
+            ),
         )
         .add_systems(Update, log_headless_progress);
     } else {
@@ -1518,7 +932,8 @@ fn build(cli: Cli, prepared: Option<grounding::Prepared>) -> Result<App, String>
         // Before `StrataPlugins::client()` reads the settings path.
         #[cfg(target_arch = "wasm32")]
         web::insert_resources(&mut app);
-        if cli.wireframe {
+        #[cfg(feature = "dev-tools")]
+        if cli.dev.wireframe {
             app.insert_resource(strata::client::debug::WireframeWanted);
         }
         // A source has to exist before the asset plugin builds its server.
@@ -1568,61 +983,43 @@ fn build(cli: Cli, prepared: Option<grounding::Prepared>) -> Result<App, String>
                     ..default()
                 }),
             StrataPlugins::client(),
+            veyra_ui::VeyraUiPlugin,
             world_load(&cli),
-            AshlarPlugin::default(),
+            // The content step validates what it bakes; the preflight would read every map twice
+            // and, on the web, fetch all of them in turn before the city could draw.
+            AshlarPlugin {
+                preflight: false,
+                ..default()
+            },
         ))
         .add_systems(
             OnEnter(AppState::InWorld),
             (
-                deposits::init,
-                factions::init,
-                camps::resolve_at,
-                household::init.run_if(resource_exists::<household::HouseholdFile>),
-                household::people::locate.run_if(resource_exists::<household::HouseholdFile>),
-                spawn_camera,
-            )
-                .chain(),
-        )
-        .add_systems(
-            Update,
-            (
-                take_screenshots,
-                open_pause_for_shot,
-                open_screens_for_shot,
-                open_dialogue_for_shot,
-                open_render_for_shot,
-                track_for_shot,
-                ping_for_shot,
-                sampling_for_shot,
+                (camps::resolve_at, camps::sync_launch)
+                    .chain()
+                    .after(GameSet::World)
+                    .before(GameSet::Household),
+                spawn_camera.after(GameSet::Household),
             ),
-        )
-        // After the camera set, which writes the trigger from the mouse (and
-        // clears it in an unfocused window), so the held trigger is the
-        // last word.
-        .init_resource::<GuardHold>()
-        .add_systems(
-            Update,
-            (hold_fire_for_shot, hold_guard_for_shot, hold_aim_for_shot)
-                .after(strata::client::ClientSet::Camera),
         );
+        if cfg!(target_arch = "wasm32") || cli.data_bundle.is_some() {
+            water_fetch::install(&mut app);
+        }
         let generated = data_files(&cli).under("generated");
         // The weapon pictures' index, read once; without it the diagram
         // draws boxes. A window's business only: nothing below the client
         // knows the pictures exist. After the plugins, so the log plugin
         // is there to say which it was.
-        app.insert_resource(strata::client::ui::weapon_diagram::WeaponPictures::read(
-            &generated,
-        ));
+        app.insert_resource(veyra_ui::weapon_diagram::WeaponPictures::read(&generated));
         // The weapon models' index likewise: without it the hand keeps the
         // old art.
-        app.insert_resource(strata::client::weapon_model::WeaponModels::read(&generated));
+        app.insert_resource(veyra_ui::weapon_model::WeaponModels::read(&generated));
         // The bike's likewise: without it a box stands under the rider.
-        app.insert_resource(strata::client::ride_art::BikeModels::read(&generated));
-        app.insert_resource(if cli.fitting_view == "diagram" {
-            strata::client::ui::fitting::WellView::Diagram
-        } else {
-            strata::client::ui::fitting::WellView::Model
-        });
+        app.insert_resource(strata::client::view::BikeModels::read(&generated));
+        // The props' likewise: without it the cuboids stand where the kit's
+        // pieces would.
+        app.insert_resource(household::PropKit::read(&generated));
+        app.insert_resource(veyra_ui::fitting::WellView::Model);
         settlement::install(&mut app);
         sites::install(&mut app);
         crossings::install(&mut app);
@@ -1632,8 +1029,7 @@ fn build(cli: Cli, prepared: Option<grounding::Prepared>) -> Result<App, String>
         // must not depend on whether its window happened to get focus:
         // Bevy's game default drops an unfocused window to 60 Hz, which a
         // benchmark would record as the game's frame rate.
-        if cli.frames.is_some() || cli.flight || cli.screenshot.is_some() || cli.bench_out.is_some()
-        {
+        if cli.frames.is_some() || cli.flight || cli.recorded() {
             app.insert_resource(bevy::winit::WinitSettings::continuous());
         }
         #[cfg(not(feature = "net"))]
@@ -1646,82 +1042,78 @@ fn build(cli: Cli, prepared: Option<grounding::Prepared>) -> Result<App, String>
             // sim's states and sets, and the scripted walk for a player
             // that arrives from the server. The other players' capsules
             // are the client plugin's own business.
-            let Some(replication) = client_replication(server, &cli) else {
+            let Some((replication, parts)) = client_replication(server, &cli) else {
                 return Err("could not configure replication".to_owned());
             };
-            app.add_plugins(replication)
+            // The game's numbers in the handshake, before the plugin reads them.
+            app.insert_resource(parts)
+                .add_plugins(replication)
                 .add_systems(Update, script_connected_player);
         }
     }
 
-    // The debug statistics only when asked for, and never over a
-    // screenshot of a screen, whose corner they would cover.
-    if !cli.headless {
-        app.insert_resource(strata::client::hud::HudVisible(
-            cli.stats
-                && !(cli.open_sheet
-                    || cli.open_loadout
-                    || cli.open_bench
-                    || cli.open_stores
-                    || cli.open_inventory
-                    || cli.open_survey
-                    || cli.open_map.is_some()
-                    || cli.open_journal
-                    || cli.open_dialogue.is_some()
-                    || cli.open_register
-                    || cli.open_fitting.is_some()
-                    || cli.open_crafting.is_some()
-                    || cli.open_factory
-                    || cli.open_board),
-        ));
-    }
-    // A still of the stores is taken wherever the run stands, which is
-    // seldom at a locker, so for that run the store is reached from
-    // anywhere. The rule itself is the sim's and stays the rule.
-    if cli.open_stores {
-        app.insert_resource(strata::sim::items::StoreAccess::Anywhere);
-    }
-    // The same for a still of the fitting screen or the crafting screen and
-    // the workbench, and of the factory and the fabricator, which is held
-    // to the same lifted rule, unless the script walks to one.
-    if (cli.open_fitting.is_some()
-        || cli.open_crafting.is_some()
-        || cli.craft_first.is_some()
-        || cli.open_factory
-        || cli.open_board
-        || cli.factory_run.is_some()
-        || cli.factory_poor_lot)
-        && !cli.script_progression
-        && !cli.script_crafting
-    {
-        app.insert_resource(strata::sim::fitting::WorkbenchAccess::Anywhere);
-    }
-    if cli.rework_first && !cli.script_progression {
-        app.add_systems(Update, rework_first_for_shot);
-    }
-    if cli.craft_first.is_some() && !cli.script_progression {
-        app.init_resource::<CraftFirst>()
-            .add_systems(Update, craft_first_for_shot);
-    }
     install_scenarios(&mut app, &cli, prepared);
     insert_overrides(&mut app, &cli);
     combat::install(&mut app, &cli);
-    if !cli.press.is_empty() {
+    app.add_plugins(GamePlugin::new(
+        launch_of(&cli),
+        household::household_file(&cli),
+    ))
+    .configure_sets(Last, ExitSystems.before(GameSet::SaveOnExit));
+    household::install(&mut app, &cli);
+    #[cfg(feature = "dev-tools")]
+    veyra_dev::install(
+        &mut app,
+        &cli.dev,
+        cli.headless,
+        cli.combat,
+        cli.look,
+        veyra_dev::RunFacts {
+            frames: cli.frames,
+            flight: cli.flight,
+            flight_secs: cli.flight_secs,
+        },
+    );
+    #[cfg(not(feature = "dev-tools"))]
+    if let Some(frames) = cli.frames {
         app.add_systems(
             Update,
-            press_for_shot.after(strata::client::ClientSet::Camera),
+            move |count: Res<FrameCount>, mut exit: MessageWriter<AppExit>| {
+                if count.0 >= frames {
+                    exit.write(AppExit::Success);
+                }
+            },
         );
     }
-    household::install(&mut app, &cli);
-    ride::install(&mut app, &cli);
-    survey_script::install(&mut app, &cli);
-    app.insert_resource(cli)
-        .init_resource::<Shots>()
-        .add_systems(
-            Update,
-            (exit_when_done, report_stalled_walker, release_scripted_walk),
-        );
+    let auto_walk = cli.auto_walk;
+    app.insert_resource(cli).add_systems(
+        Update,
+        report_stalled_walker.run_if(any_with_component::<ScriptedIntent>),
+    );
+    if auto_walk {
+        app.add_systems(Update, release_scripted_walk);
+    }
     Ok(app)
+}
+
+/// What the headless side reads of the command line.
+fn launch_of(cli: &Cli) -> Launch {
+    #[allow(unused_mut, reason = "only the development flags add to it")]
+    let mut launch = Launch {
+        combat: cli.combat,
+        headless: cli.headless,
+        frames: cli.frames,
+        at: cli.at.clone(),
+        spawn: cli.spawn,
+        camp_tier: cli.camp_tier,
+        deposits: cli.combat
+            || at_deposit(cli).is_some()
+            || cli.at.as_deref().and_then(camps::claim_spec).is_some(),
+        ..default()
+    };
+    #[cfg(feature = "dev-tools")]
+    cli.dev.launch(&mut launch);
+    launch
 }
 
 /// The adapter features asked for beyond what Bevy enables itself. The
@@ -1753,25 +1145,6 @@ fn run(cli: Cli, prepared: Option<grounding::Prepared>) -> AppExit {
 /// The resources a flag overrides or turns on: the benchmark recorder, the
 /// time of day and the wind.
 fn insert_overrides(app: &mut App, cli: &Cli) {
-    if cli.bench_out.is_some() && !cli.headless {
-        let floor = Duration::from_secs_f64(cli.bench_warmup.max(0.0));
-        let ceiling = Duration::from_secs_f64(cli.bench_warm_ceiling.max(0.0));
-        let recorder = match cli.bench_warm.as_str() {
-            "idle" => BenchRecorder::until_settled(floor, ceiling),
-            "hold" => BenchRecorder::holding(
-                floor,
-                ceiling,
-                Duration::from_secs_f64(cli.bench_lead.max(0.0)),
-            ),
-            _ => BenchRecorder::new(floor),
-        };
-        app.insert_resource(recorder);
-        if cli.bench_warm == "hold" {
-            // The flight path and the scripted walkers read it; the
-            // recorder lets it go.
-            app.insert_resource(MotionHold::default());
-        }
-    }
     if let Some(time) = cli.time {
         app.insert_resource(DayStart(time));
     }
@@ -1788,23 +1161,30 @@ fn insert_overrides(app: &mut App, cli: &Cli) {
 /// flight as much farther as a minute and a quarter at 200 m/s goes.
 fn prepare_water(cli: &Cli) -> strata::sim::PrepareWater {
     let flown = if cli.flight { 15_000.0 } else { 0.0 };
+    // Masses that come over the network are read (or fetched) as far as the
+    // first view samples; a start with every file at hand bakes or reads out
+    // to the whole 128 km. The rounds ahead keep the whole reach, and the
+    // first one asks for the 128 km square at once, so a sample past 96 km
+    // finds its mass fetched, not baked on the browser's one thread.
+    let web = cfg!(target_arch = "wasm32") || cli.data_bundle.is_some();
+    let reach = if web {
+        strata::sim::WEB_PREPARE_RADIUS_M
+    } else {
+        strata::sim::PREPARE_WATER_RADIUS_M
+    };
     strata::sim::PrepareWater {
         places: vec![cli.spawn.unwrap_or((0.0, 0.0))],
-        radius_m: strata::sim::PREPARE_WATER_RADIUS_M + flown,
+        radius_m: reach + flown,
+        ahead_radius_m: web.then_some(strata::sim::PREPARE_WATER_RADIUS_M + flown),
     }
 }
 
 /// Height of the flycam above the ground at spawn and on the flight.
 const CAMERA_ALTITUDE: f64 = 120.0;
 
-/// Height of the player's feet above the ground at spawn: a short drop, so
-/// the first thing the character does is land.
-const PLAYER_DROP: f64 = 2.0;
+pub(crate) use veyra_game::PLAYER_DROP;
 
-/// The player's capsule height in the combat build, metres: a head taller
-/// than the controller's default, which the city's walkability audit stands
-/// in every doorway and stair as the player would.
-pub(crate) const PLAYER_HEIGHT_M: f32 = 1.8;
+pub(crate) use veyra_game::PLAYER_HEIGHT_M;
 
 /// Where `--spawn` (or dry land near the origin) puts things: the dry
 /// point and the ground height there.
@@ -1814,7 +1194,7 @@ fn spawn_point(
     settlements: Option<&strata::sim::Settlements>,
     survey: Option<&strata::sim::deposits::Survey>,
 ) -> (f64, f64, f64) {
-    if let Some(class) = cli.script_survey.as_deref()
+    if let Some(class) = cli.script_survey_class()
         && cli.spawn.is_none()
     {
         let from =
@@ -2161,16 +1541,16 @@ fn spawn_camera(
             Transform::default(),
         ))
         .id();
+    let (orbit_distance, orbit_yaw, orbit_pitch) = cli.orbit();
     if cli.combat {
         commands.entity(camera).insert((
-            {
-                let mut camera = strata::client::combat::CombatCamera::default();
-                camera.hold = cli.orbit_distance;
-                camera.yaw_offset = cli.orbit_yaw.unwrap_or(0.).to_radians();
-                camera
+            veyra_view::combat::CombatCamera {
+                hold: orbit_distance,
+                yaw_offset: orbit_yaw.unwrap_or(0.).to_radians(),
+                ..default()
             },
             OrbitCamera {
-                pitch: cli.orbit_pitch.map_or(-0.16, f32::to_radians),
+                pitch: orbit_pitch.map_or(-0.16, f32::to_radians),
                 yaw: quest.as_deref().map_or_else(
                     || initial_heading(&cli, settlements.as_deref()),
                     |start| start.yaw,
@@ -2191,12 +1571,6 @@ fn apply_aa(commands: &mut Commands, camera: Entity, aa: &str) {
         _ => return,
     };
     commands.entity(camera).insert(choice);
-}
-
-fn open_render_for_shot(mut commands: Commands, cli: Res<Cli>, frame: Res<FrameCount>) {
-    if cli.open_render_panel && frame.0 == 120 {
-        strata::client::ui::render::open(&mut commands);
-    }
 }
 
 /// How far a scripted walker must get in a second before it counts as
@@ -2352,803 +1726,6 @@ fn script_connected_player(
     }
 }
 
-/// The frame `--open-pause` pushes the pause screen on: late enough for
-/// the terrain around the spawn to be drawn under it.
-pub(crate) const OPEN_PAUSE_FRAME: u32 = 120;
-
-/// `--open-pause`: the pause screen over the world, once, as Escape would.
-fn open_pause_for_shot(
-    cli: Res<Cli>,
-    frames: Res<FrameCount>,
-    mut commands: Commands,
-    mut opened: Local<bool>,
-) {
-    if !cli.open_pause || *opened || frames.0 < OPEN_PAUSE_FRAME {
-        return;
-    }
-    *opened = true;
-    strata::client::ui::open_pause(&mut commands);
-}
-
-/// `--press`: one `place@frame`.
-fn parse_press(text: &str) -> Result<(usize, u32), String> {
-    let (place, frame) = text.split_once('@').ok_or("want place@frame, as 0@200")?;
-    Ok((
-        place.parse().map_err(|error| format!("place: {error}"))?,
-        frame.parse().map_err(|error| format!("frame: {error}"))?,
-    ))
-}
-
-/// `--press`: the places asked for are pressed on their frames, written
-/// where the keys write them, so the sim's rule answers a press as it
-/// answers a hand's.
-fn press_for_shot(
-    cli: Res<Cli>,
-    frames: Res<FrameCount>,
-    mut players: Query<&mut strata::sim::combat::CombatIntent, With<LocalPlayer>>,
-) {
-    for (place, _) in cli.press.iter().filter(|(_, frame)| *frame == frames.0) {
-        for mut input in &mut players {
-            input.ability = Some(*place);
-        }
-    }
-}
-
-/// `--hold-fire`: the player's trigger is down for the given seconds from
-/// frame 120, written where the mouse button would write it.
-fn hold_fire_for_shot(
-    cli: Res<Cli>,
-    frames: Res<FrameCount>,
-    time: Res<Time>,
-    mut began: Local<Option<f32>>,
-    mut players: Query<
-        (
-            &mut strata::sim::combat::CombatIntent,
-            &strata::sim::WorldPosition,
-        ),
-        With<LocalPlayer>,
-    >,
-    hostiles: Query<
-        (&strata::sim::WorldPosition, &strata::sim::combat::Combatant),
-        Without<LocalPlayer>,
-    >,
-) {
-    let Some(seconds) = cli.hold_fire else {
-        return;
-    };
-    if frames.0 < OPEN_PAUSE_FRAME {
-        return;
-    }
-    let now = time.elapsed_secs();
-    let start = *began.get_or_insert(now);
-    if now - start > seconds {
-        return;
-    }
-    for (mut input, at) in &mut players {
-        // A window with no focus gives the read of the mouse no aim to keep,
-        // so a still's shots go at the nearest hostile's chest.
-        if let Some((target, _)) = hostiles
-            .iter()
-            .filter(|(_, actor)| actor.health > 0.)
-            .min_by(|(a, _), (b, _)| a.0.distance(at.0).total_cmp(&b.0.distance(at.0)))
-        {
-            input.aim_point = WorldPos::new(target.0.x(), target.0.y() + 0.2, target.0.z());
-        }
-        input.fire = true;
-    }
-}
-
-/// `--hold-aim`: the player's aim button is down for the given seconds from
-/// frame 120, written where the right mouse button would write it.
-fn hold_aim_for_shot(
-    cli: Res<Cli>,
-    frames: Res<FrameCount>,
-    time: Res<Time>,
-    mut began: Local<Option<f32>>,
-    mut players: Query<&mut strata::sim::combat::CombatIntent, With<LocalPlayer>>,
-) {
-    let Some(seconds) = cli.hold_aim else {
-        return;
-    };
-    if frames.0 < OPEN_PAUSE_FRAME {
-        return;
-    }
-    let now = time.elapsed_secs();
-    let start = *began.get_or_insert(now);
-    if now - start > seconds {
-        return;
-    }
-    for mut input in &mut players {
-        input.aim = true;
-    }
-}
-
-/// Whether `--hold-guard` is holding the button this frame, for the scripted
-/// fight to read instead of its own last output.
-#[derive(Resource, Default)]
-struct GuardHold(bool);
-
-/// `--hold-guard`: the player's aim button is down for the given seconds
-/// from frame 120, which with a melee weapon in hand is the guard.
-fn hold_guard_for_shot(
-    cli: Res<Cli>,
-    frames: Res<FrameCount>,
-    time: Res<Time>,
-    mut began: Local<Option<f32>>,
-    mut hold: ResMut<GuardHold>,
-    mut players: Query<&mut strata::sim::combat::CombatIntent, With<LocalPlayer>>,
-) {
-    let Some(seconds) = cli.hold_guard else {
-        return;
-    };
-    hold.0 = false;
-    if frames.0 < OPEN_PAUSE_FRAME {
-        return;
-    }
-    let now = time.elapsed_secs();
-    let start = *began.get_or_insert(now);
-    if now - start > seconds {
-        return;
-    }
-    hold.0 = true;
-    for mut input in &mut players {
-        input.aim = true;
-    }
-}
-
-/// `--track`: the nearest deposit of the type to the default start is
-/// tracked, once the survey is there to ask. Asked of the sim as the
-/// register's row asks, so what is tracked is the sim's and is saved with
-/// the household like any other.
-fn track_for_shot(
-    cli: Res<Cli>,
-    survey: Option<Res<strata::sim::deposits::Survey>>,
-    source: Option<Res<WorldSourceRes>>,
-    settlements: Option<Res<strata::sim::Settlements>>,
-    mut inbox: ResMut<strata::sim::deposits::SurveyInbox>,
-    mut asked: Local<bool>,
-) {
-    let (Some(wanted), Some(survey), Some(source), false) =
-        (cli.track.as_deref(), survey, source, *asked)
-    else {
-        return;
-    };
-    *asked = true;
-    let from = combat::default_spawn(&source, settlements.as_deref())
-        .map_or((0.0, 0.0), |(x, _, z)| (x, z));
-    let Some(deposit) = deposits::nearest_of(&survey, wanted, from) else {
-        warn!("--track {wanted}: no such deposit near the default start");
-        return;
-    };
-    info!(
-        "deposits: tracking {} at ({:.0}, {:.0}), {:.0} m from the default start",
-        deposit.place,
-        deposit.at[0],
-        deposit.at[1],
-        deposit.distance_m(from.0, from.1)
-    );
-    inbox
-        .0
-        .push(strata::sim::deposits::SurveyRequest::Track(Some(
-            deposit.id,
-        )));
-}
-
-/// The frame `--ping` waits for before it asks: the player is spawned and
-/// stands in the world.
-const PING_FRAME: u32 = 70;
-
-/// `--ping <class>`: the ping the survey screen's button would send, once
-/// the player is in the world. The class is an id, taken as the `strata`
-/// namespace's when it names none. Sent once, asked of the sim like any
-/// other, so the channel plays and the household learns what it meets.
-fn ping_for_shot(
-    cli: Res<Cli>,
-    frames: Res<FrameCount>,
-    players: Query<(), With<LocalPlayer>>,
-    mut inbox: ResMut<strata::sim::deposits::SurveyInbox>,
-    mut answers: MessageReader<strata::sim::deposits::PingAnswer>,
-    mut asked: Local<bool>,
-) {
-    for answer in answers.read() {
-        match &answer.outcome {
-            Ok(strata::sim::deposits::PingDone::Met(result)) => info!(
-                "--ping: {} deposits met, the strongest {}",
-                result.found.len(),
-                result.found.first().map_or(0, |met| met.pm)
-            ),
-            Ok(strata::sim::deposits::PingDone::Started) => {}
-            Err(refusal) => warn!("--ping: {refusal}"),
-        }
-    }
-    let Some(class) = cli.ping.as_deref() else {
-        return;
-    };
-    if *asked || frames.0 < PING_FRAME || players.is_empty() {
-        return;
-    }
-    *asked = true;
-    let full = if class.contains(':') {
-        class.to_owned()
-    } else {
-        format!("strata:{class}")
-    };
-    if let Ok(class) = full.parse() {
-        inbox
-            .0
-            .push(strata::sim::deposits::SurveyRequest::Ping { class });
-    } else {
-        warn!("--ping {class}: not a class id");
-    }
-}
-
-/// `--sampling`: Sample is asked once, when the ping `--ping` asked for has
-/// been answered (or, with no `--ping`, once the player stands in the
-/// world), from where the player stands; the sim says whether there is
-/// anything found to sample here.
-fn sampling_for_shot(
-    cli: Res<Cli>,
-    frames: Res<FrameCount>,
-    last: Res<strata::sim::deposits::LastPing>,
-    players: Query<(), With<LocalPlayer>>,
-    mut inbox: ResMut<strata::sim::deposits::SurveyInbox>,
-    mut answers: MessageReader<strata::sim::deposits::SampleAnswer>,
-    mut asked: Local<bool>,
-) {
-    for answer in answers.read() {
-        if let Err(refusal) = answer.outcome {
-            warn!("--sampling: {refusal}");
-        }
-    }
-    if !cli.sampling || *asked || players.is_empty() {
-        return;
-    }
-    let ready = if cli.ping.is_some() {
-        last.0.is_some()
-    } else {
-        frames.0 >= PING_FRAME
-    };
-    if ready {
-        *asked = true;
-        inbox.0.push(strata::sim::deposits::SurveyRequest::Sample);
-    }
-}
-
-/// `--rework-first`: the first hand's weapon is reworked once, by the request
-/// the Rework button sends, and the sim's answer is said in the log.
-fn rework_first_for_shot(
-    frames: Res<FrameCount>,
-    mut inbox: ResMut<strata::sim::rework::ReworkInbox>,
-    mut answers: MessageReader<strata::sim::rework::ReworkAnswer>,
-    mut asked: Local<bool>,
-) {
-    use strata::sim::rework::ReworkRequest;
-    for answer in answers.read() {
-        match &answer.result {
-            Ok(done) => info!(
-                "--rework-first: {:?}, moddability {} to {}",
-                done.outcome, done.from, done.to
-            ),
-            Err(refusal) => warn!("--rework-first: {refusal}"),
-        }
-    }
-    if !*asked && frames.0 >= CRAFT_FIRST_FRAME {
-        inbox.0.push(ReworkRequest::Rework { hand: 0 });
-        *asked = true;
-    }
-}
-
-/// `--craft-first`: where the making stands.
-#[derive(Resource, Debug, Default)]
-struct CraftFirst {
-    /// A request is with the sim.
-    asked: bool,
-    /// The thing is made, and recorded when `--record-first` asks for it,
-    /// or cannot be.
-    done: bool,
-}
-
-/// The frame `--craft-first` starts on: the world is up and the household
-/// has handed its stock to the sim.
-const CRAFT_FIRST_FRAME: u32 = 40;
-
-/// `--craft-first`: one of the named schematic is made before the still's
-/// screen opens, by the requests a screen would send and the sim's own
-/// choice of stock: Assemble from the best stock, each point steady on the
-/// first line with room, Finish, and with `--record-first` Record. Each
-/// request waits for its answer; one the sim refuses ends it, said in the
-/// log.
-#[allow(
-    clippy::too_many_arguments,
-    reason = "the flag, the clock, the stock the sim would pick from and the two ends of a request"
-)]
-fn craft_first_for_shot(
-    cli: Res<Cli>,
-    frames: Res<FrameCount>,
-    registries: Option<Res<strata::sim::Registries>>,
-    craft: Res<strata::sim::crafting::CraftState>,
-    store: Res<strata::sim::items::HouseholdStore>,
-    players: Query<&strata::sim::items::Pack, With<strata::sim::LocalPlayer>>,
-    mut inbox: ResMut<strata::sim::crafting::CraftInbox>,
-    mut answers: MessageReader<strata::sim::crafting::CraftAnswer>,
-    mut first: ResMut<CraftFirst>,
-) {
-    use strata::registry::schematic::Hand;
-    use strata::sim::crafting::{self, CraftDone, CraftRequest};
-    for answer in answers.read() {
-        first.asked = false;
-        match &answer.outcome {
-            Ok(CraftDone::Finished { product }) => {
-                info!(
-                    "--craft-first: made {} batch {}",
-                    product.item, product.batch
-                );
-                // `--record-first`: the thing just made is recorded by
-                // the request the Record box sends, and that is waited on.
-                if let Some(percent) = cli.record_first {
-                    inbox.0.push(CraftRequest::Record {
-                        batch: product.batch,
-                        derate: percent.saturating_mul(10),
-                    });
-                    first.asked = true;
-                } else {
-                    first.done = true;
-                }
-            }
-            Ok(CraftDone::Recorded {
-                blueprint, runs, ..
-            }) => {
-                info!("--record-first: blueprint {blueprint}, {runs} runs");
-                first.done = true;
-            }
-            Ok(_) => {}
-            Err(refusal) => {
-                warn!("--craft-first: {refusal}");
-                first.done = true;
-            }
-        }
-    }
-    if first.done || first.asked || frames.0 < CRAFT_FIRST_FRAME {
-        return;
-    }
-    let (Some(name), Some(registries), Ok(pack)) =
-        (cli.craft_first.as_deref(), registries, players.single())
-    else {
-        return;
-    };
-    let registries = &registries.0;
-    let request = match &craft.session {
-        None => {
-            let schematic = strata::client::ui::crafting::schematic_named(registries, name)
-                .and_then(|id| registries.schematics.get(&id));
-            let Some(schematic) = schematic else {
-                warn!("--craft-first {name}: no such schematic");
-                first.done = true;
-                return;
-            };
-            CraftRequest::Assemble {
-                schematic: schematic.def.id.clone(),
-                picks: crafting::best_stock(registries, pack, Some(&store), schematic),
-            }
-        }
-        Some(session) => session
-            .lines
-            .iter()
-            .find(|line| session.points > 0 && !line.at_ceiling())
-            .map_or(CraftRequest::Finish, |line| CraftRequest::Roll {
-                line: line.line.clone(),
-                hand: Hand::Steady,
-            }),
-    };
-    inbox.0.push(request);
-    first.asked = true;
-}
-
-/// `--open-sheet`, `--open-bench`, `--open-stores`, `--open-inventory`,
-/// `--open-survey`, `--open-register`, `--open-fitting`, `--open-crafting`
-/// and `--open-factory` without the script: the screen over the world on
-/// the same frame as the pause would be, or once `--craft-first` has made
-/// its thing and `--factory-run` has started its run (or, with
-/// `--factory-finish`, finished it) and `--factory-poor-lot` has stocked
-/// its lot. With the script the
-/// script opens the sheet, the bench, the fitting and the crafting where
-/// they belong, and has no stop for the rest.
-#[allow(
-    clippy::too_many_arguments,
-    reason = "the flag, the clock, the four things a still waits on, and the reach a bench opens by"
-)]
-fn open_screens_for_shot(
-    cli: Res<Cli>,
-    frames: Res<FrameCount>,
-    first: Option<Res<CraftFirst>>,
-    run: Option<Res<household::FactoryShot>>,
-    lot: Option<Res<household::PoorLotShot>>,
-    joined: Option<Res<household::JoinShot>>,
-    board: Option<Res<household::BoardShot>>,
-    reach: Option<Res<strata::sim::progression::Reach>>,
-    mut commands: Commands,
-    mut opened: Local<bool>,
-) {
-    if cli.script_progression || *opened || frames.0 < OPEN_PAUSE_FRAME {
-        return;
-    }
-    if first.is_some_and(|first| !first.done)
-        || run.is_some_and(|run| !run.done)
-        || lot.is_some_and(|lot| !lot.done)
-        || joined.is_some_and(|joined| !joined.done)
-        || board.is_some_and(|board| !board.stocked)
-    {
-        return;
-    }
-    *opened = true;
-    if cli.open_survey {
-        strata::client::ui::survey::open(&mut commands);
-    }
-    if let Some(scale) = &cli.open_map {
-        if let Some(scale) = strata::client::ui::map::Scale::parse(scale) {
-            strata::client::ui::map::set_holders(&mut commands, cli.map_holders);
-            strata::client::ui::map::open_at(&mut commands, Some(scale));
-        } else {
-            warn!("--open-map takes near, region or far, not {scale}");
-        }
-    }
-    if cli.open_register {
-        strata::client::ui::bench::open_on(
-            &mut commands,
-            false,
-            strata::client::ui::bench::BenchTab::Register,
-        );
-    }
-    if let Some(filter) = cli.stores_filter {
-        strata::client::ui::stores::show_nth(&mut commands, filter, cli.stores_pin);
-    }
-    if cli.open_sheet {
-        // On the tree of the trainer stood before, as their F opens it.
-        let tree = reach.as_ref().and_then(|reach| match &reach.nearest {
-            Some((_, strata::sim::progression::InteractionKind::Trainer { trees })) => {
-                trees.first().cloned()
-            }
-            _ => None,
-        });
-        strata::client::ui::sheet::open(&mut commands, tree);
-    }
-    if cli.open_loadout {
-        strata::client::ui::sheet::open_loadout(&mut commands);
-    }
-    if cli.open_bench {
-        // Live where a terminal's F would open it (`--at terminal` stands
-        // at one), a reading anywhere else.
-        let at_terminal = reach.is_some_and(|reach| {
-            matches!(
-                reach.nearest,
-                Some((_, strata::sim::progression::InteractionKind::Terminal))
-            )
-        });
-        strata::client::ui::bench::open(&mut commands, at_terminal);
-    }
-    if cli.open_stores {
-        strata::client::ui::stores::open(&mut commands, true);
-    } else if cli.open_inventory {
-        strata::client::ui::stores::open(&mut commands, false);
-    }
-    if let Some(mount) = &cli.open_fitting {
-        strata::client::ui::fitting::open_at(&mut commands, cli.fitting_hand, Some(mount.clone()));
-        if cli.fitting_pick {
-            strata::client::ui::fitting::pick_first(&mut commands);
-        }
-    }
-    if let Some(filter) = cli.crafting_filter {
-        strata::client::ui::crafting::set_filter(&mut commands, filter.filter());
-    }
-    if let Some(schematic) = &cli.open_crafting {
-        strata::client::ui::crafting::open_for_still(
-            &mut commands,
-            schematic,
-            cli.crafting_still(),
-        );
-    }
-    if cli.open_factory {
-        strata::client::ui::factory::open(&mut commands);
-    }
-    if cli.open_board {
-        strata::client::ui::board::open(&mut commands, household::pelagic_works());
-    }
-    if cli.open_journal {
-        strata::client::ui::journal::open(&mut commands);
-    }
-}
-
-/// `--open-dialogue`: ask for the person's conversation once the household
-/// is in their reach, as their F does, on or after frame 120.
-fn open_dialogue_for_shot(
-    cli: Res<Cli>,
-    frames: Res<FrameCount>,
-    reach: Option<Res<strata::sim::progression::Reach>>,
-    inbox: Option<ResMut<strata::sim::quests::DialogueInbox>>,
-    mut opened: Local<bool>,
-) {
-    let (Some(name), Some(reach), Some(mut inbox)) = (cli.open_dialogue.as_deref(), reach, inbox)
-    else {
-        return;
-    };
-    if *opened || frames.0 < OPEN_PAUSE_FRAME {
-        return;
-    }
-    let Ok(id) = format!("veyra:person.{name}").parse() else {
-        return;
-    };
-    if reach.people.contains(&id) {
-        inbox.0.push(strata::sim::quests::DialogueRequest::Open(id));
-        *opened = true;
-    }
-}
-
-/// Screenshot bookkeeping: how many were requested and how many are on
-/// disk.
-#[derive(Resource, Default)]
-struct Shots {
-    requested: u32,
-    saved: u32,
-}
-
-/// The frame a screenshot is taken on when nothing says otherwise.
-const DEFAULT_SHOT_FRAME: u32 = 60;
-
-impl Cli {
-    /// The frames `--screenshot` captures on.
-    fn shot_frames(&self) -> Vec<u32> {
-        if !self.shot_frames.is_empty() {
-            return self.shot_frames.clone();
-        }
-        vec![self.frames.unwrap_or(DEFAULT_SHOT_FRAME)]
-    }
-
-    /// The screenshot path for `frame`, with `{frame}` substituted.
-    fn shot_path(&self, frame: u32) -> Option<PathBuf> {
-        let pattern = self.screenshot.as_ref()?.to_string_lossy().into_owned();
-        Some(PathBuf::from(
-            pattern.replace("{frame}", &frame.to_string()),
-        ))
-    }
-}
-
-/// `--screenshot`: capture on each requested frame.
-///
-/// The capture is asynchronous (a GPU readback), so completion is counted
-/// by the observer rather than assumed a fixed number of frames later.
-/// `save_to_disk` writes synchronously inside the observer, so when the
-/// count goes up the file exists.
-fn take_screenshots(
-    mut commands: Commands,
-    cli: Res<Cli>,
-    frames: Res<FrameCount>,
-    mut shots: ResMut<Shots>,
-) {
-    if cli.screenshot.is_none() {
-        return;
-    }
-    let due = cli
-        .shot_frames()
-        .into_iter()
-        .filter(|f| *f <= frames.0)
-        .count();
-    // Frames are counted, not summed; the cast cannot truncate.
-    #[allow(clippy::cast_possible_truncation)]
-    let due = due as u32;
-    while shots.requested < due {
-        let frame = cli.shot_frames()[shots.requested as usize];
-        shots.requested += 1;
-        let Some(path) = cli.shot_path(frame) else {
-            return;
-        };
-        #[cfg(not(target_arch = "wasm32"))]
-        if let Some(parent) = path.parent() {
-            std::fs::create_dir_all(parent).ok();
-        }
-        info!("capturing frame {} to {}", frames.0, path.display());
-        let mut save = save_to_disk(path);
-        commands.spawn(Screenshot::primary_window()).observe(
-            move |captured: On<ScreenshotCaptured>, mut shots: ResMut<Shots>| {
-                save(captured);
-                shots.saved += 1;
-            },
-        );
-    }
-}
-
-/// Exits once everything that was asked for has happened: `--frames` have
-/// run, every screenshot is saved, and a scripted flight has lasted
-/// `--flight-secs`. With none of those asked for, runs forever.
-#[cfg_attr(
-    target_arch = "wasm32",
-    allow(unused_variables, reason = "only the native bench summary reads them")
-)]
-fn exit_when_done(
-    cli: Res<Cli>,
-    frames: Res<FrameCount>,
-    shots: Res<Shots>,
-    flights: Query<&FlightPath>,
-    script: Option<Res<household::ProgressionScript>>,
-    // What the benchmark summary reads when the run ends, and the scripted
-    // ride's report.
-    (loaded, bench, entities, clock, ride, survey, quest): (
-        Option<Res<LoadedRegions>>,
-        Option<Res<BenchRecorder>>,
-        Query<Entity>,
-        Option<Res<strata::client::stats::WorkClock>>,
-        Option<Res<ride::ScriptRide>>,
-        Option<Res<survey_script::ScriptSurvey>>,
-        Option<Res<household::script_quest::QuestScript>>,
-    ),
-    mut exit: MessageWriter<AppExit>,
-) {
-    let mut asked = false;
-    let mut done = true;
-    if let Some(limit) = cli.frames {
-        asked = true;
-        done &= frames.0 >= limit;
-    }
-    if cli.screenshot.is_some() {
-        asked = true;
-        // Frames are counted, not summed; the cast cannot truncate.
-        #[allow(clippy::cast_possible_truncation)]
-        let wanted = cli.shot_frames().len() as u32;
-        done &= shots.saved >= wanted;
-    }
-    if cli.flight && cli.frames.is_none() {
-        asked = true;
-        done &= flights.iter().any(|f| f.elapsed >= cli.flight_secs);
-    }
-    if cli.script_progression && cli.frames.is_none() {
-        asked = true;
-        done &= script.is_some_and(|s| s.done());
-    }
-    if cli.script_ride && cli.frames.is_none() {
-        asked = true;
-        done &= ride.is_some_and(|ride| ride.done());
-    }
-    if cli.script_survey.is_some() && cli.frames.is_none() {
-        asked = true;
-        done &= survey.is_some_and(|survey| survey.done());
-    }
-    if cli.script_quest.is_some() && cli.frames.is_none() {
-        asked = true;
-        done &= quest.is_some_and(|quest| quest.done());
-    }
-    if let Some(wanted) = cli.bench_frames {
-        asked = true;
-        done &= bench
-            .as_deref()
-            .is_some_and(|b| b.measured_frames() >= wanted);
-    }
-    if let Some(wanted) = cli.bench_secs {
-        asked = true;
-        done &= bench
-            .as_deref()
-            .is_some_and(|b| b.measured_secs() >= wanted);
-    }
-    if asked && done {
-        let regions = loaded.map_or(0, |l| l.len());
-        info!(
-            "done after {} frames with {regions} regions loaded, exiting",
-            frames.0
-        );
-        #[cfg(not(target_arch = "wasm32"))]
-        if let (Some(path), Some(bench)) = (&cli.bench_out, bench)
-            && let Err(error) = write_bench(
-                path,
-                &bench,
-                clock.as_deref(),
-                regions,
-                entities.iter().count(),
-            )
-        {
-            error!(
-                "writing the benchmark summary to {}: {error}",
-                path.display()
-            );
-            exit.write(AppExit::error());
-            return;
-        }
-        exit.write(AppExit::Success);
-    }
-}
-
-/// The benchmark summary as a flat JSON object, for `tools/bench.py`.
-#[cfg(not(target_arch = "wasm32"))]
-fn write_bench(
-    path: &std::path::Path,
-    bench: &BenchRecorder,
-    clock: Option<&strata::client::stats::WorkClock>,
-    regions: usize,
-    entities: usize,
-) -> std::io::Result<()> {
-    let summary = bench.summary_with(clock).ok_or_else(|| {
-        std::io::Error::other("no frame was measured; the run ended inside its warm-up")
-    })?;
-    let mut fields = vec![
-        ("frames", summary.frames.to_string()),
-        ("mean_ms", format!("{:.3}", summary.mean_ms)),
-        ("p50_ms", format!("{:.3}", summary.p50_ms)),
-        ("p95_ms", format!("{:.3}", summary.p95_ms)),
-        ("p99_ms", format!("{:.3}", summary.p99_ms)),
-        ("worst_ms", format!("{:.3}", summary.worst_ms)),
-        ("over_33ms", summary.over_33ms.to_string()),
-        ("gpu_mean_ms", format!("{:.3}", summary.gpu_mean_ms)),
-        ("main_p50_ms", format!("{:.3}", summary.main_ms[0])),
-        ("main_p95_ms", format!("{:.3}", summary.main_ms[1])),
-        ("main_p99_ms", format!("{:.3}", summary.main_ms[2])),
-        ("main_max_ms", format!("{:.3}", summary.main_ms[4])),
-        ("render_p50_ms", format!("{:.3}", summary.render_ms[0])),
-        ("render_p95_ms", format!("{:.3}", summary.render_ms[1])),
-        ("render_p99_ms", format!("{:.3}", summary.render_ms[2])),
-        ("render_max_ms", format!("{:.3}", summary.render_ms[4])),
-        ("regions", regions.to_string()),
-        ("entities", entities.to_string()),
-        ("warmup_s", format!("{:.2}", summary.warmup_s)),
-        ("warm_up", format!("\"{}\"", summary.warm_up.name())),
-    ];
-    if let Some(held) = summary.held_s {
-        fields.push(("held_s", format!("{held:.2}")));
-    }
-    // The terrain and collider streamers over the whole measured stretch:
-    // rates from totals, not medians of the log's two-second intervals.
-    let s = &summary.stream;
-    fields.extend([
-        (
-            "regions_pending_mean",
-            format!("{:.2}", s.regions_pending_mean),
-        ),
-        ("regions_pending_max", s.regions_pending_max.to_string()),
-        ("terrain_tasks_mean", format!("{:.2}", s.terrain_tasks_mean)),
-        ("terrain_tasks_max", s.terrain_tasks_max.to_string()),
-        (
-            "terrain_uploads_per_frame",
-            format!("{:.3}", s.uploads_per_frame),
-        ),
-        ("terrain_uploads_max_frame", s.uploads_max_frame.to_string()),
-        ("terrain_uploads_per_s", format!("{:.2}", s.uploads_per_s)),
-        (
-            "terrain_cancelled_per_s",
-            format!("{:.2}", s.cancelled_per_s),
-        ),
-        ("heightfields_per_s", format!("{:.2}", s.heightfields_per_s)),
-        (
-            "colliders_added_per_s",
-            format!("{:.2}", s.colliders_added_per_s),
-        ),
-        (
-            "colliders_removed_per_s",
-            format!("{:.2}", s.colliders_removed_per_s),
-        ),
-    ]);
-    // How far the observer went, which `tools/bench.py` holds a moving
-    // fixture to.
-    if let Some(travel) = summary.travel {
-        fields.push(("travel_m", format!("{:.1}", travel.metres)));
-        fields.push(("speed_mps", format!("{:.3}", travel.speed_mps)));
-        if let Some(slowest) = travel.slowest_span_m {
-            fields.push(("slowest_5s_m", format!("{slowest:.2}")));
-        }
-    }
-    // The cost line's medians over the measured stretch, when one was
-    // written after the warm-up.
-    if let Some(cost) = summary.cost {
-        for (key, value) in strata::client::stats::COST_KEYS.iter().zip(cost) {
-            fields.push((*key, format!("{value:.3}")));
-        }
-    }
-    let body: Vec<String> = fields
-        .iter()
-        .map(|(key, value)| format!("\"{key}\": {value}"))
-        .collect();
-    let json = format!("{{{}}}\n", body.join(", "));
-    if let Some(parent) = path.parent() {
-        std::fs::create_dir_all(parent)?;
-    }
-    std::fs::write(path, json)
-}
-
 #[cfg(feature = "net")]
 /// The adapter as a client of `server`, with the versions of the tree
 /// library and the site groups under `--generated` and of the world the
@@ -3158,7 +1735,10 @@ fn write_bench(
 /// says which. `None`
 /// having said why a version cannot be read (most often: run `just
 /// content`).
-fn client_replication(server: std::net::SocketAddr, cli: &Cli) -> Option<ReplicationPlugin> {
+fn client_replication(
+    server: std::net::SocketAddr,
+    cli: &Cli,
+) -> Option<(ReplicationPlugin, strata::net_replicon::VersionParts)> {
     let files = Files::installed();
     let library = strata_flora::TreeLibrary::read_from(&files.under("generated"))
         .map(|library| library.version)
@@ -3170,14 +1750,15 @@ fn client_replication(server: std::net::SocketAddr, cli: &Cli) -> Option<Replica
     let site_groups = strata::sim::sites::site_groups_version_from(&files)
         .map_err(|error| eprintln!("{error}"))
         .ok()?;
-    Some(
+    let parts =
+        strata::game_version_parts(strata::sim::combat_tables::current().version(), site_groups);
+    Some((
         ReplicationPlugin::client(server)
             .with_tree_library(library)
             .with_world_version(world)
-            .with_seed(cli.seed)
-            .with_combat_tables(strata::sim::combat_tables::current().version())
-            .with_site_groups(site_groups),
-    )
+            .with_seed(cli.seed),
+        parts,
+    ))
 }
 
 /// The scripted scenarios a run may carry: the slice's route and the
@@ -3191,7 +1772,7 @@ fn install_scenarios(app: &mut App, cli: &Cli, prepared: Option<grounding::Prepa
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "dev-tools"))]
 mod fog_flag_tests {
     use super::*;
 
@@ -3240,10 +1821,10 @@ mod fog_flag_tests {
     /// went with the screen.
     #[test]
     fn the_fitting_flags_name_a_mount_and_a_hand() {
-        assert_eq!(Cli::parse_from(["game"]).open_fitting, None);
+        assert_eq!(Cli::parse_from(["game"]).dev.open_fitting, None);
         let cli = Cli::parse_from(["game", "--open-fitting"]);
-        assert_eq!(cli.open_fitting.as_deref(), Some("feed"));
-        assert_eq!((cli.fitting_hand, cli.fitting_pick), (None, false));
+        assert_eq!(cli.dev.open_fitting.as_deref(), Some("feed"));
+        assert_eq!((cli.dev.fitting_hand, cli.dev.fitting_pick), (None, false));
         let cli = Cli::parse_from([
             "game",
             "--open-fitting",
@@ -3254,9 +1835,12 @@ mod fog_flag_tests {
             "--fitted",
             "veyra:module.patrol_extended_feed",
         ]);
-        assert_eq!(cli.open_fitting.as_deref(), Some("muzzle"));
-        assert_eq!((cli.fitting_hand, cli.fitting_pick), (Some(1), true));
-        assert_eq!(cli.fitted, ["veyra:module.patrol_extended_feed"]);
+        assert_eq!(cli.dev.open_fitting.as_deref(), Some("muzzle"));
+        assert_eq!(
+            (cli.dev.fitting_hand, cli.dev.fitting_pick),
+            (Some(1), true)
+        );
+        assert_eq!(cli.dev.fitted, ["veyra:module.patrol_extended_feed"]);
         for args in [
             &["game", "--fitting-hand", "1"][..],
             &["game", "--fitting-pick"],
@@ -3272,11 +1856,11 @@ mod fog_flag_tests {
     #[test]
     fn the_crafting_flags_parse() {
         let cli = Cli::parse_from(["game"]);
-        assert_eq!(cli.open_crafting, None);
-        assert_eq!(cli.crafting_state, CraftingShot::Pick);
+        assert_eq!(cli.dev.open_crafting, None);
+        assert_eq!(cli.dev.crafting_state, veyra_dev::CraftingShot::Pick);
         let cli = Cli::parse_from(["game", "--open-crafting"]);
-        assert_eq!(cli.open_crafting.as_deref(), Some("cell_core"));
-        assert_eq!(cli.crafting_state, CraftingShot::Pick);
+        assert_eq!(cli.dev.open_crafting.as_deref(), Some("cell_core"));
+        assert_eq!(cli.dev.crafting_state, veyra_dev::CraftingShot::Pick);
         let cli = Cli::parse_from([
             "game",
             "--open-crafting",
@@ -3284,13 +1868,16 @@ mod fog_flag_tests {
             "--crafting-state",
             "hand",
         ]);
-        assert_eq!(cli.open_crafting.as_deref(), Some("patrol_extended_feed"));
-        assert_eq!(cli.crafting_state, CraftingShot::Hand);
+        assert_eq!(
+            cli.dev.open_crafting.as_deref(),
+            Some("patrol_extended_feed")
+        );
+        assert_eq!(cli.dev.crafting_state, veyra_dev::CraftingShot::Hand);
         let cli = Cli::parse_from(["game", "--open-crafting", "--crafting-state", "done"]);
-        assert_eq!(cli.open_crafting.as_deref(), Some("cell_core"));
-        assert_eq!(cli.crafting_state, CraftingShot::Done);
+        assert_eq!(cli.dev.open_crafting.as_deref(), Some("cell_core"));
+        assert_eq!(cli.dev.crafting_state, veyra_dev::CraftingShot::Done);
         let cli = Cli::parse_from(["game", "--open-crafting", "--crafting-state", "empty"]);
-        assert_eq!(cli.crafting_state, CraftingShot::Empty);
+        assert_eq!(cli.dev.crafting_state, veyra_dev::CraftingShot::Empty);
         // A thing made first, for a still of what takes it or of its card.
         let cli = Cli::parse_from([
             "game",
@@ -3299,8 +1886,11 @@ mod fog_flag_tests {
             "--open-crafting",
             "patrol_extended_feed",
         ]);
-        assert_eq!(cli.craft_first.as_deref(), Some("cell_core"));
-        assert_eq!(cli.open_crafting.as_deref(), Some("patrol_extended_feed"));
+        assert_eq!(cli.dev.craft_first.as_deref(), Some("cell_core"));
+        assert_eq!(
+            cli.dev.open_crafting.as_deref(),
+            Some("patrol_extended_feed")
+        );
         let cli = Cli::parse_from([
             "game",
             "--craft-first",
@@ -3309,7 +1899,7 @@ mod fog_flag_tests {
             "--stores-filter",
             "parts",
         ]);
-        assert!(cli.open_stores && cli.craft_first.is_some());
+        assert!(cli.dev.open_stores && cli.dev.craft_first.is_some());
         assert!(
             Cli::try_parse_from(["game", "--script-crafting", "--craft-first", "cell_core"])
                 .is_err()
@@ -3356,7 +1946,7 @@ mod fog_flag_tests {
         // walks to, so the two go together.
         let mut cli = Cli::parse_from(["game", "--script-crafting", "--open-crafting"]);
         cli.resolve_play_mode();
-        assert!(cli.script_progression && cli.open_crafting.is_some());
+        assert!(cli.dev.script_progression && cli.dev.open_crafting.is_some());
         for args in [
             &["game", "--crafting-state", "hand"][..],
             &["game", "--open-crafting", "--crafting-state", "rolled"],
@@ -3369,18 +1959,19 @@ mod fog_flag_tests {
     /// opens with somebody on it, and the finished card with Record open
     /// at a derating.
     #[test]
+    #[allow(clippy::too_many_lines, reason = "one flag family in one test")]
     fn the_factory_flags_parse() {
         let cli = Cli::parse_from(["game"]);
-        assert!(!cli.open_factory && !cli.factory_worker);
-        assert_eq!((cli.factory_run, cli.record_derate), (None, 85));
-        assert!(!cli.factory_finish && !cli.factory_poor_lot);
-        assert_eq!(cli.record_first, None);
+        assert!(!cli.dev.open_factory && !cli.dev.factory_worker);
+        assert_eq!((cli.dev.factory_run, cli.dev.record_derate), (None, 85));
+        assert!(!cli.dev.factory_finish && !cli.dev.factory_poor_lot);
+        assert_eq!(cli.dev.record_first, None);
         let cli = Cli::parse_from(["game", "--open-factory"]);
-        assert!(cli.open_factory);
-        assert_eq!(cli.factory_run, None, "a still of the idle screen");
+        assert!(cli.dev.open_factory);
+        assert_eq!(cli.dev.factory_run, None, "a still of the idle screen");
         // A batch of twenty unless another is named.
         let cli = Cli::parse_from(["game", "--open-factory", "--factory-run"]);
-        assert_eq!(cli.factory_run, Some(20));
+        assert_eq!(cli.dev.factory_run, Some(20));
         let cli = Cli::parse_from([
             "game",
             "--open-factory",
@@ -3388,15 +1979,21 @@ mod fog_flag_tests {
             "5",
             "--factory-worker",
         ]);
-        assert_eq!((cli.factory_run, cli.factory_worker), (Some(5), true));
+        assert_eq!(
+            (cli.dev.factory_run, cli.dev.factory_worker),
+            (Some(5), true)
+        );
         // The bench's still of who is working takes a run and no factory.
         let cli = Cli::parse_from(["game", "--open-bench", "--factory-run", "--factory-worker"]);
-        assert!(cli.open_bench && !cli.open_factory);
-        assert_eq!((cli.factory_run, cli.factory_worker), (Some(20), true));
+        assert!(cli.dev.open_bench && !cli.dev.open_factory);
+        assert_eq!(
+            (cli.dev.factory_run, cli.dev.factory_worker),
+            (Some(20), true)
+        );
         // Record is a state of the crafting screen, at 85 % unless told.
         let cli = Cli::parse_from(["game", "--open-crafting", "--crafting-state", "record"]);
-        assert_eq!(cli.crafting_state, CraftingShot::Record);
-        assert_eq!(cli.record_derate, 85);
+        assert_eq!(cli.dev.crafting_state, veyra_dev::CraftingShot::Record);
+        assert_eq!(cli.dev.record_derate, 85);
         let cli = Cli::parse_from([
             "game",
             "--open-crafting",
@@ -3405,10 +2002,10 @@ mod fog_flag_tests {
             "--record-derate",
             "70",
         ]);
-        assert_eq!(cli.record_derate, 70);
+        assert_eq!(cli.dev.record_derate, 70);
         {
-            use strata::client::ui::crafting::Still;
-            assert_eq!(cli.crafting_still(), Still::Record(700), "per-mille");
+            use veyra_ui::crafting::Still;
+            assert_eq!(cli.dev.crafting_still(), Still::Record(700), "per-mille");
         }
         // What a still of the factory needs first: a blueprint recorded
         // off a thing made, a lot it refuses, and for the stores the run
@@ -3421,8 +2018,8 @@ mod fog_flag_tests {
             "--record-first",
             "--factory-poor-lot",
         ]);
-        assert_eq!(cli.record_first, Some(85));
-        assert!(cli.factory_poor_lot);
+        assert_eq!(cli.dev.record_first, Some(85));
+        assert!(cli.dev.factory_poor_lot);
         let cli = Cli::parse_from([
             "game",
             "--open-stores",
@@ -3434,7 +2031,10 @@ mod fog_flag_tests {
             "2",
             "--factory-finish",
         ]);
-        assert_eq!((cli.record_first, cli.factory_finish), (Some(100), true));
+        assert_eq!(
+            (cli.dev.record_first, cli.dev.factory_finish),
+            (Some(100), true)
+        );
         // A paused run's still and one of the bench at a terminal with
         // everyone on it.
         let cli = Cli::parse_from([
@@ -3444,9 +2044,9 @@ mod fog_flag_tests {
             "3",
             "--factory-full-store",
         ]);
-        assert!(cli.factory_full_store && !cli.join_all);
+        assert!(cli.dev.factory_full_store && !cli.dev.join_all);
         let cli = Cli::parse_from(["game", "--at", "terminal", "--open-bench", "--join-all"]);
-        assert!(cli.join_all && cli.open_bench);
+        assert!(cli.dev.join_all && cli.dev.open_bench);
         assert_eq!(cli.at.as_deref(), Some("terminal"));
         for args in [
             &["game", "--record-first"][..],
@@ -3475,7 +2075,7 @@ mod fog_flag_tests {
         // lifted for it; a still's run has none to stand at.
         let mut cli = Cli::parse_from(["game", "--script-crafting"]);
         cli.resolve_play_mode();
-        assert!(cli.script_progression && cli.factory_run.is_none());
+        assert!(cli.dev.script_progression && cli.dev.factory_run.is_none());
     }
 
     /// A still that starts a run or records spends the household it is run
@@ -3514,21 +2114,21 @@ mod fog_flag_tests {
     /// nothing in the household.
     #[test]
     fn the_loadout_flag_reads() {
-        assert!(!Cli::parse_from(["game"]).open_loadout);
+        assert!(!Cli::parse_from(["game"]).dev.open_loadout);
         let cli = Cli::parse_from(["game", "--open-loadout", "--grant", "heavy_cut"]);
-        assert!(cli.open_loadout);
-        assert_eq!(cli.grant, ["heavy_cut"]);
+        assert!(cli.dev.open_loadout);
+        assert_eq!(cli.dev.grant, ["heavy_cut"]);
     }
 
     /// The stills of step 3: the survey screen, the register, a tracked deposit, a
     /// start before the bench place, and the stores on one kind of stock.
     #[test]
     fn the_survey_flags_read() {
-        use strata::client::ui::stores::Filter;
+        use veyra_ui::stores::Filter;
         let cli = Cli::parse_from(["game"]);
-        assert!(!cli.open_survey && !cli.open_register);
-        assert!(cli.ping.is_none() && !cli.sampling);
-        assert_eq!((cli.track, cli.stores_filter), (None, None));
+        assert!(!cli.dev.open_survey && !cli.dev.open_register);
+        assert!(cli.dev.ping.is_none() && !cli.dev.sampling);
+        assert_eq!((cli.dev.track, cli.dev.stores_filter), (None, None));
         let cli = Cli::parse_from([
             "game",
             "--at",
@@ -3539,16 +2139,19 @@ mod fog_flag_tests {
             "--track",
             "light_alloy_ore",
         ]);
-        assert!(cli.open_survey);
-        assert_eq!(cli.ping.as_deref(), Some("conductor"));
+        assert!(cli.dev.open_survey);
+        assert_eq!(cli.dev.ping.as_deref(), Some("conductor"));
         assert_eq!(cli.at.as_deref(), Some("deposit:sulphur"));
-        assert_eq!(cli.track.as_deref(), Some("light_alloy_ore"));
+        assert_eq!(cli.dev.track.as_deref(), Some("light_alloy_ore"));
         let cli = Cli::parse_from(["game", "--at", "bench", "--open-register"]);
         assert_eq!(cli.at.as_deref(), Some("bench"));
-        assert!(cli.open_register);
+        assert!(cli.dev.open_register);
         assert!(at_deposit(&cli).is_none());
         let cli = Cli::parse_from(["game", "--open-stores", "--stores-filter", "lots"]);
-        assert_eq!((cli.stores_filter, cli.stores_pin), (Some(Filter::Lots), 0));
+        assert_eq!(
+            (cli.dev.stores_filter, cli.dev.stores_pin),
+            (Some(Filter::Lots), 0)
+        );
         let cli = Cli::parse_from([
             "game",
             "--open-stores",
@@ -3557,7 +2160,7 @@ mod fog_flag_tests {
             "--stores-pin",
             "2",
         ]);
-        assert_eq!(cli.stores_pin, 2);
+        assert_eq!(cli.dev.stores_pin, 2);
         assert!(Cli::try_parse_from(["game", "--open-stores", "--stores-pin", "2"]).is_err());
         assert!(Cli::parse_from(["game", "--at", "deposit", "--no-hostiles"]).no_hostiles);
         assert_eq!(

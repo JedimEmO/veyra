@@ -22,7 +22,7 @@ use bevy::input::mouse::{
 use bevy::math::{EulerRot, Quat, Vec2, Vec3};
 use bevy::time::{Fixed, Time};
 use bevy::transform::components::Transform;
-use strata_sim::{LocalPlayer, PreviousWorldPosition, RenderOrigin, WorldPosition, WorldSourceRes};
+use veyra_sim::{LocalPlayer, PreviousWorldPosition, RenderOrigin, WorldPosition, WorldSourceRes};
 
 /// The orbit camera's angles and distance. Attach to the camera entity;
 /// it follows whichever entity is the [`LocalPlayer`].
@@ -97,7 +97,7 @@ impl OrbitCamera {
 pub fn look(
     mouse: Res<ButtonInput<MouseButton>>,
     motion: Res<AccumulatedMouseMotion>,
-    mut cameras: Query<&mut OrbitCamera, Without<crate::combat::CombatCamera>>,
+    mut cameras: Query<&mut OrbitCamera, Without<crate::view::CombatCamera>>,
 ) {
     if !mouse.pressed(MouseButton::Right) || motion.delta == Vec2::ZERO {
         return;
@@ -112,7 +112,7 @@ pub fn look(
 /// Scroll changes the boom length geometrically.
 pub fn zoom(
     scroll: Res<AccumulatedMouseScroll>,
-    mut cameras: Query<&mut OrbitCamera, Without<crate::combat::CombatCamera>>,
+    mut cameras: Query<&mut OrbitCamera, Without<crate::view::CombatCamera>>,
 ) {
     if scroll.delta.y == 0.0 {
         return;
@@ -133,7 +133,7 @@ pub fn follow(
     time: Res<Time<Fixed>>,
     origin: Res<RenderOrigin>,
     source: Option<Res<WorldSourceRes>>,
-    view: Option<Res<crate::ride_art::RideView>>,
+    view: Option<Res<crate::view::RideView>>,
     players: Query<
         (
             &WorldPosition,
@@ -142,7 +142,7 @@ pub fn follow(
         ),
         With<LocalPlayer>,
     >,
-    mut cameras: Query<(&OrbitCamera, &mut Transform), Without<crate::combat::CombatCamera>>,
+    mut cameras: Query<(&OrbitCamera, &mut Transform), Without<crate::view::CombatCamera>>,
 ) {
     let Ok((position, previous, controller)) = players.single() else {
         return;

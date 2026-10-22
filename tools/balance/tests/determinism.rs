@@ -4,7 +4,7 @@
 
 use balance::report::bout_row;
 use balance::{Cell, Policy, Profile, Side, Winner, bout, preset};
-use strata_sim::combat::Weapon;
+use veyra_rules::combat::Weapon;
 
 #[test]
 fn the_same_seed_and_tables_give_the_same_row() {

@@ -127,6 +127,13 @@ pub struct RenderLook {
     /// the graphics preset writes it (`strata_client::ui::graphics`): MSAA
     /// or TAA is the one cost the presets can drop that no other field says.
     pub no_aa: bool,
+    /// The share of the window's width and height the 3D camera renders at,
+    /// 0.5 to 1.0 ([`crate::render_scale`]). Under 1 the camera draws to an
+    /// image that a second camera stretches over the window and sharpens, so
+    /// every pass that reads the view's size follows the smaller image and
+    /// the UI stays at the window's. A look saved before the field existed
+    /// renders at the window's size.
+    pub render_scale: f32,
     /// Contrast around middle grey, before tonemapping.
     pub contrast: f32,
     /// Saturation after tonemapping.
@@ -366,6 +373,7 @@ impl Default for RenderLook {
             // MSAA (chosen 2026-09-27).
             taa: true,
             no_aa: false,
+            render_scale: 1.0,
             contrast: 1.0,
             saturation: 1.0,
             contact_shadows: false,
@@ -447,8 +455,8 @@ impl Default for RenderLook {
             // The ground painted (ticket 0006, pass 1, 2026-10-10).
             ground_colour: 1.4,
             ground_warmth: 0.75,
-            ground_near_tint: 0.6,
-            ground_near_value: 0.5,
+            ground_near_tint: 0.95,
+            ground_near_value: 0.0,
             ground_grain: 0.7,
             ground_normal: 0.6,
             ground_matte: 0.55,
@@ -621,6 +629,7 @@ impl LookFile {
             ("aberration", l.aberration, 0.0, 1.0),
             // Auto exposure by night (lighting plan phase 4, after review).
             ("auto exposure by night", l.auto_exposure_night, 0.0, 1.0),
+            ("render scale", l.render_scale, 0.5, 1.0),
             // The water (lighting plan phase 5a).
             ("water reflection", l.water_reflection, 0.0, 1.0),
             ("water foam", l.water_foam, 0.0, 1.0),

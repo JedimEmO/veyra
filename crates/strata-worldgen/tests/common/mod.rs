@@ -1,12 +1,12 @@
 //! Shared fixtures for the integration tests.
 
 use strata_core::Seed;
-use strata_registry::GameRegistries;
+use strata_data::WorldDefs;
 use strata_worldgen::ProceduralWorld;
 
 /// The shipped asset set, the one the game boots with.
-pub fn registries() -> GameRegistries {
-    strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+pub fn registries() -> WorldDefs {
+    strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
         .expect("the shipped assets load")
 }
 

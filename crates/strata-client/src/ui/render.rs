@@ -2,15 +2,21 @@
 
 use bevy::app::{App, Startup, Update};
 use bevy::ecs::prelude::*;
-use bevy::input::{ButtonInput, keyboard::KeyCode};
+use bevy::ecs::schedule::{
+    SystemCondition,
+    common_conditions::{resource_changed, resource_exists_and_changed},
+};
+#[cfg(feature = "dev")]
+use bevy::input::ButtonInput;
+use bevy::input::keyboard::KeyCode;
 use bevy::math::Vec2;
 use bevy::ui::widget::Text;
 // Exposure and the lens (lighting plan phase 4b).
 use slotted::menu::{MenuChoice, SettingsRow, SettingsSpec};
 use slotted::ui::{
     ButtonOpts, Layout, LayoutDirection, Length, LocKey, NineAnchor, Place, Presentation,
-    PresentationMode, ScreenKind, ScreenStack, Screens, SelectOption, Tags, TextOpts, TextRole,
-    ToggleStyle, UiNodeDef, Value, ValueRules, ValueStore, pop_screen, push_screen,
+    PresentationMode, ScreenKind, ScreenStack, Screens, SelectOption, Tags, TestIdIndex, TextOpts,
+    TextRole, ToggleStyle, UiNodeDef, Value, ValueRules, ValueStore, pop_screen, push_screen,
 };
 use strata_atmosphere::exposure::ExposureMode;
 use strata_atmosphere::{
@@ -172,6 +178,7 @@ const NUMBERS: &[Number] = &[
     ),
     number!(look.ground_air, "Ground air", "ground", 0.0, 2.0, 0.05),
     number!(look.saturation, "Saturation", "look", 0.0, 2.0, 0.01),
+    number!(look.render_scale, "Render scale", "look", 0.5, 1.0, 0.05),
     // Colour scripting (lighting plan phase 4a): the grade by biome and
     // time of day over the look's contrast and saturation; zero is the
     // look's alone.
@@ -593,6 +600,24 @@ pub fn english(key: &str) -> Option<&'static str> {
         })
 }
 
+/// The look panel's words as a fallback catalogue of their own, because the
+/// game's catalogue (`veyra-ui`) is a crate above this one and knows none of
+/// them. The keys are disjoint from the game's, so the order they are asked
+/// in does not matter.
+#[derive(Debug, Default, Clone, Copy)]
+struct RenderStrings;
+
+impl slotted::ui::Localizer for RenderStrings {
+    fn resolve(&self, key: &LocKey, _args: &slotted::ui::LocArgs) -> Option<String> {
+        english(&key.0).map(str::to_owned)
+    }
+}
+
+/// `Startup`: pushes the look panel's fallback.
+pub(crate) fn install_strings(mut localization: ResMut<slotted::ui::Localization>) {
+    localization.push_fallback(RenderStrings);
+}
+
 fn button(action: &str) -> UiNodeDef {
     UiNodeDef::Button {
         widget: None,
@@ -679,6 +704,9 @@ struct PanelState {
 }
 
 pub(crate) fn register(app: &mut App) {
+    slotted::ui::TestIdIndex::install(app.world_mut());
+    #[cfg(feature = "dev")]
+    app.add_systems(Update, toggle.before(actions).in_set(super::ScreenWork));
     app.init_resource::<SkySettings>()
         .init_resource::<RenderLook>()
         .init_resource::<StudySettings>()
@@ -687,7 +715,6 @@ pub(crate) fn register(app: &mut App) {
         .add_systems(
             Update,
             (
-                toggle,
                 actions,
                 apply_values.after(super::graphics::resolve),
                 status,
@@ -696,21 +723,66 @@ pub(crate) fn register(app: &mut App) {
                 .in_set(super::ScreenWork),
         )
         // Sky visibility (lighting plan phase 3a).
-        .add_systems(Update, sync_sky_visibility)
+        .add_systems(
+            Update,
+            sync_sky_visibility.run_if(
+                resource_changed::<RenderLook>
+                    .or_eager(resource_exists_and_changed::<strata_terrain::TerrainLook>)
+                    .or_eager(resource_exists_and_changed::<strata_foliage::FoliageSky>),
+            ),
+        )
+        // The shade's colour (visual.md F4): the grade's `LookUniform` to
+        // each material's own parameters.
+        .add_systems(
+            Update,
+            sync_shade_tint.run_if(
+                resource_exists_and_changed::<strata_atmosphere::grade::LookUniform>
+                    .or_eager(
+                        resource_exists_and_changed::<strata_atmosphere::grade::BuildingGradient>,
+                    )
+                    .or_eager(
+                        resource_exists_and_changed::<
+                            bevy::asset::Assets<ashlar_bevy::anti_tiling::AntiTilingMaterial>,
+                        >,
+                    ),
+            ),
+        )
         // The water (lighting plan phase 5a).
-        .add_systems(Update, sync_water)
+        .add_systems(
+            Update,
+            sync_water.run_if(
+                resource_changed::<RenderLook>
+                    .or_eager(resource_exists_and_changed::<strata_terrain::water::WaterLook>),
+            ),
+        )
         // Irradiance probes (lighting plan phase 3b).
         .add_systems(Update, sync_probe_clouds)
         // Grass against the low sun (lighting plan phase 5b).
-        .add_systems(Update, sync_grass_rim)
+        .add_systems(
+            Update,
+            sync_grass_rim.run_if(
+                resource_changed::<RenderLook>
+                    .or_eager(resource_exists_and_changed::<strata_foliage::FoliageSky>),
+            ),
+        )
         // The ground painted (ticket 0006, pass 1).
-        .add_systems(Update, sync_ground);
+        .add_systems(
+            Update,
+            sync_ground.run_if(
+                resource_changed::<RenderLook>
+                    .or_eager(resource_exists_and_changed::<strata_terrain::TerrainLook>),
+            ),
+        );
 }
 
 // The ground painted (ticket 0006, pass 1).
 /// The terrain's parameters with the look's ground fields written in. The
 /// air is a share of the terrain's own, so the panel has one slider for
 /// its two terms.
+#[allow(
+    clippy::large_types_passed_by_value,
+    reason = "the struct update consumes `params`, and one call a frame"
+)]
 fn ground_params(
     look: &RenderLook,
     params: strata_terrain::material::TerrainParams,
@@ -825,6 +897,78 @@ fn sync_sky_visibility(
     }
 }
 
+/// Carries the grade's shade tint to the terrain material, the foliage and
+/// the anti-tiled building materials, which do not see the atmosphere
+/// crate. Written only where it differs, and a building material that is
+/// new since the last change takes the current tint on the frame it is added.
+#[allow(
+    clippy::float_cmp,
+    reason = "a copy is exact: any difference is a stale copy"
+)]
+fn sync_shade_tint(
+    uniform: Option<Res<strata_atmosphere::grade::LookUniform>>,
+    terrain: Option<ResMut<strata_terrain::TerrainLook>>,
+    foliage: Option<ResMut<strata_foliage::FoliageSky>>,
+    buildings: Option<ResMut<bevy::asset::Assets<ashlar_bevy::anti_tiling::AntiTilingMaterial>>>,
+    gradient: Option<Res<strata_atmosphere::grade::BuildingGradient>>,
+) {
+    let Some(uniform) = uniform else { return };
+    let tint = uniform.shade_tint;
+    let wide = tint.extend(1.0);
+    if let Some(mut terrain) = terrain
+        && terrain.params.shade_tint != wide
+    {
+        terrain.params.shade_tint = wide;
+    }
+    if let Some(mut foliage) = foliage
+        && foliage.shade_tint != tint
+    {
+        foliage.shade_tint = tint;
+    }
+    let Some(mut buildings) = buildings else {
+        return;
+    };
+    // The height gradient's dials (assets/look/buildings.ron): the shader
+    // holds none, and a material built since the last change takes them here.
+    let (height, warm) = gradient.map_or((None, None), |g| {
+        let look = g.0;
+        (
+            Some(bevy::math::Vec4::new(
+                look.grime_m,
+                look.grime,
+                look.reach_m,
+                look.lift,
+            )),
+            Some(bevy::math::Vec4::new(
+                look.warm[0],
+                look.warm[1],
+                look.warm[2],
+                1.0,
+            )),
+        )
+    });
+    let stale: Vec<_> = buildings
+        .iter()
+        .filter(|(_, m)| {
+            m.extension.uniform.shade != wide
+                || height.is_some_and(|h| m.extension.uniform.gradient != h)
+                || warm.is_some_and(|w| m.extension.uniform.warm != w)
+        })
+        .map(|(id, _)| id)
+        .collect();
+    for id in stale {
+        if let Some(mut material) = buildings.get_mut(id) {
+            material.extension.uniform.shade = wide;
+            if let Some(height) = height {
+                material.extension.uniform.gradient = height;
+            }
+            if let Some(warm) = warm {
+                material.extension.uniform.warm = warm;
+            }
+        }
+    }
+}
+
 fn seed(store: &mut ValueStore, file: &LookFile) {
     store.insert("render.preset", file.look.preset.clone());
     store.insert(SHADOW_FILTER, file.look.shadow_filter.as_str());
@@ -915,6 +1059,10 @@ pub fn open(commands: &mut Commands) {
     });
 }
 
+/// F6 opens the panel only with the `dev` feature: the panel's resources and
+/// systems stay (the render look is read by the graphics presets), but a
+/// shipped or web build has no key to the laboratory.
+#[cfg(feature = "dev")]
 fn toggle(keys: Res<ButtonInput<KeyCode>>, stack: Res<ScreenStack>, mut commands: Commands) {
     if !keys.just_pressed(KEY) {
         return;
@@ -1049,7 +1197,8 @@ fn status(
     look: Res<RenderLook>,
     study: Res<StudySettings>,
     cameras: Query<Option<&AaOverride>, With<strata_atmosphere::SkyCamera>>,
-    mut labels: Query<(&Tags, &mut Text)>,
+    index: Res<TestIdIndex>,
+    mut labels: Query<&mut Text>,
 ) {
     let suppressed = cameras
         .iter()
@@ -1068,8 +1217,10 @@ fn status(
         },
         state.status
     );
-    for (tags, mut label) in &mut labels {
-        if tags.get(Tags::TEST_ID) == Some("render.status") && label.0 != text {
+    for entity in index.entities("render.status") {
+        if let Ok(mut label) = labels.get_mut(*entity)
+            && label.0 != text
+        {
             label.0.clone_from(&text);
         }
     }

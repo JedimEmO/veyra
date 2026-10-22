@@ -9,12 +9,13 @@ authors.workspace = true
 
 [features]
 default = ["ui"]
-# The slotted UI: the glass theme, the pause and settings screens from the
+# The slotted UI: the pause and settings screens from the
 # menu templates, and the HUD layers (the debug statistics, the reticle,
 # the hotbar). The Bevy features named here are the ones this crate's own
 # code reaches for; slotted's `ui` feature turns on the rest of Bevy's UI
 # stack (picking, focus, widgets) on the same `bevy` package.
 ui = [
+    "dep:strata-ui",
     "dep:slotted",
     "dep:dirs",
     "dep:serde",
@@ -32,10 +33,9 @@ dev = ["bevy/bevy_pbr"]
 
 [dependencies]
 strata-core = { workspace = true }
-# The skill graph's types, for the character sheet and the bench.
-strata-registry = { workspace = true }
+strata-app = { workspace = true }
 strata-atmosphere = { workspace = true }
-strata-sim = { workspace = true }
+veyra-sim = { workspace = true }
 strata-stream = { workspace = true }
 # The character's dimensions, for the placeholder capsule and the camera's
 # eye height.
@@ -48,8 +48,8 @@ strata-net = { workspace = true }
 strata-terrain = { workspace = true }
 # For the foliage counters in the statistics line, likewise.
 strata-foliage = { workspace = true }
-# The baked weapon pieces in the hand are props over a material library of
-# their own. Featureless, as the foliage crate takes it: no kernel.
+# The anti-tiling material the look panel's building study reads. Featureless,
+# as the foliage crate takes it: no kernel.
 ashlar-bevy = { workspace = true }
 # `bevy_window` for the cursor grab while the right button is held. Input,
 # time and transforms are in the umbrella's always-on set. The placeholder
@@ -63,25 +63,23 @@ bevy = { workspace = true, features = [
     "bevy_mesh",
     "bevy_camera",
     "bevy_pbr",
-    "bevy_gltf",
-    "bevy_animation",
-    "bevy_scene",
-    "bevy_audio",
-    "wav",
 ] }
 tracing = { workspace = true }
+# The screen framework the settings, the HUD and the look panel stand on; the
+# game's screens (`veyra-ui`) stand on it beside this crate, not on it.
+strata-ui = { workspace = true, optional = true }
 slotted = { workspace = true, optional = true, features = ["ui", "menu"] }
 dirs = { workspace = true, optional = true }
-# The weapon diagram's parameters, read from a `custom` node's value.
+# The graphics presets' RON (`assets/look/graphics.ron`).
 serde = { workspace = true, optional = true }
 # The settings are RON in whatever store is installed.
 ron = { workspace = true, optional = true }
 
 [dev-dependencies]
+# Tests read the shipped data compiled in; the shipped binaries read it from disk.
+veyra-sim = { workspace = true, features = ["shipped-data"] }
 slotted-test = { workspace = true, features = ["menu"] }
 ron = { workspace = true }
-# A real faction map under the claim words' tests.
-strata-worldgen = { workspace = true }
 
 [lints]
 workspace = true

@@ -83,10 +83,10 @@ use bevy::render::{Render, RenderApp, RenderSystems};
 use bevy::shader::{Shader, ShaderRef};
 use bevy::state::condition::in_state;
 use bevy::state::state::{OnEnter, OnExit};
-use strata_core::{WorldPos, mix64};
-use strata_sim::{
+use strata_app::{
     AppState, Observers, OriginSet, RenderOrigin, SimClock, Wind, WorldPosition, WorldSourceRes,
 };
+use strata_core::{WorldPos, mix64};
 use strata_stream::StreamConfig;
 
 use crate::TerrainStats;
@@ -877,12 +877,12 @@ fn add_depth_prepass(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use strata_sim::PrimaryObserver;
+    use strata_app::PrimaryObserver;
 
     #[test]
     fn the_plane_follows_the_observer_without_a_renderer() {
         let mut app = App::new();
-        app.add_plugins((bevy::time::TimePlugin, strata_sim::SimPlugin, WaterPlugin));
+        app.add_plugins((bevy::time::TimePlugin, strata_app::AppPlugin, WaterPlugin));
         app.world_mut()
             .spawn((PrimaryObserver, WorldPosition::new(500.0, 30.0, -200.0)));
         for _ in 0..4 {
@@ -904,7 +904,7 @@ mod tests {
     #[test]
     fn the_plane_is_hidden_until_terrain_is_built() {
         let mut app = App::new();
-        app.add_plugins((bevy::time::TimePlugin, strata_sim::SimPlugin, WaterPlugin));
+        app.add_plugins((bevy::time::TimePlugin, strata_app::AppPlugin, WaterPlugin));
         app.init_resource::<TerrainStats>();
         for _ in 0..3 {
             app.update();

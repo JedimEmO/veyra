@@ -5,7 +5,7 @@
 //! server and the client both call [`register_protocol`] and nothing else
 //! registers anything. The types themselves are the sim's where they can
 //! be (`WorldPosition`, `Player`, `PlayerIntent` derive serde in
-//! `strata-sim`); the three defined here are the adapter's own: the clock
+//! `veyra-sim`); the three defined here are the adapter's own: the clock
 //! carrier, the greeting and the intent envelope. Last comes
 //! [`Versions`], which a server sends a client it
 //! refuses so the client can say why.
@@ -19,8 +19,8 @@ use bevy_replicon::prelude::{
 use bevy_replicon::shared::replication::deferred_entity::DeferredEntity;
 use bevy_replicon::shared::replication::registry::ctx::WriteCtx;
 use bevy_replicon::shared::replication::registry::receive_fns;
+use strata_app::{Player, PlayerId, PlayerIntent, WorldPosition};
 use strata_core::{SimTime, WorldPos};
-use strata_sim::{Player, PlayerId, PlayerIntent, WorldPosition};
 
 use crate::handshake::Versions;
 use serde::{Deserialize, Serialize};
@@ -29,7 +29,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// Replicon 0.44 can replicate a resource, but only onto a client that does
 /// not already hold it, and every client holds a `SimClock` from the moment
-/// `SimPlugin` builds. So the clock rides on a singleton entity the server
+/// `AppPlugin` builds. So the clock rides on a singleton entity the server
 /// spawns and the client copies it into its own `SimClock` (and day
 /// settings) whenever it arrives. The day settings travel with it because
 /// the sim owns them (PLAN 4.1): a server that starts at dawn tells every

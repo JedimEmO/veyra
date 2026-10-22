@@ -1,29 +1,16 @@
 //! `--at camp`: a still's start on the trail into the outlaw camp nearest Port
-//! Serein, facing it.
+//! Serein, facing it, and the stills that clear or empty a camp before the sim
+//! reads the ledger. The camps' people are `veyra_game::camps`.
 
 use bevy::prelude::*;
-use strata::physics::avian3d::prelude::{SpatialQuery, SpatialQueryFilter};
-use strata::prelude::*;
 use strata::registry::faction::ClaimKind;
 use strata::sim::ProceduralWorldRes;
-use strata::sim::combat::{BlasterBolt, Combatant};
 use strata::sim::deposits::Survey;
-use strata::sim::encounters::{
-    Allegiance, Cleared, EncounterChanged, EncounterId, Fights, NearEncounters, PlayedClock, Slot,
-    hostility,
-};
 use strata::sim::factions::Factions;
-use strata::sim::sites::NearSites;
-use strata::worldgen::factions::FactionId;
+use veyra_game::Launch;
+use veyra_game::camps::{CAMP_KIND, MACHINE_KIND};
 
 use super::Cli;
-use super::combat::{Birth, spawn_hostile};
-
-/// The outlaw camp's site kind.
-const CAMP_KIND: &str = "strata:wild_camp";
-
-/// The derelict machine's site kind, whose security wears grey metal.
-const MACHINE_KIND: &str = "strata:wreck_works";
 
 /// The kind of site `--at camp`, `--at wreck` and `--at machine` look for.
 fn site_kind_of(at: &str) -> Option<&'static str> {
@@ -158,7 +145,7 @@ pub(super) fn resolve_at(
     let Some(world) = world else {
         return;
     };
-    let stand_off = if cli.cache {
+    let stand_off = if cli.cache() {
         CACHE_STAND_OFF_M
     } else {
         STAND_OFF_M
@@ -172,20 +159,13 @@ pub(super) fn resolve_at(
     }
 }
 
-/// The plate's words for a post's person: `Pelagic Works guard`.
-fn plate_name(kind: ClaimKind, faction: &str) -> String {
-    let key = if kind == ClaimKind::Reserve {
-        "strata.post.warden"
-    } else {
-        "strata.post.guard"
-    };
-    let mut name = faction.to_owned();
-    if let Some(first) = name.get_mut(..1) {
-        first.make_ascii_uppercase();
-    }
-    strata::client::ui::strings::english(key)
-        .unwrap_or(key)
-        .replace("{faction}", &name)
+/// What [`resolve_at`] settled of `--at`, `--spawn` and `--look` is copied to
+/// the headless side's [`Launch`], which the people's start reads, so the two
+/// agree on where the run begins. Right after `resolve_at`, before the
+/// household's start.
+pub(super) fn sync_launch(cli: Res<Cli>, mut launch: ResMut<Launch>) {
+    launch.at.clone_from(&cli.at);
+    launch.spawn = cli.spawn;
 }
 
 /// Whether `--at` asks for a claim, and the faction it names: `claim` is the
@@ -255,295 +235,16 @@ fn claim_view(
     Some((at, yaw))
 }
 
-/// The camps whose people have not all been given ground yet, each as its
-/// camp and the index of a slot in its plan. A camp stands up 260 m or so
-/// out, where the ground may not have streamed, so a slot waits here until
-/// a ray finds it, as the staging fight's places do.
-#[derive(Resource, Default)]
-pub(super) struct Waiting(Vec<(EncounterId, usize)>);
-
-/// What a standing encounter asks of the game: where its people stand, at
-/// what tier, under which allegiance and in whose colour.
-struct Stand<'a> {
-    slots: &'a [Slot],
-    tier: u8,
-    allegiance: Allegiance,
-    holder: Option<FactionId>,
-    /// The words a plate says of a post's person, `None` for a camp's.
-    post: Option<ClaimKind>,
-    /// A post's deposit centre, which is never in water: a slot of its ring
-    /// that is wet is drawn in towards it. `None` for a camp, whose pad is dry.
-    centre: Option<[f64; 2]>,
-}
-
-/// The camp or post `id` names, as it now stands.
-fn stand_of(near: &NearEncounters, id: EncounterId) -> Option<Stand<'_>> {
-    if let Some(camp) = near.camps.iter().find(|camp| camp.id == id) {
-        return Some(Stand {
-            slots: &camp.slots,
-            tier: camp.tier,
-            allegiance: Allegiance::Outlaw(camp.band),
-            holder: camp.band,
-            post: None,
-            centre: None,
-        });
-    }
-    let post = near.posts.iter().find(|post| post.id == id)?;
-    Some(Stand {
-        slots: &post.slots,
-        tier: post.tier,
-        allegiance: Allegiance::Faction(post.faction),
-        holder: Some(post.faction),
-        post: Some(post.kind),
-        centre: Some(post.centre),
-    })
-}
-
-/// A post's person is the team its post's state says: neutral until the post
-/// is crossed, then the hostile team, so a hit lands the same either way and
-/// the enemy rule leaves an uncrossed guard out of every "hostile near" test.
-pub(super) fn sync_post_teams(
-    fights: Res<Fights>,
-    mut people: Query<(&EncounterId, &Allegiance, &mut Combatant)>,
-) {
-    for (id, allegiance, mut actor) in &mut people {
-        if !matches!(id, EncounterId::Post(_)) {
-            continue;
-        }
-        let team = hostility(*allegiance, fights.crossed(*id));
-        if actor.team != team {
-            actor.team = team;
-        }
-    }
-}
-
-/// Turns what the sim stood up and folded into people and back. A folded
-/// camp's or post's people and their bolts go; a standing camp's slots get their
-/// ground as it streams, and a person is made with its tier's scaled stats,
-/// its kind's brain, its holder's allegiance and colour, and no
-/// `ResetPosition`, so F5 leaves a camp as it is. A post's people are named
-/// for their faction and their post, and stand neutral.
-#[allow(
-    clippy::too_many_arguments,
-    reason = "the sim's changes, the world's ground, and what is made"
-)]
-pub(super) fn stage_camps(
-    mut commands: Commands,
-    mut changes: MessageReader<EncounterChanged>,
-    near: Res<NearEncounters>,
-    mut waiting: ResMut<Waiting>,
-    people: Query<(Entity, &EncounterId)>,
-    bolts: Query<(Entity, &BlasterBolt)>,
-    actors: Query<Entity, With<Combatant>>,
-    source: Res<WorldSourceRes>,
-    origin: Res<RenderOrigin>,
-    spatial: SpatialQuery,
-    registries: Res<strata::sim::Registries>,
-    factions: Option<Res<Factions>>,
-) {
-    for change in changes.read() {
-        for id in &change.0.folded {
-            waiting.0.retain(|(waiting, _)| waiting != id);
-            let gone: Vec<Entity> = people
-                .iter()
-                .filter(|(_, person)| *person == id)
-                .map(|(entity, _)| entity)
-                .collect();
-            for (bolt, shot) in &bolts {
-                if gone.contains(&shot.owner) {
-                    commands.entity(bolt).despawn();
-                }
-            }
-            for entity in gone {
-                commands.entity(entity).despawn();
-            }
-        }
-        for id in &change.0.stood {
-            if let Some(stand) = stand_of(&near, *id) {
-                waiting
-                    .0
-                    .extend((0..stand.slots.len()).map(|index| (*id, index)));
-            }
-        }
-    }
-    if waiting.0.is_empty() {
-        return;
-    }
-    let filter = SpatialQueryFilter::from_excluded_entities(actors.iter());
-    let mut pending = Vec::new();
-    for (id, index) in waiting.0.drain(..) {
-        let Some(stand) = stand_of(&near, id) else {
-            continue;
-        };
-        let Slot { kind, at: [x, z] } = stand.slots[index];
-        let (x, z) = stand
-            .centre
-            .map_or((x, z), |centre| dry_towards(&source, [x, z], centre));
-        let Some(ground) = super::household::ground_at(x, z, &source, &origin, &spatial, &filter)
-        else {
-            pending.push((id, index));
-            continue;
-        };
-        let birth = Birth {
-            passive: false,
-            kind,
-            tier: stand.tier,
-            id,
-            allegiance: stand.allegiance,
-        };
-        let at = WorldPos::new(x, ground + super::PLAYER_DROP + 0.9, z);
-        info!(
-            "camp: {} stands at ({x:.0}, {z:.0}), tier {}",
-            kind.name(),
-            stand.tier
-        );
-        let mut person = spawn_hostile(&mut commands, at, birth, &registries.0);
-        let holder = stand
-            .holder
-            .zip(factions.as_deref())
-            .and_then(|(holder, factions)| factions.0.faction(holder));
-        if let Some(holder) = holder {
-            person.insert(strata::client::combat_art::BodyColour(holder.colour));
-            if let Some(kind) = stand.post {
-                person.insert(Name::new(plate_name(kind, &holder.name)));
-            }
-        } else {
-            // An unbanded outlaw keeps the second household look, as before.
-            person.insert(strata::client::combat_art::BodyTint(1));
-            // Scavengers and security units are of no faction: the place's
-            // kind words their plate, and a machine's people wear grey.
-            let place = near
-                .camps
-                .iter()
-                .find(|camp| camp.id == id)
-                .and_then(|camp| registries.0.sites.get(camp.site.kind))
-                .map(|def| def.id.to_string());
-            if let Some(place) = place.as_deref() {
-                if let Some(name) = crew_name(place) {
-                    person.insert(Name::new(name));
-                }
-                if place == MACHINE_KIND {
-                    person.insert(strata::client::combat_art::BodyColour(
-                        strata::client::combat_art::MACHINE_STEEL,
-                    ));
-                }
-            }
-        }
-    }
-    waiting.0 = pending;
-}
-
-/// What a plate says of the unaligned crew of a place of `kind`, if the
-/// kind has one (a camp's people keep their kind's name).
-pub(super) fn crew_name(kind: &str) -> Option<&'static str> {
-    strata::client::ui::strings::english(&format!("strata.crew.{kind}"))
-}
-
-/// The first dry point from `slot` in towards `centre`, in quarters of the
-/// way; the centre itself when every step is wet.
-fn dry_towards(source: &WorldSourceRes, slot: [f64; 2], centre: [f64; 2]) -> (f64, f64) {
-    let world = source.source();
-    [1.0, 0.75, 0.5, 0.25]
-        .into_iter()
-        .map(|share| {
-            (
-                centre[0] + (slot[0] - centre[0]) * share,
-                centre[1] + (slot[1] - centre[1]) * share,
-            )
-        })
-        .find(|&(x, z)| !world.sample(x, z).in_water())
-        .unwrap_or((centre[0], centre[1]))
-}
-
-/// `--cleared`: the camp nearest the member is quiet from the first frame,
-/// once, so a still shows it with nobody standing. `--cache` clears it the
-/// same way and leaves its cache. Runs before the sim reads the ledger.
-#[allow(
-    clippy::too_many_arguments,
-    reason = "the sites, the ledgers a clearing writes and the world a cache is drawn from"
-)]
-pub(super) fn clear_nearest(
-    cli: Res<Cli>,
-    sites: Option<Res<NearSites>>,
-    clock: Res<PlayedClock>,
-    mut cleared: ResMut<Cleared>,
-    mut caches: ResMut<strata::sim::loot::Caches>,
-    (registries, seed, survey): (
-        Option<Res<strata::sim::Registries>>,
-        Option<Res<strata::sim::WorldSeed>>,
-        Option<Res<Survey>>,
-    ),
-    encounters: Option<Res<NearEncounters>>,
-    player: Query<&WorldPosition, With<LocalPlayer>>,
-    mut done: Local<bool>,
-) {
-    if !(cli.cleared || cli.cache) || *done {
-        return;
-    }
-    let (Some(sites), Ok(position)) = (sites, player.single()) else {
-        return;
-    };
-    let (x, z) = (position.0.x(), position.0.z());
-    // Any place an encounter file stands people at: a camp, a wreck or a machine.
-    let places: Vec<String> = registries.as_ref().map_or_else(
-        || vec![CAMP_KIND.to_owned()],
-        |registries| {
-            registries
-                .0
-                .encounters
-                .iter()
-                .filter_map(|def| def.at.site().map(ToString::to_string))
-                .collect()
-        },
-    );
-    let nearest = sites
-        .sites
-        .iter()
-        .filter(|near| places.contains(&near.kind))
-        .min_by(|a, b| {
-            let d = |s: &&strata::sim::sites::NearSite| {
-                (s.site.centre[0] - x).hypot(s.site.centre[1] - z)
-            };
-            d(a).total_cmp(&d(b))
-        });
-    if let Some(near) = nearest {
-        cleared.clear(near.site.id.key(), clock.seconds);
-        if cli.cache
-            && let Some(registries) = registries
-        {
-            let tier = encounters
-                .and_then(|near| near.forced_tier)
-                .unwrap_or_else(|| {
-                    strata::sim::combat_tiers::tier_at(near.site.centre[0], near.site.centre[1])
-                });
-            strata::sim::encounters::leave_cache(
-                &registries.0,
-                near.site.kind(),
-                (near.site.id.key(), near.site.centre, tier),
-                seed.map_or(strata::core::Seed(0), |seed| seed.0),
-                (survey.as_deref(), None),
-                clock.seconds,
-                &mut caches,
-            );
-        }
-        *done = true;
-    }
-}
-
 #[cfg(test)]
 mod tests {
     #![allow(clippy::unwrap_used, reason = "the scenario owns its world")]
 
     use super::*;
     use clap::Parser;
-
-    /// The unaligned crews are worded by their place; a camp's are not.
-    #[test]
-    fn the_crew_of_a_wreck_and_a_machine_have_plates_of_their_own() {
-        assert_eq!(crew_name("strata:wreck"), Some("Scavenger"));
-        assert_eq!(crew_name("strata:wreck_works"), Some("Security unit"));
-        assert_eq!(crew_name(CAMP_KIND), None);
-    }
+    use strata::prelude::*;
+    use strata::sim::combat::Combatant;
+    use strata::sim::encounters::NearEncounters;
+    use strata::sim::encounters::{Allegiance, EncounterId};
 
     /// A member who stands at a camp's door has its tier's people stood up
     /// with their allegiance and ids, and when the member is moved far off

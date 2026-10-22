@@ -16,8 +16,8 @@ use bevy::MinimalPlugins;
 use bevy::app::App;
 use bevy::ecs::prelude::*;
 use bevy::state::state::State;
+use strata_app::{AppPlugin, AppState, PrimaryObserver, WorldLoadPlugin, WorldPosition, WorldSeed};
 use strata_core::{Seed, WorldPos};
-use strata_sim::{AppState, PrimaryObserver, SimPlugin, WorldLoadPlugin, WorldPosition, WorldSeed};
 use strata_stream::{
     LoadedRegions, Region, RegionState, StreamConfig, StreamPlugin, WantedRegions,
 };
@@ -45,7 +45,7 @@ fn app_with_observer(at: WorldPos) -> (App, Entity) {
     app.insert_resource(WorldSeed(Seed(42)));
     app.add_plugins((
         MinimalPlugins,
-        SimPlugin,
+        AppPlugin,
         WorldLoadPlugin::new(assets()),
         StreamPlugin,
         TerrainPlugin,
@@ -113,7 +113,7 @@ fn settle(app: &mut App, timeout: Duration) {
 const SETTLE: Duration = Duration::from_secs(120);
 
 fn assert_every_ready_region_is_meshed(app: &mut App) {
-    let source = app.world().resource::<strata_sim::WorldSourceRes>().clone();
+    let source = app.world().resource::<strata_app::WorldSourceRes>().clone();
     let mut query = app.world_mut().query::<(&Region, Option<&TerrainRegion>)>();
     let mut count = 0;
     for (region, terrain) in query.iter(app.world()) {

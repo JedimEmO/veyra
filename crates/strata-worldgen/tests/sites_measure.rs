@@ -277,7 +277,7 @@ fn probe_sample_cost() {
     };
     // The same points in a world without site kinds: what the pads add.
     let mut registries = common::registries();
-    registries.sites = strata_registry::SiteKindStore::default();
+    registries.sites = strata_data::SiteKindStore::default();
     let bare = ProceduralWorld::new(Seed(42), &registries);
     bare.hydrology().set_threads(common::THREADS);
     bare.prepare_water(city[0], city[1], 32_000.0);
@@ -307,7 +307,7 @@ fn probe_sample_cost() {
 fn probe_startup_bake() {
     let registries = common::registries();
     let mut bare_registries = registries.clone();
-    bare_registries.sites = strata_registry::SiteKindStore::default();
+    bare_registries.sites = strata_data::SiteKindStore::default();
     for (label, registries) in [
         ("without sites", &bare_registries),
         ("with sites", &registries),

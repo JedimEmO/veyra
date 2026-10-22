@@ -4,7 +4,7 @@
 //! what the number means, and `docs/balance/README.md` what to do.
 
 use balance::contracts::{Contracts, table};
-use strata_sim::combat_tables::CombatTables;
+use veyra_rules::combat_tables::CombatTables;
 
 #[test]
 fn every_shipped_band_holds_on_the_shipped_tables() {

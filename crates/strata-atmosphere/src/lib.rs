@@ -65,6 +65,7 @@ pub mod light_rays;
 mod local_fog;
 pub mod look;
 mod prepass;
+pub mod render_scale;
 pub mod study;
 
 use serde::{Deserialize, Serialize};
@@ -85,15 +86,15 @@ use bevy::math::{Quat, UVec2, Vec3};
 use bevy::pbr::{AtmosphereSettings, DistanceFog, FogFalloff};
 use bevy::state::condition::in_state;
 use bevy::transform::components::Transform;
+use strata_app::{AppState, Observers, TimeOfDay, WorldPosition, WorldSourceRes};
 use strata_core::WorldPos;
-use strata_sim::{AppState, Observers, TimeOfDay, WorldPosition, WorldSourceRes};
 use tracing::warn;
 
 /// The day cycle: how a time of day maps to a sun position.
 ///
 /// A resource rather than a constant so the game can set a planet's
 /// latitude from data. The length of the day and where it starts are sim
-/// state (`strata_sim::DayLength`, `strata_sim::DayStart`).
+/// state (`strata_app::DayLength`, `strata_app::DayStart`).
 #[derive(Resource, Debug, Clone, Copy, PartialEq)]
 pub struct DayCycle {
     /// Tilt of the sun's path from the zenith, in radians. At noon the sun
@@ -200,7 +201,9 @@ pub struct SkySettings {
     // The cloud layer (lighting plan phase 2b, `clouds`).
     /// The share of the sky under cloud, `0` to `1`: the cloud image's
     /// quantile its density has to pass. Zero hides the layer and takes the
-    /// cloud shadow off the sun.
+    /// cloud shadow off the sun. With the look's `gate_floor` (`assets/look/clouds.ron`) the
+    /// gaps between groups never cloud over, so the sky stops filling near
+    /// 0.58 and an overcast day needs a raised floor, not this dial.
     pub cloud_cover: f32,
     /// The metres one repeat of the cloud image covers. At 6 km a heap of
     /// cumulus is about a kilometre across and the repeat is not seen from
@@ -292,7 +295,7 @@ impl Default for SkySettings {
             sun_disk_intensity: 1.0,
             soft_shadow_size: None,
             // The cloud layer (lighting plan phase 2b).
-            cloud_cover: 0.45,
+            cloud_cover: 0.32,
             cloud_scale: 6_000.0,
             cloud_speed: 22.0,
             cloud_shear: 0.8,
@@ -376,9 +379,10 @@ pub struct Planet {
     pub radius: f64,
 }
 
-/// Opt a `Camera3d` out of the sky, exposure and tonemapping.
-#[derive(Component, Debug, Clone, Copy, Default)]
-pub struct NoSky;
+/// Opt a `Camera3d` out of the sky, exposure and tonemapping; it lives in
+/// `strata-app` so a screen crate can mark its camera without linking the
+/// atmosphere.
+pub use strata_app::NoSky;
 
 /// Marks a camera this plugin has dressed, so it is done once.
 #[derive(Component, Debug, Clone, Copy, Default)]
@@ -408,6 +412,8 @@ impl Plugin for AtmospherePlugin {
         // The sun's cascades, each with only the casters that can shade
         // its slice (lighting plan phase 6).
         cascade_trim::register(app);
+        // The 3D camera at a share of the window's size (review F8).
+        render_scale::register(app);
         app.init_resource::<DayCycle>()
             .init_resource::<Night>()
             .init_resource::<SkySettings>()
@@ -956,8 +962,8 @@ mod environment_hold {
     };
     use bevy::render::{Render, RenderApp, RenderSystems};
     use bevy::transform::components::Transform;
+    use strata_app::Observers;
     use strata_core::WorldPos;
-    use strata_sim::Observers;
 
     use super::{SkySettings, Sun};
 
@@ -1193,7 +1199,7 @@ mod tests {
         let mut app = App::new();
         app.add_plugins((
             bevy::time::TimePlugin,
-            strata_sim::SimPlugin,
+            strata_app::AppPlugin,
             AtmospherePlugin,
         ));
         app.update();
@@ -1227,7 +1233,7 @@ mod tests {
         let mut app = App::new();
         app.add_plugins((
             bevy::time::TimePlugin,
-            strata_sim::SimPlugin,
+            strata_app::AppPlugin,
             AtmospherePlugin,
         ));
         app.insert_resource(TimeOfDay(0.25));
@@ -1272,12 +1278,12 @@ mod tests {
     #[test]
     fn the_planet_is_rebased_with_everything_else() {
         use bevy::time::TimeUpdateStrategy;
-        use strata_sim::{PrimaryObserver, RenderOrigin};
+        use strata_app::{PrimaryObserver, RenderOrigin};
 
         let mut app = App::new();
         app.add_plugins((
             bevy::time::TimePlugin,
-            strata_sim::SimPlugin,
+            strata_app::AppPlugin,
             AtmospherePlugin,
         ));
         app.insert_resource(TimeUpdateStrategy::FixedTimesteps(1));

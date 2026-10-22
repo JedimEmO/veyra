@@ -143,6 +143,7 @@ fn stream_crossings(
         let entity = commands
             .spawn((
                 Name::new(file.to_owned()),
+                crate::pieces::Streamed,
                 CrossingPiece {
                     file: file.to_owned(),
                 },

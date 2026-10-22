@@ -14,5 +14,6 @@
     ground: (0.76, 0.64, 0.34),
     // Golden grass: warm and a little richer than the plains, the
     // prairie's gold.
-    grade: (temperature: 0.009, saturation: 1.04),
+    // Shade colour (visual.md F4): Warm shade, a hint of rose over the gold grass.
+    grade: (temperature: 0.009, saturation: 1.04, shade: (1.06, 0.94, 1.04)),
 )

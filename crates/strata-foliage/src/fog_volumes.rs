@@ -32,10 +32,10 @@ use bevy::state::condition::in_state;
 use bevy::state::state::OnExit;
 use bevy::time::Time;
 use bevy::transform::components::Transform;
+use strata_app::{AppState, Observers, Registries, TreeLibraryRes, WorldPosition};
 use strata_core::{REGION_BASE_SIZE, WorldPos};
 use strata_flora::PlantId;
 use strata_registry::flora::FloraKind;
-use strata_sim::{AppState, Observers, Registries, TreeLibraryRes, WorldPosition};
 
 use crate::{FoliageSet, TreeInstance};
 

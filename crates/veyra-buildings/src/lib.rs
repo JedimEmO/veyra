@@ -5,6 +5,7 @@ pub mod corporate;
 mod example;
 mod grounding;
 pub mod port;
+pub mod props;
 pub mod roadside;
 pub mod vehicle;
 use ashlar::{

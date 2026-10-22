@@ -31,9 +31,9 @@ use bevy::math::Vec3;
 use bevy::render::view::ColorGrading;
 use bevy::time::{Real, Time};
 use serde::Deserialize;
+use strata_app::{Observers, Registries, TimeOfDay, WorldSourceRes};
 use strata_core::WorldPos;
 use strata_registry::{BiomeId, Grade};
-use strata_sim::{Observers, Registries, TimeOfDay, WorldSourceRes};
 
 /// The time keys' file under the asset root.
 pub const TIMES_FILE: &str = "look/times.ron";
@@ -181,6 +181,52 @@ pub fn compose(biome: &Grade, time: &Grade, strength: f32, look: &RenderLook) ->
     grading
 }
 
+/// The Rec. 709 luminance weights, for the tint's normalisation.
+const LUMA: Vec3 = Vec3::new(0.2126, 0.7152, 0.0722);
+
+/// The colour of the shade at the observer, the biome's and the time's
+/// [`Grade::shade`] summed as offsets at `strength` like the rest of the
+/// grade, then divided by its own luminance: a tint that moves the shade's
+/// hue and never its brightness, so exposure and the lit surfaces stay put.
+#[must_use]
+pub fn shade_tint(biome: &Grade, time: &Grade, strength: f32) -> Vec3 {
+    let g = Grade::sum([(biome, strength), (time, strength)]);
+    let tint = Vec3::from(g.shade).max(Vec3::splat(0.05));
+    tint / tint.dot(LUMA)
+}
+
+/// What the look writes once a frame for every material we own to read
+/// (visual.md F4): a colour per quantity, each a linear multiplier on a
+/// term the material already has. Only the shade is written yet; the sun's
+/// tint and the air's colour are here so the CPU side keeps one shape; each
+/// material's own uniform still needs a row per quantity.
+///
+/// The client carries it to each material's own parameters
+/// (`strata_client::ui::render`), because a bind group shared by terrain,
+/// trees, grass, impostors and ashlar would need a pipeline layout change in
+/// each of them for the same one multiply.
+#[derive(Resource, Debug, Clone, Copy, PartialEq)]
+pub struct LookUniform {
+    /// Multiplies `diffuse_occlusion`, so only indirect diffuse (the sky and
+    /// the probes, a shaded surface's whole light) takes the colour.
+    /// Luminance one.
+    pub shade_tint: Vec3,
+    /// Reserved: a tint on the direct sun. Not read yet.
+    pub sun_tint: Vec3,
+    /// Reserved: the air's colour. Not read yet.
+    pub air_colour: Vec3,
+}
+
+impl Default for LookUniform {
+    fn default() -> Self {
+        Self {
+            shade_tint: Vec3::ONE,
+            sun_tint: Vec3::ONE,
+            air_colour: Vec3::ONE,
+        }
+    }
+}
+
 /// The whole blend in one: the biome pair by its shares, the time keys by
 /// their weights, at `strength`, over the look.
 #[must_use]
@@ -209,10 +255,19 @@ pub struct BiomeGrade {
     pub sample_us: f32,
 }
 
+/// The height gradient of built surfaces (`assets/look/buildings.ron`, visual.md
+/// F7), read at start-up over the shipped dials. The client writes it to every
+/// building material; it lives beside the shade because both are the grade's
+/// word to materials that do not see the atmosphere.
+#[derive(Resource, Debug, Clone, Copy, Default)]
+pub struct BuildingGradient(pub strata_registry::BuildingLook);
+
 pub(crate) fn register(app: &mut App) {
     app.init_resource::<TimeGrades>()
+        .init_resource::<BuildingGradient>()
         .init_resource::<BiomeGrade>()
-        .add_systems(Startup, load_times)
+        .init_resource::<LookUniform>()
+        .add_systems(Startup, (load_times, load_buildings))
         .add_systems(
             Update,
             (
@@ -226,7 +281,7 @@ pub(crate) fn register(app: &mut App) {
 
 /// Reads the time keys from the asset root, when the app has one, over the
 /// compiled-in copy; a broken file is reported and the shipped keys kept.
-fn load_times(root: Option<Res<strata_sim::WorldAssetRoot>>, mut times: ResMut<TimeGrades>) {
+fn load_times(root: Option<Res<strata_app::WorldAssetRoot>>, mut times: ResMut<TimeGrades>) {
     let Some(root) = root else {
         return;
     };
@@ -236,6 +291,26 @@ fn load_times(root: Option<Res<strata_sim::WorldAssetRoot>>, mut times: ResMut<T
             Err(error) => tracing::warn!("{TIMES_FILE}: {error}; the shipped keys stay"),
         },
         Err(error) => tracing::debug!("{TIMES_FILE}: {error}; the shipped keys stay"),
+    }
+}
+
+/// Reads the buildings' gradient from the asset root, when the app has one,
+/// over the compiled-in dials; a broken file is reported and the shipped dials
+/// kept.
+fn load_buildings(
+    root: Option<Res<strata_app::WorldAssetRoot>>,
+    mut gradient: ResMut<BuildingGradient>,
+) {
+    use strata_registry::{BUILDINGS_FILE, BuildingLook};
+    let Some(root) = root else {
+        return;
+    };
+    match root.0.read_string(BUILDINGS_FILE) {
+        Ok(text) => match BuildingLook::parse(&text) {
+            Ok(read) => gradient.0 = read,
+            Err(error) => tracing::warn!("{BUILDINGS_FILE}: {error}; the shipped dials stay"),
+        },
+        Err(error) => tracing::debug!("{BUILDINGS_FILE}: {error}; the shipped dials stay"),
     }
 }
 
@@ -304,6 +379,10 @@ fn same(a: &ColorGrading, b: &ColorGrading) -> bool {
 
 /// Writes the blended grade on every sky camera, after the look has
 /// written its own (which this replaces with the composition of both).
+#[allow(
+    clippy::too_many_arguments,
+    reason = "a Bevy system's parameters are its dependencies"
+)]
 fn apply_grade(
     look: Res<RenderLook>,
     times: Res<TimeGrades>,
@@ -311,10 +390,17 @@ fn apply_grade(
     cycle: Res<DayCycle>,
     time_of_day: Res<TimeOfDay>,
     study: Res<StudySettings>,
+    mut uniform: ResMut<LookUniform>,
     mut cameras: Query<&mut ColorGrading, (With<SkyCamera>, Without<NoSky>)>,
 ) {
     let to_sun = cycle.sun_direction(study.visual_time.unwrap_or(time_of_day.0));
     let time = times.at(time_weights(to_sun));
+    let shade = shade_tint(&biome.current, &time, look.grade);
+    // Written only past a quantum of a 256th, so a settled frame marks
+    // nothing changed and the materials are not touched.
+    if (shade - uniform.shade_tint).abs().max_element() > 1.0 / 256.0 {
+        uniform.shade_tint = shade;
+    }
     let wanted = compose(&biome.current, &time, look.grade, &look);
     for mut grading in &mut cameras {
         if !same(&grading, &wanted) {
@@ -604,5 +690,34 @@ mod tests {
         let g = app.world().get::<ColorGrading>(camera).expect("graded");
         assert!(g.global.temperature.abs() < 1e-9, "{g:?}");
         assert!((g.global.post_saturation - 0.92).abs() < 1e-6, "{g:?}");
+    }
+
+    #[test]
+    fn the_shade_tint_has_luminance_one_and_neutral_grades_leave_it_white() {
+        let neutral = shade_tint(&Grade::NEUTRAL, &Grade::NEUTRAL, 1.0);
+        assert!((neutral - Vec3::ONE).abs().max_element() < 1e-6);
+        let violet = Grade {
+            shade: [1.0, 0.93, 1.10],
+            ..Grade::NEUTRAL
+        };
+        let tint = shade_tint(&violet, &Grade::NEUTRAL, 1.0);
+        assert!((tint.dot(LUMA) - 1.0).abs() < 1e-5);
+        assert!(tint.z > tint.y, "blue over green: {tint}");
+        // Strength zero is the look's own, untinted shade.
+        let off = shade_tint(&violet, &Grade::NEUTRAL, 0.0);
+        assert!((off - Vec3::ONE).abs().max_element() < 1e-6);
+    }
+
+    #[test]
+    fn shipped_shades_are_valid_and_a_shade_alone_writes_no_grade() {
+        let times = TimeGrades::shipped();
+        for (_, g) in times.keys() {
+            assert!(g.invalid_field().is_none());
+        }
+        let only = Grade {
+            shade: [1.0, 0.9, 1.1],
+            ..Grade::NEUTRAL
+        };
+        assert!(only.is_neutral());
     }
 }

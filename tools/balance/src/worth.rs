@@ -13,9 +13,9 @@ use std::fmt::Write as _;
 use std::path::Path;
 
 use serde::Deserialize;
-use strata_sim::combat::{Action, Weapon};
-use strata_sim::combat_ai::OpponentKind;
-use strata_sim::combat_tables;
+use veyra_rules::combat::{Action, Weapon};
+use veyra_rules::combat_ai::OpponentKind;
+use veyra_rules::combat_tables;
 
 use crate::bout::BoutResult;
 use crate::contracts::{Metric, SideMetric};
@@ -398,7 +398,7 @@ fn abilities(results: &Results) -> anyhow::Result<String> {
         };
         let opened = !case.lower_is_better && control == 0. && with > 0.;
         let (stamina, length) = match &row.effect {
-            strata_sim::ability::AbilityEffect::Cut(action) => {
+            veyra_rules::ability::AbilityEffect::Cut(action) => {
                 let spec = action.spec();
                 (spec.stamina, spec.duration)
             }
@@ -409,7 +409,7 @@ fn abilities(results: &Results) -> anyhow::Result<String> {
         // (counted under cuts) are not in the book's count, so only the rest
         // can be told unpressed.
         let pressed = row.is_instant()
-            || matches!(row.effect, strata_sim::ability::AbilityEffect::Cut(_))
+            || matches!(row.effect, veyra_rules::ability::AbilityEffect::Cut(_))
             || read(results, case.with, &Metric::A(SideMetric::Abilities))? > 0.;
         let word = if opened {
             "opens"

@@ -6,7 +6,7 @@
 //! needs: gravity and a jump, a slope limit that turns steep ground into a
 //! wall, a step up over small ledges, a snap down so walking downhill stays
 //! in contact, and water: the sea's, a river's or a lake's at the
-//! character's point ([`strata_sim::water_here`], ticket 0005, step 3),
+//! character's point ([`strata_app::water_here`], ticket 0005, step 3),
 //! which slows a wader by its depth, floats a swimmer and carries both with
 //! its flow. The body is kinematic, so avian never moves it:
 //! [`step_characters`] computes the new position and writes both avian's
@@ -26,23 +26,19 @@
 //! collider at all (a downward ray finds nothing) holds still until there
 //! is one. That covers spawning, a stall in the streamer and a teleport.
 
-pub mod ride;
-
 use core::time::Duration;
 
 use avian3d::prelude::{
-    Collider, MoveAndSlide, MoveAndSlideConfig, MoveAndSlideHitResponse, Position, RigidBody,
-    Rotation, ShapeCastConfig, SpatialQueryFilter,
+    Collider, CollisionLayers, LayerMask, MoveAndSlide, MoveAndSlideConfig,
+    MoveAndSlideHitResponse, Position, RigidBody, Rotation, ShapeCastConfig, SpatialQueryFilter,
 };
 use bevy::ecs::prelude::*;
-use bevy::math::{Dir3, Quat, Vec3};
+use bevy::math::{Dir3, Quat, Vec2, Vec3};
 use bevy::time::{Fixed, Time};
 use bevy::transform::components::Transform;
-use strata_sim::combat::CombatMotion;
-use strata_sim::ride::Riding;
-use strata_sim::water::water_of;
-use strata_sim::{
-    PlayerCommand, PlayerIntent, RenderOrigin, WorldPosition, WorldSourceRes, water_here,
+use strata_app::{
+    CombatMotion, PlayerCommand, PlayerIntent, RenderOrigin, WaterHere, WorldPosition,
+    WorldSourceRes, water_here,
 };
 
 /// `Position = origin.to_render(WorldPosition)` for characters only, after
@@ -67,9 +63,29 @@ pub fn sync_characters(
 /// to fall. Longer than any drop in the world.
 pub const GROUND_PROBE: f32 = 4_000.0;
 
+/// Ticks a resting body skips its step before one full step re-checks the
+/// ground and its neighbours, so a collider that streamed in or out under
+/// it is noticed within a fraction of a second.
+pub const REST_RECHECK_TICKS: u8 = 16;
+
+/// How far a body may move before its cached water sample is taken again,
+/// metres: a surface and a flow change slowly across a river.
+pub const WATER_REUSE_M: f64 = 1.0;
+
 /// Falling faster than this is capped: a character that fell for a long
 /// time would otherwise sweep kilometres per tick.
 pub const TERMINAL_SPEED: f32 = 60.0;
+
+/// The layers of every character capsule: a member of the actor layer
+/// (bit 1) that filters for nothing. Avian builds a contact pair only when
+/// both sides' filters accept the other's membership, so no capsule is ever
+/// paired and no manifold is computed for contacts nothing reads, while
+/// spatial queries (the ground probe, bolts, cuts, reach) test their own
+/// mask, `ALL` by default, against the membership and still find it.
+pub const ACTOR_LAYERS: CollisionLayers = CollisionLayers {
+    memberships: LayerMask(1 << 1),
+    filters: LayerMask::NONE,
+};
 
 /// The character's shape, tuning and state. The entity is a kinematic
 /// body; the capsule collider is inserted from the dimensions by
@@ -80,7 +96,7 @@ pub const TERMINAL_SPEED: f32 = 60.0;
 /// shape by the entity's `GlobalTransform` on insert, to zero without one;
 /// the sim's origin sync writes its translation like any other.
 #[derive(Component, Debug, Clone, PartialEq)]
-#[require(RigidBody = RigidBody::Kinematic, Position, Rotation, Transform)]
+#[require(RigidBody = RigidBody::Kinematic, CollisionLayers = ACTOR_LAYERS, Position, Rotation, Transform)]
 pub struct CharacterController {
     /// Acceleration-limited horizontal motion, enabled for the combat study.
     pub responsive: bool,
@@ -142,6 +158,17 @@ pub struct CharacterController {
     pub swimming: bool,
     /// The normal of the ground stood on, or up. State.
     pub ground_normal: Vec3,
+    /// Consecutive ticks the body has stood exactly where it was with
+    /// nothing asking it to move; zero when the last step moved it. State.
+    pub rested: u8,
+    /// The last water sample and the world point it was taken at, so a
+    /// body that has not moved a metre does not sample the world again.
+    /// State.
+    pub water_cache: Option<(f64, f64, WaterHere)>,
+    /// Where the body was when it last came to rest, so a body moved by
+    /// something other than its own step (a reset, a fall carried home, a
+    /// script) is not left hanging where it was put. State.
+    pub rest_at: Option<WorldPosition>,
 }
 
 impl Default for CharacterController {
@@ -170,6 +197,9 @@ impl Default for CharacterController {
             grounded: false,
             swimming: false,
             ground_normal: Vec3::Y,
+            rested: 0,
+            water_cache: None,
+            rest_at: None,
         }
     }
 }
@@ -239,7 +269,7 @@ impl CharacterController {
 }
 
 /// The water at a character's point, in render space: the surface's height
-/// and the flow, from [`strata_sim::water_here`] (the sea everywhere, a
+/// and the flow, from [`strata_app::water_here`] (the sea everywhere, a
 /// river or a lake where it stands higher).
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct WaterAt {
@@ -261,33 +291,48 @@ pub fn init_characters(
     }
 }
 
+/// Marks a character whose motor a layer above this crate runs instead of
+/// [`step_characters`] (the game's hoverbike): the walk step leaves it alone, and
+/// the other motor is ordered in [`PhysicsSet::Character`] before
+/// [`sync_characters`]. A marker and not a type parameter so the engine names
+/// nothing of the layer that owns the motor.
+///
+/// [`PhysicsSet::Character`]: crate::PhysicsSet::Character
+#[derive(Component, Debug, Clone, Copy, Default)]
+pub struct ExternalMotor;
+
 /// One tick of every character: gravity, the command, move and slide, step
 /// and snap, then the `WorldPosition` written. Avian's `Position` is read
 /// here and written by the sync that follows, because [`MoveAndSlide`]
 /// holds a read of every `Position` and a write next to it is a conflict.
+#[allow(
+    clippy::too_many_lines,
+    reason = "one ordered pass over the characters: rest, water, or step"
+)]
 pub fn step_characters(
     time: Res<Time<Fixed>>,
     origin: Res<RenderOrigin>,
     source: Option<Res<WorldSourceRes>>,
     mover: MoveAndSlide,
-    mut characters: Query<(
-        Entity,
-        &mut CharacterController,
-        &Collider,
-        Option<&PlayerCommand>,
-        Option<&CombatMotion>,
-        &Position,
-        &mut WorldPosition,
-        Option<&mut Riding>,
-    )>,
+    mut characters: Query<
+        (
+            Entity,
+            &mut CharacterController,
+            &Collider,
+            Option<&PlayerCommand>,
+            Option<&CombatMotion>,
+            &Position,
+            &mut WorldPosition,
+        ),
+        Without<ExternalMotor>,
+    >,
 ) {
     let dt = time.delta_secs();
     if dt <= 0.0 {
         return;
     }
     let config = MoveAndSlideConfig::default();
-    for (entity, mut controller, collider, command, motion, position, mut world, mut riding) in
-        &mut characters
+    for (entity, mut controller, collider, command, motion, position, mut world) in &mut characters
     {
         let filter = SpatialQueryFilter::from_excluded_entities([entity]);
         let mut intent = command.map_or_else(PlayerIntent::default, |c| c.0);
@@ -308,10 +353,23 @@ pub fn step_characters(
         // water cell already, so the tick never waits on a bake. Render
         // space: the origin's height is small next to a world height, and
         // the cast is the same one the transforms make.
+        let cached = controller.water_cache;
+        let fresh = core::cell::Cell::new(None);
         let water = || {
             let s = source.as_ref()?;
             let at = origin.to_world(position.0);
-            let here = water_here(s.source(), at.x(), at.z());
+            let here = match cached {
+                Some((x, z, here))
+                    if (at.x() - x).abs() < WATER_REUSE_M && (at.z() - z).abs() < WATER_REUSE_M =>
+                {
+                    here
+                }
+                _ => {
+                    let here = water_here(s.source(), at.x(), at.z());
+                    fresh.set(Some((at.x(), at.z(), here)));
+                    here
+                }
+            };
             #[allow(
                 clippy::cast_possible_truncation,
                 reason = "render-space f32 is the point"
@@ -323,43 +381,42 @@ pub fn step_characters(
                 fall: here.fall,
             })
         };
-        let next = if let Some(riding) = riding.as_deref_mut() {
-            // The bike reads the command as it came: a mounted rider has no
-            // action to scale it. One sample answers the water and the road.
-            let command = command.map_or_else(PlayerIntent::default, |c| c.0);
-            let road_rule = riding.dials.road;
-            let ground = || {
-                let s = source.as_ref()?;
-                let at = origin.to_world(position.0);
-                let sample = s.source().sample(at.x(), at.z());
-                let here = water_of(&sample, s.source().sea_level());
-                #[allow(
-                    clippy::cast_possible_truncation,
-                    reason = "render-space f32 is the point"
-                )]
-                let surface = (f64::from(here.surface_m) - origin.0.y()) as f32;
-                Some(ride::RideGround {
-                    water: Some(WaterAt {
-                        surface,
-                        flow: Vec3::ZERO,
-                        fall: here.fall,
-                    }),
-                    road: sample.landform.cleared >= road_rule.cleared_min
-                        || sample.landform.developed >= road_rule.developed_min,
-                })
-            };
-            controller.ride(
-                riding, &mover, collider, position.0, &command, ground, dt, &filter, &config,
-            )
-        } else {
-            controller.step(
-                &mover, collider, position.0, &intent, water, dt, &filter, &config,
-            )
-        };
+        // A resting body that is no longer where it rested was moved by a
+        // hand other than the step: it is airborne until the step says
+        // otherwise, so the ground ray runs before the water is asked.
+        if controller.rested > 0 && controller.rest_at != Some(*world) {
+            controller.rested = 0;
+            controller.grounded = false;
+        }
+        // A body that stood still last tick and is asked for nothing would
+        // cast, slide and snap to the place it already is: it keeps its
+        // position, and one full step in `REST_RECHECK_TICKS` looks again.
+        let at_rest = (1..REST_RECHECK_TICKS).contains(&controller.rested)
+            && controller.grounded
+            && !controller.swimming
+            && controller.action_velocity.is_none()
+            && intent.move_dir == Vec2::ZERO
+            && !intent.jump
+            && controller.vertical_velocity == 0.0
+            && controller.horizontal_velocity == Vec3::ZERO
+            && controller.jump_buffer_left == 0.0;
+        if at_rest {
+            controller.rested += 1;
+            continue;
+        }
+        let next = controller.step(
+            &mover, collider, position.0, &intent, water, dt, &filter, &config,
+        );
+        if let Some(fresh) = fresh.take() {
+            controller.water_cache = Some(fresh);
+        }
         let Some(next) = next else {
             continue;
         };
         world.0 = origin.to_world(next);
+        if controller.rested > 0 {
+            controller.rest_at = Some(*world);
+        }
     }
 }
 
@@ -391,10 +448,13 @@ impl CharacterController {
         let rotation = Quat::IDENTITY;
         let skin = config.skin_width * mover.length_unit.0;
 
-        // Nothing to stand on anywhere below: wait for the streamer.
-        mover
-            .spatial_query
-            .cast_ray(start, Dir3::NEG_Y, GROUND_PROBE, true, filter)?;
+        // Nothing to stand on anywhere below: wait for the streamer. A body
+        // that stood on ground last tick has proved there is some, so it
+        // asks again only if the snap cast below then finds none.
+        let probed = !self.grounded;
+        if probed {
+            Self::ground_below(mover, start, filter)?;
+        }
         let water = water();
 
         // Falling water holds nothing up: a body in a fall is carried down
@@ -425,6 +485,9 @@ impl CharacterController {
                 )
                 .filter(|hit| self.is_walkable(hit.normal1))
         };
+        if !probed && ground.is_none() {
+            Self::ground_below(mover, start, filter)?;
+        }
         let was_grounded = ground.is_some();
         self.ground_normal = ground.map_or(Vec3::Y, |hit| hit.normal1);
         self.swimming = submerged;
@@ -536,6 +599,8 @@ impl CharacterController {
             self.vertical_velocity = 0.0;
         }
         self.grounded = landed && !submerged;
+        let still = next == start && velocity == Vec3::ZERO && self.grounded;
+        self.rested = u8::from(still);
         if self.responsive && self.action_velocity.is_none() {
             // Keep a blocked axis from storing speed that would launch off a
             // wall. What the body's own motion achieved is the move less the
@@ -551,6 +616,14 @@ impl CharacterController {
             }
         }
         Some(next)
+    }
+
+    /// Whether any ground at all lies below `start`.
+    fn ground_below(mover: &MoveAndSlide, start: Vec3, filter: &SpatialQueryFilter) -> Option<()> {
+        mover
+            .spatial_query
+            .cast_ray(start, Dir3::NEG_Y, GROUND_PROBE, true, filter)
+            .map(|_| ())
     }
 
     /// Buoyancy, standing, a jump, or a fall. Returns whether a jump
@@ -586,7 +659,7 @@ impl CharacterController {
     /// and drop back down onto what is there. The result when it gets
     /// further than the blocked move did.
     #[allow(clippy::too_many_arguments, reason = "the sweep's inputs, spelled out")]
-    fn step_up(
+    pub fn step_up(
         &self,
         mover: &MoveAndSlide,
         collider: &Collider,
@@ -622,7 +695,7 @@ impl CharacterController {
 
     /// Snap down: a grounded character that did not jump follows the
     /// ground it walked off, up to a step down plus the snap distance.
-    fn snap_down(
+    pub fn snap_down(
         &mut self,
         mover: &MoveAndSlide,
         collider: &Collider,

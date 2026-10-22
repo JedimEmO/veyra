@@ -10,7 +10,7 @@ use std::fmt::Write as _;
 use proptest::prelude::*;
 use rayon::prelude::*;
 use strata_core::Seed;
-use strata_registry::Namespaced;
+use strata_data::Namespaced;
 use strata_worldgen::{ProceduralWorld, ProvinceMix, Sample, WorldSource};
 
 use common::sweep;
@@ -174,7 +174,7 @@ fn a_province_with_no_beds_is_the_ground_without_them() {
     let registries = common::registries();
     let shipped = world42();
     let bedless = ProceduralWorld::new(Seed(42), registries_without_beds());
-    let unbedded = |id: strata_registry::ProvinceId| {
+    let unbedded = |id: strata_data::ProvinceId| {
         registries
             .provinces
             .iter()
@@ -413,13 +413,13 @@ fn a_shape_keeps_the_middle_of_the_relief_and_the_land_above_the_sea() {
     let registries = common::registries();
     let shaped = world42();
     let bare = ProceduralWorld::new(Seed(42), registries_without_rules());
-    let rolling: Vec<strata_registry::BiomeId> = registries
+    let rolling: Vec<strata_data::BiomeId> = registries
         .biomes
         .iter()
         .filter(|(_, _, def)| {
             matches!(
                 def.relief.kind,
-                strata_registry::ReliefKind::Plains | strata_registry::ReliefKind::Hills
+                strata_data::ReliefKind::Plains | strata_data::ReliefKind::Hills
             )
         })
         .map(|(id, _, _)| id)
@@ -436,40 +436,38 @@ fn a_shape_keeps_the_middle_of_the_relief_and_the_land_above_the_sea() {
         .collect();
     let lattice = head_lattice();
     let points: Vec<(f64, f64)> = lattice.iter().copied().chain(trench).collect();
-    let (shifts, sunk): (
-        Vec<(u32, strata_registry::BiomeId, f64)>,
-        Vec<(f64, f64, f32)>,
-    ) = sweep(|| {
-        let shifts = lattice
-            .par_iter()
-            .filter_map(|&(x, z)| {
-                let t = shaped.terms(x, z);
-                let [(id, w)]: [(strata_registry::ProvinceId, f64); 1] =
-                    mix(shaped, x, z).entries().try_into().ok()?;
-                let [(biome, ..)] = t.biomes.as_slice() else {
-                    return None;
-                };
-                (w >= 0.999 && rolling.contains(biome) && t.continent.land > 0.02)
-                    .then(|| (id.0, *biome, t.relief_m - bare.terms(x, z).relief_m))
-            })
-            .collect();
-        let sunk = points
-            .par_iter()
-            .filter(|&&(x, z)| shaped.continent(x, z).land >= 0.06)
-            .filter_map(|&(x, z)| {
-                let h = shaped.sample(x, z).height;
-                (h <= 0.0).then_some((x, z, h))
-            })
-            .collect();
-        (shifts, sunk)
-    });
+    let (shifts, sunk): (Vec<(u32, strata_data::BiomeId, f64)>, Vec<(f64, f64, f32)>) =
+        sweep(|| {
+            let shifts = lattice
+                .par_iter()
+                .filter_map(|&(x, z)| {
+                    let t = shaped.terms(x, z);
+                    let [(id, w)]: [(strata_data::ProvinceId, f64); 1] =
+                        mix(shaped, x, z).entries().try_into().ok()?;
+                    let [(biome, ..)] = t.biomes.as_slice() else {
+                        return None;
+                    };
+                    (w >= 0.999 && rolling.contains(biome) && t.continent.land > 0.02)
+                        .then(|| (id.0, *biome, t.relief_m - bare.terms(x, z).relief_m))
+                })
+                .collect();
+            let sunk = points
+                .par_iter()
+                .filter(|&&(x, z)| shaped.continent(x, z).land >= 0.06)
+                .filter_map(|&(x, z)| {
+                    let h = shaped.sample(x, z).height;
+                    (h <= 0.0).then_some((x, z, h))
+                })
+                .collect();
+            (shifts, sunk)
+        });
     assert!(
         sunk.is_empty(),
         "{} inland points under the sea, the first {:?}",
         sunk.len(),
         &sunk[..sunk.len().min(5)]
     );
-    let mut groups: Vec<(u32, strata_registry::BiomeId)> =
+    let mut groups: Vec<(u32, strata_data::BiomeId)> =
         shifts.iter().map(|&(p, b, _)| (p, b)).collect();
     groups.sort_unstable_by_key(|&(p, b)| (p, b.0));
     groups.dedup();
@@ -624,12 +622,11 @@ fn assets_without_geology() -> std::path::PathBuf {
 /// The shipped registries with no `geology/`, loaded once for the binary:
 /// the tests that want them run on threads of their own, and each copying
 /// the tree into one directory would pull it from under the others.
-fn registries_without_geology() -> &'static strata_registry::GameRegistries {
-    static REGISTRIES: std::sync::OnceLock<strata_registry::GameRegistries> =
-        std::sync::OnceLock::new();
+fn registries_without_geology() -> &'static strata_data::WorldDefs {
+    static REGISTRIES: std::sync::OnceLock<strata_data::WorldDefs> = std::sync::OnceLock::new();
     REGISTRIES.get_or_init(|| {
         let assets = assets_without_geology();
-        let registries = strata_registry::load_from_dir(&assets).expect("the copy loads");
+        let registries = strata_data::load_world_from_dir(&assets).expect("the copy loads");
         let _ = std::fs::remove_dir_all(&assets);
         registries
     })
@@ -639,23 +636,21 @@ fn registries_without_geology() -> &'static strata_registry::GameRegistries {
 /// and have no beds (ticket 0004, step 5: beds move heights too, and the
 /// tests that want the ground without a province's shapes want it without
 /// its beds), loaded once for the binary.
-fn registries_without_rules() -> &'static strata_registry::GameRegistries {
-    static REGISTRIES: std::sync::OnceLock<strata_registry::GameRegistries> =
-        std::sync::OnceLock::new();
+fn registries_without_rules() -> &'static strata_data::WorldDefs {
+    static REGISTRIES: std::sync::OnceLock<strata_data::WorldDefs> = std::sync::OnceLock::new();
     REGISTRIES.get_or_init(|| edited_registries("assets-without-rules", true))
 }
 
 /// A copy of the shipped registries whose provinces have no beds and keep
 /// their relief rules, loaded once for the binary.
-fn registries_without_beds() -> &'static strata_registry::GameRegistries {
-    static REGISTRIES: std::sync::OnceLock<strata_registry::GameRegistries> =
-        std::sync::OnceLock::new();
+fn registries_without_beds() -> &'static strata_data::WorldDefs {
+    static REGISTRIES: std::sync::OnceLock<strata_data::WorldDefs> = std::sync::OnceLock::new();
     REGISTRIES.get_or_init(|| edited_registries("assets-without-beds", false))
 }
 
 /// The shipped registries with every province's beds taken out and, if
 /// `rules`, its relief rules too, copied to `name` under the target dir.
-fn edited_registries(name: &str, rules: bool) -> strata_registry::GameRegistries {
+fn edited_registries(name: &str, rules: bool) -> strata_data::WorldDefs {
     {
         let source = std::path::Path::new(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"));
         let target = std::path::Path::new(env!("CARGO_TARGET_TMPDIR")).join(name);
@@ -694,7 +689,7 @@ fn edited_registries(name: &str, rules: bool) -> strata_registry::GameRegistries
             }
             std::fs::write(&path, out).expect("the copy is writable");
         }
-        let registries = strata_registry::load_from_dir(&target).expect("the copy loads");
+        let registries = strata_data::load_world_from_dir(&target).expect("the copy loads");
         let _ = std::fs::remove_dir_all(&target);
         assert!(
             registries

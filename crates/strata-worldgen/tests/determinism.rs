@@ -119,7 +119,7 @@ fn the_sampler_is_send_and_sync() {
 #[test]
 fn port_serein_stands_on_its_own_ground_in_any_world() {
     let registries =
-        strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+        strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
             .expect("the shipped assets load");
     let def = &registries.settlements[0];
     let started = std::time::Instant::now();
@@ -190,7 +190,7 @@ fn port_serein_stands_on_its_own_ground_in_any_world() {
 )]
 fn coastal_slopes_near_the_origin() {
     let registries =
-        strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+        strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
             .expect("the shipped assets load");
     let world = strata_worldgen::ProceduralWorld::new(strata_core::Seed(42), &registries);
     let h = |x: f64, z: f64| f64::from(strata_worldgen::WorldSource::sample(&world, x, z).height);

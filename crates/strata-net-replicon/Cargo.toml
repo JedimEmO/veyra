@@ -9,7 +9,7 @@ authors.workspace = true
 
 [dependencies]
 strata-core = { workspace = true }
-strata-sim = { workspace = true }
+strata-app = { workspace = true }
 strata-stream = { workspace = true }
 strata-physics = { workspace = true }
 strata-net = { workspace = true }

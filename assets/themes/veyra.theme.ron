@@ -1,0 +1,781 @@
+// "Veyra", the game's own slotted theme, derived from glass.theme.ron (review
+// step six, F9). The structure, the sizes, the fonts and every role name are
+// glass's, so no screen changes; only the colours move to the world's palette:
+// the accent is the hue of Pelagic Works' teal paint (`serein:paint-teal`,
+// 0.449 0.584 0.584) lifted to hold on a dark panel, the warm role is the
+// hazard orange (`serein:hazard`), text is ivory, and the buttons that were
+// saturated blue gradients (the dialogue's replies are `button.primary`) are
+// outlined: a teal wash and a teal line, the label in ivory. A label under an
+// accent fill is drawn in `control.label.inverse`, so the fills that carry one
+// (`tab.active`, `radio.active`, the danger button) are deep tones and the
+// inverse label is ivory.
+//
+// Colours are "#RRGGBB" or "#RRGGBBAA" literals, or "$name" palette
+// references. Roles are dotted; a missing state role (slot.hover) falls back
+// to its parent (slot).
+#![enable(implicit_some)]
+(
+    name: "veyra",
+    tokens: (
+        spacing: (xs: 2.0, sm: 6.0, md: 14.0, lg: 20.0, xl: 32.0),
+        sizes: (control_height: 44.0, control_height_compact: 28.0),
+        radii: (sm: 8.0, md: 12.0, lg: 16.0),
+        elevation: {
+            "low":  (y: 4.0,  blur: 12.0, spread: 0.0, color: "#0000008C"),
+            "mid":  (y: 8.0,  blur: 24.0, spread: 1.0, color: "#0000008C"),
+            "high": (y: 14.0, blur: 38.0, spread: 2.0, color: "#0000008C"),
+        },
+        durations: (fast: 90, normal: 180, slow: 320, hover_delay: 60),
+        motion: (
+            easing: Standard,
+            presets: {
+                // The quick-move flight is decoration over a model change
+                // that already happened: it reads as lag the moment it
+                // outlasts the gesture. Emphasised ease-out, most of the
+                // travel in the first third.
+                FlyToSlot: (duration: 110, easing: Snap),
+                // A pushed screen settles in over the normal tier with the
+                // direction's ease-out; the fade under it shares the timing.
+                Slide: (duration: 180, easing: Standard),
+            },
+        ),
+        // Type is Manrope for prose and Barlow Condensed for numerals and
+        // labels, shipped under assets/fonts/ with their OFL.txt. A game that
+        // would rather ask the OS for the family can drop `path:` and set
+        // `system: true`, which needs Bevy's `system_font_discovery` feature.
+        fonts: {
+            "body": (family: "Manrope", path: "fonts/manrope/Manrope-Variable.ttf"),
+            "display": (family: "Barlow Condensed", path: "fonts/barlow-condensed/BarlowCondensed-SemiBold.ttf"),
+        },
+        // Menus M1: the type scale. Manrope for prose, Barlow Condensed for
+        // the headline.
+        typography: {
+            "display": (size: 40.0, font: "display", weight: 600),
+            "title":   (size: 24.0, font: "body", weight: 600),
+            "heading": (size: 18.0, font: "body", weight: 600),
+            "body":    (size: 15.0, font: "body", line_height: 1.4),
+            "label":   (size: 13.0, font: "body", weight: 500),
+            "caption": (size: 12.0, font: "body"),
+        },
+        blur: (radius: 4.0, backdrop_divisor: 4),
+        palette: {
+            "base":     "#0B0E14",
+            "panel":    "#141A24",
+            "hairline": "#2A3446",
+            "accent":   "#6FAAA8",
+            "warm":     "#DB8A33",
+            "text":     "#EEE8D8",
+            "muted":    "#EEE8D873",
+            "danger":   "#FF6B6B",
+        },
+        rarity: {
+            "common":    "#EEE8D8",
+            "uncommon":  "#6FAAA8",
+            "rare":      "#B48CFF",
+            "epic":      "#DB8A33",
+            "legendary": "#FF6B6B",
+        },
+    ),
+    roles: {
+        "panel": Glass(
+            tint: "#141A247A",
+            border: "#FFFFFF1A",
+            radius: 16.0,
+            elevation: Some("high"),
+        ),
+        "panel.title": Text(color: "$text", size: "$title"),
+
+        "slot": Solid(fill: "#141A24B8", border: "#2A34468C", radius: 8.0),
+        "slot.hover": Solid(fill: "#243447E6", border: "#6FAAA8D9", radius: 8.0),
+        "slot.focus": Solid(fill: "#141A24B8", border: "$accent", radius: 8.0),
+        "slot.carried": Solid(fill: "#2A3B4FF2", border: "$warm", radius: 8.0),
+        // The favourite (pinned) marker sits on the slot itself, one step
+        // warmer than the resting slot.
+        "slot.favorite": Solid(fill: "#2A241AB8", border: "$warm", radius: 8.0),
+
+        // Rarity rings are a sibling overlay child of the slot, so they do not
+        // fight the slot's own hover / focus / carried state role.
+        "slot.rarity": Solid(fill: "#00000000", radius: 8.0),
+        "slot.rarity.common": Solid(fill: "#00000000", radius: 8.0),
+        "slot.rarity.uncommon": Solid(fill: "#00000000", border: "#6FAAA8B3", radius: 8.0),
+        "slot.rarity.rare": Solid(fill: "#00000000", border: "#B48CFFB3", radius: 8.0),
+        "slot.rarity.epic": Solid(fill: "#00000000", border: "#DB8A33B3", radius: 8.0),
+        "slot.rarity.legendary": Solid(fill: "#00000000", border: "#FF6B6BD9", radius: 8.0),
+
+        // Durability track; the fill's colour is interpolated per stack by the
+        // item renderer, so it carries no role.
+        "slot.durability": Solid(fill: "#0B0E14CC", radius: 2.0),
+
+        // The stack that follows the pointer.
+        "carried": Solid(fill: "#00000000", radius: 8.0),
+        // The ring the carried stack wears over the slot it is about to
+        // land in: cool accent when it will be taken, danger when it will
+        // not. `slot.phantom` and `slot.hint` are read as tints for an
+        // `ImageNode`, not as node fills.
+        "carried.good": Solid(fill: "#00000000", border: "$accent", radius: 8.0),
+        "carried.bad": Solid(fill: "#00000000", border: "$danger", radius: 8.0),
+        "slot.phantom": Solid(fill: "#EEE8D899"),
+        "slot.hint": Solid(fill: "#EEE8D859"),
+
+        "tooltip": Solid(fill: "#0B0E14F2", border: None, radius: 12.0, elevation: Some("mid")),
+        "tooltip.frame": Solid(fill: "#00000000", border: "$hairline", radius: 12.0),
+        "tooltip.title": Text(color: "$text", size: 14.0, font: "body"),
+
+        "button": Solid(fill: "#1B2330E6", border: "$hairline", radius: 8.0),
+        "button.primary": Solid(fill: "#6FAAA82E", border: "$accent", radius: 8.0),
+        "button.hover": Solid(fill: "#243447E6", border: "$accent", radius: 8.0),
+
+        "text": Text(color: "$text", size: "$body"),
+        "text.muted": Text(color: "$muted", size: "$caption"),
+        "count": Text(color: "$text", size: "$caption", shadow: "#000000BF", font: "display"),
+
+        "rail": Solid(fill: "#0B0E14A6", border: "$hairline", radius: 12.0),
+        "rail.button": Solid(fill: "#1B2330E6", border: "$hairline", radius: 8.0),
+
+        // The item and recipe browser (Phase 3). The panel is a second sheet
+        // of the same glass, one step darker than a screen so it reads as
+        // beside rather than on top.
+        "browser.panel": Glass(
+            tint: "#0F141EA6",
+            border: "#FFFFFF14",
+            radius: 12.0,
+            elevation: Some("mid"),
+        ),
+        // A card is the moodboard's `.icard`: an 8 px tile that lifts and
+        // brightens under the pointer, with the display name and the mod
+        // namespace legible on it.
+        "browser.card": Solid(fill: "#FFFFFF0D", border: "#FFFFFF14", radius: 8.0),
+        "browser.card.hover": Solid(fill: "#FFFFFF1A", border: "$accent", radius: 8.0),
+        "browser.card.name": Text(color: "$text", size: 11.0, font: "body"),
+        "browser.badge": Text(color: "#9C9786", size: 9.0, font: "display"),
+        "browser.glyph": Text(color: "#9C9786", size: 22.0, font: "display"),
+
+        // The rarity strip across the top of a card. `common` is transparent,
+        // so an ordinary item shows no strip at all.
+        "browser.rarity": Solid(fill: "#00000000", radius: 1.0),
+        "browser.rarity.common": Solid(fill: "#00000000", radius: 1.0),
+        "browser.rarity.uncommon": Solid(fill: "#6FAAA8", radius: 1.0),
+        "browser.rarity.rare": Solid(fill: "#B48CFF", radius: 1.0),
+        "browser.rarity.epic": Solid(fill: "#DB8A33", radius: 1.0),
+        "browser.rarity.legendary": Solid(fill: "#FF6B6B", radius: 1.0),
+
+        // Chips and tabs are pills; the selected one inverts to the accent.
+        "browser.chip": Solid(fill: "#FFFFFF0F", border: "#FFFFFF1A", radius: 999.0),
+        "browser.chip.active": Solid(fill: "$accent", border: "$accent", radius: 999.0),
+        "browser.chip.text": Text(color: "#D0CAB8", size: 12.0, font: "body"),
+        "browser.chip.text.active": Text(color: "$base", size: 12.0, font: "body"),
+
+        "browser.search": Solid(fill: "#00000059", border: "#FFFFFF1F", radius: 10.0),
+        "browser.search.focus": Solid(fill: "#00000073", border: "$accent", radius: 10.0),
+
+        "browser.tab": Solid(fill: "#FFFFFF0F", border: "#FFFFFF1A", radius: 999.0),
+        "browser.tab.active": Solid(fill: "$accent", border: "$accent", radius: 999.0),
+
+        "browser.bookmark": Solid(fill: "#2A241A99", border: "$warm", radius: 6.0),
+
+        // The recipe view's header title and the small pill buttons under it.
+        "browser.title": Text(color: "$text", size: 18.0, font: "body"),
+        "browser.pill": Solid(fill: "#FFFFFF14", border: "#FFFFFF1F", radius: 8.0),
+        "browser.pill.text": Text(color: "$text", size: 12.0, font: "body"),
+
+        // The footer: the result count on the left, the hotkey hint and the
+        // "used in" line in the quieter tone.
+        "browser.status": Text(color: "#9C9786", size: 12.0, font: "display"),
+        "browser.hint": Text(color: "#9C9786", size: 11.0, font: "display"),
+
+        // Recipe slots reuse the slot geometry; a slot the transfer could not
+        // fill turns the danger colour until the next successful dry run.
+        "browser.slot": Solid(fill: "#0B0E1499", border: "#FFFFFF1F", radius: 8.0),
+        "browser.slot.missing": Solid(fill: "#2A1414CC", border: "$danger", radius: 8.0),
+
+        "browser.recipe.arrow": Solid(fill: "#FFFFFF1F", radius: 5.0),
+        "browser.recipe.arrow.progress": Solid(fill: "$accent", radius: 5.0),
+
+        "browser.button.disabled": Solid(fill: "#FFFFFF08", border: "#FFFFFF14", radius: 8.0),
+
+        // Machine widgets (Phase 6). A tank is a dark well whose fill takes
+        // the fluid's colour; the well's own fill role is what shows when no
+        // fluid is resolved.
+        "tank": Solid(fill: "#0B0E14B8", border: "$hairline", radius: 8.0),
+        "tank.fill": Solid(fill: "#3B7DD8B0", radius: 6.0),
+        "bar": Solid(fill: "#0B0E14B8", border: "$hairline", radius: 6.0),
+        "bar.fill": Solid(fill: "$warm", radius: 5.0),
+        "bar.text": Text(color: "$text", size: 10.0, font: "display"),
+        "progress": Solid(fill: "#FFFFFF14", radius: 4.0),
+        "progress.fill": Gradient(angle: 90.0, stops: [(0.0, "#4D8785"), (1.0, "$accent")], radius: 4.0),
+
+        // Side tabs hang in a rail beside the panel; open, the tab brightens
+        // and its content is one more sheet of glass.
+        "tab.rail": Solid(fill: "#00000000"),
+        "tab.side": Solid(fill: "#141A24B8", border: "$hairline", radius: 10.0),
+        "tab.side.open": Solid(fill: "#1B2330F2", border: "$accent", radius: 10.0),
+        "tab.side.header": Solid(fill: "#00000000", radius: 8.0),
+        "tab.side.content": Solid(fill: "#0B0E1466", radius: 8.0),
+
+        "icon_button": Solid(fill: "#1B2330E6", border: "$hairline", radius: 8.0),
+        "icon_button.hover": Solid(fill: "#243447E6", border: "$accent", radius: 8.0),
+
+        "virtual_grid": Solid(fill: "#00000000"),
+        "virtual_grid.scrollbar": Solid(fill: "#FFFFFF0F", radius: 4.0),
+        "virtual_grid.thumb": Solid(fill: "#FFFFFF4D", radius: 4.0),
+
+        "viewport": Solid(fill: "#0B0E14B8", border: "$hairline", radius: 12.0),
+
+        // HUD layers sit over the world with no panel behind them unless a
+        // layer asks for one.
+        "hud.panel": Solid(fill: "#0B0E1480", border: "#FFFFFF14", radius: 8.0),
+        "hud.crosshair": Solid(fill: "#EEE8D8CC", radius: 999.0),
+        "hud.edit.frame": Solid(fill: "#00000000", border: "$warm", radius: 4.0),
+
+        // Menus M0: the focus ring is a 2 px accent outline (the ring node
+        // sets the width) and the scrim dims what sits under a modal.
+        "focus.ring": Solid(fill: "#00000000", border: "$accent", radius: 12.0),
+        "scrim": Solid(fill: "#0B0E1499"),
+
+        // Anchors and layer roots are laid out but never painted.
+        // Menus M1: type roles, control rows and the controls themselves.
+        "text.display": Text(color: "$text", size: "$display"),
+        "text.heading": Text(color: "$text", size: "$heading"),
+        "text.label": Text(color: "#D0CAB8", size: "$label"),
+        "text.caption": Text(color: "$muted", size: "$caption"),
+        "text.key": Text(color: "$accent", size: "$label", font: "display", weight: 600),
+        "text.icon": Text(color: "$warm", size: "$body", weight: 600),
+        "text.inverse": Text(color: "$base", size: "$label", weight: 600),
+        "control.label": Text(color: "$text", size: "$body"),
+        // Labels on an accent fill (`button.primary`, `tab.active`, ...):
+        // the same size and font as at rest, only the colour flips.
+        "control.label.inverse": Text(color: "$text", size: "$body", weight: 600),
+        "control.label.disabled": Text(color: "$muted", size: "$body"),
+        "text.label.inverse": Text(color: "$text", size: "$label", weight: 600),
+        "button.danger": Solid(fill: "#B5473F", border: "#FFFFFF33", radius: 8.0),
+        // Menus M2: the primary and danger buttons keep their fill through
+        // focus, hover and press (a menu's focused button is usually the
+        // primary one), and say so with the border and a shade.
+        "button.primary.hover": Solid(fill: "#6FAAA85C", border: "#A8D6D4", radius: 8.0),
+        "button.primary.focus": Solid(fill: "#6FAAA85C", border: "#EEE8D8", radius: 8.0),
+        "button.primary.pressed": Solid(fill: "#6FAAA88A", border: "$accent", radius: 8.0),
+        "button.danger.hover": Solid(fill: "#C85A50", border: "#FFFFFF33", radius: 8.0),
+        "button.danger.focus": Solid(fill: "#C85A50", border: "#FFFFFFCC", radius: 8.0),
+        "button.danger.pressed": Solid(fill: "#963A33", border: "#FFFFFF33", radius: 8.0),
+        "button.focus": Solid(fill: "#243447E6", border: "$accent", radius: 8.0),
+        "button.pressed": Solid(fill: "#0B0E14E6", border: "$accent", radius: 8.0),
+        "button.disabled": Solid(fill: "#1B233066", border: "#2A344666", radius: 8.0),
+        "toggle": Solid(fill: "#0B0E14A6", border: "$hairline", radius: 999.0),
+        "toggle.on": Solid(fill: "$accent", border: "$accent", radius: 999.0),
+        "toggle.thumb": Solid(fill: "$text", radius: 999.0, elevation: "low"),
+        "toggle.hover": Solid(fill: "#243447E6", border: "$accent", radius: 999.0),
+        "toggle.focus": Solid(fill: "#0B0E14A6", border: "$accent", radius: 999.0),
+        "toggle.disabled": Solid(fill: "#0B0E1466", border: "#2A344666", radius: 999.0),
+        "checkbox": Solid(fill: "#0B0E14A6", border: "$hairline", radius: 6.0),
+        "checkbox.on": Solid(fill: "$accent", border: "$accent", radius: 6.0),
+        // The unlit track is a light wash, not the controls' dark well: on
+        // a dark box (the Record box) the well could not be told from the
+        // ground, and a slider part way along read as full.
+        "slider": Solid(fill: "#FFFFFF1F", border: "$hairline", radius: 999.0),
+        "slider.fill": Solid(fill: "$accent", radius: 999.0),
+        "slider.thumb": Solid(fill: "$text", border: "$accent", radius: 999.0, elevation: "low"),
+        "slider.text": Text(color: "$text", size: "$label", font: "display", weight: 600),
+        "slider.focus": Solid(fill: "#FFFFFF1F", border: "$accent", radius: 999.0),
+        "slider.disabled": Solid(fill: "#0B0E1466", border: "#2A344666", radius: 999.0),
+        "select": Solid(fill: "#1B2330E6", border: "$hairline", radius: 8.0),
+        "select.hover": Solid(fill: "#243447E6", border: "$accent", radius: 8.0),
+        "select.focus": Solid(fill: "#1B2330E6", border: "$accent", radius: 8.0),
+        "select.popup": Glass(tint: "#141A24E6", border: "#FFFFFF1A", radius: 12.0, elevation: "high"),
+        "select.option": Solid(fill: "#00000000", radius: 8.0),
+        "select.option.active": Solid(fill: "#6FAAA833", border: "$accent", radius: 8.0),
+        "radio": Solid(fill: "#FFFFFF0F", border: "#FFFFFF1A", radius: 999.0),
+        "radio.active": Solid(fill: "#2F5A58", border: "$accent", radius: 999.0),
+        "key_binding": Solid(fill: "#0B0E14A6", border: "$hairline", radius: 8.0),
+        "key_binding.capturing": Solid(fill: "#6FAAA81F", border: "$accent", radius: 8.0),
+        "text_field": Solid(fill: "#00000059", border: "#FFFFFF1F", radius: 10.0),
+        "text_field.focus": Solid(fill: "#00000073", border: "$accent", radius: 10.0),
+        "text_field.disabled": Solid(fill: "#00000033", border: "#FFFFFF0F", radius: 10.0),
+        "text_field.placeholder": Text(color: "$muted", size: "$body"),
+        "scroll.bar": Solid(fill: "#FFFFFF0F", radius: 4.0),
+        "scroll.thumb": Solid(fill: "#FFFFFF4D", radius: 4.0),
+        "list.row": Solid(fill: "#00000000", radius: 8.0),
+        "list.row.hover": Solid(fill: "#FFFFFF0F", radius: 8.0),
+        "list.row.focus": Solid(fill: "#6FAAA81F", radius: 8.0),
+        "list.row.selected": Solid(fill: "#6FAAA833", border: "$accent", radius: 8.0),
+        "tabs.bar": Solid(fill: "#00000000"),
+        "tab": Solid(fill: "#FFFFFF0F", border: "#FFFFFF1A", radius: 999.0),
+        "tab.active": Solid(fill: "#2F5A58", border: "$accent", radius: 999.0),
+        "tab.hover": Solid(fill: "#FFFFFF1F", border: "$accent", radius: 999.0),
+        "tab.focus": Solid(fill: "#FFFFFF0F", border: "$accent", radius: 999.0),
+        "separator": Solid(fill: "$hairline"),
+
+        // Menus M2: toasts, the hint bar and the main menu header.
+        "toast": Glass(tint: "#141A24E6", border: "#FFFFFF1A", radius: 12.0, elevation: "mid"),
+        "toast.info": Glass(tint: "#141A24E6", border: "$accent", radius: 12.0, elevation: "mid"),
+        "toast.success": Glass(tint: "#141A24E6", border: "#7FFFB0", radius: 12.0, elevation: "mid"),
+        "toast.warning": Glass(tint: "#141A24E6", border: "$warm", radius: 12.0, elevation: "mid"),
+        "toast.error": Glass(tint: "#141A24E6", border: "$danger", radius: 12.0, elevation: "mid"),
+        "toast.text": Text(color: "$text", size: "$body"),
+        "hint.bar": Solid(fill: "#00000000"),
+        // The glyph is an accent pill; its text is `hint.glyph.text`, which
+        // a theme that draws the glyph as bare text leaves undefined.
+        "hint.glyph": Solid(fill: "$accent", radius: 999.0),
+        "hint.glyph.text": Text(color: "$base", size: "$caption", font: "display", weight: 700),
+        "hint.label": Text(color: "$muted", size: "$caption"),
+        "menu.title": Text(color: "$text", size: "$display"),
+        "menu.version": Text(color: "$muted", size: "$caption"),
+        // Menus M3: the dialogue is a translucent sheet over the world, the
+        // speaker in the accent, the portrait a darker tile with an accent
+        // edge. The screen draws no scrim, so the tint carries the contrast.
+        "dialogue": Glass(tint: "#141A24CC", border: "#FFFFFF2E", radius: 14.0, elevation: "mid"),
+        "dialogue.speaker": Text(color: "$accent", size: "$label", font: "display", weight: 700),
+        "dialogue.text": Text(color: "$text", size: "$body"),
+        "dialogue.portrait": Glass(tint: "#0B0F16D9", border: "$accent", radius: 10.0),
+
+        "invisible": Solid(fill: "#00000000"),
+
+        // ---- strata: the character sheet and the bench (sheet.rs, bench.rs) ----
+        // A box card says its state three ways at once, so it reads without
+        // its words: a stripe down the left edge, the frame, the name's tone.
+        // The whole card is the button, so each frame is a family the card
+        // paints through hover, focus and press: the pointer lifts the fill,
+        // focus brightens the border, a press sinks into the accent.
+        "strata.sheet.card": Solid(fill: "#FFFFFF0D", border: "#FFFFFF14", radius: 8.0),
+        "strata.sheet.card.hover": Solid(fill: "#FFFFFF1A", border: "#FFFFFF40", radius: 8.0),
+        "strata.sheet.card.focus": Solid(fill: "#FFFFFF1A", border: "#6FAAA899", radius: 8.0),
+        "strata.sheet.card.pressed": Solid(fill: "#6FAAA826", border: "#6FAAA899", radius: 8.0),
+        // Learned: the faint accent, so learned boxes read as a lit path.
+        "strata.sheet.card.learned": Solid(fill: "#6FAAA814", border: "#6FAAA840", radius: 8.0),
+        "strata.sheet.card.learned.hover": Solid(fill: "#6FAAA824", border: "#6FAAA866", radius: 8.0),
+        "strata.sheet.card.learned.focus": Solid(fill: "#6FAAA824", border: "#6FAAA8B3", radius: 8.0),
+        "strata.sheet.card.learned.pressed": Solid(fill: "#6FAAA833", border: "$accent", radius: 8.0),
+        // Selected: the accent ring, which wins over every other frame.
+        "strata.sheet.card.selected": Solid(fill: "#6FAAA833", border: "$accent", radius: 8.0),
+        "strata.sheet.card.selected.hover": Solid(fill: "#6FAAA840", border: "$accent", radius: 8.0),
+        "strata.sheet.card.selected.focus": Solid(fill: "#6FAAA83D", border: "$accent", radius: 8.0),
+        "strata.sheet.card.selected.pressed": Solid(fill: "#6FAAA84D", border: "$accent", radius: 8.0),
+        // Taught here: the warm frame of a box a trainer in reach teaches.
+        "strata.sheet.card.taught": Solid(fill: "#2A241A99", border: "$warm", radius: 8.0),
+        "strata.sheet.card.taught.hover": Solid(fill: "#3A3020B3", border: "$warm", radius: 8.0),
+        "strata.sheet.card.taught.focus": Solid(fill: "#3A3020B3", border: "$warm", radius: 8.0),
+        "strata.sheet.card.taught.pressed": Solid(fill: "#4A3C26CC", border: "$warm", radius: 8.0),
+        // Every slotted panel has a 1 px border and paints its fill inside
+        // it, so a shape a few pixels across paints its border in its fill.
+        "strata.sheet.stripe.learned": Solid(fill: "$accent", border: "$accent", radius: 2.0),
+        "strata.sheet.stripe.taught": Solid(fill: "$warm", border: "$warm", radius: 2.0),
+        "strata.sheet.stripe.locked": Solid(fill: "#5A677C", border: "#5A677C", radius: 2.0),
+        "strata.sheet.stripe.later": Solid(fill: "#FFFFFF14", border: "#FFFFFF14", radius: 2.0),
+        // The name's tone: lit for what is had or can be had here, a step
+        // down for what waits, faint for what the game cannot teach.
+        "strata.sheet.name.lit": Text(color: "$text", size: 14.0, font: "body", weight: 600),
+        "strata.sheet.name.dim": Text(color: "#D0CAB8", size: 14.0, font: "body", weight: 600),
+        "strata.sheet.name.later": Text(color: "$muted", size: 14.0, font: "body", weight: 600),
+        "strata.sheet.cost": Text(color: "#9C9786", size: 13.0, font: "display"),
+        "strata.sheet.state.learned": Text(color: "$accent", size: 12.0, font: "body", weight: 600),
+        "strata.sheet.state.learnable": Text(color: "$warm", size: 12.0, font: "body", weight: 600),
+        "strata.sheet.state.waiting": Text(color: "#EEE8D88C", size: 12.0, font: "body", weight: 500),
+        "strata.sheet.state.xp": Text(color: "#EEE8D88C", size: 13.0, font: "display"),
+        // The connectors that make the cards one tree: lit where the box
+        // above them is learned.
+        "strata.sheet.link": Solid(fill: "#3D4A5E", border: "#3D4A5E"),
+        "strata.sheet.link.lit": Solid(fill: "#6FAAA8B3", border: "#6FAAA8B3"),
+        "strata.sheet.progress": Solid(fill: "#FFFFFF1F", border: "#FFFFFF1F", radius: 2.0),
+        "strata.sheet.progress.fill": Solid(fill: "$accent", border: "$accent", radius: 2.0),
+        "strata.sheet.figure": Text(color: "$text", size: 16.0, font: "display"),
+        "strata.sheet.figure.from": Text(color: "#9C9786", size: 16.0, font: "display"),
+        "strata.sheet.progress.text": Text(color: "#D0CAB8", size: 13.0, font: "display"),
+        "strata.sheet.chip.figure": Text(color: "#D0CAB8", size: 14.0, font: "display"),
+        "strata.sheet.chip.figure.active": Text(color: "$base", size: 14.0, font: "display"),
+        "strata.bench.points": Text(color: "$text", size: 20.0, font: "display"),
+        "strata.bench.points.total": Text(color: "$muted", size: 14.0, font: "display"),
+        // ---- end strata: the character sheet and the bench ----
+
+        // ---- strata: the combat HUD (combat_hud.rs, combat_text.rs) ----
+        // The vitals cluster, bottom left: one sheet of glass a step darker
+        // than `hud.panel`, so the bars read over snow and sky alike.
+        "strata.vitals.panel": Solid(fill: "#0B0E14B3", border: "#FFFFFF14", radius: 12.0, elevation: "low"),
+        "strata.vitals.name": Text(color: "$text", size: 15.0, font: "body", weight: 600),
+        "strata.vitals.chip": Solid(fill: "#FFFFFF12", border: "#FFFFFF24", radius: 999.0),
+        "strata.vitals.chip.text": Text(color: "#D0CAB8", size: 12.0, font: "display"),
+        "strata.vitals.chip.warm": Solid(fill: "#DB8A331F", border: "#DB8A3373", radius: 999.0),
+        "strata.vitals.chip.warm.text": Text(color: "$warm", size: 12.0, font: "display"),
+        // The encounter's word, right of the name: a label, so small.
+        "strata.vitals.encounter.engaged": Text(color: "$danger", size: 12.0, font: "display"),
+        "strata.vitals.encounter.clear": Text(color: "#7FFFB0", size: 12.0, font: "display"),
+        "strata.vitals.encounter.quiet": Text(color: "$muted", size: 12.0, font: "display"),
+        // A meter: grey label, hairline track, one-colour fill, white figure.
+        "strata.vitals.label": Text(color: "#9C9786", size: 11.0, font: "display"),
+        "strata.vitals.value": Text(color: "$text", size: 14.0, font: "display"),
+        "strata.vitals.track": Solid(fill: "#FFFFFF0D", border: "#FFFFFF1F", radius: 999.0),
+        "strata.vitals.health": Solid(fill: "#7FFFB0", radius: 999.0),
+        "strata.vitals.health.low": Solid(fill: "$danger", radius: 999.0),
+        "strata.vitals.shield": Solid(fill: "$accent", radius: 999.0),
+        "strata.vitals.stamina": Solid(fill: "$warm", radius: 999.0),
+        "strata.vitals.wear": Solid(fill: "$warm", radius: 999.0),
+        // The magazine: the figure the eye goes to, warm when low, danger
+        // when dry; the capacity beside it is only context.
+        "strata.vitals.ammo": Text(color: "$text", size: 28.0, font: "display"),
+        "strata.vitals.ammo.low": Text(color: "$warm", size: 28.0, font: "display"),
+        "strata.vitals.ammo.empty": Text(color: "$danger", size: 28.0, font: "display"),
+        "strata.vitals.ammo.max": Text(color: "$muted", size: 14.0, font: "display"),
+        "strata.vitals.reload": Text(color: "$warm", size: 12.0, font: "display"),
+        "strata.vitals.reload.glyph": Solid(fill: "#DB8A3326", border: "$warm", radius: 6.0),
+        "strata.vitals.reload.glyph.text": Text(color: "$warm", size: 12.0, font: "display", weight: 700),
+        "strata.vitals.action": Text(color: "$text", size: 13.0, font: "display"),
+        "strata.vitals.action.danger": Text(color: "$danger", size: 13.0, font: "display"),
+        // The controls card, bottom centre for the first seconds and on F1.
+        "strata.controls.panel": Solid(fill: "#0B0E14C7", border: "#FFFFFF14", radius: 12.0, elevation: "mid"),
+        "strata.controls.title": Text(color: "#9C9786", size: 11.0, font: "display"),
+        "strata.controls.label": Text(color: "#D0CAB8", size: 13.0, font: "body", weight: 500),
+        // ---- end strata: the combat HUD ----
+
+        // ---- strata: the world layer (nameplates.rs, combat_hud.rs) ----
+        // These paint raw nodes through `Painted`, which fades them, so
+        // they are solids and text only: a glass backdrop cannot fade.
+        // A hostile's plate: a small dark pill with the cluster's hairline.
+        "strata.nameplate": Solid(fill: "#0B0E14B3", border: "#FFFFFF14", radius: 6.0),
+        "strata.nameplate.name": Text(color: "$text", size: 12.0, font: "body", weight: 600),
+        "strata.nameplate.track": Solid(fill: "#FFFFFF1A", radius: 2.0),
+        "strata.nameplate.health": Solid(fill: "$danger", radius: 2.0),
+        // A post's person nobody has crossed: the same pill with a calm fill,
+        // and the warning word over the nearest of them.
+        "strata.nameplate.neutral": Solid(fill: "#9AA7BC", radius: 2.0),
+        "strata.post.warning": Text(color: "$warm", size: 22.0, font: "display", weight: 700),
+        "strata.nameplate.shield": Solid(fill: "$accent", radius: 1.0),
+        // The health figure's danger half of the low-health pulse.
+        "strata.vitals.value.danger": Text(color: "$danger", size: 14.0, font: "display"),
+        // The down card over the `scrim`: the word large in danger, who
+        // fell under it, the key to get up in the controls card's style.
+        "strata.down.card": Solid(fill: "#0B0E14D9", border: "#FFFFFF14", radius: 12.0, elevation: "mid"),
+        "strata.down.title": Text(color: "$danger", size: 40.0, font: "display"),
+        "strata.down.name": Text(color: "$text", size: 15.0, font: "body", weight: 600),
+        // ---- end strata: the world layer ----
+
+        // ---- strata: the action bar and the statuses (action_bar.rs) ----
+        // A square's frame at rest, and the four things it can say: a press
+        // taken (accent), a press refused (danger), short of stamina (warm).
+        "strata.bar.frame": Solid(fill: "#0B0E14B3", border: "#FFFFFF33", radius: 8.0),
+        "strata.bar.frame.accent": Solid(fill: "#0B0E14B3", border: "$accent", radius: 8.0),
+        "strata.bar.frame.danger": Solid(fill: "#0B0E14B3", border: "$danger", radius: 8.0),
+        "strata.bar.frame.short": Solid(fill: "#0B0E14B3", border: "$warm", radius: 8.0),
+        // The cooldown's veil, draining downward over the picture.
+        "strata.bar.cool": Solid(fill: "#05070CE0", radius: 7.0),
+        "strata.bar.secs": Text(color: "$text", size: 20.0, font: "display", weight: 700),
+        "strata.bar.key": Solid(fill: "#05070CE6", border: "#FFFFFF33", radius: 4.0),
+        "strata.bar.key.text": Text(color: "$text", size: 11.0, font: "display", weight: 700),
+        "strata.bar.weapon.key": Text(color: "$accent", size: 11.0, font: "display"),
+        "strata.bar.weapon.key.dim": Text(color: "#9C9786", size: 11.0, font: "display"),
+        // The weapon marks are white symbols; these are the colours they take.
+        "strata.bar.symbol": Solid(fill: "$accent"),
+        "strata.bar.symbol.dim": Solid(fill: "#6F7B8E"),
+        "strata.bar.reason": Text(color: "$danger", size: 14.0, font: "display"),
+        // The name under a filled square, and the open place's plus and caption.
+        "strata.bar.name": Text(color: "#D0CAB8", size: 11.0, font: "body"),
+        "strata.bar.plus": Text(color: "$accent", size: 26.0, font: "display", weight: 700),
+        "strata.bar.hint": Text(color: "$accent", size: 12.0, font: "display", weight: 700),
+        // ---- end strata: the action bar ----
+
+        // ---- strata: the weapon diagram (ui/weapon_diagram.rs) ----
+        // The well the pieces are stacked in, a step darker than the panel.
+        "strata.weapon.frame": Solid(fill: "#0B0E1499", border: "#FFFFFF14", radius: 8.0),
+        // A piece's picture is its own tone and coverage, and the fill here
+        // multiplies the tone: each is the colour a white surface takes in
+        // that state, so the shading the bake drew shows through it. The
+        // body is the quietest so the parts read as parts.
+        "strata.weapon.piece.body": Solid(fill: "#7C8BA1"),
+        "strata.weapon.piece.standard": Solid(fill: "#A9B8CC"),
+        "strata.weapon.piece.fitted": Solid(fill: "$accent"),
+        "strata.weapon.piece.shut": Solid(fill: "#4B566A"),
+        "strata.weapon.piece.focus": Solid(fill: "$warm"),
+        "strata.weapon.piece.hover": Solid(fill: "$text"),
+        // A mount with no piece to show, and every mount when no pictures
+        // are baked: a small labelled button in the same four states. Each
+        // is a family the button paints through hover and press.
+        "strata.weapon.box.standard": Solid(fill: "#FFFFFF0D", border: "#FFFFFF24", radius: 6.0),
+        "strata.weapon.box.standard.hover": Solid(fill: "#FFFFFF1A", border: "#FFFFFF40", radius: 6.0),
+        "strata.weapon.box.fitted": Solid(fill: "#6FAAA814", border: "#6FAAA866", radius: 6.0),
+        "strata.weapon.box.fitted.hover": Solid(fill: "#6FAAA824", border: "#6FAAA899", radius: 6.0),
+        "strata.weapon.box.shut": Solid(fill: "#FFFFFF05", border: "#FFFFFF14", radius: 6.0),
+        "strata.weapon.box.shut.hover": Solid(fill: "#FFFFFF0D", border: "#FFFFFF24", radius: 6.0),
+        "strata.weapon.box.focus": Solid(fill: "#DB8A331F", border: "$warm", radius: 6.0),
+        "strata.weapon.box.focus.hover": Solid(fill: "#DB8A3333", border: "$warm", radius: 6.0),
+        "strata.weapon.label.standard": Text(color: "#D0CAB8", size: 12.0, font: "display"),
+        "strata.weapon.label.fitted": Text(color: "$accent", size: 12.0, font: "display"),
+        "strata.weapon.label.shut": Text(color: "#5A677C", size: 12.0, font: "display"),
+        "strata.weapon.label.focus": Text(color: "$warm", size: 12.0, font: "display"),
+        // The bracket round the mount in focus: each corner is a node whose
+        // border is the line, so no fill and no radius. Its tag may lie
+        // over the body, so it brings a ground to be read on.
+        "strata.weapon.bracket": Solid(fill: "#00000000", border: "$warm"),
+        "strata.weapon.bracket.label": Solid(fill: "#0B0E14E6", border: "#DB8A3373", radius: 4.0),
+        // ---- end strata: the weapon diagram ----
+
+        // ---- strata: the fitting screen (ui/fitting.rs) ----
+        // A mount's row: the whole row is the button, so each look is a
+        // family it paints through hover, focus and press. The mount in
+        // focus takes the accent; a shut one is a step under the rest and
+        // says so in words.
+        "strata.fitting.mount": Solid(fill: "#FFFFFF0D", border: "#FFFFFF14", radius: 8.0),
+        "strata.fitting.mount.hover": Solid(fill: "#FFFFFF1A", border: "#FFFFFF40", radius: 8.0),
+        "strata.fitting.mount.focus": Solid(fill: "#FFFFFF1A", border: "#6FAAA899", radius: 8.0),
+        "strata.fitting.mount.pressed": Solid(fill: "#6FAAA826", border: "#6FAAA899", radius: 8.0),
+        "strata.fitting.mount.on": Solid(fill: "#6FAAA833", border: "$accent", radius: 8.0),
+        "strata.fitting.mount.on.hover": Solid(fill: "#6FAAA840", border: "$accent", radius: 8.0),
+        "strata.fitting.mount.on.focus": Solid(fill: "#6FAAA83D", border: "#FFFFFFCC", radius: 8.0),
+        "strata.fitting.mount.on.pressed": Solid(fill: "#6FAAA84D", border: "$accent", radius: 8.0),
+        "strata.fitting.mount.shut": Solid(fill: "#FFFFFF05", border: "#FFFFFF0F", radius: 8.0),
+        "strata.fitting.mount.shut.hover": Solid(fill: "#FFFFFF0F", border: "#FFFFFF2E", radius: 8.0),
+        "strata.fitting.mount.shut.focus": Solid(fill: "#FFFFFF0F", border: "#6FAAA899", radius: 8.0),
+        "strata.fitting.mount.shut.pressed": Solid(fill: "#6FAAA81A", border: "#6FAAA899", radius: 8.0),
+        "strata.fitting.mount.label": Text(color: "#9C9786", size: 12.0, font: "display"),
+        "strata.fitting.mount.label.on": Text(color: "$text", size: 12.0, font: "display"),
+        "strata.fitting.mount.name": Text(color: "$text", size: 14.0, font: "body", weight: 600),
+        "strata.fitting.mount.name.shut": Text(color: "#9C9786", size: 14.0, font: "body", weight: 600),
+        "strata.fitting.mount.sub": Text(color: "$muted", size: 12.0, font: "body"),
+        // A part that fits the mount in focus: the same button, a step
+        // quieter at rest, lit when it is the one picked.
+        "strata.fitting.pick": Solid(fill: "#FFFFFF0A", border: "#FFFFFF12", radius: 8.0),
+        "strata.fitting.pick.hover": Solid(fill: "#FFFFFF1A", border: "#FFFFFF40", radius: 8.0),
+        "strata.fitting.pick.focus": Solid(fill: "#FFFFFF1A", border: "#6FAAA899", radius: 8.0),
+        "strata.fitting.pick.pressed": Solid(fill: "#6FAAA826", border: "#6FAAA899", radius: 8.0),
+        "strata.fitting.pick.on": Solid(fill: "#6FAAA833", border: "$accent", radius: 8.0),
+        "strata.fitting.pick.on.hover": Solid(fill: "#6FAAA840", border: "$accent", radius: 8.0),
+        "strata.fitting.pick.on.focus": Solid(fill: "#6FAAA83D", border: "#FFFFFFCC", radius: 8.0),
+        "strata.fitting.pick.on.pressed": Solid(fill: "#6FAAA84D", border: "$accent", radius: 8.0),
+        // What a part would do, at the right of its row, and the well its
+        // picture stands in at the left.
+        "strata.fitting.pick.lead": Text(color: "$text", size: 14.0, font: "display"),
+        "strata.fitting.pick.icon": Solid(fill: "#0B0E1499", border: "#FFFFFF14", radius: 6.0),
+        // A column's heading, and the box the table and the moddability
+        // stand in.
+        "strata.fitting.head": Text(color: "#9C9786", size: 12.0, font: "display"),
+        "strata.fitting.box": Solid(fill: "#0B0E1473", border: "#FFFFFF12", radius: 10.0),
+        "strata.fitting.cell.name": Text(color: "#D0CAB8", size: 13.0, font: "body", weight: 500),
+        "strata.fitting.cell.now": Text(color: "$text", size: 15.0, font: "display"),
+        "strata.fitting.cell.after": Text(color: "$text", size: 15.0, font: "display"),
+        "strata.fitting.cell.bare": Text(color: "#9C9786", size: 15.0, font: "display"),
+        // A change for the better and one for the worse. The worse one says
+        // so in a word as well.
+        "strata.fitting.better": Text(color: "#7FFFB0", size: 13.0, font: "display"),
+        "strata.fitting.worse": Text(color: "$warm", size: 13.0, font: "display"),
+        "strata.fitting.status": Text(color: "$muted", size: 12.0, font: "body"),
+        "strata.fitting.status.refused": Text(color: "$warm", size: 12.0, font: "body", weight: 600),
+        // Beside the buttons: a reason one cannot act, in the refusal's
+        // colour, and a word on what to do next, in the footer's.
+        "strata.fitting.why": Text(color: "$warm", size: 12.0, font: "body", weight: 600),
+        "strata.fitting.why.hint": Text(color: "$muted", size: 12.0, font: "body"),
+        // Remove, and Fit while it cannot act. One that can has the accent
+        // on its border; one that cannot is fainter than the theme's own
+        // disabled button, so the two are told apart at a glance.
+        "strata.fitting.act": Solid(fill: "#243447E6", border: "#6FAAA899", radius: 8.0),
+        "strata.fitting.act.hover": Solid(fill: "#2D4259E6", border: "$accent", radius: 8.0),
+        "strata.fitting.act.focus": Solid(fill: "#2D4259E6", border: "#FFFFFFCC", radius: 8.0),
+        "strata.fitting.act.pressed": Solid(fill: "#0B0E14E6", border: "$accent", radius: 8.0),
+        "strata.fitting.act.disabled": Solid(fill: "#FFFFFF05", border: "#FFFFFF0F", radius: 8.0),
+        "strata.fitting.figure": Text(color: "$text", size: 14.0, font: "display"),
+        // Which of the two weapons is on the bench: pills, the chosen one
+        // inverted to the accent, as the stores' filter chips are.
+        "strata.fitting.tab": Solid(fill: "#FFFFFF0F", border: "#FFFFFF1F", radius: 999.0),
+        "strata.fitting.tab.hover": Solid(fill: "#FFFFFF1F", border: "#FFFFFF40", radius: 999.0),
+        "strata.fitting.tab.focus": Solid(fill: "#FFFFFF1F", border: "$accent", radius: 999.0),
+        "strata.fitting.tab.pressed": Solid(fill: "#6FAAA833", border: "$accent", radius: 999.0),
+        "strata.fitting.tab.on": Solid(fill: "$accent", border: "$accent", radius: 999.0),
+        "strata.fitting.tab.on.hover": Solid(fill: "#8CC4C2", border: "#FFFFFF80", radius: 999.0),
+        "strata.fitting.tab.on.focus": Solid(fill: "#8CC4C2", border: "#FFFFFFCC", radius: 999.0),
+        "strata.fitting.tab.on.pressed": Solid(fill: "#4D8785", border: "$accent", radius: 999.0),
+        "strata.fitting.tab.text": Text(color: "#D0CAB8", size: 12.0, font: "display"),
+        "strata.fitting.tab.text.on": Text(color: "$base", size: 12.0, font: "display"),
+        // ---- end strata: the fitting screen ----
+
+        // ---- strata: the stores and the item card (ui/stores.rs, ui/card.rs) ----
+        // The card pinned beside the grids: a step darker than the panel it
+        // sits on. Raised on hover it is drawn in the tooltip's own frame.
+        "strata.card": Solid(fill: "#0B0E148C", border: "$hairline", radius: 12.0),
+        "strata.card.raised": Solid(fill: "$base", radius: 8.0),
+        "strata.card.name": Text(color: "$text", size: 15.0, font: "body", weight: 600),
+        // What the item is, at the right of its name, and every small label
+        // on the card: uppercase in the condensed face.
+        "strata.card.kind": Text(color: "#9C9786", size: 11.0, font: "display"),
+        "strata.card.from": Text(color: "$muted", size: 12.0, font: "body"),
+        "strata.card.rule": Solid(fill: "#FFFFFF14"),
+        "strata.card.note": Text(color: "#9C9786", size: 12.0, font: "body"),
+        // What the item does, in the game's units: the property, its
+        // figure, and the change against what the weapon has there now,
+        // which says worse in a word where it is. A property the fight has
+        // no number for is tagged as such.
+        "strata.card.effect.name": Text(color: "#D0CAB8", size: 13.0, font: "body", weight: 500),
+        "strata.card.effect.value": Text(color: "$text", size: 15.0, font: "display"),
+        "strata.card.effect.better": Text(color: "#7FFFB0", size: 13.0, font: "display"),
+        "strata.card.effect.worse": Text(color: "$warm", size: 13.0, font: "display"),
+        "strata.card.effect.later": Text(color: "#9C9786", size: 10.0, font: "display"),
+        // A quality line on its track of nought to a thousand. The tick
+        // marks store grade and stands proud of the track, so it reads
+        // whether the fill has passed it or not.
+        "strata.quality.track": Solid(fill: "#FFFFFF14", radius: 3.0),
+        "strata.quality.fill": Solid(fill: "$accent", radius: 3.0),
+        "strata.quality.tick": Solid(fill: "#EEE8D88C", radius: 1.0),
+        // A weapon's condition on the same track, in the cluster's green.
+        "strata.quality.fill.condition": Solid(fill: "#7FFFB0", radius: 3.0),
+        "strata.quality.fill.condition.worn": Solid(fill: "$warm", radius: 3.0),
+        "strata.quality.value": Text(color: "$text", size: 13.0, font: "display"),
+        // A cell's dressing: the pip up its left edge is the stack's
+        // quality, the strip across its top a weapon's condition once it
+        // has worn.
+        "strata.slot.pip": Solid(fill: "#FFFFFF14", radius: 2.0),
+        "strata.slot.pip.fill": Solid(fill: "$accent", radius: 2.0),
+        // The cap across the pip's head marks a crafted batch from store
+        // grade, where the fills of two batches may stand at one height.
+        "strata.slot.pip.cap": Solid(fill: "$text", radius: 1.0),
+        "strata.slot.condition": Solid(fill: "#0B0E14CC", radius: 2.0),
+        "strata.slot.condition.fill": Solid(fill: "#7FFFB0", radius: 2.0),
+        "strata.stores.section": Text(color: "#9C9786", size: 12.0, font: "display"),
+        // The filter chips: pills, the chosen one inverted to the accent.
+        // Each is a family the chip paints through hover, focus and press.
+        "strata.stores.chip": Solid(fill: "#FFFFFF0F", border: "#FFFFFF1F", radius: 999.0),
+        "strata.stores.chip.hover": Solid(fill: "#FFFFFF1F", border: "#FFFFFF40", radius: 999.0),
+        "strata.stores.chip.focus": Solid(fill: "#FFFFFF1F", border: "$accent", radius: 999.0),
+        "strata.stores.chip.pressed": Solid(fill: "#6FAAA833", border: "$accent", radius: 999.0),
+        "strata.stores.chip.on": Solid(fill: "$accent", border: "$accent", radius: 999.0),
+        "strata.stores.chip.on.hover": Solid(fill: "#8CC4C2", border: "#FFFFFF80", radius: 999.0),
+        "strata.stores.chip.on.focus": Solid(fill: "#8CC4C2", border: "#FFFFFFCC", radius: 999.0),
+        "strata.stores.chip.on.pressed": Solid(fill: "#4D8785", border: "$accent", radius: 999.0),
+        "strata.stores.chip.text": Text(color: "#D0CAB8", size: 12.0, font: "display"),
+        "strata.stores.chip.text.on": Text(color: "$base", size: 12.0, font: "display"),
+        // A weapon in hand: its cell, its name and what it carries, on a
+        // quiet tile, with the word for which hand at the right.
+        "strata.stores.hand": Solid(fill: "#FFFFFF0D", border: "#FFFFFF14", radius: 10.0),
+        "strata.stores.hand.name": Text(color: "$text", size: 14.0, font: "body", weight: 600),
+        "strata.stores.hand.state": Text(color: "$accent", size: 11.0, font: "display"),
+        "strata.stores.caption": Text(color: "#D0CAB8", size: 12.0, font: "body"),
+        // Why a click did nothing, at the thing clicked, and the mark
+        // beside a bag that will not come out.
+        "strata.stores.refusal": Text(color: "$warm", size: 12.0, font: "body", weight: 600),
+        "strata.stores.lock": Solid(fill: "$warm", border: "$warm", radius: 2.0),
+        "strata.stores.lock.shackle": Solid(fill: "#00000000", border: "$warm", radius: 4.0),
+        "strata.stores.status": Text(color: "$muted", size: 12.0, font: "body"),
+        "strata.stores.carrying": Text(color: "$text", size: 12.0, font: "body", weight: 600),
+        // ---- end strata: the stores and the item card ----
+
+        // ---- strata: lots, the survey, the register and the tracker (ui/card.rs, ui/survey.rs, ui/bench.rs, ui/tracker.rs) ----
+        // A lot's line on its track: the band is the range its type can
+        // have anywhere, with an end at its floor and at its cap; the fill
+        // runs from the floor to the lot's figure and the mark stands at
+        // the figure, proud of the track.
+        "strata.quality.track.lot": Solid(fill: "#FFFFFF0D", radius: 3.0),
+        "strata.quality.range": Solid(fill: "#FFFFFF21", radius: 3.0),
+        "strata.quality.range.end": Solid(fill: "#EEE8D859", radius: 1.0),
+        "strata.quality.mark": Solid(fill: "$text", radius: 1.0),
+        "strata.card.of": Text(color: "#9C9786", size: 12.0, font: "display"),
+        // The household's credits, at the right of a screen's head.
+        "strata.purse.value": Text(color: "$text", size: 18.0, font: "display", weight: 600),
+        "strata.purse.label": Text(color: "#9C9786", size: 12.0, font: "display"),
+        // The survey screen: the grid, the deposits met and the card.
+        // The survey tool's screen and its HUD bar: the grid's cells (tinted
+        // by the screen with the class's colour), the channel's track and
+        // fill, and the words on them.
+        "strata.survey.note": Text(color: "$muted", size: 12.0, font: "body"),
+        "strata.survey.cell": Solid(fill: "#0B0E14B3", border: "#9C978680", radius: 6.0),
+        "strata.survey.cell.you": Solid(fill: "#0B0E14B3", border: "#FFFFFFE6", radius: 6.0),
+        "strata.survey.pct": Text(color: "$text", size: 16.0, font: "display", weight: 700),
+        "strata.survey.you": Text(color: "#FFFFFF", size: 11.0, font: "display", weight: 700),
+        "strata.survey.edge": Text(color: "#9C9786", size: 11.0, font: "display"),
+        "strata.survey.swatch": Solid(fill: "#FFFFFF", border: "#0B0E14", radius: 999.0),
+        "strata.survey.track": Solid(fill: "#FFFFFF26", border: "#9C978680", radius: 4.0),
+        "strata.survey.fill": Solid(fill: "$accent", border: "$accent", radius: 4.0),
+        "strata.survey.met": Text(color: "$text", size: 13.0, font: "body", weight: 600),
+        "strata.survey.met.sub": Text(color: "#D0CAB8", size: 12.0, font: "display"),
+        // A row of the survey register: a button the width of the list,
+        // the tracked one lit. Its name in the prose face, its class and
+        // its figures in the condensed one.
+        "strata.register.row": Solid(fill: "#FFFFFF0A", border: "#FFFFFF12", radius: 8.0),
+        "strata.register.row.hover": Solid(fill: "#FFFFFF1A", border: "#FFFFFF40", radius: 8.0),
+        "strata.register.row.focus": Solid(fill: "#FFFFFF1A", border: "#6FAAA899", radius: 8.0),
+        "strata.register.row.pressed": Solid(fill: "#6FAAA826", border: "#6FAAA899", radius: 8.0),
+        "strata.register.row.on": Solid(fill: "#6FAAA833", border: "$accent", radius: 8.0),
+        "strata.register.row.on.hover": Solid(fill: "#6FAAA840", border: "$accent", radius: 8.0),
+        "strata.register.row.on.focus": Solid(fill: "#6FAAA83D", border: "#FFFFFFCC", radius: 8.0),
+        "strata.register.row.on.pressed": Solid(fill: "#6FAAA84D", border: "$accent", radius: 8.0),
+        "strata.register.name": Text(color: "$text", size: 14.0, font: "body", weight: 600),
+        "strata.register.kind": Text(color: "#9C9786", size: 12.0, font: "display"),
+        "strata.register.figure": Text(color: "$text", size: 14.0, font: "display"),
+        "strata.register.where": Text(color: "#D0CAB8", size: 13.0, font: "display"),
+        "strata.register.tracked": Text(color: "$accent", size: 12.0, font: "display"),
+        // Stood at, a full disc; not yet, a ring.
+        "strata.register.mark": Solid(fill: "$accent", border: "$accent", radius: 999.0),
+        "strata.register.mark.read": Solid(fill: "$accent", border: "$accent", radius: 1.0),
+        "strata.register.mark.none": Solid(fill: "#00000000", border: "#9C9786", radius: 999.0),
+        // The tracked deposit's marker over the world: a warm diamond and
+        // its name on a dark plate, which is what keeps it read over
+        // bright ground.
+        "strata.tracker.plate": Solid(fill: "#0B0E14D9", border: "#DB8A3373", radius: 6.0),
+        "strata.tracker.pin": Solid(fill: "$warm", border: "#0B0E14", radius: 1.0),
+        "strata.tracker.text": Text(color: "$text", size: 13.0, font: "display"),
+        // ---- end strata: lots, the survey, the register and the tracker ----
+
+        // ---- strata: the crafting session (ui/crafting.rs, ui/card.rs) ----
+        // A schematic's row: the whole row is the button. The one shown
+        // takes the accent and a guillemet; one that cannot be picked while
+        // something is on the bench is a step under the rest and says why.
+        "strata.crafting.schem": Solid(fill: "#FFFFFF0A", border: "#FFFFFF12", radius: 8.0),
+        "strata.crafting.schem.hover": Solid(fill: "#FFFFFF1A", border: "#FFFFFF40", radius: 8.0),
+        "strata.crafting.schem.focus": Solid(fill: "#FFFFFF1A", border: "#6FAAA899", radius: 8.0),
+        "strata.crafting.schem.pressed": Solid(fill: "#6FAAA826", border: "#6FAAA899", radius: 8.0),
+        "strata.crafting.schem.disabled": Solid(fill: "#FFFFFF05", border: "#FFFFFF0F", radius: 8.0),
+        "strata.crafting.schem.on": Solid(fill: "#6FAAA833", border: "$accent", radius: 8.0),
+        "strata.crafting.schem.on.hover": Solid(fill: "#6FAAA840", border: "$accent", radius: 8.0),
+        "strata.crafting.schem.on.focus": Solid(fill: "#6FAAA83D", border: "#FFFFFFCC", radius: 8.0),
+        "strata.crafting.schem.on.pressed": Solid(fill: "#6FAAA84D", border: "$accent", radius: 8.0),
+        "strata.crafting.schem.name": Text(color: "$text", size: 13.0, font: "body", weight: 600),
+        "strata.crafting.schem.name.cant": Text(color: "#9C9786", size: 13.0, font: "body", weight: 600),
+        // A slot's box, lit while its candidates are listed.
+        "strata.crafting.slot": Solid(fill: "#0B0E1473", border: "#FFFFFF12", radius: 10.0),
+        "strata.crafting.slot.open": Solid(fill: "#0B0E1473", border: "#6FAAA899", radius: 10.0),
+        // A candidate there is too little of: its name a step under the
+        // rest, with the reason beside it in the refusal's colour.
+        "strata.crafting.pick.short": Text(color: "#9C9786", size: 14.0, font: "body", weight: 600),
+        // A figure the slot weighs: its name, then the figure lit.
+        "strata.crafting.stat": Text(color: "#D0CAB8", size: 12.0, font: "display"),
+        "strata.crafting.stat.value": Text(color: "$text", size: 14.0, font: "display"),
+        // A small uppercase mark on a row: BEST, NOT IN THE FIGHT YET.
+        "strata.crafting.tag": Text(color: "#9C9786", size: 10.0, font: "display"),
+        // What a line is worth in the game's units, and the prose under it.
+        "strata.crafting.means": Text(color: "$text", size: 15.0, font: "display"),
+        "strata.crafting.note": Text(color: "#D0CAB8", size: 12.0, font: "body"),
+        // The word a roll says. Each is a word first; the colour follows it.
+        "strata.crafting.word.good": Text(color: "$accent", size: 14.0, font: "display"),
+        "strata.crafting.word.fair": Text(color: "#D0CAB8", size: 14.0, font: "display"),
+        "strata.crafting.word.poor": Text(color: "$warm", size: 14.0, font: "display"),
+        "strata.crafting.word.setback": Text(color: "$danger", size: 14.0, font: "display"),
+        // The five bars of a hand's odds, left to right: exceptional and
+        // good, fair, poor, setback. The sentence under them says the order.
+        "strata.crafting.odds.good": Solid(fill: "$accent", radius: 2.0),
+        "strata.crafting.odds.fair": Solid(fill: "#D0CAB8", radius: 2.0),
+        "strata.crafting.odds.poor": Solid(fill: "$warm", radius: 2.0),
+        "strata.crafting.odds.setback": Solid(fill: "$danger", radius: 2.0),
+        // The hairline round a stack's shape in a list; the fill is the
+        // item's own colour and no role's.
+        "strata.crafting.swatch": Solid(fill: "#00000000", border: "#FFFFFF59", radius: 3.0),
+        // A craft's line on its track: what the materials allow is the lit
+        // part of the track, the mark is where assembly alone lands it.
+        "strata.quality.ceiling": Solid(fill: "#6FAAA838", radius: 3.0),
+        "strata.quality.floor": Solid(fill: "$warm", radius: 1.0),
+        // ---- end strata: the crafting session ----
+
+        // ---- strata: the factory (ui/factory.rs, ui/bench.rs) ----
+        // What a blueprint's slot asks of its stock: `needs Potency 537`.
+        "strata.factory.need": Text(color: "#D0CAB8", size: 13.0, font: "display"),
+        // The batch's size, the one numeral of the row that changes it.
+        "strata.factory.batch": Text(color: "$text", size: 20.0, font: "display"),
+        // A kind of stack that does not meet its slot: its name a step
+        // under the rest, with the figure it fails on beside it in the
+        // refusal's colour and words.
+        "strata.factory.feed.fail": Text(color: "#9C9786", size: 14.0, font: "body", weight: 600),
+        // The mark on a kind picked to feed its slot: the word FEEDS, lit.
+        "strata.factory.feeds": Text(color: "$accent", size: 10.0, font: "display"),
+        // How much of a batch is made; the count beside the bar is the
+        // figure.
+        "strata.factory.progress": Solid(fill: "#FFFFFF14", radius: 4.0),
+        "strata.factory.progress.fill": Solid(fill: "$accent", radius: 4.0),
+        // A run that stands says so in a word, where its time would be.
+        "strata.factory.paused": Text(color: "$warm", size: 14.0, font: "display"),
+        // A benched member at the fabricator: where they are and how far
+        // the batch has come, on their card.
+        "strata.bench.work": Text(color: "$warm", size: 12.0, font: "display"),
+        // ---- end strata: the factory ----
+    },
+)

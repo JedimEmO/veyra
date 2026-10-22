@@ -201,7 +201,7 @@ crates/strata-registry    no Bevy: biome, terrain material, flora, settlement an
 crates/strata-worldgen    no Bevy: continents, climate, biomes, geological provinces, relief; the WorldSource port
 crates/strata-flora       no Bevy: vegetation placed per 64 m cell from the seed and the species registry
 crates/strata-weather     no Bevy: where fog lies, basins baked per 8 km tile and sampled under a weather
-crates/strata-sim         bevy_ecs/app/math/state/time/transform/tasks: fixed-tick sim, f64 positions, render origin, world loader
+crates/veyra-sim         bevy_ecs/app/math/state/time/transform/tasks: fixed-tick sim, f64 positions, render origin, world loader
 crates/strata-stream      no renderer: quadtree selection, wanted/loaded regions, budgets
 crates/strata-physics     no renderer: avian3d stepped in the sim tick, a heightfield collider per region, the character controller
 crates/strata-terrain     bevy_render: async heightfield meshing, LOD morph, splat material, the sea
@@ -218,8 +218,8 @@ assets/                    biomes/*.biome.ron, geology/*.geology.ron, flora/*.fl
 ```
 
 The rule that holds it together: an arrow never points from a lower crate
-to a higher one. Crates below `strata-sim` have no Bevy at all;
-`strata-sim`, `strata-stream`, `strata-physics` and
+to a higher one. Crates below `veyra-sim` have no Bevy at all;
+`veyra-sim`, `strata-stream`, `strata-physics` and
 `strata-net-replicon` use `bevy_ecs`, `bevy_app` and `bevy_math` (plus
 state, time, transforms and the task pool) and never a renderer; only the
 crates above them see `bevy_render`. `just server-check` asserts that the

@@ -321,10 +321,11 @@ dependencies = [
 [[package]]
 name = "ashlar"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/ashlar?rev=b6148290f272075f099605173969b71ce1ebc793#b6148290f272075f099605173969b71ce1ebc793"
+source = "git+https://github.com/JedimEmO/ashlar?rev=b12d929815c6487f0f37c08a6d247d475de8e181#b12d929815c6487f0f37c08a6d247d475de8e181"
 dependencies = [
  "ashlar-surface",
  "glam",
+ "meshopt",
  "ron",
  "serde",
  "thiserror 2.0.20",
@@ -333,7 +334,7 @@ dependencies = [
 [[package]]
 name = "ashlar-bevy"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/ashlar?rev=b6148290f272075f099605173969b71ce1ebc793#b6148290f272075f099605173969b71ce1ebc793"
+source = "git+https://github.com/JedimEmO/ashlar?rev=b12d929815c6487f0f37c08a6d247d475de8e181#b12d929815c6487f0f37c08a6d247d475de8e181"
 dependencies = [
  "anyhow",
  "ashlar",
@@ -348,12 +349,13 @@ dependencies = [
 [[package]]
 name = "ashlar-content"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/ashlar?rev=b6148290f272075f099605173969b71ce1ebc793#b6148290f272075f099605173969b71ce1ebc793"
+source = "git+https://github.com/JedimEmO/ashlar?rev=b12d929815c6487f0f37c08a6d247d475de8e181#b12d929815c6487f0f37c08a6d247d475de8e181"
 dependencies = [
  "ashlar",
  "ashlar-impostor",
  "ashlar-manifold",
  "ashlar-material",
+ "bevy_mikktspace",
  "blake3",
  "half",
  "image",
@@ -366,7 +368,7 @@ dependencies = [
 [[package]]
 name = "ashlar-impostor"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/ashlar?rev=b6148290f272075f099605173969b71ce1ebc793#b6148290f272075f099605173969b71ce1ebc793"
+source = "git+https://github.com/JedimEmO/ashlar?rev=b12d929815c6487f0f37c08a6d247d475de8e181#b12d929815c6487f0f37c08a6d247d475de8e181"
 dependencies = [
  "ashlar",
  "ashlar-material",
@@ -377,7 +379,7 @@ dependencies = [
 [[package]]
 name = "ashlar-manifold"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/ashlar?rev=b6148290f272075f099605173969b71ce1ebc793#b6148290f272075f099605173969b71ce1ebc793"
+source = "git+https://github.com/JedimEmO/ashlar?rev=b12d929815c6487f0f37c08a6d247d475de8e181#b12d929815c6487f0f37c08a6d247d475de8e181"
 dependencies = [
  "ashlar",
  "glam",
@@ -387,10 +389,11 @@ dependencies = [
 [[package]]
 name = "ashlar-material"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/ashlar?rev=b6148290f272075f099605173969b71ce1ebc793#b6148290f272075f099605173969b71ce1ebc793"
+source = "git+https://github.com/JedimEmO/ashlar?rev=b12d929815c6487f0f37c08a6d247d475de8e181#b12d929815c6487f0f37c08a6d247d475de8e181"
 dependencies = [
  "ashlar-strands",
  "ashlar-surface",
+ "ctt-intel-texture-compressor",
  "glam",
  "serde",
  "thiserror 2.0.20",
@@ -401,7 +404,7 @@ dependencies = [
 [[package]]
 name = "ashlar-preview"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/ashlar?rev=b6148290f272075f099605173969b71ce1ebc793#b6148290f272075f099605173969b71ce1ebc793"
+source = "git+https://github.com/JedimEmO/ashlar?rev=b12d929815c6487f0f37c08a6d247d475de8e181#b12d929815c6487f0f37c08a6d247d475de8e181"
 dependencies = [
  "anyhow",
  "ashlar",
@@ -416,7 +419,7 @@ dependencies = [
 [[package]]
 name = "ashlar-strands"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/ashlar?rev=b6148290f272075f099605173969b71ce1ebc793#b6148290f272075f099605173969b71ce1ebc793"
+source = "git+https://github.com/JedimEmO/ashlar?rev=b12d929815c6487f0f37c08a6d247d475de8e181#b12d929815c6487f0f37c08a6d247d475de8e181"
 dependencies = [
  "glam",
  "serde",
@@ -426,7 +429,7 @@ dependencies = [
 [[package]]
 name = "ashlar-surface"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/ashlar?rev=b6148290f272075f099605173969b71ce1ebc793#b6148290f272075f099605173969b71ce1ebc793"
+source = "git+https://github.com/JedimEmO/ashlar?rev=b12d929815c6487f0f37c08a6d247d475de8e181#b12d929815c6487f0f37c08a6d247d475de8e181"
 dependencies = [
  "serde",
  "thiserror 2.0.20",
@@ -604,9 +607,12 @@ dependencies = [
  "strata-core",
  "strata-physics",
  "strata-registry",
- "strata-sim",
  "strata-stream",
  "strata-worldgen",
+ "veyra-physics",
+ "veyra-rules",
+ "veyra-sim",
+ "veyra-world",
 ]
 
 [[package]]
@@ -2613,7 +2619,9 @@ dependencies = [
  "insta",
  "ron",
  "serde",
+ "serde_json",
  "strata-core",
+ "strata-data",
  "strata-flora",
  "strata-registry",
  "strata-worldgen",
@@ -2865,6 +2873,26 @@ dependencies = [
  "dispatch2",
  "nix",
  "windows-sys 0.61.2",
+]
+
+[[package]]
+name = "ctt-intel-texture-compressor"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7fde7d8720e4046e78f6f00fc4cc40f2203bbf2c5095c787129baacb1c014036"
+dependencies = [
+ "cc",
+ "ctt-intel-texture-compressor-prebuilt",
+ "ispc-build-utils",
+]
+
+[[package]]
+name = "ctt-intel-texture-compressor-prebuilt"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cc71ae3da55d5b0fa24389fcf4bde84efcef4158192742437553ff17db61b575"
+dependencies = [
+ "ispc-build-utils",
 ]
 
 [[package]]
@@ -3188,6 +3216,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "float-cmp"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b09cf3155332e944990140d967ff5eceb70df778b34f77d8075db46e4704e6d8"
+dependencies = [
+ "num-traits",
+]
+
+[[package]]
 name = "fluent-bundle"
 version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3382,6 +3419,11 @@ dependencies = [
  "tempfile",
  "tracing",
  "veyra-buildings",
+ "veyra-dev",
+ "veyra-game",
+ "veyra-sim",
+ "veyra-ui",
+ "veyra-view",
  "wasm-bindgen",
  "web-sys",
 ]
@@ -3746,12 +3788,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dfa686283ad6dd069f105e5ab091b04c62850d3e4cf5d67debad1933f55023df"
 
 [[package]]
-name = "hound"
-version = "3.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62adaabb884c94955b19907d60019f4e145d091c75345379e70d1ee696f7854f"
-
-[[package]]
 name = "icu_collections"
 version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3999,6 +4035,15 @@ name = "is_terminal_polyfill"
 version = "1.70.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a6cb138bb79a146c1bd460005623e142ef0181e3d0219cb493e02f7d08a35695"
+
+[[package]]
+name = "ispc-build-utils"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e7febad5267887f09e45eff88910e9a9793936d9a8c2e0a8501b4e733998aaf3"
+dependencies = [
+ "find-msvc-tools",
+]
 
 [[package]]
 name = "itertools"
@@ -4311,6 +4356,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d1219ed1b7f229ee7104d281dd01d6802fe28bb6e95d292942c4daacdeb798c0"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "meshopt"
+version = "0.6.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e01e77ead21976b3a9f01ec1724f766923da74f0726364e2b0f425658935d71a"
+dependencies = [
+ "bitflags 2.13.2",
+ "cc",
+ "float-cmp",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -5819,7 +5876,6 @@ checksum = "d0a536bb79db59098ef71a4dd4246c02eb87b316deceb1b68e0cde7167ec01eb"
 dependencies = [
  "cpal",
  "dasp_sample",
- "hound",
  "lewton",
  "num-rational",
  "thiserror 2.0.20",
@@ -6051,6 +6107,7 @@ dependencies = [
  "strata",
  "strata-flora",
  "tracing",
+ "veyra-game",
 ]
 
 [[package]]
@@ -6147,7 +6204,7 @@ dependencies = [
 [[package]]
 name = "slotted"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/bevy-slotted?rev=dfe0c6e416a12b35b3ac29593f69fa55d573e7fd#dfe0c6e416a12b35b3ac29593f69fa55d573e7fd"
+source = "git+https://github.com/JedimEmO/bevy-slotted?rev=c6e811555ce811f678df8f38361c25c5a7984028#c6e811555ce811f678df8f38361c25c5a7984028"
 dependencies = [
  "bevy",
  "slotted-browser",
@@ -6164,7 +6221,7 @@ dependencies = [
 [[package]]
 name = "slotted-browser"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/bevy-slotted?rev=dfe0c6e416a12b35b3ac29593f69fa55d573e7fd#dfe0c6e416a12b35b3ac29593f69fa55d573e7fd"
+source = "git+https://github.com/JedimEmO/bevy-slotted?rev=c6e811555ce811f678df8f38361c25c5a7984028#c6e811555ce811f678df8f38361c25c5a7984028"
 dependencies = [
  "bevy",
  "ron",
@@ -6182,7 +6239,7 @@ dependencies = [
 [[package]]
 name = "slotted-ecs"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/bevy-slotted?rev=dfe0c6e416a12b35b3ac29593f69fa55d573e7fd#dfe0c6e416a12b35b3ac29593f69fa55d573e7fd"
+source = "git+https://github.com/JedimEmO/bevy-slotted?rev=c6e811555ce811f678df8f38361c25c5a7984028#c6e811555ce811f678df8f38361c25c5a7984028"
 dependencies = [
  "bevy",
  "serde",
@@ -6195,7 +6252,7 @@ dependencies = [
 [[package]]
 name = "slotted-icons"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/bevy-slotted?rev=dfe0c6e416a12b35b3ac29593f69fa55d573e7fd#dfe0c6e416a12b35b3ac29593f69fa55d573e7fd"
+source = "git+https://github.com/JedimEmO/bevy-slotted?rev=c6e811555ce811f678df8f38361c25c5a7984028#c6e811555ce811f678df8f38361c25c5a7984028"
 dependencies = [
  "bevy",
  "slotted-ecs",
@@ -6208,7 +6265,7 @@ dependencies = [
 [[package]]
 name = "slotted-menu"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/bevy-slotted?rev=dfe0c6e416a12b35b3ac29593f69fa55d573e7fd#dfe0c6e416a12b35b3ac29593f69fa55d573e7fd"
+source = "git+https://github.com/JedimEmO/bevy-slotted?rev=c6e811555ce811f678df8f38361c25c5a7984028#c6e811555ce811f678df8f38361c25c5a7984028"
 dependencies = [
  "bevy",
  "ron",
@@ -6223,7 +6280,7 @@ dependencies = [
 [[package]]
 name = "slotted-model"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/bevy-slotted?rev=dfe0c6e416a12b35b3ac29593f69fa55d573e7fd#dfe0c6e416a12b35b3ac29593f69fa55d573e7fd"
+source = "git+https://github.com/JedimEmO/bevy-slotted?rev=c6e811555ce811f678df8f38361c25c5a7984028#c6e811555ce811f678df8f38361c25c5a7984028"
 dependencies = [
  "serde",
  "thiserror 2.0.20",
@@ -6232,7 +6289,7 @@ dependencies = [
 [[package]]
 name = "slotted-packs"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/bevy-slotted?rev=dfe0c6e416a12b35b3ac29593f69fa55d573e7fd#dfe0c6e416a12b35b3ac29593f69fa55d573e7fd"
+source = "git+https://github.com/JedimEmO/bevy-slotted?rev=c6e811555ce811f678df8f38361c25c5a7984028#c6e811555ce811f678df8f38361c25c5a7984028"
 dependencies = [
  "bevy",
  "fluent-bundle",
@@ -6253,7 +6310,7 @@ dependencies = [
 [[package]]
 name = "slotted-registry"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/bevy-slotted?rev=dfe0c6e416a12b35b3ac29593f69fa55d573e7fd#dfe0c6e416a12b35b3ac29593f69fa55d573e7fd"
+source = "git+https://github.com/JedimEmO/bevy-slotted?rev=c6e811555ce811f678df8f38361c25c5a7984028#c6e811555ce811f678df8f38361c25c5a7984028"
 dependencies = [
  "indexmap",
  "ron",
@@ -6267,7 +6324,7 @@ dependencies = [
 [[package]]
 name = "slotted-script"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/bevy-slotted?rev=dfe0c6e416a12b35b3ac29593f69fa55d573e7fd#dfe0c6e416a12b35b3ac29593f69fa55d573e7fd"
+source = "git+https://github.com/JedimEmO/bevy-slotted?rev=c6e811555ce811f678df8f38361c25c5a7984028#c6e811555ce811f678df8f38361c25c5a7984028"
 dependencies = [
  "serde",
  "slotted-model",
@@ -6277,7 +6334,7 @@ dependencies = [
 [[package]]
 name = "slotted-test"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/bevy-slotted?rev=dfe0c6e416a12b35b3ac29593f69fa55d573e7fd#dfe0c6e416a12b35b3ac29593f69fa55d573e7fd"
+source = "git+https://github.com/JedimEmO/bevy-slotted?rev=c6e811555ce811f678df8f38361c25c5a7984028#c6e811555ce811f678df8f38361c25c5a7984028"
 dependencies = [
  "bevy",
  "ron",
@@ -6299,7 +6356,7 @@ dependencies = [
 [[package]]
 name = "slotted-theme"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/bevy-slotted?rev=dfe0c6e416a12b35b3ac29593f69fa55d573e7fd#dfe0c6e416a12b35b3ac29593f69fa55d573e7fd"
+source = "git+https://github.com/JedimEmO/bevy-slotted?rev=c6e811555ce811f678df8f38361c25c5a7984028#c6e811555ce811f678df8f38361c25c5a7984028"
 dependencies = [
  "bevy",
  "ron",
@@ -6311,7 +6368,7 @@ dependencies = [
 [[package]]
 name = "slotted-ui"
 version = "0.1.0"
-source = "git+https://github.com/JedimEmO/bevy-slotted?rev=dfe0c6e416a12b35b3ac29593f69fa55d573e7fd#dfe0c6e416a12b35b3ac29593f69fa55d573e7fd"
+source = "git+https://github.com/JedimEmO/bevy-slotted?rev=c6e811555ce811f678df8f38361c25c5a7984028#c6e811555ce811f678df8f38361c25c5a7984028"
 dependencies = [
  "accesskit",
  "bevy",
@@ -6431,6 +6488,8 @@ name = "strata"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "bevy_replicon",
+ "strata-app",
  "strata-atmosphere",
  "strata-client",
  "strata-core",
@@ -6439,11 +6498,30 @@ dependencies = [
  "strata-net-replicon",
  "strata-physics",
  "strata-registry",
- "strata-sim",
  "strata-stream",
  "strata-terrain",
  "strata-weather",
  "strata-worldgen",
+ "veyra-physics",
+ "veyra-sim",
+ "veyra-world",
+]
+
+[[package]]
+name = "strata-app"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "ron",
+ "serde",
+ "strata-core",
+ "strata-flora",
+ "strata-registry",
+ "strata-types",
+ "strata-worldgen",
+ "thiserror 2.0.20",
+ "tracing",
+ "web-sys",
 ]
 
 [[package]]
@@ -6455,9 +6533,9 @@ dependencies = [
  "naga",
  "ron",
  "serde",
+ "strata-app",
  "strata-core",
  "strata-registry",
- "strata-sim",
  "strata-weather",
  "strata-worldgen",
  "tracing",
@@ -6474,17 +6552,17 @@ dependencies = [
  "serde",
  "slotted",
  "slotted-test",
+ "strata-app",
  "strata-atmosphere",
  "strata-core",
  "strata-foliage",
  "strata-net",
  "strata-physics",
- "strata-registry",
- "strata-sim",
  "strata-stream",
  "strata-terrain",
- "strata-worldgen",
+ "strata-ui",
  "tracing",
+ "veyra-sim",
 ]
 
 [[package]]
@@ -6500,6 +6578,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "strata-data"
+version = "0.1.0"
+dependencies = [
+ "pretty_assertions",
+ "ron",
+ "serde",
+ "slotted-model",
+ "slotted-registry",
+ "thiserror 2.0.20",
+]
+
+[[package]]
 name = "strata-flora"
 version = "0.1.0"
 dependencies = [
@@ -6511,7 +6601,7 @@ dependencies = [
  "ron",
  "serde",
  "strata-core",
- "strata-registry",
+ "strata-data",
  "strata-worldgen",
  "thiserror 2.0.20",
 ]
@@ -6522,10 +6612,10 @@ version = "0.1.0"
 dependencies = [
  "ashlar-bevy",
  "bevy",
+ "strata-app",
  "strata-core",
  "strata-flora",
  "strata-registry",
- "strata-sim",
  "strata-stream",
  "strata-terrain",
  "strata-worldgen",
@@ -6537,7 +6627,6 @@ name = "strata-net"
 version = "0.1.0"
 dependencies = [
  "bevy",
- "strata-sim",
 ]
 
 [[package]]
@@ -6548,11 +6637,11 @@ dependencies = [
  "bevy_replicon",
  "bevy_replicon_renet",
  "serde",
+ "strata-app",
  "strata-core",
  "strata-net",
  "strata-physics",
  "strata-registry",
- "strata-sim",
  "strata-stream",
  "strata-worldgen",
  "tracing",
@@ -6566,10 +6655,10 @@ dependencies = [
  "ashlar-manifold",
  "avian3d",
  "bevy",
+ "strata-app",
  "strata-core",
  "strata-flora",
  "strata-registry",
- "strata-sim",
  "strata-stream",
  "strata-worldgen",
  "tracing",
@@ -6580,31 +6669,8 @@ dependencies = [
 name = "strata-registry"
 version = "0.1.0"
 dependencies = [
- "pretty_assertions",
- "ron",
- "serde",
- "serde_json",
- "slotted-model",
- "slotted-registry",
- "strata-core",
- "thiserror 2.0.20",
-]
-
-[[package]]
-name = "strata-sim"
-version = "0.1.0"
-dependencies = [
- "bevy",
- "ron",
- "serde",
- "slotted-model",
- "strata-core",
- "strata-flora",
- "strata-registry",
- "strata-worldgen",
- "thiserror 2.0.20",
- "tracing",
- "web-sys",
+ "strata-data",
+ "veyra-data",
 ]
 
 [[package]]
@@ -6612,8 +6678,8 @@ name = "strata-stream"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "strata-app",
  "strata-core",
- "strata-sim",
 ]
 
 [[package]]
@@ -6625,12 +6691,33 @@ dependencies = [
  "libm",
  "naga",
  "naga_oil",
+ "strata-app",
  "strata-core",
  "strata-registry",
- "strata-sim",
  "strata-stream",
  "strata-worldgen",
  "thiserror 2.0.20",
+ "tracing",
+]
+
+[[package]]
+name = "strata-types"
+version = "0.1.0"
+dependencies = [
+ "bevy_ecs",
+ "bevy_math",
+ "serde",
+ "strata-registry",
+ "strata-worldgen",
+]
+
+[[package]]
+name = "strata-ui"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "slotted",
+ "strata-app",
  "tracing",
 ]
 
@@ -6640,7 +6727,7 @@ version = "0.1.0"
 dependencies = [
  "serde",
  "strata-core",
- "strata-registry",
+ "strata-data",
  "strata-worldgen",
 ]
 
@@ -6658,7 +6745,7 @@ dependencies = [
  "ron",
  "serde",
  "strata-core",
- "strata-registry",
+ "strata-data",
  "tracing",
 ]
 
@@ -7294,12 +7381,63 @@ dependencies = [
 ]
 
 [[package]]
+name = "veyra-data"
+version = "0.1.0"
+dependencies = [
+ "pretty_assertions",
+ "ron",
+ "serde",
+ "serde_json",
+ "slotted-model",
+ "slotted-registry",
+ "strata-core",
+ "strata-data",
+ "thiserror 2.0.20",
+]
+
+[[package]]
+name = "veyra-dev"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "clap",
+ "ron",
+ "serde",
+ "slotted-model",
+ "strata",
+ "strata-core",
+ "tracing",
+ "veyra-game",
+ "veyra-sim",
+ "veyra-ui",
+]
+
+[[package]]
 name = "veyra-flora"
 version = "0.1.0"
 dependencies = [
  "ashlar",
  "image",
  "veyra-materials",
+]
+
+[[package]]
+name = "veyra-game"
+version = "0.1.0"
+dependencies = [
+ "ashlar",
+ "bevy",
+ "image",
+ "ron",
+ "serde",
+ "strata",
+ "strata-core",
+ "strata-flora",
+ "tempfile",
+ "tracing",
+ "veyra-game",
+ "veyra-sim",
+ "veyra-words",
 ]
 
 [[package]]
@@ -7312,11 +7450,45 @@ dependencies = [
 ]
 
 [[package]]
+name = "veyra-physics"
+version = "0.1.0"
+dependencies = [
+ "avian3d",
+ "bevy",
+ "strata-app",
+ "strata-core",
+ "strata-physics",
+ "strata-registry",
+ "strata-stream",
+ "strata-worldgen",
+ "veyra-rules",
+ "veyra-sim",
+]
+
+[[package]]
 name = "veyra-rocks"
 version = "0.1.0"
 dependencies = [
  "ashlar",
  "image",
+]
+
+[[package]]
+name = "veyra-rules"
+version = "0.1.0"
+dependencies = [
+ "bevy_ecs",
+ "bevy_math",
+ "ron",
+ "serde",
+ "slotted-model",
+ "strata-core",
+ "strata-registry",
+ "strata-types",
+ "strata-worldgen",
+ "thiserror 2.0.20",
+ "tracing",
+ "veyra-world",
 ]
 
 [[package]]
@@ -7333,6 +7505,74 @@ dependencies = [
 ]
 
 [[package]]
+name = "veyra-sim"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "ron",
+ "serde",
+ "slotted-model",
+ "strata-app",
+ "strata-core",
+ "strata-flora",
+ "strata-registry",
+ "strata-worldgen",
+ "thiserror 2.0.20",
+ "tracing",
+ "veyra-rules",
+ "veyra-world",
+]
+
+[[package]]
+name = "veyra-ui"
+version = "0.1.0"
+dependencies = [
+ "ashlar-bevy",
+ "bevy",
+ "ron",
+ "serde",
+ "slotted",
+ "slotted-test",
+ "strata-app",
+ "strata-atmosphere",
+ "strata-client",
+ "strata-core",
+ "strata-foliage",
+ "strata-physics",
+ "strata-registry",
+ "strata-stream",
+ "strata-ui",
+ "strata-worldgen",
+ "tracing",
+ "veyra-sim",
+ "veyra-view",
+ "veyra-words",
+]
+
+[[package]]
+name = "veyra-view"
+version = "0.1.0"
+dependencies = [
+ "ashlar-bevy",
+ "bevy",
+ "slotted",
+ "slotted-test",
+ "strata-atmosphere",
+ "strata-client",
+ "strata-core",
+ "strata-physics",
+ "strata-registry",
+ "strata-stream",
+ "strata-terrain",
+ "strata-ui",
+ "strata-worldgen",
+ "tracing",
+ "veyra-physics",
+ "veyra-sim",
+ "veyra-ui",
+]
+
+[[package]]
 name = "veyra-weapons"
 version = "0.1.0"
 dependencies = [
@@ -7341,6 +7581,23 @@ dependencies = [
  "ron",
  "serde",
  "thiserror 2.0.20",
+]
+
+[[package]]
+name = "veyra-words"
+version = "0.1.0"
+
+[[package]]
+name = "veyra-world"
+version = "0.1.0"
+dependencies = [
+ "rayon",
+ "ron",
+ "serde",
+ "strata-core",
+ "strata-data",
+ "strata-worldgen",
+ "veyra-data",
 ]
 
 [[package]]
@@ -8251,6 +8508,7 @@ dependencies = [
  "strata-registry",
  "strata-weather",
  "strata-worldgen",
+ "veyra-world",
 ]
 
 [[package]]
@@ -8331,7 +8589,7 @@ dependencies = [
  "image",
  "strata-core",
  "strata-registry",
- "strata-sim",
+ "strata-worldgen",
 ]
 
 [[package]]

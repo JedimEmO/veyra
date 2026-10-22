@@ -1,30 +1,28 @@
 //! A repeatable open-world encounter, separate from terrain generation.
 
-use bevy::ecs::system::EntityCommands;
 use bevy::prelude::*;
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(all(not(target_arch = "wasm32"), feature = "dev-tools"))]
 use std::io::Write;
 use strata::core::{SimTime, WorldPos};
 use strata::physics::CharacterController;
 use strata::physics::avian3d::prelude::{SpatialQuery, SpatialQueryFilter};
 use strata::prelude::*;
-use strata::registry::GameRegistries;
-use strata::sim::combat::{Action, BlasterBolt, CombatEncounter, CombatIntent, Combatant, Weapon};
-use strata::sim::combat_ai::{OpponentBrain, OpponentKind, Seen};
-use strata::sim::encounters::{Allegiance, EncounterId, Fights, Present, hostility};
+#[cfg(any(test, feature = "dev-tools"))]
+use strata::sim::combat::Weapon;
+use strata::sim::combat::{Action, BlasterBolt, CombatEncounter, CombatIntent, Combatant};
+use strata::sim::combat_ai::{OpponentKind, Seen};
+use strata::sim::encounters::{Allegiance, EncounterId, Fights, Present};
 use strata::sim::progression::{CharacterSheet, XpGained};
+use veyra_game::camps::sync_post_teams;
+use veyra_game::hostiles::{Birth, Opponent, opponent_stats, spawn_hostile};
+pub(crate) use veyra_game::hostiles::{StagingSpawn, default_spawn};
 
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(all(not(target_arch = "wasm32"), feature = "dev-tools"))]
 #[derive(Resource)]
 struct Trace(std::io::BufWriter<std::fs::File>);
 
-/// An encounter opponent: whether it is the training target, and the
-/// shipped AI (`strata_sim::combat_ai`) that fights once it is released.
-#[derive(Component)]
-struct Opponent {
-    passive: bool,
-    brain: OpponentBrain,
-}
+#[cfg(feature = "dev-tools")]
+mod script;
 
 #[derive(Component)]
 struct ResetPosition(WorldPos);
@@ -87,6 +85,10 @@ struct Encounter {
     /// `--script-progression`: the fight is fought melee first, so the
     /// rusher's death earns the blade XP One hand 1 costs, and the household
     /// script takes the player over once it is won.
+    #[cfg_attr(
+        not(feature = "dev-tools"),
+        allow(dead_code, reason = "only the scripted fight reads it")
+    )]
     progression: bool,
     /// `--no-hostiles`: the encounter stands up with nobody in it, so a
     /// still of the world has no fight and no nameplates in the frame.
@@ -108,8 +110,11 @@ pub(super) fn install(app: &mut App, cli: &super::Cli) {
     if !cli.combat {
         return;
     }
-    let (scripted, headless) = (cli.combat_script, cli.headless);
-    let progression = cli.script_progression;
+    let headless = cli.headless;
+    #[cfg(feature = "dev-tools")]
+    let (scripted, progression) = (cli.dev.combat_script, cli.dev.script_progression);
+    #[cfg(not(feature = "dev-tools"))]
+    let (scripted, progression) = (false, false);
     let path = "characters/combat/melee.ron";
     let text = super::data_files(cli)
         .under("assets")
@@ -119,8 +124,8 @@ pub(super) fn install(app: &mut App, cli: &super::Cli) {
         strata::sim::combat_curves::MeleeCurves::parse(&text).expect("valid combat blade curves");
     app.insert_resource(curves)
         .init_resource::<CombatEncounter>();
-    #[cfg(not(target_arch = "wasm32"))]
-    if let Some(path) = &cli.combat_trace {
+    #[cfg(all(not(target_arch = "wasm32"), feature = "dev-tools"))]
+    if let Some(path) = &cli.dev.combat_trace {
         let mut file =
             std::io::BufWriter::new(std::fs::File::create(path).expect("create combat trace"));
         writeln!(
@@ -141,59 +146,50 @@ pub(super) fn install(app: &mut App, cli: &super::Cli) {
             ..default()
         })
         .add_systems(Update, setup.run_if(in_state(AppState::InWorld)))
-        .add_systems(
-            SimTick,
-            (
-                super::camps::sync_post_teams,
-                drive_opponents,
-                drive_script,
-                super::household::drive_script
-                    .run_if(resource_exists::<super::household::ProgressionScript>),
-                report,
-            )
-                .chain()
-                .before(strata::sim::player::apply_scripted_intents)
-                .in_set(SimSet::Input),
-        )
         .add_systems(SimTick, log_xp.in_set(SimSet::Observe));
-    let forced = cli.camp_tier;
-    app.init_resource::<super::camps::Waiting>()
-        .add_systems(
-            Startup,
-            move |mut near: ResMut<strata::sim::encounters::NearEncounters>| {
-                near.forced_tier = forced;
-            },
+    #[cfg(feature = "dev-tools")]
+    app.add_systems(
+        SimTick,
+        (
+            drive_opponents.after(sync_post_teams),
+            script::drive_script,
+            veyra_dev::household::drive_script
+                .run_if(resource_exists::<veyra_dev::household::ProgressionScript>),
+            report,
         )
-        .add_systems(
-            Update,
-            (
-                super::camps::clear_nearest.before(strata::sim::encounters::update_near_encounters),
-                super::factions::still_jobs,
-                super::standing::set_stance_and_lease,
-                super::camps::stage_camps.after(strata::sim::encounters::update_near_encounters),
-            )
-                .run_if(in_state(AppState::InWorld)),
-        );
+            .chain()
+            .before(strata::sim::player::apply_scripted_intents)
+            .in_set(SimSet::Input),
+    );
+    #[cfg(not(feature = "dev-tools"))]
+    app.add_systems(
+        SimTick,
+        (drive_opponents.after(sync_post_teams), report)
+            .chain()
+            .before(strata::sim::player::apply_scripted_intents)
+            .in_set(SimSet::Input),
+    );
     if !headless {
-        app.add_plugins(strata::client::combat::CombatViewPlugin)
+        app.add_plugins(veyra_view::combat::CombatViewPlugin)
             .add_systems(Update, reset.run_if(strata::client::ui::game_input_allowed));
+        #[cfg(feature = "dev-tools")]
         if scripted {
             app.add_systems(
                 Update,
-                scripted_camera
+                script::scripted_camera
                     .in_set(strata::client::ClientSet::Camera)
                     .run_if(strata::client::ui::game_input_allowed),
             );
         }
     }
-    if scripted || cli.script_survey.is_some() {
+    if scripted || cli.script_survey() {
         app.insert_resource(bevy::time::TimeUpdateStrategy::ManualDuration(
             std::time::Duration::from_secs_f64(1. / 60.),
         ));
     }
 }
 
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(all(not(target_arch = "wasm32"), feature = "dev-tools"))]
 fn trace_state(
     clock: Res<SimClock>,
     mut trace: ResMut<Trace>,
@@ -370,150 +366,6 @@ fn setup(
     );
 }
 
-/// Where the staging fight stands when the household does not start beside
-/// it: the default spawn and its heading, which the fight is placed from and
-/// F5 returns the player to (ticket 0014, a new household starts on the quay).
-#[derive(Resource, Debug, Clone, Copy)]
-pub(crate) struct StagingSpawn {
-    pub(crate) at: WorldPos,
-    pub(crate) yaw: f32,
-}
-
-/// What a hostile is born as: the staging fight's people and a camp's are
-/// made by [`spawn_hostile`] the same way and differ only in this.
-#[derive(Debug, Clone, Copy)]
-pub(crate) struct Birth {
-    pub(crate) passive: bool,
-    pub(crate) kind: OpponentKind,
-    /// 0 for the staging fight, which `opponents.ron` states as written.
-    pub(crate) tier: u8,
-    pub(crate) id: EncounterId,
-    pub(crate) allegiance: Allegiance,
-}
-
-/// Makes one hostile at `position`: stats, brain, motor and the marks that
-/// say which encounter it fights in.
-pub(crate) fn spawn_hostile<'a>(
-    commands: &'a mut Commands,
-    position: WorldPos,
-    birth: Birth,
-    registries: &GameRegistries,
-) -> EntityCommands<'a> {
-    let Birth {
-        passive,
-        kind,
-        id,
-        allegiance,
-        ..
-    } = birth;
-    let (actor, sheet) = opponent_stats(birth, registries);
-    let opponents = &strata::sim::combat_tables::current().opponents;
-    let motor_speed = kind.motor_speed(opponents, actor.with_actor(|row| row.aim_speed_scale));
-    let mut opponent = commands.spawn((
-        Name::new(if passive {
-            "Training target"
-        } else {
-            match kind {
-                OpponentKind::Sentry => "Sentry",
-                OpponentKind::Rusher => "Rusher",
-                OpponentKind::Marksman => "Marksman",
-                OpponentKind::Duelist => "Duelist",
-                OpponentKind::Bulwark => "Bulwark",
-            }
-        }),
-        Opponent {
-            passive,
-            brain: OpponentBrain::new(kind, opponents),
-        },
-        // What the questline counts a defeat by (ticket 0014); a crew's
-        // members are marked again by the game that stands them.
-        strata::sim::quests::QuestFoe {
-            kind: strata::sim::quests::foe_kind(kind),
-            crew: None,
-        },
-        id,
-        allegiance,
-        WorldPosition(position),
-        PreviousWorldPosition::default(),
-        PlayerIntent::default(),
-        PlayerCommand::default(),
-        CharacterController {
-            height: 1.8,
-            responsive: true,
-            walk_speed: motor_speed,
-            sprint_speed: opponents.sprint_speed,
-            ..default()
-        },
-        actor,
-        sheet,
-    ));
-    if kind == OpponentKind::Marksman && !passive {
-        opponent.insert(strata::client::combat_beam::AimBeam);
-    }
-    if kind == OpponentKind::Bulwark && !passive {
-        opponent.insert(strata::client::combat_shield::Shield);
-    }
-    opponent
-}
-
-/// An opponent's pools and pressure, from `assets/combat/opponents.ron`,
-/// and its moveset from its sheet in `assets/progression/opponents.ron`
-/// (the rusher's One hand 2, the sentry's Carbine 2), fitted over the tables
-/// the way the player's is. The passive target has an empty sheet: it
-/// does nothing, so it may do nothing.
-fn opponent_stats(birth: Birth, registries: &GameRegistries) -> (Combatant, CharacterSheet) {
-    let Birth {
-        passive,
-        kind,
-        tier,
-        allegiance,
-        ..
-    } = birth;
-    let table = strata::sim::combat_tables::current();
-    let opponents = &table.opponents;
-    // The tier scales the pools and the pressure, in the one function the
-    // duel harness reads too.
-    let pools = strata::sim::combat_tiers::opponent_pools(tier);
-    let mut actor = Combatant::on_team(
-        // Born neutral if a post's, until `sync_post_teams` hears it crossed.
-        hostility(allegiance, false),
-        if passive {
-            opponents.passive_health
-        } else {
-            pools.health
-        },
-    );
-    actor.shield = pools.shield;
-    actor.shield_capacity = pools.shield;
-    actor.damage_scale = pools.damage_scale;
-    // The marksman fires the rifle's own mode and, set again below once it
-    // carries the rifle, its own bolt speed.
-    actor.bolt_speed = opponents.sentry.bolt_speed;
-    actor.mode_override = (kind != OpponentKind::Marksman).then_some(opponents.sentry.mode);
-    let name = (!passive).then(|| kind.name());
-    let sheet = name
-        .and_then(|name| registries.sheets.opponents.get(name))
-        .map(CharacterSheet::authored)
-        .unwrap_or_default();
-    actor.fit(&registries.progression, &sheet);
-    // The rusher cuts, and a cut is a blade's now: it carries one, with the
-    // carbine it always had holstered, and plays as it did.
-    if matches!(name, Some("rusher" | "duelist")) {
-        actor = actor.carrying([Some(Weapon::Blade), Some(Weapon::Carbine)], 0);
-    } else if name == Some("bulwark") {
-        // The bulwark's guard is its own row, not the Blade class's.
-        actor = actor
-            .carrying([Some(Weapon::Blade), None], 0)
-            .with_guard(Weapon::Blade, opponents.bulwark.guard);
-    } else if name == Some("marksman") {
-        // `carrying` reads the weapon's row into the bolt speed, so the
-        // marksman's own goes on after it.
-        actor = actor.carrying([Some(Weapon::Rifle), Some(Weapon::Carbine)], 0);
-        actor.bolt_speed = opponents.marksman.bolt_speed;
-    }
-    (actor, sheet)
-}
-
 /// A line per XP credit, so a headless or scripted run shows the ledger
 /// working before a HUD does.
 fn log_xp(mut gained: MessageReader<XpGained>, players: Query<(), With<LocalPlayer>>) {
@@ -597,178 +449,6 @@ fn drive_opponents(
             &mut movement,
             &mut input,
         );
-    }
-}
-
-#[allow(
-    clippy::too_many_lines,
-    clippy::too_many_arguments,
-    reason = "one script, phase by phase, the way the capture was timed; it reads the encounter, the graph and the ground"
-)]
-fn drive_script(
-    time: Res<Time<Fixed>>,
-    mut encounter: ResMut<Encounter>,
-    script: Option<Res<super::household::ProgressionScript>>,
-    guard_hold: Option<Res<crate::GuardHold>>,
-    registries: Res<strata::sim::Registries>,
-    origin: Res<RenderOrigin>,
-    spatial: SpatialQuery,
-    mut players: Query<
-        (
-            Entity,
-            &WorldPosition,
-            &mut ScriptedIntent,
-            &mut CombatIntent,
-            &Combatant,
-            &CharacterSheet,
-        ),
-        With<LocalPlayer>,
-    >,
-    targets: Query<
-        (&WorldPosition, &Opponent, &Combatant, &CharacterController),
-        Without<LocalPlayer>,
-    >,
-) {
-    if !encounter.started || !encounter.scripted {
-        return;
-    }
-    let before = encounter.elapsed - 5.;
-    encounter.elapsed += time.delta_secs();
-    let now = encounter.elapsed - 5.;
-    // Once the fight is won the household script walks the player.
-    if script.is_some_and(|s| !s.fighting()) {
-        return;
-    }
-    let hold_guard = guard_hold.is_some_and(|hold| hold.0);
-    for (entity, position, mut movement, mut input, actor, sheet) in &mut players {
-        movement.0 = PlayerIntent::default();
-        // A draw request is held, not an edge: it survives the per-tick reset
-        // the way a player's does until the sim takes it.
-        let weapon = input.weapon;
-        // `--hold-guard` writes the button once a frame, and the reset below
-        // would take it before the sim does; its own clock says whether it
-        // is holding now, so the script's output never feeds the latch.
-        let held_aim = hold_guard;
-        *input = CombatIntent::default();
-        input.weapon = weapon;
-        let target = targets
-            .iter()
-            .find(|(_, enemy, _, _)| enemy.passive)
-            .map_or(
-                position.0.0 + bevy::math::DVec3::NEG_Z * 100.,
-                |(position, _, _, _)| position.0.0,
-            );
-        input.aim_point = WorldPos(target + bevy::math::DVec3::Y * 0.2);
-        let delta = target - position.0.0;
-        #[allow(clippy::cast_possible_truncation, reason = "local scripted heading")]
-        {
-            movement.0.yaw = (-delta.x).atan2(-delta.z) as f32;
-        }
-        // After the moveset study, fight both hostiles with ordinary inputs.
-        // This exercises the real encounter without immunity or damage overrides.
-        if now >= 17. {
-            let mut target = targets
-                .iter()
-                .filter(|(_, enemy, actor, _)| !enemy.passive && actor.action != Action::Dead)
-                .min_by(|(a, _, _, _), (b, _, _, _)| {
-                    a.0.distance(position.0)
-                        .total_cmp(&b.0.distance(position.0))
-                });
-            // Hostiles down and the lesson still unpaid: the training
-            // target takes the rest of the cuts.
-            if target.is_none()
-                && encounter.progression
-                && super::household::short_of_gate(sheet, &registries.0.progression)
-            {
-                target = targets.iter().find(|(_, enemy, _, _)| enemy.passive);
-            }
-            if let Some((target, enemy, _, motor)) = target {
-                let distance = target.0.distance(position.0);
-                let lead = motor.horizontal_velocity.as_dvec3() * (distance / 38.).min(0.6);
-                input.aim_point = WorldPos(target.0.0 + lead + bevy::math::DVec3::Y * 0.2);
-                let aim = input.aim_point.0 - position.0.0;
-                #[allow(clippy::cast_possible_truncation, reason = "local scripted heading")]
-                {
-                    movement.0.yaw = (-aim.x).atan2(-aim.z) as f32;
-                }
-                // The rusher is taken with the blade, the sentry with the
-                // carbine; the draw is held until the sim takes it.
-                let wanted = if enemy.brain.kind.ranged() {
-                    Weapon::Carbine
-                } else {
-                    Weapon::Blade
-                };
-                if actor.weapon != wanted
-                    && let Some(slot) = actor.slots().iter().position(|slot| *slot == Some(wanted))
-                {
-                    input.weapon = Some(slot);
-                }
-                // The progression script takes the rusher with the blade:
-                // close in and cut whenever the body is free, so the kill
-                // earns blade XP and not ranged.
-                if encounter.progression && !enemy.brain.kind.ranged() {
-                    if distance > 1.5 {
-                        movement.0.move_dir.y = 1.;
-                        movement.0.sprint = distance > 6.;
-                    } else {
-                        input.light = actor.action == Action::Ready;
-                    }
-                    continue;
-                }
-                // A scripted hand taps: a pistol fires a press at a time and
-                // a carbine a burst, so a held trigger would fire the pistol
-                // once. The pulse is slow enough for every press to land.
-                input.fire = !(18.0..21.0).contains(&now) && (now * 20.).floor() % 2. == 0.;
-                input.aim = true;
-                input.reload = actor.ammo == 0;
-                movement.0.move_dir.x = if (now % 6.) < 3. { 0.6 } else { -0.6 };
-                if distance < 5. {
-                    movement.0.move_dir.y = -0.5;
-                } else {
-                    let shoulder = origin.to_render(position.0) + Vec3::Y * 0.45;
-                    let path = origin.to_render(input.aim_point) - shoulder;
-                    let blocked = Dir3::new(path).is_ok_and(|direction| {
-                        spatial
-                            .cast_ray(
-                                shoulder,
-                                direction,
-                                (path.length() - 0.8).max(0.),
-                                true,
-                                &SpatialQueryFilter::from_excluded_entities([entity]),
-                            )
-                            .is_some()
-                    });
-                    if blocked || distance > 22. {
-                        movement.0.move_dir.y = 0.8;
-                    }
-                }
-            }
-            continue;
-        }
-        // Windows leave enough time for streamed colliders and the first asset load.
-        input.fire =
-            (3.0..4.0).contains(&now) || (12.0..14.0).contains(&now) || (15.6..16.6).contains(&now);
-        input.aim = input.fire || held_aim;
-        // A cut is a blade's, a burst a gun's: draw the blade for the cuts
-        // and the carbine for the shots that follow them. The fight that
-        // starts at 17 s draws what each target wants.
-        let slot_of = |weapon| actor.slots().iter().position(|slot| *slot == Some(weapon));
-        if before < 4.2 && now >= 4.2 {
-            input.weapon = slot_of(Weapon::Blade);
-        }
-        if before < 10.8 && now >= 10.8 {
-            input.weapon = slot_of(Weapon::Carbine);
-        }
-        if (4.0..5.0).contains(&now) {
-            movement.0.move_dir.y = 1.;
-        }
-        input.light = [5.2, 5.38, 10.0].iter().any(|t| before < *t && now >= *t);
-        input.heavy = before < 7.0 && now >= 7.0;
-        input.dodge = before < 8.4 && now >= 8.4;
-        if (8.3..8.5).contains(&now) {
-            movement.0.move_dir.x = 1.;
-        }
-        input.reload = before < 14.2 && now >= 14.2;
     }
 }
 
@@ -907,75 +587,12 @@ fn reset(
     }
 }
 
-fn scripted_camera(
-    players: Query<&ScriptedIntent, With<LocalPlayer>>,
-    mut cameras: Query<&mut OrbitCamera>,
-) {
-    if let Ok(input) = players.single() {
-        for mut camera in &mut cameras {
-            camera.yaw = input.0.yaw;
-        }
-    }
-}
-
-/// Search only beside the city's western terraces and outside building bounds.
-pub(super) fn default_spawn(
-    source: &WorldSourceRes,
-    settlements: Option<&strata::sim::Settlements>,
-) -> Option<(f64, f64, f64)> {
-    let settlement = settlements?.0.first()?;
-    let world = source.source();
-    let mut best: Option<(f64, f64, f64, f64)> = None;
-    let edge = settlement.layout.as_ref().map_or(-320., |layout| {
-        layout
-            .buildings
-            .iter()
-            .map(|b| b.footprint[0])
-            .fold(0., f64::min)
-    });
-    let wanted_x = edge - 55.;
-    for ix in -5..=5 {
-        for iz in -5..=5 {
-            let local = [wanted_x + f64::from(ix) * 8., -70. + f64::from(iz) * 12.];
-            if settlement.layout.as_ref().is_some_and(|layout| {
-                layout.buildings.iter().any(|building| {
-                    let [x0, z0, x1, z1] = building.footprint;
-                    local[0] > x0 - 34.
-                        && local[0] < x1 + 34.
-                        && local[1] > z0 - 34.
-                        && local[1] < z1 + 34.
-                })
-            }) {
-                continue;
-            }
-            let [x, z] = settlement.site.to_world_xz(local);
-            let center = world.sample(x, z).height;
-            if center < world.sea_level() + 5. {
-                continue;
-            }
-            let mut min = center;
-            let mut max = center;
-            for dx in [-10., 0., 30.] {
-                for dz in [-12., 0., 12.] {
-                    let [px, pz] = settlement.site.to_world_xz([local[0] + dx, local[1] + dz]);
-                    let height = world.sample(px, pz).height;
-                    min = min.min(height);
-                    max = max.max(height);
-                }
-            }
-            let score = f64::from(max - min) + (local[0] - wanted_x).hypot(local[1] + 70.) * 0.025;
-            if best.is_none_or(|(s, _, _, _)| score < s) {
-                best = Some((score, x, f64::from(center), z));
-            }
-        }
-    }
-    best.map(|(_, x, y, z)| (x, y, z))
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use bevy::ecs::system::RunSystemOnce;
+    use strata::registry::GameRegistries;
+    use strata::sim::combat_ai::OpponentBrain;
 
     fn staging(kind: OpponentKind) -> Birth {
         Birth {

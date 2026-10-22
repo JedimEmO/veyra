@@ -9,13 +9,14 @@
     view_transformations::position_world_to_clip,
 }
 
-#import strata::foliage_common::{FoliageVertex, bend_vertex, wind}
+#import strata::foliage_common::{FoliageVertex, bend_vertex, tree_wind}
 
 @vertex
 fn vertex(vertex: FoliageVertex) -> VertexOutput {
     var out: VertexOutput;
     let world_from_local = mesh_functions::get_world_from_local(vertex.instance_index);
-    let bent = bend_vertex(vertex, world_from_local, wind[0], wind[0].time);
+    let wind_now = tree_wind(vertex.instance_index);
+    let bent = bend_vertex(vertex, world_from_local, wind_now, wind_now.time);
 
     out.world_position = bent.world_position;
     out.position = position_world_to_clip(out.world_position.xyz);
@@ -37,10 +38,10 @@ fn vertex(vertex: FoliageVertex) -> VertexOutput {
 
 #ifdef MOTION_VECTOR_PREPASS
     let prev_model = mesh_functions::get_previous_world_from_local(vertex.instance_index);
-    var previous_wind = wind[0];
-    previous_wind.origin_x = wind[0].prev_origin_x;
-    previous_wind.origin_z = wind[0].prev_origin_z;
-    let prev = bend_vertex(vertex, prev_model, previous_wind, wind[0].prev_time);
+    var previous_wind = wind_now;
+    previous_wind.origin_x = wind_now.prev_origin_x;
+    previous_wind.origin_z = wind_now.prev_origin_z;
+    let prev = bend_vertex(vertex, prev_model, previous_wind, wind_now.prev_time);
     out.previous_world_position = prev.world_position;
 #endif
 

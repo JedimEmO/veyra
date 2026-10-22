@@ -11,16 +11,16 @@ use std::sync::Arc;
 use ashlar::{Building, Instance, LodPolicy};
 use bevy::app::App;
 use bevy::time::TimeUpdateStrategy;
+use strata_app::sites::{NearSite, NearSites};
+use strata_app::{
+    AppPlugin, GeneratedRoot, PrimaryObserver, RenderOrigin, WorldObserver, WorldPosition,
+    WorldSourceRes,
+};
 use strata_core::WorldPos;
 use strata_physics::PhysicsPlugin;
 use strata_physics::avian3d::prelude::{Position, RigidBody, Rotation};
 use strata_physics::sites::{COLLIDE_M, SiteCollider};
 use strata_registry::{BiomeId, SiteKindId};
-use strata_sim::sites::{NearSite, NearSites};
-use strata_sim::{
-    GeneratedRoot, PrimaryObserver, RenderOrigin, SimPlugin, WorldObserver, WorldPosition,
-    WorldSourceRes,
-};
 use strata_stream::{StreamConfig, StreamPlugin};
 use strata_worldgen::sites::{PlacedSiteBuilding, ProceduralSite, SiteId, SitePlacement};
 use strata_worldgen::{Sample, WorldSource};
@@ -70,6 +70,13 @@ fn bake_bollard(root: &std::path::Path) {
     .unwrap();
     std::fs::create_dir_all(root.join("sites")).unwrap();
     std::fs::write(root.join("sites/bollard.ashlar"), baked.write().unwrap()).unwrap();
+    std::fs::write(
+        root.join("sites/bollard.collision"),
+        ashlar::collision_file::CollisionFile::from_baked(&baked)
+            .unwrap()
+            .write(),
+    )
+    .unwrap();
 }
 
 /// A site at `(x, z)` standing the bollard and a file that was never baked.
@@ -137,7 +144,7 @@ fn site_buildings_collide_where_the_list_stands_them_and_only_near() {
     app.add_plugins((
         bevy::app::TaskPoolPlugin::default(),
         bevy::time::TimePlugin,
-        SimPlugin,
+        AppPlugin,
         StreamPlugin,
         PhysicsPlugin,
     ));

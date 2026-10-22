@@ -16,7 +16,7 @@ strata-worldgen = { workspace = true }
 # is a trunk the server collides with (ADR 0005).
 strata-registry = { workspace = true }
 strata-flora = { workspace = true }
-strata-sim = { workspace = true }
+strata-app = { workspace = true }
 strata-stream = { workspace = true }
 # No renderer: this crate is in the headless facade and runs on a dedicated
 # server. `parry-f32` is the collider backend; `parallel` is the broad
@@ -29,6 +29,8 @@ tracing = { workspace = true }
 ashlar.workspace = true
 
 [dev-dependencies]
+# Tests read the shipped data compiled in; the shipped binaries read it from disk.
+strata-registry = { workspace = true, features = ["shipped-data"] }
 veyra-buildings.workspace = true
 # Test only: the fitted-building test collides with the proxies the content
 # declares, and deriving those needs the authoring kernel. A dev dependency

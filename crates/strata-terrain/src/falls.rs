@@ -106,8 +106,8 @@ use bevy::render::render_resource::{
 };
 use bevy::shader::ShaderRef;
 use bevy::transform::components::Transform;
+use strata_app::{Observers, RenderOrigin, WorldPosition};
 use strata_core::WorldPos;
-use strata_sim::{Observers, RenderOrigin, WorldPosition};
 use strata_worldgen::hydrology::{Fall, Network};
 
 /// The falls' shader, vertex and fragment, relative to the asset root.
@@ -760,7 +760,7 @@ pub(crate) fn stream_falls(
     mut commands: Commands,
     cfg: Option<Res<crate::TerrainConfig>>,
     look: Res<FallConfig>,
-    world: Option<Res<strata_sim::ProceduralWorldRes>>,
+    world: Option<Res<strata_app::ProceduralWorldRes>>,
     observers: Res<Observers>,
     origin: Res<RenderOrigin>,
     meshes: Option<ResMut<Assets<Mesh>>>,

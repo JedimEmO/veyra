@@ -13,8 +13,8 @@ use std::collections::BTreeMap;
 
 use image::{ImageBuffer, Rgb};
 use rayon::prelude::*;
-use strata_worldgen::factions::{Faction, FactionId, FactionMap};
 use strata_worldgen::sites::ProceduralSite;
+use veyra_world::factions::{Faction, FactionId, FactionMap};
 
 use crate::rivers::Square;
 use crate::sites::Canvas;

@@ -395,6 +395,11 @@ pub fn setts() -> MaterialGraph {
     )
 }
 
+/// The flagstones' courses and stones to a course, and how far a joint moves
+/// as a share of a stone: the layout `assets/terrain/materials.ron` repeats
+/// for the terrain shader (`laid`), so it can tell one flag from the next.
+pub const FLAGSTONES_LAYOUT: ([u16; 2], f32) = ([13, 9], 0.2);
+
 /// Flagstones for the quay apron and the wide terraces: pale cast flags
 /// about 90 cm by 60 cm in random courses, narrow dark joints, each slab
 /// settled a few millimetres its own way, a few cracked through, with damp
@@ -432,16 +437,23 @@ pub fn flagstones() -> MaterialGraph {
             Noise::perlin().period(16).octaves(2).seed(1117),
         );
     let g = wobble(g, "wobble", 16, 1121);
-    let g = courses(g, "flag", [13, 9], 0.2, tile, ("wobble", 0.0006))
-        .node("radius", remap(hash("flag_id", 23.7), 0.004, 0.015))
-        .node(
-            "inset",
-            m(
-                Add,
-                remap(hash("flag_id", 7.13), 0.005, 0.008),
-                m(Mul, "chip", 0.004),
-            ),
-        );
+    let g = courses(
+        g,
+        "flag",
+        FLAGSTONES_LAYOUT.0,
+        FLAGSTONES_LAYOUT.1,
+        tile,
+        ("wobble", 0.0006),
+    )
+    .node("radius", remap(hash("flag_id", 23.7), 0.004, 0.015))
+    .node(
+        "inset",
+        m(
+            Add,
+            remap(hash("flag_id", 7.13), 0.005, 0.008),
+            m(Mul, "chip", 0.004),
+        ),
+    );
     let g = outline(g, "flag", "radius", ["inset", "inset"])
         .node(
             "arris",

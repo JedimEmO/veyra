@@ -31,5 +31,6 @@
     ground: (0.42, 0.52, 0.40),
     // Between the plains and the peaks: a little of the plains' green
     // and clearer brights, no warmth.
-    grade: (tint: -0.003, gain: 1.02),
+    // Shade colour (visual.md F4): Cool blue-grey shade, less violet than the plains: rock and heath.
+    grade: (tint: -0.003, gain: 1.02, shade: (0.94, 0.94, 1.14)),
 )

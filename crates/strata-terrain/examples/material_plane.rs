@@ -29,8 +29,8 @@ use bevy::prelude::*;
 use bevy::render::renderer::{RenderDevice, RenderQueue};
 use bevy::render::view::screenshot::{Screenshot, ScreenshotCaptured, save_to_disk};
 use clap::Parser;
+use strata_app::{AppPlugin, Registries, WorldLoadPlugin};
 use strata_core::{GRID_N, RegionCoord};
-use strata_sim::{Registries, SimPlugin, WorldLoadPlugin};
 use strata_terrain::material::{
     MAX_LAYERS, TerrainMaterial, TerrainMaterialHandle, TerrainMaterialPlugin, dev_asset_root,
 };
@@ -61,7 +61,7 @@ fn main() -> AppExit {
             }),
             // The material's layers come from the terrain material
             // registry, so the real registries are loaded.
-            SimPlugin,
+            AppPlugin,
             WorldLoadPlugin::new(dev_asset_root()),
             TerrainMaterialPlugin,
         ))

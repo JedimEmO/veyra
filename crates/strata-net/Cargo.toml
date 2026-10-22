@@ -8,10 +8,6 @@ license.workspace = true
 authors.workspace = true
 
 [dependencies]
-# Unused by the port itself; kept so the layering is on record: a transport
-# adapter replicates sim state (`Intent`, `WorldPosition`) and sits above
-# `strata-sim`, never the other way round (ADR 0001).
-strata-sim = { workspace = true }
 bevy = { workspace = true, features = ["std"] }
 
 [lints]

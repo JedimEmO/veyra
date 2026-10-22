@@ -14,10 +14,10 @@
 use std::path::PathBuf;
 
 use anyhow::{Context, Result};
-use ashlar::BakedBuilding;
+use ashlar::{BakedBuilding, CookedBuilding};
 use ashlar_content::Content;
 use clap::Parser;
-use content::{MATERIALS, STATS, building_stats, buildings};
+use content::{MATERIALS, STATS, buildings, file_stats};
 use strata_flora::library::{Collider, SpeciesEntry, TreeLibrary, TreeVariant, Trunk};
 
 /// Where generated content goes by default: `generated/` at the workspace
@@ -50,6 +50,15 @@ struct Cli {
     /// Bake and mesh everything again, reading no cache entry and writing none.
     #[arg(long)]
     no_cache: bool,
+    /// Write the maps in the bake's raw formats (RGBA8, 16-bit height) instead
+    /// of block-compressed, for a look comparison against the compressed set.
+    #[arg(long)]
+    raw_textures: bool,
+    /// Write each building as the full version 1 file (recipe, face
+    /// provenance, full-precision meshes) instead of the cooked version 2 file
+    /// the game draws, for a tool that wants to read the recipe back.
+    #[arg(long)]
+    full_buildings: bool,
     /// Also write the Phase 8 capacity fixture: every synthetic tree under
     /// `generated/capacity/`, for `prop-capacity` to load.
     #[arg(long)]
@@ -65,6 +74,15 @@ struct Cli {
     /// Bake only the vehicle prop, its icon and their index.
     #[arg(long)]
     vehicles_only: bool,
+    /// Bake only the household's interaction props, their materials and
+    /// their index.
+    #[arg(long)]
+    props_only: bool,
+    /// Fold the terrain layer maps already in `generated/materials/terrain/`
+    /// into the two terrain arrays and write nothing else, so a change to the
+    /// fold or the encoder does not rebake the maps.
+    #[arg(long)]
+    terrain_only: bool,
     /// Bake the buildings, their materials and the city's layout and
     /// skyline, and leave the weapons, the vehicle and the plants as they
     /// are, so a change to the city's plan does not regrow every tree.
@@ -87,6 +105,14 @@ fn main() -> Result<()> {
         let content = Content::new(&cli.out).resolution(cli.resolution);
         return vehicle_models(&content);
     }
+    if cli.props_only {
+        let content = Content::new(&cli.out).resolution(cli.resolution);
+        return prop_kit(&content);
+    }
+    if cli.terrain_only {
+        let content = Content::new(&cli.out).resolution(cli.resolution);
+        return terrain_arrays(&content, &cli.out, cli.raw_textures);
+    }
     let mut buildings = buildings()?;
     let (city, layout, plan) = content::settlement(std::path::Path::new(WORKSPACE_ASSETS))?;
     buildings.extend(city);
@@ -97,8 +123,15 @@ fn main() -> Result<()> {
     let (roadside_files, roadside_kit) = content::roadside()?;
     buildings.extend(roadside_files);
     let started = std::time::Instant::now();
+    // The renderer samples every map as blocks (BC7, BC5, BC6H) and has no use
+    // for a building material's height. The terrain's layers are the exception:
+    // the terrain stacks them on the CPU from level 0, so they stay as bytes
+    // and keep their height until the terrain arrays are baked.
     let content = Content::new(&cli.out)
         .resolution(cli.resolution)
+        .block_compressed(!cli.raw_textures)
+        .cooked_buildings(!cli.full_buildings)
+        .raw_namespaces(&["terrain"])
         .cache((!cli.no_cache).then_some(&cli.cache));
     let shipped = content.ship(
         &content::graphs(),
@@ -126,6 +159,7 @@ fn main() -> Result<()> {
             mb(written.bytes),
         );
     }
+    terrain_arrays(&content, &cli.out, cli.raw_textures)?;
     let skyline = skyline(&content, &plan, &shipped.materials.library)?;
     // What each building costs, from the files as written, for a reviewer.
     let stats = shipped
@@ -135,7 +169,7 @@ fn main() -> Result<()> {
         .chain(layout.skyline.as_deref())
         .map(|path| {
             let bytes = std::fs::read(cli.out.join(path))?;
-            Ok(building_stats(path, &BakedBuilding::read(&bytes)?))
+            Ok(file_stats(path, &bytes)?)
         })
         .collect::<Result<Vec<_>>>()?;
     content.write_file(
@@ -199,6 +233,7 @@ fn main() -> Result<()> {
     weapons(&content, cli.weapon_sheets.as_deref())?;
     weapon_models(&content)?;
     vehicle_models(&content)?;
+    prop_kit(&content)?;
     let trees = trees(&content)?;
     println!(
         "plants and rocks: {} species, {} variants, {} near triangles in all, {:.1} MB, library version {:016x}",
@@ -226,6 +261,7 @@ fn main() -> Result<()> {
                     frames: 12,
                     frame_px: 64,
                     hemispherical: true,
+                    grade: Some(content::canopy_grade()),
                 },
             )?;
             bytes += impostor.bytes;
@@ -250,6 +286,59 @@ fn main() -> Result<()> {
         );
     }
     println!("wrote {} in {:.1?}", cli.out.display(), started.elapsed());
+    Ok(())
+}
+
+/// Fold the terrain's layer maps into its two arrays and the index that says
+/// what they were folded for (`strata_registry::terrain_arrays`).
+///
+/// With `raw` (`--raw-textures`) no array is written and an old pair is
+/// removed, so the terrain packs the raw layer maps on the CPU as it did
+/// before the arrays were baked, which is the comparison the flag is for.
+fn terrain_arrays(content: &Content, root: &std::path::Path, raw: bool) -> Result<()> {
+    use strata_registry::terrain_arrays::{COLOUR_FILE, INDEX_FILE, NORMAL_FILE};
+    if raw {
+        for file in [COLOUR_FILE, NORMAL_FILE, INDEX_FILE] {
+            match std::fs::remove_file(root.join(file)) {
+                Ok(()) => {}
+                Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+                Err(error) => return Err(error).with_context(|| format!("removing {file}")),
+            }
+        }
+        println!("terrain arrays: not baked (--raw-textures); the game packs the layer maps");
+        return Ok(());
+    }
+    let started = std::time::Instant::now();
+    let registries = strata_registry::load_from_dir(std::path::Path::new(WORKSPACE_ASSETS))
+        .context("the registries")?;
+    let sets = content::terrain::layer_sets(&registries);
+    let layers = sets
+        .iter()
+        .map(|set| content::terrain::read_layer(root, set))
+        .collect::<Result<Vec<_>>>()?;
+    let first = layers
+        .first()
+        .context("no terrain materials are registered")?;
+    // Level 0 is a square of four-byte texels.
+    let size = u32::try_from((first.base[0].len() / 4).isqrt())?;
+    let baked = content::terrain::bake(&sets, &layers, size)?;
+    content.write_file(COLOUR_FILE, &baked.colour)?;
+    content.write_file(NORMAL_FILE, &baked.normal)?;
+    content.write_file(
+        INDEX_FILE,
+        baked
+            .index
+            .to_text()
+            .map_err(anyhow::Error::msg)?
+            .as_bytes(),
+    )?;
+    println!(
+        "terrain arrays: {} layers at {size}, colour {:.1} MB and normal {:.1} MB on disk, in {:.1?}",
+        sets.len(),
+        mb(baked.colour.len()),
+        mb(baked.normal.len()),
+        started.elapsed(),
+    );
     Ok(())
 }
 
@@ -287,13 +376,17 @@ fn skyline(
     )?;
     let bytes = std::fs::read(content.root().join(content::SETTLEMENT_SKYLINE))
         .context("the skyline as written")?;
-    let baked = BakedBuilding::read(&bytes)?;
-    anyhow::ensure!(
-        baked.part_colliders.values().all(Vec::is_empty)
-            && baked.part_portals.values().all(Vec::is_empty),
-        "the skyline carries colliders or portals"
-    );
-    let pieces = building_stats(content::SETTLEMENT_SKYLINE, &baked).levels[0].pieces;
+    let skyline_stats = file_stats(content::SETTLEMENT_SKYLINE, &bytes)?;
+    let carries = if CookedBuilding::is_cooked(&bytes) {
+        let cooked = CookedBuilding::read(&bytes)?;
+        !cooked.part_hulls.values().all(Vec::is_empty) || !cooked.portals.is_empty()
+    } else {
+        let baked = BakedBuilding::read(&bytes)?;
+        !(baked.part_colliders.values().all(Vec::is_empty)
+            && baked.part_portals.values().all(Vec::is_empty))
+    };
+    anyhow::ensure!(!carries, "the skyline carries colliders or portals");
+    let pieces = skyline_stats.levels[0].pieces;
     Ok(Skyline { written, pieces })
 }
 
@@ -327,6 +420,38 @@ fn weapon_models(content: &Content) -> Result<()> {
         mb(bytes) * 1e3,
         content::WEAPON_LIBRARY,
         strata_registry::models::MODELS_PATH,
+        started.elapsed(),
+    );
+    Ok(())
+}
+
+/// Bake the household's interaction props (review step six): a prop a
+/// piece, the plain materials they wear and the index, and say what was
+/// written.
+fn prop_kit(content: &Content) -> Result<()> {
+    let started = std::time::Instant::now();
+    let (props, index) = content::prop_kit()?;
+    let (mut triangles, mut bytes) = (0, 0);
+    for (path, prop) in &props {
+        let written = content.write_prop(path, prop)?;
+        triangles += written.triangles.first().copied().unwrap_or(0);
+        bytes += written.bytes;
+    }
+    content.write_materials(
+        &ashlar_material::MaterialGraphLibrary::default(),
+        &content::prop_definitions(),
+        content::PROP_MATERIALS,
+    )?;
+    content.write_file(
+        strata_registry::props::MODELS_PATH,
+        index.to_ron().as_bytes(),
+    )?;
+    println!(
+        "prop kit: {} props, {triangles} triangles, {:.0} kB, library {}, index {}, in {:.2?}",
+        props.len(),
+        mb(bytes) * 1e3,
+        content::PROP_LIBRARY,
+        strata_registry::props::MODELS_PATH,
         started.elapsed(),
     );
     Ok(())
@@ -529,7 +654,10 @@ fn trees(content: &Content) -> Result<Trees> {
                 &species.variants[0].0,
                 &graphs,
                 &definitions,
-                ashlar_content::ImpostorSettings::default(),
+                ashlar_content::ImpostorSettings {
+                    grade: Some(content::canopy_grade()),
+                    ..ashlar_content::ImpostorSettings::default()
+                },
             )?;
             bytes += written.bytes;
             Some(written.impostor)

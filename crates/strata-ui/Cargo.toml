@@ -1,0 +1,33 @@
+[package]
+name = "strata-ui"
+description = "The engine's screen framework over slotted: the SimScreen kit (declared inputs, change-driven rebuilds), the run conditions, the pause flow, the UI scale, fonts and world-anchored UI helpers. Bevy with a window; no game rules."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+# The player and the intent the pause flow holds still; nothing above the
+# engine core.
+strata-app = { workspace = true }
+# The Bevy features this crate's own code reaches for; slotted's `ui` feature
+# turns on the rest of Bevy's UI stack (picking, focus, widgets) on the same
+# `bevy` package.
+bevy = { workspace = true, features = [
+    "std",
+    "bevy_state",
+    "bevy_window",
+    "bevy_asset",
+    "bevy_ui",
+    "bevy_ui_render",
+    "bevy_text",
+    "bevy_input_focus",
+    "bevy_ui_widgets",
+    "default_font",
+] }
+tracing = { workspace = true }
+slotted = { workspace = true, features = ["ui", "menu"] }
+
+[lints]
+workspace = true

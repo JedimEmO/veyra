@@ -26,7 +26,7 @@
 //! lake's coarse slope are held fixed at the point (they change over
 //! kilometres and the lattice's spacing).
 
-use strata_registry::WaterSection;
+use strata_data::WaterSection;
 
 use super::dual::{D, smooth, smooth_c, soft};
 use super::index::{Blend, Found, LakeHere, Near, RiverHere, SurfaceReading, lake_water};
@@ -482,7 +482,7 @@ const STEPS_RISEN_M: f64 = 4.0;
 /// weight, as the natural ground's beds are, so a wall does not step
 /// where the heaviest province changes.
 pub(crate) struct Steps<'a> {
-    pub provinces: &'a [(strata_registry::ProvinceId, f64)],
+    pub provinces: &'a [(strata_data::ProvinceId, f64)],
     pub beds: &'a [Option<crate::strata::Beds>],
     pub sections: &'a [Section],
     pub at: (f64, f64),

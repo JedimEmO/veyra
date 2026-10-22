@@ -54,3 +54,21 @@ fn every_terrain_set_bakes_maps_of_its_own() {
         }
     }
 }
+
+/// The shader repeats the flagstones' course layout to tell one flag from the
+/// next (`laid` in the registry); it must be the layout the graph draws.
+#[test]
+fn the_flagstones_layout_in_the_registry_is_the_graphs() {
+    let registries =
+        strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+            .expect("the shipped assets load");
+    let ([rows, stones], joint) = veyra_materials::terrain::FLAGSTONES_LAYOUT;
+    let (_, _, def) = registries
+        .materials
+        .iter()
+        .find(|(_, _, def)| def.texture_set == "flagstones")
+        .expect("the flagstones are registered");
+    let laid = def.laid.expect("the flagstones carry their layout");
+    assert_eq!((laid.rows, laid.stones), (rows, stones));
+    assert!((laid.joint - joint).abs() < 1e-6, "{}", laid.joint);
+}

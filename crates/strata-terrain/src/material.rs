@@ -11,12 +11,14 @@
 //! from a world sample is an array slice without a lookup, and the mesh
 //! builder and this material can never disagree about the order. Each
 //! material names a terrain set `just content` bakes from `veyra-materials`
-//! into the `generated://` source. Once [`strata_sim::Registries`] exists,
-//! [`TerrainMaterialPlugin`] loads the four baked maps of every material
-//! (base colour, normal, ORM, height), packs them into two texture arrays
-//! (colour with roughness in alpha, normal with height in alpha) with a full
-//! mip chain on the compute pool, and publishes the one shared material as
-//! [`TerrainMaterialHandle`].
+//! into the `generated://` source. Once [`strata_app::Registries`] exists,
+//! [`TerrainMaterialPlugin`] loads the two arrays the content step baked from
+//! them (`strata_registry::terrain_arrays`: colour with roughness in alpha,
+//! normal with height in alpha, block-compressed, with ashlar's mip chain) and
+//! publishes the one shared material as [`TerrainMaterialHandle`]. Only a look
+//! that asks for another cavity shade than the baked one loads the four maps
+//! of every material (base colour, normal, ORM, height) and packs the arrays
+//! on the compute pool, as the terrain did before they were baked.
 //! Every terrain region uses that one handle, so the whole terrain is one
 //! material bind group.
 //!
@@ -116,9 +118,12 @@ use bevy::render::render_resource::{
 use bevy::render::renderer::RenderDevice;
 use bevy::shader::{Shader, ShaderRef};
 use bevy::tasks::{AsyncComputeTaskPool, Task, block_on, poll_once};
+use strata_app::Registries;
 use strata_core::platform::time::Instant;
+use strata_registry::terrain_arrays::{
+    ArraysIndex, COLOUR_ASSET, CavityShade, INDEX_PATH, NORMAL_ASSET, fold_colour, fold_normal,
+};
 use strata_registry::{Registry, TerrainMaterialDef, TerrainMaterialId};
-use strata_sim::Registries;
 use strata_stream::StreamConfig;
 use tracing::{error, info, warn};
 
@@ -172,6 +177,18 @@ pub struct TerrainParams {
     /// of scalars pads each element to 16 bytes. Slots beyond the loaded
     /// layers are unused.
     pub tiling: [Vec4; MAX_LAYERS / 4],
+    /// The linear luminance each layer is drawn at, packed as `tiling` is
+    /// (the value budget, `assets/look/values.ron`): the shader scales a
+    /// layer's albedo and mean by this over the luminance of its baked mean.
+    /// Zero leaves a layer as baked.
+    pub value: [Vec4; MAX_LAYERS / 4],
+    /// The grain each layer keeps (`strata_registry::TerrainMaterialDef::grain`),
+    /// packed as `tiling` is; zero reads the look's [`grain`](Self::grain).
+    pub layer_grain: [Vec4; MAX_LAYERS / 4],
+    /// A laid layer's stones, one `Vec4` a layer: courses, stones to a
+    /// course, the joints' share of a stone, and the value a stone may differ
+    /// by (`strata_registry::Laid`). Zero in `w` leaves the layer as baked.
+    pub laid: [Vec4; MAX_LAYERS],
     /// Where the slope blend starts, as a multiple of the biome's slope
     /// threshold.
     pub slope_start: f32,
@@ -298,12 +315,20 @@ pub struct TerrainParams {
     /// pale blue grey, lit by the sun and the sky as the ground is, so it
     /// warms at dusk with them.
     pub air_colour: Vec4,
+    /// The colour of the shade as a linear multiplier in `xyz` (`w`
+    /// unused), luminance one: it scales the indirect diffuse beside the
+    /// sky occlusion (visual.md F4). The grade writes it through the client
+    /// (`strata_atmosphere::grade::LookUniform`).
+    pub shade_tint: Vec4,
 }
 
 impl Default for TerrainParams {
     fn default() -> Self {
         Self {
             tiling: [Vec4::ONE; MAX_LAYERS / 4],
+            value: [Vec4::ZERO; MAX_LAYERS / 4],
+            layer_grain: [Vec4::ZERO; MAX_LAYERS / 4],
+            laid: [Vec4::ZERO; MAX_LAYERS],
             slope_start: 0.75,
             slope_end: 1.35,
             // Under one (ticket 0006): a painted ground's relief is soft,
@@ -332,8 +357,10 @@ impl Default for TerrainParams {
             // and the shape field's measured spread.
             colour_lush: 1.4,
             colour_warm: 0.75,
-            near_tint: 0.6,
-            near_value: 0.5,
+            near_tint: 0.95,
+            // Nought since the value budget: each layer is remapped to its own
+            // target (`value`), which is the job the capped pull did.
+            near_value: 0.0,
             grain: 0.7,
             matte: 0.55,
             seam_shade: 0.35,
@@ -343,6 +370,7 @@ impl Default for TerrainParams {
             air_lift: 0.12,
             air_desaturate: 0.25,
             air_colour: Vec4::new(0.30, 0.36, 0.45, 1.0),
+            shade_tint: Vec4::ONE,
         }
     }
 }
@@ -356,6 +384,34 @@ impl TerrainParams {
         self.tiling[layer / 4][layer % 4] = metres;
     }
 
+    /// Sets the luminance layer `layer` is drawn at; zero draws it as baked.
+    /// Out-of-range layers are ignored.
+    pub fn set_value(&mut self, layer: usize, luminance: f32) {
+        if layer >= MAX_LAYERS {
+            return;
+        }
+        self.value[layer / 4][layer % 4] = luminance;
+    }
+
+    /// Sets the grain layer `layer` keeps; zero reads the look's. Out-of-range
+    /// layers are ignored.
+    pub fn set_layer_grain(&mut self, layer: usize, grain: f32) {
+        if layer >= MAX_LAYERS {
+            return;
+        }
+        self.layer_grain[layer / 4][layer % 4] = grain;
+    }
+
+    /// Sets layer `layer`'s stone layout; out-of-range layers are ignored.
+    pub fn set_laid(&mut self, layer: usize, laid: Option<strata_registry::Laid>) {
+        if layer >= MAX_LAYERS {
+            return;
+        }
+        self.laid[layer] = laid.map_or(Vec4::ZERO, |l| {
+            Vec4::new(f32::from(l.rows), f32::from(l.stones), l.joint, l.tone)
+        });
+    }
+
     /// The tiling of layer `layer`, or 1 for a layer beyond the table.
     #[must_use]
     pub fn tiling_of(&self, layer: usize) -> f32 {
@@ -366,12 +422,15 @@ impl TerrainParams {
     }
 
     /// These parameters with everything [`TerrainLook`] sets taken from
-    /// `look`: all but the tiling, the morph band, the read bits and the
+    /// `look`: all but the tiling, the value targets, the morph band, the read bits and the
     /// period, which the registry and the streamer own.
     #[must_use]
     pub fn with_look(self, look: &Self) -> Self {
         Self {
             tiling: self.tiling,
+            value: self.value,
+            layer_grain: self.layer_grain,
+            laid: self.laid,
             morph_start: self.morph_start,
             morph_end: self.morph_end,
             uv_period: self.uv_period,
@@ -445,20 +504,28 @@ pub struct TerrainSplat {
     /// paint with nothing to draw still costs its code and a read a
     /// fragment.
     pub far_paint: bool,
+    /// Whether the fragment shader reads one tap per layer instead of three
+    /// stochastic ones (`TERRAIN_SINGLE_TAP`, review step six, F10): the
+    /// Low preset's cheaper ground, the repeat left to the macro variation
+    /// and the colour shapes. Carried from [`TerrainLook::single_tap`].
+    pub single_tap: bool,
 }
 
 /// What a [`TerrainSplat`]'s pipeline is specialised on: whether its
-/// fragment shader is compiled with the far paint.
+/// fragment shader is compiled with the far paint and the single tap.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct TerrainSplatKey {
     /// [`TerrainSplat::far_paint`].
     pub far_paint: bool,
+    /// [`TerrainSplat::single_tap`].
+    pub single_tap: bool,
 }
 
 impl From<&TerrainSplat> for TerrainSplatKey {
     fn from(splat: &TerrainSplat) -> Self {
         Self {
             far_paint: splat.far_paint,
+            single_tap: splat.single_tap,
         }
     }
 }
@@ -496,6 +563,11 @@ impl MaterialExtension for TerrainSplat {
         {
             fragment.shader_defs.push("TERRAIN_FAR_PAINT".into());
         }
+        if key.bind_group_data.single_tap
+            && let Some(fragment) = descriptor.fragment.as_mut()
+        {
+            fragment.shader_defs.push("TERRAIN_SINGLE_TAP".into());
+        }
         Ok(())
     }
 }
@@ -515,6 +587,9 @@ pub struct TerrainMaterialHandle(pub Handle<TerrainMaterial>);
 pub struct TerrainLook {
     /// Applied to every field of [`TerrainParams`] except tiling and morph.
     pub params: TerrainParams,
+    /// Whether the ground is read with one texture tap per layer
+    /// ([`TerrainSplat::single_tap`]); the Low graphics preset sets it.
+    pub single_tap: bool,
 }
 
 /// Registers [`TerrainMaterial`] and builds [`TerrainMaterialHandle`] from
@@ -549,14 +624,18 @@ fn apply_look(
     // Every page of the store draws with its own copy of the material.
     let pages = store.iter().flat_map(|store| store.materials());
     for handle in std::iter::once(&handle.0).chain(pages) {
-        let Some(params) = materials.get(handle).map(|m| m.extension.params) else {
+        let Some((params, single_tap)) = materials
+            .get(handle)
+            .map(|m| (m.extension.params, m.extension.single_tap))
+        else {
             continue;
         };
         let wanted = params.with_look(&look.params);
-        if wanted != params
+        if (wanted != params || single_tap != look.single_tap)
             && let Some(mut material) = materials.get_mut(handle)
         {
             material.extension.params = wanted;
+            material.extension.single_tap = look.single_tap;
         }
     }
 }
@@ -591,35 +670,77 @@ struct LayerHandles {
     height: Handle<Image>,
 }
 
-/// The arrays as built on the compute pool.
-struct TerrainArrays {
+/// The arrays the CPU stacker built on the compute pool.
+struct StackedArrays {
     diffuse: Image,
     normal: Image,
-    /// How long the task took to pack and stack them, for the log line a
-    /// memory or start-up review reads.
+    /// How long the task took to pack and stack them.
     stacked_in: std::time::Duration,
 }
 
+/// The two arrays as the material takes them, however they came.
+struct TerrainArrays {
+    diffuse: Handle<Image>,
+    normal: Handle<Image>,
+    /// What each uploads, colour and normal, in MiB: every level of every
+    /// layer, as the GPU holds them.
+    mib: (f64, f64),
+    /// How long the CPU stacker took, or `None` for the baked arrays.
+    stacked_in: Option<std::time::Duration>,
+}
+
+/// What an array image uploads, in MiB, from its descriptor: the size is the
+/// same whether the bytes are still in `Assets` or already extracted.
+fn gpu_mib(image: &Image) -> f64 {
+    let descriptor = &image.texture_descriptor;
+    let (block_w, block_h) = descriptor.format.block_dimensions();
+    let block_bytes = u64::from(descriptor.format.block_copy_size(None).unwrap_or(0));
+    let mut bytes = 0_u64;
+    for level in 0..descriptor.mip_level_count {
+        let w = (descriptor.size.width >> level).max(1);
+        let h = (descriptor.size.height >> level).max(1);
+        bytes += u64::from(w.div_ceil(block_w)) * u64::from(h.div_ceil(block_h)) * block_bytes;
+    }
+    bytes *= u64::from(descriptor.size.depth_or_array_layers);
+    #[allow(clippy::cast_precision_loss, reason = "a byte count far under 2^52")]
+    let mib = bytes as f64 / (1024.0 * 1024.0);
+    mib
+}
+
 impl TerrainArrays {
-    /// What the two arrays upload, colour and normal, in MiB: every level of
-    /// every layer, from their bytes, as the GPU holds them.
-    fn mib(&self) -> (f64, f64) {
-        let mib = |image: &Image| {
-            #[allow(clippy::cast_precision_loss, reason = "a byte count far under 2^52")]
-            let bytes = image.data.as_ref().map_or(0, Vec::len) as f64;
-            bytes / (1024.0 * 1024.0)
-        };
-        (mib(&self.diffuse), mib(&self.normal))
+    /// The arrays the CPU stacker built, added to `images`.
+    fn stacked(stacked: StackedArrays, images: &mut Assets<Image>) -> Self {
+        let mib = (gpu_mib(&stacked.diffuse), gpu_mib(&stacked.normal));
+        Self {
+            diffuse: images.add(stacked.diffuse),
+            normal: images.add(stacked.normal),
+            mib,
+            stacked_in: Some(stacked.stacked_in),
+        }
+    }
+
+    /// The baked arrays, loaded.
+    fn baked(colour: &Handle<Image>, normal: &Handle<Image>, images: &Assets<Image>) -> Self {
+        let mib = |handle: &Handle<Image>| images.get(handle).map_or(0.0, gpu_mib);
+        Self {
+            diffuse: colour.clone(),
+            normal: normal.clone(),
+            mib: (mib(colour), mib(normal)),
+            stacked_in: None,
+        }
     }
 
     /// The line a memory or start-up review reads: how many layers, what
     /// they upload, and how long they took to become drawable.
     fn log_ready(&self, layers: usize, requested: Instant) {
-        let (colour, normal) = self.mib();
+        let (colour, normal) = self.mib;
+        let how = self.stacked_in.map_or_else(
+            || "baked".to_owned(),
+            |took| format!("stacked in {:.1} ms", took.as_secs_f64() * 1000.0),
+        );
         info!(
-            "terrain material ready: {layers} layers, arrays {:.2} MiB (colour {colour:.2}, normal {normal:.2}), stacked in {:.1} ms, {:.1} ms after the maps were requested",
+            "terrain material ready: {layers} layers, arrays {:.2} MiB (colour {colour:.2}, normal {normal:.2}), {how}, {:.1} ms after the maps were requested",
             colour + normal,
-            self.stacked_in.as_secs_f64() * 1000.0,
             requested.elapsed().as_secs_f64() * 1000.0,
         );
     }
@@ -628,10 +749,19 @@ impl TerrainArrays {
 /// Loading state, removed once the material exists or loading has failed.
 #[derive(Resource)]
 struct TerrainTextureLoading {
+    /// The baked arrays, when they are the ones this start would pack.
+    baked: Option<(Handle<Image>, Handle<Image>)>,
+    /// The layer maps, loaded only when there are no baked arrays to use.
     layers: Vec<LayerHandles>,
     tiling: Vec<f32>,
+    /// The value budget's luminance per layer, nought for a layer it leaves.
+    value: Vec<f32>,
+    /// Each layer's own grain, nought for the look's.
+    grain: Vec<f32>,
+    /// Each layer's stone layout, from the registry.
+    laid: Vec<Option<strata_registry::Laid>>,
     reads: LayerReads,
-    build: Option<Task<Result<TerrainArrays, StackError>>>,
+    build: Option<Task<Result<StackedArrays, StackError>>>,
     /// When the maps were first asked for, so the log can say how long the
     /// terrain took to become drawable.
     requested: Instant,
@@ -674,22 +804,49 @@ pub fn layer_reads(materials: &Registry<TerrainMaterialDef, TerrainMaterialId>) 
     reads
 }
 
-/// Loads the source maps of every registered material, main-world only:
-/// they are stacked on the CPU and never uploaded individually.
+/// The baked arrays' index, when there is one and it is for this registry and
+/// this look's cavity shade. Says why not, in one log line, when it is not.
+fn baked_arrays_serve(sets: &[&str], cavity: f32) -> bool {
+    if !strata_registry::files::is_installed() {
+        return false;
+    }
+    let files = strata_registry::files::Files::installed();
+    let Ok(text) = files.read_string(INDEX_PATH) else {
+        warn!(
+            "no baked terrain arrays ({INDEX_PATH} is missing; run `just content`); packing the layer maps on the CPU"
+        );
+        return false;
+    };
+    let index = match ArraysIndex::parse(&text) {
+        Ok(index) => index,
+        Err(err) => {
+            warn!(
+                "the baked terrain arrays' index is unreadable ({err}); packing the layer maps on the CPU"
+            );
+            return false;
+        }
+    };
+    if index.serves(sets.iter().copied(), cavity) {
+        return true;
+    }
+    info!(
+        "the baked terrain arrays are for cavity {} and {} layers; this start wants cavity {cavity} and {} layers, so the layer maps are loaded and packed on the CPU",
+        index.cavity,
+        index.layers.len(),
+        sets.len(),
+    );
+    false
+}
+
+/// Asks for the terrain's textures, main-world only where they are stacked
+/// on the CPU and never uploaded individually: the two baked arrays if they
+/// are the ones this start would pack, else the four maps of every material.
 fn start_loading_textures(
     commands: &mut Commands,
     asset_server: &AssetServer,
     registries: &Registries,
+    cavity: f32,
 ) {
-    let load = |path: String, is_srgb: bool| {
-        asset_server
-            .load_builder()
-            .with_settings(move |settings: &mut ImageLoaderSettings| {
-                settings.is_srgb = is_srgb;
-                settings.asset_usage = RenderAssetUsages::MAIN_WORLD;
-            })
-            .load(path)
-    };
     let materials = &registries.0.materials;
     if materials.is_empty() {
         warn!("no terrain materials are registered; terrain will not be drawn");
@@ -701,15 +858,18 @@ fn start_loading_textures(
             materials.len()
         );
     }
-    let mut layers = Vec::with_capacity(materials.len());
     let mut tiling = Vec::with_capacity(materials.len());
+    let mut value = Vec::with_capacity(materials.len());
+    let mut grain = Vec::with_capacity(materials.len());
+    let mut laid = Vec::with_capacity(materials.len());
     let reads = layer_reads(materials);
-    for (_, name, def) in materials.iter().take(MAX_LAYERS) {
-        info!(
-            "terrain layer {}: {name} ({})",
-            layers.len(),
-            def.texture_set
-        );
+    let sets: Vec<&str> = materials
+        .iter()
+        .take(MAX_LAYERS)
+        .map(|(_, _, def)| def.texture_set.as_str())
+        .collect();
+    for (layer, (_, name, def)) in materials.iter().take(MAX_LAYERS).enumerate() {
+        info!("terrain layer {layer}: {name} ({})", def.texture_set);
         let cells = UV_PERIOD_M / def.tiling_m;
         if (cells - cells.round()).abs() > 1e-3 {
             warn!(
@@ -717,21 +877,82 @@ fn start_loading_textures(
                 def.tiling_m
             );
         }
-        layers.push(LayerHandles {
-            base: load(def.base_path(), true),
-            normal: load(def.normal_path(), false),
-            orm: load(def.orm_path(), false),
-            height: load(def.height_path(), false),
-        });
         tiling.push(def.tiling_m);
+        laid.push(def.laid);
+        grain.push(def.grain.unwrap_or(0.0));
+        value.push(
+            registries
+                .0
+                .values
+                .terrain_target(&def.texture_set)
+                .unwrap_or(0.0),
+        );
+    }
+
+    let mut baked = None;
+    let mut layers = Vec::new();
+    if baked_arrays_serve(&sets, cavity) {
+        // The arrays go to the GPU and nowhere else: the sampler is the one
+        // the CPU stacker gives its own.
+        // `is_srgb` picks between the two BC7 variants for a file whose
+        // format is the unorm one, so the normal array must say it is not.
+        let load = |path: &'static str, is_srgb: bool| {
+            asset_server
+                .load_builder()
+                .with_settings(move |settings: &mut ImageLoaderSettings| {
+                    settings.is_srgb = is_srgb;
+                    settings.asset_usage = RenderAssetUsages::RENDER_WORLD;
+                    settings.sampler = ImageSampler::Descriptor(array_sampler(path));
+                })
+                .load(path)
+        };
+        baked = Some((load(COLOUR_ASSET, true), load(NORMAL_ASSET, false)));
+    } else {
+        let load = |path: String, is_srgb: bool| {
+            asset_server
+                .load_builder()
+                .with_settings(move |settings: &mut ImageLoaderSettings| {
+                    settings.is_srgb = is_srgb;
+                    settings.asset_usage = RenderAssetUsages::MAIN_WORLD;
+                })
+                .load(path)
+        };
+        for (_, _, def) in materials.iter().take(MAX_LAYERS) {
+            layers.push(LayerHandles {
+                base: load(def.base_path(), true),
+                normal: load(def.normal_path(), false),
+                orm: load(def.orm_path(), false),
+                height: load(def.height_path(), false),
+            });
+        }
     }
     commands.insert_resource(TerrainTextureLoading {
+        baked,
         layers,
         tiling,
+        value,
+        grain,
+        laid,
         reads,
         build: None,
         requested: Instant::now(),
     });
+}
+
+/// The sampler of a terrain array: repeating, trilinear, and anisotropic,
+/// because ground seen at a grazing angle is the whole terrain and without
+/// anisotropy the mid field turns to mush one mip early.
+fn array_sampler(label: &str) -> ImageSamplerDescriptor {
+    ImageSamplerDescriptor {
+        label: Some(label.to_owned()),
+        address_mode_u: ImageAddressMode::Repeat,
+        address_mode_v: ImageAddressMode::Repeat,
+        mag_filter: ImageFilterMode::Linear,
+        min_filter: ImageFilterMode::Linear,
+        mipmap_filter: ImageFilterMode::Linear,
+        anisotropy_clamp: 16,
+        ..Default::default()
+    }
 }
 
 /// Waits for the registries, then the sources, stacks them off the main
@@ -764,7 +985,12 @@ fn assemble_terrain_arrays(
         let Some(registries) = registries else {
             return;
         };
-        start_loading_textures(&mut commands, &asset_server, &registries);
+        start_loading_textures(
+            &mut commands,
+            &asset_server,
+            &registries,
+            look.params.cavity,
+        );
         commands.insert_resource(TerrainTexturesRequested);
         return;
     }
@@ -772,8 +998,27 @@ fn assemble_terrain_arrays(
         return;
     };
 
-    if let Some(task) = loading.build.as_mut() {
-        let Some(result) = block_on(poll_once(task)) else {
+    // The arrays, from whichever way they are being made.
+    let ready = if let Some(task) = loading.build.as_mut() {
+        block_on(poll_once(task))
+            .map(|result| result.map(|stacked| TerrainArrays::stacked(stacked, &mut images)))
+    } else if let Some((colour, normal)) = loading.baked.as_ref() {
+        match [colour, normal].map(|handle| asset_server.load_state(handle.id())) {
+            [LoadState::Loaded, LoadState::Loaded] => {
+                Some(Ok(TerrainArrays::baked(colour, normal, &images)))
+            }
+            [LoadState::Failed(err), _] | [_, LoadState::Failed(err)] => {
+                error!("a baked terrain array failed to load (run `just content`): {err}");
+                commands.remove_resource::<TerrainTextureLoading>();
+                return;
+            }
+            _ => None,
+        }
+    } else {
+        None
+    };
+    if loading.build.is_some() || loading.baked.is_some() {
+        let Some(result) = ready else {
             return;
         };
         match result {
@@ -795,6 +1040,15 @@ fn assemble_terrain_arrays(
                 for (layer, metres) in loading.tiling.iter().enumerate() {
                     params.set_tiling(layer, *metres);
                 }
+                for (layer, luminance) in loading.value.iter().enumerate() {
+                    params.set_value(layer, *luminance);
+                }
+                for (layer, grain) in loading.grain.iter().enumerate() {
+                    params.set_layer_grain(layer, *grain);
+                }
+                for (layer, stones) in loading.laid.iter().enumerate() {
+                    params.set_laid(layer, *stones);
+                }
                 params.patterned = loading.reads.patterned;
                 params.oriented = loading.reads.oriented;
                 params.palette = loading.reads.palette;
@@ -809,13 +1063,14 @@ fn assemble_terrain_arrays(
                 }
                 arrays.log_ready(loading.tiling.len(), loading.requested);
                 let splat = TerrainSplat {
-                    diffuse: images.add(arrays.diffuse),
-                    normal: images.add(arrays.normal),
+                    diffuse: arrays.diffuse,
+                    normal: arrays.normal,
                     params,
                     vertices,
                     slots,
                     paint,
                     far_paint: config.as_deref().is_none_or(|config| config.paint),
+                    single_tap: look.single_tap,
                 };
                 let handle = materials.add(TerrainMaterial {
                     base: StandardMaterial {
@@ -880,7 +1135,7 @@ fn assemble_terrain_arrays(
 
 /// Packs every layer's maps into its two planes and stacks each plane into
 /// an array with its mip chain: the work of the compute-pool task.
-fn stack_arrays(baked: &[BakedLayer], cavity: f32) -> Result<TerrainArrays, StackError> {
+fn stack_arrays(baked: &[BakedLayer], cavity: f32) -> Result<StackedArrays, StackError> {
     let started = Instant::now();
     let shade = CavityShade::new(cavity);
     let mut diffuse = Vec::with_capacity(baked.len());
@@ -890,7 +1145,7 @@ fn stack_arrays(baked: &[BakedLayer], cavity: f32) -> Result<TerrainArrays, Stac
         diffuse.push(d);
         normal.push(n);
     }
-    Ok(TerrainArrays {
+    Ok(StackedArrays {
         diffuse: stack_layers(&diffuse, TextureFormat::Rgba8UnormSrgb, "terrain diffuse")?,
         normal: stack_layers(&normal, TextureFormat::Rgba8Unorm, "terrain normal")?,
         stacked_in: started.elapsed(),
@@ -906,20 +1161,9 @@ struct BakedLayer {
 }
 
 impl BakedLayer {
-    /// The two planes the arrays hold, each one level at full size: the
-    /// base colour, darkened by the ORM's baked occlusion (its red) through
-    /// `shade`, with the ORM's roughness (its green) in alpha; and the
-    /// normal with its green turned to point up the texture (ashlar bakes
-    /// image-space normals) and the height in its alpha, for the shader's
-    /// height blend.
-    ///
-    /// The occlusion is folded into the colour here rather than kept as a
-    /// plane of its own (ticket 0006, "To decide" 3): the stochastic read
-    /// already takes two array reads per lattice corner, three corners per
-    /// layer, up to three layers and two rock planes a fragment, and a third
-    /// array would add a read to each of them. Folded, it costs nothing per
-    /// frame, and the cavities are dark under every light, which is what a
-    /// painted ground's shade is.
+    /// The two planes the arrays hold, each one level at full size, packed
+    /// as the content step packs the baked arrays
+    /// ([`fold_colour`], [`fold_normal`]).
     fn planes(&self, layer: usize, shade: &CavityShade) -> Result<[Image; 2], StackError> {
         let (width, height) = (self.base.width(), self.base.height());
         let texels = (width as usize) * (height as usize);
@@ -927,27 +1171,8 @@ impl BakedLayer {
         let normal = level0(&self.normal, layer, 4, texels)?;
         let orm = level0(&self.orm, layer, 4, texels)?;
         let relief = level0(&self.height, layer, 2, texels)?;
-        let mut packed = Vec::with_capacity(texels * 4);
-        for (texel, height) in normal
-            .as_chunks::<4>()
-            .0
-            .iter()
-            .zip(relief.as_chunks::<2>().0)
-        {
-            // The 16-bit height is little-endian; its high byte is plenty
-            // for a blend weight.
-            packed.extend_from_slice(&[texel[0], 255 - texel[1], texel[2], height[1]]);
-        }
-        let mut colour = Vec::with_capacity(texels * 4);
-        for (texel, orm) in base.as_chunks::<4>().0.iter().zip(orm.as_chunks::<4>().0) {
-            let ao = orm[0];
-            colour.extend_from_slice(&[
-                shade.apply(texel[0], ao),
-                shade.apply(texel[1], ao),
-                shade.apply(texel[2], ao),
-                orm[1],
-            ]);
-        }
+        let packed = fold_normal(normal, relief);
+        let colour = fold_colour(base, orm, shade);
         let plane = |data: Vec<u8>, format| {
             Image::new(
                 Extent3d {
@@ -965,63 +1190,6 @@ impl BakedLayer {
             plane(colour, TextureFormat::Rgba8UnormSrgb),
             plane(packed, TextureFormat::Rgba8Unorm),
         ])
-    }
-}
-
-/// The baked occlusion multiplied into an sRGB colour byte, as a table of
-/// every occlusion byte by every colour byte: the darkening is in linear
-/// light, and the table makes the fourteen layers' sixteen million texels
-/// three lookups each.
-struct CavityShade {
-    table: Vec<u8>,
-}
-
-impl CavityShade {
-    /// The table for a `strength` from 0 (the colour as baked) to 1 (the
-    /// colour times the whole occlusion).
-    fn new(strength: f32) -> Self {
-        let mut table = Vec::with_capacity(256 * 256);
-        for ao in 0..=255_u8 {
-            for byte in 0..=255_u8 {
-                table.push(cavity_shade(byte, ao, strength));
-            }
-        }
-        Self { table }
-    }
-
-    fn apply(&self, byte: u8, ao: u8) -> u8 {
-        self.table[usize::from(ao) * 256 + usize::from(byte)]
-    }
-}
-
-/// An sRGB colour byte darkened by a linear occlusion byte, by `strength`
-/// of the way: `colour * (1 - strength * (1 - ao))` in linear light.
-#[must_use]
-pub fn cavity_shade(byte: u8, ao: u8, strength: f32) -> u8 {
-    let linear = srgb_decode(f32::from(byte) / 255.0);
-    let occlusion = f32::from(ao) / 255.0;
-    let factor = 1.0 - strength.clamp(0.0, 1.0) * (1.0 - occlusion);
-    // In 0..=255 after the clamp; the rounding is the conversion.
-    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
-    let out = (srgb_encode(linear * factor).clamp(0.0, 1.0) * 255.0).round() as u8;
-    out
-}
-
-/// The sRGB transfer function, inverted.
-fn srgb_decode(c: f32) -> f32 {
-    if c <= 0.040_45 {
-        c / 12.92
-    } else {
-        ((c + 0.055) / 1.055).powf(2.4)
-    }
-}
-
-/// The sRGB transfer function.
-fn srgb_encode(c: f32) -> f32 {
-    if c <= 0.003_130_8 {
-        c * 12.92
-    } else {
-        1.055 * c.powf(1.0 / 2.4) - 0.055
     }
 }
 
@@ -1150,18 +1318,7 @@ pub fn stack_layers(
     image.texture_descriptor.mip_level_count = mip_count;
     image.data_order = TextureDataOrder::LayerMajor;
     image.data = Some(data);
-    image.sampler = ImageSampler::Descriptor(ImageSamplerDescriptor {
-        label: Some(label.to_owned()),
-        address_mode_u: ImageAddressMode::Repeat,
-        address_mode_v: ImageAddressMode::Repeat,
-        mag_filter: ImageFilterMode::Linear,
-        min_filter: ImageFilterMode::Linear,
-        mipmap_filter: ImageFilterMode::Linear,
-        // Ground seen at a grazing angle is the whole terrain; without
-        // anisotropy the mid field turns to mush one mip early.
-        anisotropy_clamp: 16,
-        ..Default::default()
-    });
+    image.sampler = ImageSampler::Descriptor(array_sampler(label));
     Ok(image)
 }
 
@@ -1367,36 +1524,13 @@ mod tests {
         ));
     }
 
-    /// The cavity shade is the colour in linear light times the share of
-    /// the occlusion asked for: none at no strength or an occlusion of
-    /// one, and an sRGB byte darkened by half its light at strength one
-    /// and an occlusion of a half.
-    #[test]
-    fn the_cavity_shade_darkens_in_linear_light() {
-        for byte in [0_u8, 1, 17, 128, 200, 255] {
-            assert_eq!(cavity_shade(byte, 255, 1.0), byte);
-            assert_eq!(cavity_shade(byte, 0, 0.0), byte);
-        }
-        assert_eq!(cavity_shade(200, 0, 1.0), 0);
-        // 188 is linear 0.5029; times 128 / 255 it is 0.2524, 138 in sRGB.
-        assert_eq!(cavity_shade(188, 128, 1.0), 138);
-        // Monotone in the occlusion.
-        let mut last = 0;
-        for ao in 0..=255_u8 {
-            let out = cavity_shade(160, ao, 0.8);
-            assert!(out >= last, "{ao}: {out} after {last}");
-            last = out;
-        }
-        let shade = CavityShade::new(0.8);
-        assert_eq!(shade.apply(160, 77), cavity_shade(160, 77, 0.8));
-    }
-
     /// The look sets everything but what the registry and the streamer own.
     #[test]
     #[allow(clippy::float_cmp, reason = "copies, not arithmetic")]
     fn the_look_leaves_the_registry_s_fields_alone() {
         let mut built = TerrainParams::default();
         built.set_tiling(3, 6.0);
+        built.set_layer_grain(5, 0.4);
         built.morph_start = 3.0;
         built.patterned = 0b101;
         built.palette = 0b11;
@@ -1411,6 +1545,10 @@ mod tests {
         assert_eq!(applied.near_tint, 0.9);
         assert_eq!(applied.grain, 0.5);
         assert_eq!(applied.tiling_of(3), 6.0);
+        assert_eq!(
+            applied.layer_grain[1].y, 0.4,
+            "a layer's own grain is the registry's"
+        );
         assert_eq!(applied.morph_start, 3.0);
         assert_eq!(applied.patterned, 0b101);
         assert_eq!(applied.palette, 0b11);

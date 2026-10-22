@@ -37,11 +37,13 @@ pcss = ["client", "strata-atmosphere?/pcss"]
 strata-core = { workspace = true }
 strata-registry = { workspace = true }
 strata-worldgen = { workspace = true }
+veyra-world = { workspace = true }
 # Where fog lies: Bevy-free, so the headless build and the server have it.
 strata-weather = { workspace = true }
-strata-sim = { workspace = true }
+veyra-sim = { workspace = true }
 strata-stream = { workspace = true }
 strata-physics = { workspace = true }
+veyra-physics = { workspace = true }
 strata-net = { workspace = true }
 strata-net-replicon = { workspace = true, optional = true }
 strata-terrain = { workspace = true, optional = true }
@@ -51,6 +53,10 @@ strata-client = { workspace = true, optional = true }
 # Only what the headless group needs. The render crates bring their own
 # Bevy features in through the `client` feature's optional dependencies.
 bevy = { workspace = true, features = ["std", "bevy_state"] }
+
+[dev-dependencies]
+strata-app = { workspace = true }
+bevy_replicon = { workspace = true }
 
 [lints]
 workspace = true

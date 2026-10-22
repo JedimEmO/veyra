@@ -73,9 +73,9 @@ use bevy::platform::collections::{HashMap, HashSet};
 use bevy::state::condition::in_state;
 use bevy::tasks::{AsyncComputeTaskPool, Task, TaskPool, block_on, poll_once};
 use bevy::time::{Real, Time};
+use strata_app::{AppState, Observers, Registries, WorldSourceRes};
 use strata_core::platform::time::Instant;
 use strata_core::{RegionCoord, WorldPos};
-use strata_sim::{AppState, Observers, Registries, WorldSourceRes};
 use strata_stream::{
     ExternalRegionBuilder, LoadedRegions, Region, RegionLoad, RegionReady, RegionUnload,
     StreamConfig, StreamSet, WantedRegions, nearest_distance,
@@ -91,17 +91,9 @@ pub use river::{RegionWater, RiverConfig, RiverMaterial, RiverMesh, build_river_
 pub use store::{TerrainSlot, TerrainStore};
 pub use water::{WaterConfig, WaterMaterial, WaterPlane, WaterPlugin};
 
-/// Marks a `Camera3d` that does not look at the world: a model turning on
-/// a screen, a portrait render.
-///
-/// The terrain dresses and reads cameras by `Camera3d` alone, because the
-/// world has one. A second camera drawing something else would otherwise
-/// be given the water's depth prepass and the probes' cluster bound, and,
-/// drawn before the world's, be the one the probes' fallback and the
-/// foliage's levels follow. The crates above the terrain tell the world's
-/// camera from another by this too.
-#[derive(Component, Debug, Clone, Copy, Default)]
-pub struct OffWorld;
+/// Marks a `Camera3d` that does not look at the world; it lives in `strata-app`
+/// so a screen crate can mark its camera without linking the terrain.
+pub use strata_app::OffWorld;
 
 /// The terrain sets, in order, in `Update`, after streaming has decided.
 #[derive(SystemSet, Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -635,6 +627,12 @@ impl Plugin for TerrainPlugin {
                 ),
             );
         // Irradiance probes per streamed region (lighting plan phase 3b).
+        // Bevy compiles irradiance volumes out on wasm32 (bevy_pbr's
+        // irradiance_volume.rs), so there the bake would spend the browser's
+        // one thread on volumes nothing draws, and the environment map is the
+        // fill with or without the fallback probe. The crate's one platform
+        // `cfg`: the game's `web` feature only forwards to wasm32 builds.
+        #[cfg(not(target_arch = "wasm32"))]
         probes::register(app);
     }
 }
@@ -663,7 +661,7 @@ fn dispatch_meshing(
     registries: Option<Res<Registries>>,
     inputs: Option<Res<MeshInputs>>,
     painted: (
-        Option<Res<strata_sim::crossings::Crossings>>,
+        Option<Res<strata_app::crossings::Crossings>>,
         Option<Res<TerrainStore>>,
     ),
     zones: Option<Res<strata_stream::DetailZones>>,
@@ -785,7 +783,7 @@ fn dispatch_meshing(
 fn paint_source(
     cfg: &TerrainConfig,
     inputs: Option<&MeshInputs>,
-    crossings: Option<&strata_sim::crossings::Crossings>,
+    crossings: Option<&strata_app::crossings::Crossings>,
     store: bool,
 ) -> Option<Arc<paint::PaintSource>> {
     let (Some(inputs), Some(crossings)) = (inputs, crossings) else {
@@ -1184,7 +1182,7 @@ mod smoke {
         let mut app = App::new();
         app.add_plugins((
             bevy::time::TimePlugin,
-            strata_sim::SimPlugin,
+            strata_app::AppPlugin,
             strata_stream::StreamPlugin,
             TerrainPlugin,
         ));

@@ -9,7 +9,7 @@ authors.workspace = true
 
 [dependencies]
 strata-core = { workspace = true }
-strata-registry = { workspace = true }
+strata-data = { workspace = true }
 noise = { workspace = true }
 serde = { workspace = true }
 # Pure-Rust sin and cos for the one transcendental in the stack, so the

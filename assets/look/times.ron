@@ -13,17 +13,26 @@
 // takes over as the sun sinks (the same easing as exposure's night), and
 // day is the rest.
 (
-    // A cooler, pinker warmth than dusk, the shade opened a little.
-    dawn: (temperature: 0.008, tint: 0.002, saturation: 1.04, lift: 0.003),
-    // Neutral: midday is the light the materials were judged under.
+    // A cooler, pinker warmth than dusk, the shade opened a little. Shade
+    // colour: a rose lean added to the biome's, so the morning shade is
+    // lilac where noon's is blue-violet.
+    dawn: (temperature: 0.008, tint: 0.002, saturation: 1.04, lift: 0.003, shade: (1.10, 0.94, 0.96)),
+    // Neutral: midday is the light the materials were judged under, and the
+    // shade is the biome's own colour (lavender in the wood, teal at the
+    // coast).
     day: (),
     // The golden hour: warm and rich, the long shade lifted a little so it
     // does not go black. Bevy's lift is grey, so the shade's blue is the
     // sky's light and this warmth takes some of it (2026-10-03: the dusk
-    // street's shaded paving from 0.15 to 0.11 of saturation).
-    dusk: (temperature: 0.02, saturation: 1.08, lift: 0.003),
+    // street's shaded paving from 0.15 to 0.11 of saturation). Shade
+    // colour: warmer than dawn's, a violet-rose that takes some blue from
+    // the biome's and leaves the red, the painted dusk's mauve shadow. Strong
+    // enough that Port Serein's dusk (the coast's teal at 0.99, this at 0.67)
+    // nets red up and blue level, not the teal it summed to at 1.16.
+    dusk: (temperature: 0.02, saturation: 1.08, lift: 0.003, shade: (1.30, 0.90, 0.86)),
     // Moonlight: blue, the colour crushed as the eye loses it. The tint
     // turns Bevy's cool axis from cyan towards blue; no lift, which greyed
     // the blue away.
-    night: (temperature: -0.014, tint: 0.014, saturation: 0.8),
+    // Shade colour: a deeper blue-violet, the moonlit shade that no sun warms.
+    night: (temperature: -0.014, tint: 0.014, saturation: 0.8, shade: (0.92, 0.94, 1.12)),
 )

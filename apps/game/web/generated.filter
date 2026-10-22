@@ -1,0 +1,24 @@
+# What `just web` copies from generated/ into dist/generated/: the baked files
+# Bevy loads over HTTP (buildings, props, texture maps, pictures, material
+# libraries). Layouts and registries ride in data.bundle.gz, and so do the rivers' index
+# and the masses within 96 km of the spawn. The farther masses reach
+# dist/generated/hydrology/mass because `xtask bundle` writes them beside its
+# output (run after `rm -rf dist`, before an rsync that deletes nothing).
+# The rest (the capacity bench, the
+# material graphs, the statistics) is read by no one in a browser.
+- /capacity/
+- /hydrology/
+- /stats/
+- /materials/capacity/
+# The terrain's layer maps are read only to pack the arrays on the CPU for a
+# look that asks for another cavity shade than the baked one; the page ships
+# the baked arrays (terrain/*.ktx2) and the default look.
+- /materials/terrain/
+- graphs.ron
++ */
++ *.ashlar
++ *.ashprop
++ *.ktx2
++ *.png
++ *.materials.ron
+- *

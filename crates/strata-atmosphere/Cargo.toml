@@ -9,7 +9,7 @@ authors.workspace = true
 
 [dependencies]
 strata-core = { workspace = true }
-strata-sim = { workspace = true }
+strata-app = { workspace = true }
 # The fog field the ground fog pass draws.
 strata-weather = { workspace = true }
 # The biomes' colour grades (`grade`), plain data beside the biomes.
@@ -27,6 +27,11 @@ bevy = { workspace = true, features = [
     "bevy_core_pipeline",
     "bevy_post_process",
     "bevy_anti_alias",
+    # The render scale draws its image over the window with a sprite on a
+    # 2D camera.
+    "bevy_window",
+    "bevy_sprite",
+    "bevy_sprite_render",
     "tonemapping_luts",
     "zstd_rust",
     "bluenoise_texture",

@@ -52,7 +52,8 @@
 //! biome's slope material in the shader from the geometric normal, which is
 //! per pixel and independent of LOD, so the sample's own slope-chosen
 //! material is not used. The tint attribute is the biomes' ground colours
-//! (`BiomeDef::ground_colour`, the palette's colour or the tint) blended by
+//! (`BiomeDef::ground_colour`'s hue at the luminance of the biome's surface
+//! layer, `strata_registry::far_colour`) blended by
 //! weight, for the far field and the near ground's hue.
 //!
 //! # Rock
@@ -303,14 +304,18 @@ impl BiomeLayers {
             let rise = surface.map_or(0.7, |s| s.slope_threshold);
             slope_rises.push(rise);
             slope_thresholds.push(slope_of_rise(rise));
-            // The ground's palette colour where the biome names one
-            // (ticket 0006): the tint is the map's.
-            tints.push(
-                registries
-                    .biomes
-                    .get(id)
-                    .map_or([1.0, 1.0, 1.0], |def| def.ground_colour().0),
-            );
+            // The far colour (value budget, review step six): the ground's
+            // palette hue at the luminance its surface layer is drawn at near,
+            // so the plain at a kilometre is as bright as the ground it
+            // blends from and not several times over it. A biome whose
+            // layer the budget leaves as baked keeps its colour as written.
+            tints.push(registries.biomes.get(id).map_or([1.0, 1.0, 1.0], |def| {
+                let ground = def.ground_colour().0;
+                surface
+                    .and_then(|s| registries.materials.get(s.material))
+                    .and_then(|m| registries.values.terrain_target(&m.texture_set))
+                    .map_or(ground, |target| strata_registry::far_colour(ground, target))
+            }));
         }
         let provinces = registries
             .province_ids()

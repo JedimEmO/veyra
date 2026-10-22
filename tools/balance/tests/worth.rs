@@ -6,9 +6,9 @@
 use std::path::Path;
 
 use balance::worth::page;
-use strata_sim::combat::Weapon;
-use strata_sim::combat_ai::OpponentKind;
-use strata_sim::combat_tables::CombatTables;
+use veyra_rules::combat::Weapon;
+use veyra_rules::combat_ai::OpponentKind;
+use veyra_rules::combat_tables::CombatTables;
 
 const SECTIONS: [&str; 5] = [
     "## Guns by range",
@@ -88,7 +88,7 @@ fn holds_its_shape(text: &str, what: &str) {
 #[test]
 fn the_page_has_a_row_for_every_weapon_ability_and_opponent() {
     let assets = Path::new(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"));
-    strata_sim::combat_tables::install(CombatTables::shipped());
+    veyra_rules::combat_tables::install(CombatTables::shipped());
     let jobs = std::thread::available_parallelism().map_or(1, |n| n.get().min(8));
     let made = page(assets, 1, 1, 4., jobs).expect("the page is made from the shipped data");
     holds_its_shape(&made, "the made page");

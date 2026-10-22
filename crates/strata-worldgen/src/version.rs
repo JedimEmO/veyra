@@ -25,7 +25,7 @@
 //! that did not move. That errs on the safe side and is known.
 
 use serde::Serialize;
-use strata_registry::GameRegistries;
+use strata_data::WorldDefs;
 
 use crate::WorldParams;
 
@@ -189,7 +189,7 @@ const GRADE_OFFSETS: [f64; 10] = [0.0, 2.0, 4.2, 6.0, 8.5, -9.0, 14.0, -20.0, 33
     clippy::many_single_char_names,
     reason = "a road's segment and its direction, as the grade's canary reads them"
 )]
-pub fn world_version(params: &WorldParams, registries: &GameRegistries) -> u64 {
+pub fn world_version(params: &WorldParams, registries: &WorldDefs) -> u64 {
     let mut hash = Fnv::default();
     hash.bytes(b"scrolls world\0");
     hash.bytes(&GENERATOR_VERSION.to_le_bytes());
@@ -201,8 +201,8 @@ pub fn world_version(params: &WorldParams, registries: &GameRegistries) -> u64 {
         // not the world: a client on another grade stands on the same
         // ground. Neutral, it is not written, so the text is the one
         // hashed before grades existed.
-        hash.ron(&strata_registry::BiomeDef {
-            grade: strata_registry::Grade::NEUTRAL,
+        hash.ron(&strata_data::BiomeDef {
+            grade: strata_data::Grade::NEUTRAL,
             ..def.clone()
         });
     }
@@ -296,7 +296,7 @@ pub fn world_version(params: &WorldParams, registries: &GameRegistries) -> u64 {
 pub(crate) fn network_key(
     seed: strata_core::Seed,
     params: &WorldParams,
-    registries: &GameRegistries,
+    registries: &WorldDefs,
 ) -> u64 {
     let mut hash = Fnv::default();
     hash.bytes(&seed.0.to_le_bytes());
@@ -326,11 +326,7 @@ pub(crate) fn network_key(
 /// the hydrology's fixed numbers. Not [`world_version`], whose canary bakes would cost a browser
 /// the seconds the file is there to save.
 #[must_use]
-pub fn water_stamp(
-    seed: strata_core::Seed,
-    params: &WorldParams,
-    registries: &GameRegistries,
-) -> u64 {
+pub fn water_stamp(seed: strata_core::Seed, params: &WorldParams, registries: &WorldDefs) -> u64 {
     let mut hash = Fnv(network_key(seed, params, registries));
     hash.bytes(&GENERATOR_VERSION.to_le_bytes());
     // The hydrology's own fixed numbers, which `world_version` also folds

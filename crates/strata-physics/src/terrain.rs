@@ -61,8 +61,8 @@ use bevy::ecs::system::SystemState;
 use bevy::math::Vec3;
 use bevy::tasks::{AsyncComputeTaskPool, Task, TaskPool, block_on, poll_once};
 use bevy::transform::components::Transform;
+use strata_app::{Observers, Registries, RenderOrigin, WorldPosition, WorldSeed, WorldSourceRes};
 use strata_core::{GRID_N, RegionCoord, WorldPos};
-use strata_sim::{Observers, Registries, RenderOrigin, WorldPosition, WorldSeed, WorldSourceRes};
 use strata_stream::{RegionLoad, RegionUnload};
 use strata_worldgen::{Sample, WorldSource};
 use tracing::warn;
@@ -283,10 +283,10 @@ pub(crate) fn dispatch_colliders(
     mut commands: Commands,
     source: Option<Res<WorldSourceRes>>,
     registries: Option<Res<Registries>>,
-    library: Option<Res<strata_sim::TreeLibraryRes>>,
+    library: Option<Res<strata_app::TreeLibraryRes>>,
     flora: Option<Res<FloraPlacement>>,
-    exclusions: Option<Res<strata_sim::footprints::VegetationExclusions>>,
-    planted: Option<Res<strata_sim::footprints::PlantedFlora>>,
+    exclusions: Option<Res<strata_app::footprints::VegetationExclusions>>,
+    planted: Option<Res<strata_app::footprints::PlantedFlora>>,
     seed: Option<Res<WorldSeed>>,
     mut tasks: ResMut<ColliderTasks>,
     mut colliders: ResMut<ColliderEntities>,
@@ -353,7 +353,7 @@ pub(crate) fn dispatch_colliders(
         let exclusions = exclusions.as_deref().cloned().unwrap_or_default();
         let planted = planted
             .as_deref()
-            .map(strata_sim::footprints::PlantedFlora::plants);
+            .map(strata_app::footprints::PlantedFlora::plants);
         let coord = *coord;
         let task = pool.spawn(async move {
             let mut scratch = Vec::new();

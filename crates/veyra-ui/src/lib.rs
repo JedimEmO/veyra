@@ -1,0 +1,394 @@
+//! Veyra's screens over the engine's screen framework (`strata-ui`): the Veyra
+//! theme, the English for the game's keys ([`strings`]) and the screens
+//! themselves. The settings and graphics screens, the pause flow and the
+//! input gate are the engine's (`strata-client`, `strata-ui`); the templates,
+//! the stack, Escape, focus and persistence are slotted's. The progression
+//! slice's screens are the character sheet
+//! ([`sheet`], key C, a trainer's F, the pause menu) and the bench
+//! ([`mod@bench`], a terminal's F, the pause menu read-only), with the
+//! interaction chip ([`prompt`]), the XP toasts ([`progress`]) and the
+//! name of the place underfoot ([`place`]) on the HUD. The stores
+//! ([`stores`], a locker's F with the household's store, key I and the
+//! pause menu without it) show what a character carries and move it by
+//! slotted's own clicks, each sent to the sim; every item on them shows the
+//! one card ([`card`]). The fitting screen ([`fitting`], a workbench's F
+//! with its buttons live, a weapon's cell on the stores screen as a
+//! reading) shows a weapon's mounts and what the stock has for them, in
+//! the sim's own figures, and asks the sim to fit and to remove. The
+//! workbench's second tab is the crafting session ([`crafting`]): a
+//! schematic's slots filled from the stock, assembled, worked up a roll at
+//! a time and finished, every figure the sim's, and a finished thing
+//! recorded there as a production blueprint. A fabricator's F opens the
+//! factory ([`factory`]): a blueprint fed from the stock and run as a
+//! standing job, whose finish is a toast wherever the player is. They
+//! answer the sim's `Interact` message here, which the keyboard and the
+//! game's script both write. A weapon drawn from its baked pieces is a
+//! widget of the game's own ([`weapon_diagram`], ticket 0008), which the
+//! fitting screen draws its weapon with, or, where the weapon's models are
+//! baked, with the same pieces turning on a stage of their own
+//! ([`weapon_stage`], ticket 0007 step 8). The terminal's
+//! second tab is the survey register ([`mod@bench`]), and the deposit
+//! tracked there has a marker on the HUD ([`tracker`]), as has the
+//! questline's current objective. A person's F opens their conversation
+//! ([`dialogue`]) and J the journal ([`journal`]).
+//!
+//! The simulation does not pause. This is an MMO: the world goes on for
+//! everyone else while one player reads a menu, so the pause screen is a
+//! modal over a running world and only the local input stops.
+//!
+//! Nothing here runs without Bevy's UI plugins. A headless app that adds
+//! [`VeyraUiPlugin`] over `MinimalPlugins` gets no screens and no HUD, which is
+//! what `strata_ui::register` reports.
+
+pub mod bench;
+pub mod board;
+pub mod card;
+pub mod claims;
+pub mod crafting;
+pub mod dialogue;
+pub mod drawn;
+pub mod factory;
+pub mod fitting;
+pub mod harvester;
+pub mod icons;
+pub mod journal;
+pub mod loot;
+pub mod map;
+pub mod place;
+pub mod progress;
+pub mod prompt;
+pub mod ride;
+pub mod sheet;
+pub mod stores;
+pub mod strings;
+pub mod survey;
+pub mod tracker;
+pub mod weapon_diagram;
+pub mod weapon_model;
+pub mod weapon_stage;
+pub mod world_ui;
+
+use bevy::app::{App, Plugin, Startup, Update};
+use bevy::asset::{AssetServer, Handle};
+use bevy::ecs::prelude::*;
+use bevy::ecs::schedule::IntoScheduleConfigs;
+use slotted::menu::{MenuChoice, kinds};
+use slotted::theme::{ActiveTheme, Role};
+use slotted::ui::LocKey;
+use slotted::ui::def::{
+    Align, AnchorId, ButtonOpts, Layout, LayoutDirection, Length, Tags, UiNodeDef,
+};
+use slotted::ui::invalidate::Owner;
+use slotted::ui::screen::{Injection, Injections};
+use strata_ui::ScreenWork;
+// The run conditions and the set live in `strata-ui`; the screens name them
+// through here (`super::screen_up`).
+use strata_ui::{screen_on_top, screen_up};
+use veyra_sim::progression::{Interact, InteractionKind};
+
+pub use strata_ui::game_input_allowed;
+
+/// The theme, relative to the asset root. The file is derived from the slotted glass theme, and it and the two font
+/// families it names are copied from the slotted workspace with their
+/// licences; `assets/README.md` says from where.
+pub const THEME_PATH: &str = "themes/veyra.theme.ron";
+
+/// Wires the game's screens and HUD chips over the engine's UI, and nothing
+/// else: the app adds `strata-client`'s `ClientPlugin` (settings, graphics,
+/// cameras) beside it, in either order, because both ask `strata_ui::register`
+/// for the slotted stack first and it does the work once.
+#[derive(Debug, Clone, Copy, Default)]
+pub struct VeyraUiPlugin;
+
+impl Plugin for VeyraUiPlugin {
+    fn build(&self, app: &mut App) {
+        register(app);
+    }
+}
+
+pub(crate) fn register(app: &mut App) -> bool {
+    if !strata_ui::register(app) {
+        return false;
+    }
+    app.add_systems(
+        Startup,
+        (load_theme, strings::install, inject_pause_buttons),
+    )
+    .add_systems(
+        Update,
+        (open_on_pause_choice, open_on_interact).in_set(ScreenWork),
+    );
+    sheet::register(app);
+    bench::register(app);
+    prompt::register(app);
+    progress::register(app);
+    place::register(app);
+    weapon_diagram::register(app);
+    weapon_stage::register(app);
+    card::register(app);
+    app.add_systems(bevy::app::Startup, icons::register_widget);
+    stores::register(app);
+    fitting::register(app);
+    crafting::register(app);
+    loot::register(app);
+    factory::register(app);
+    board::register(app);
+    harvester::register(app);
+    tracker::register(app);
+    survey::register(app);
+    map::register(app);
+    ride::register(app);
+    dialogue::register(app);
+    journal::register(app);
+    true
+}
+
+/// `Startup`: the Character, Bench and Inventory buttons under the pause
+/// menu's own three, through the template's `buttons_end` anchor, so the template
+/// stays the crate's and a theme change restyles these with the rest.
+fn inject_pause_buttons(mut injections: ResMut<Injections>) {
+    let button = |id: &str, label: &str| UiNodeDef::Button {
+        widget: None,
+        opts: ButtonOpts {
+            label: Some(LocKey(label.to_owned())),
+            ..ButtonOpts::default()
+        },
+        tags: Tags::new().with("menu", id).with(Tags::TEST_ID, id),
+    };
+    injections.0.push(Injection {
+        target: kinds::pause(),
+        anchor: AnchorId::new("buttons_end"),
+        node: UiNodeDef::Panel {
+            role: Role::new_static("invisible"),
+            layout: Layout {
+                direction: LayoutDirection::Column,
+                gap: 2.0,
+                width: Some(Length::Percent(100.0)),
+                align: Some(Align::Stretch),
+                ..Layout::default()
+            },
+            children: vec![
+                button("sheet", "strata.menu.character"),
+                button("loadout", "strata.menu.loadout"),
+                button("bench", "strata.menu.bench"),
+                button("map", "strata.menu.map"),
+                button("journal", "strata.menu.journal"),
+                button("inventory", "strata.menu.inventory"),
+            ],
+            tags: Tags::new().with(Tags::TEST_ID, "strata.pause.buttons"),
+        },
+        exclusion: false,
+        owner: Owner::Game,
+    });
+}
+
+/// `Update`: the pause menu's Character, Bench and Inventory buttons. The
+/// bench from here is read-only, switching being a terminal's business,
+/// and the inventory is the pack without the household's store, which is a
+/// locker's.
+fn open_on_pause_choice(mut choices: MessageReader<MenuChoice>, mut commands: Commands) {
+    for choice in choices.read() {
+        if choice.screen != kinds::pause() {
+            continue;
+        }
+        match choice.id.as_str() {
+            "sheet" => sheet::open_tab(&mut commands, false),
+            "loadout" => sheet::open_loadout(&mut commands),
+            "bench" => bench::open(&mut commands, false),
+            "map" => map::open(&mut commands),
+            "journal" => journal::open(&mut commands),
+            "inventory" => stores::open(&mut commands, false),
+            _ => {}
+        }
+    }
+}
+
+/// `Update`: F beside a prop. A terminal opens the bench with its buttons
+/// live; a trainer opens the sheet on the first tree they teach; a locker
+/// opens the stores over the household's store; a workbench opens the tab
+/// of its screen last shown, the fitting of the weapon in hand or the
+/// crafting session, and the session whenever something is on the bench; a
+/// fabricator opens the
+/// factory, on its run when one is on; a board opens its buyer's lines.
+fn open_on_interact(
+    mut interactions: MessageReader<Interact>,
+    mut commands: Commands,
+    inbox: Option<ResMut<veyra_sim::procurement::ProcurementInbox>>,
+    caches: Option<ResMut<veyra_sim::loot::CacheInbox>>,
+    talk: Option<ResMut<veyra_sim::quests::DialogueInbox>>,
+) {
+    let mut inbox = inbox;
+    let mut caches = caches;
+    let mut talk = talk;
+    for interaction in interactions.read() {
+        match &interaction.kind {
+            InteractionKind::Terminal => bench::open(&mut commands, true),
+            InteractionKind::Trainer { trees } => {
+                sheet::open(&mut commands, trees.first().cloned());
+            }
+            InteractionKind::Locker => stores::open(&mut commands, true),
+            InteractionKind::Workbench => crafting::open_bench(&mut commands),
+            InteractionKind::Fabricator => factory::open(&mut commands),
+            InteractionKind::Board { buyer } => board::open(&mut commands, buyer.clone()),
+            InteractionKind::Harvester { id } => harvester::open(&mut commands, *id),
+            // F empties a cache into the pack; `loot::hear_caches` toasts the answer.
+            InteractionKind::Cache { key } => {
+                if let Some(caches) = caches.as_mut() {
+                    caches.push(veyra_sim::loot::CacheRequest::Take { key: *key });
+                }
+            }
+            // A person's F opens their conversation; the sim answers with a
+            // `DialogueView`, which `dialogue` draws.
+            InteractionKind::Person { id } => {
+                if let Some(talk) = talk.as_mut() {
+                    talk.push(veyra_sim::quests::DialogueRequest::Open(id.clone()));
+                }
+            }
+            // A guard's F buys its faction's lease, through the request the
+            // board's button sends; the toast is `board::hear_leases`.
+            InteractionKind::Guard { faction } => {
+                if let Some(inbox) = inbox.as_mut() {
+                    inbox.push(veyra_sim::procurement::ProcurementRequest::Lease {
+                        faction: *faction,
+                    });
+                }
+            }
+        }
+    }
+}
+
+/// `Startup`: the Veyra theme through the asset server, unless the app
+/// already chose one (the harness sets the theme it was asked for).
+/// `SlottedThemePlugin` inserts an `ActiveTheme` holding the default
+/// handle, so "none chosen" is that handle rather than a missing resource.
+fn load_theme(mut active: ResMut<ActiveTheme>, assets: Option<Res<AssetServer>>) {
+    let Some(assets) = assets else {
+        return;
+    };
+    if active.0 == Handle::default() {
+        active.0 = assets.load(THEME_PATH);
+    }
+}
+
+/// What the tests of the survey's screens share: the shipped registries
+/// and a deposit made by hand, so no world need be baked to word one.
+#[cfg(test)]
+pub(crate) mod testing {
+    use strata_registry::GameRegistries;
+    use veyra_sim::deposits::{Deposit, DepositId};
+
+    /// The shipped `assets/`.
+    pub fn shipped() -> GameRegistries {
+        let assets = concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets");
+        strata_registry::load_from_dir(assets).expect("assets/ loads")
+    }
+
+    /// A harvester record at store grade.
+    pub fn harvester_record() -> strata_registry::Record {
+        strata_registry::Record {
+            item: "veyra:station.field_harvester".parse().expect("an id"),
+            count: 1,
+            batch: 0,
+            by: None,
+            lines: std::collections::BTreeMap::from([
+                ("rate".to_owned(), strata_registry::item::STORE_GRADE),
+                ("hopper".to_owned(), strata_registry::item::STORE_GRADE),
+            ]),
+            condition: None,
+            fitted: std::collections::BTreeMap::new(),
+            origin: None,
+        }
+    }
+
+    /// The first member's pack, with `record` put into it when given.
+    pub fn pack_with(
+        registries: &GameRegistries,
+        record: Option<&strata_registry::Record>,
+    ) -> veyra_sim::items::Pack {
+        use strata_registry::item::SavedPack;
+        use veyra_sim::items::{Pack, place_in, write};
+        let mut pack = Pack::from_saved(&SavedPack::default(), &registries.items).expect("a pack");
+        if let Some(saved) = registries
+            .items
+            .starting()
+            .and_then(|start| start.packs.values().next())
+        {
+            pack = Pack::from_saved(saved, &registries.items).expect("a pack");
+        }
+        if let Some(record) = record {
+            let stack = write(record, &registries.items).expect("a stack");
+            assert!(place_in(&registries.items, &mut pack.cells, stack).is_none());
+        }
+        pack
+    }
+
+    /// A sheet that has learned `boxes`.
+    pub fn sheet_of(boxes: &[&str]) -> veyra_sim::progression::CharacterSheet {
+        veyra_sim::progression::CharacterSheet {
+            learned: boxes.iter().map(|each| (*each).to_owned()).collect(),
+            ..veyra_sim::progression::CharacterSheet::default()
+        }
+    }
+
+    /// A machine planted on `deposit` at `at`, `pm` there, holding `held`
+    /// of a hopper of 300.
+    pub fn planted(
+        registries: &GameRegistries,
+        deposit: &Deposit,
+        at: [f64; 2],
+        pm: u16,
+        held: u32,
+    ) -> veyra_sim::harvest::Harvester {
+        let rules = registries.resources.harvest();
+        veyra_sim::harvest::Harvester {
+            id: 0,
+            deposit: deposit.id,
+            at,
+            pm,
+            item: harvester_record(),
+            by: "Ilse Marrow".to_owned(),
+            rate: rules.rate,
+            hopper: rules.hopper,
+            lot: veyra_sim::deposits::lot(deposit, &registries.resources, 1).expect("a lot"),
+            held,
+            carry: 0,
+            full: held >= rules.hopper,
+        }
+    }
+
+    /// A deposit of `ty` named `root` in `cell`, at `at`, each figure a little over its
+    /// floor: what a query would give.
+    pub fn deposit(
+        registries: &GameRegistries,
+        ty: &str,
+        root: &str,
+        cell: [i32; 2],
+        at: [f64; 2],
+    ) -> Deposit {
+        let set = &registries.resources;
+        let ty = set.type_id(&ty.parse().expect("an id")).expect("a type");
+        let def = set.get(ty).expect("its definition");
+        Deposit {
+            id: DepositId(cell),
+            ty,
+            root: root.to_owned(),
+            place: format!("{root} {}", def.grounds[0]),
+            at,
+            height_m: 12.,
+            figures: set
+                .class_of(ty)
+                .carries
+                .iter()
+                .enumerate()
+                .map(|(index, attribute)| {
+                    let span = def.ranges[attribute];
+                    let over = u16::try_from(60 * (index + 1)).expect("small");
+                    (*attribute, (span.floor + over).min(span.cap))
+                })
+                .collect(),
+            radius_m: 200.0,
+            peak: 800,
+            grade_pm: 500,
+        }
+    }
+}

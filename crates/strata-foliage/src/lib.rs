@@ -32,9 +32,9 @@ use bevy::state::state::OnExit;
 use bevy::time::Time;
 use bevy::transform::components::Transform;
 use std::sync::{Arc, Mutex, PoisonError};
+use strata_app::{AppState, OriginSet, Registries, RenderOrigin, Wind};
 use strata_core::RegionCoord;
 use strata_flora::{CellFlora, FloraTable};
-use strata_sim::{AppState, OriginSet, Registries, RenderOrigin, Wind};
 use strata_terrain::TerrainSet;
 use tracing::info;
 
@@ -43,7 +43,8 @@ use grass::{
 };
 pub use grass::{GrassCellRecord, GrassField, GrassLod, GrassMaterial, GrassParams, WindParams};
 pub use impostor::{FarTreeMaterial, FarTreeStore, FarTrees, ImpostorBatch, ImpostorBatchMaterial};
-use tree::TREE_COMMON_SHADER_PATH;
+use strata_registry::{CANOPY_FILE, CanopyLook};
+use tree::{CANOPY_SHADER_PATH, TREE_COMMON_SHADER_PATH};
 pub use tree::{
     TreeAssets, TreeFades, TreeImpostorBatch, TreeInstance, TreeLoading, TreeMaterial, TreePiece,
     TreeWind,
@@ -158,6 +159,15 @@ pub struct FoliageSky {
     /// `grass_rim`, which the client sets. Here because the wind's buffer
     /// that carries this resource to the grass is the one the grass binds.
     pub grass_rim: f32,
+    /// The shade's colour from the look's `LookUniform`, which the client
+    /// sets; the wind's buffer carries it to trees and grass, the far-tree
+    /// uniform to the impostors.
+    pub shade_tint: Vec3,
+    /// The crown's grouping (`assets/look/canopy.ron`, visual.md F5), read at
+    /// start-up over the compiled-in copy: the near shader applies its core,
+    /// lift and rim, the impostor shader its rim (its core and lift are in
+    /// the baked atlas).
+    pub canopy: CanopyLook,
 }
 
 impl Default for FoliageSky {
@@ -165,7 +175,24 @@ impl Default for FoliageSky {
         Self {
             strength: 1.0,
             grass_rim: 1.0,
+            shade_tint: Vec3::ONE,
+            canopy: CanopyLook::default(),
         }
+    }
+}
+
+/// Reads the crown's grouping from the asset root, when the app has one, over
+/// the compiled-in copy; a broken file is reported and the shipped look kept.
+fn load_canopy(root: Option<Res<strata_app::WorldAssetRoot>>, mut sky: ResMut<FoliageSky>) {
+    let Some(root) = root else {
+        return;
+    };
+    match root.0.read_string(CANOPY_FILE) {
+        Ok(text) => match CanopyLook::parse(&text) {
+            Ok(read) => sky.canopy = read,
+            Err(error) => tracing::warn!("{CANOPY_FILE}: {error}; the shipped look stays"),
+        },
+        Err(error) => tracing::debug!("{CANOPY_FILE}: {error}; the shipped look stays"),
     }
 }
 
@@ -289,7 +316,10 @@ impl Plugin for FoliagePlugin {
         .init_resource::<FoliageSky>()
         .init_resource::<FoliageStats>()
         .init_resource::<streaming::CellStream>()
-        .add_systems(Startup, (load_shader_library, build_grass_assets))
+        .add_systems(
+            Startup,
+            (load_shader_library, build_grass_assets, load_canopy),
+        )
         .configure_sets(
             Update,
             (FoliageSet::Dispatch, FoliageSet::Collect, FoliageSet::Wind)
@@ -347,6 +377,7 @@ fn load_shader_library(
             server.load(FOLIAGE_WIND_SHADER_PATH),
             server.load(GRASS_COMMON_SHADER_PATH),
             server.load(TREE_COMMON_SHADER_PATH),
+            server.load(CANOPY_SHADER_PATH),
         ]));
     }
 }
@@ -403,7 +434,7 @@ fn prepare_inputs(
     server: Res<AssetServer>,
     inputs: Option<Res<PlaceInputs>>,
     registries: Option<Res<Registries>>,
-    library: Option<Res<strata_sim::TreeLibraryRes>>,
+    library: Option<Res<strata_app::TreeLibraryRes>>,
     assets: Option<ResMut<GrassAssets>>,
     mut materials: ResMut<Assets<GrassMaterial>>,
 ) {
@@ -640,6 +671,10 @@ fn update_wind(
         prev_origin_z: previous.2,
         sky_visibility: sky.strength,
         grass_rim: sky.grass_rim,
+        shade_tint: sky.shade_tint.to_array(),
+        canopy_core: sky.canopy.cool.map(|lane| lane * sky.canopy.core),
+        canopy_lift: sky.canopy.lift,
+        canopy_rim: sky.canopy.rim,
     };
     queue.write_buffer(&assets.wind, 0, &grass::wind_bytes(&params));
     *prev = Some((now, origin_x, origin_z));
@@ -674,6 +709,8 @@ fn install_far_materials(
             extension.uniform.fade.z = cfg.tree_fades.far.0;
             extension.uniform.fade.w = cfg.tree_fades.far.1;
             extension.uniform.shading.z = sky.strength;
+            extension.uniform.shading.w = sky.canopy.rim;
+            extension.uniform.shade = sky.shade_tint.extend(1.0);
             Some(materials.add(FarTreeMaterial {
                 base: description.base.clone(),
                 extension,
@@ -708,7 +745,7 @@ fn sync_far_fade(
 }
 
 /// Carries [`FoliageSky`] to every species' far-tree material, whose
-/// uniform's `shading.z` the impostor shader reads it from.
+/// uniform's `shading.z` and `shade` the impostor shader reads it from.
 #[allow(
     clippy::float_cmp,
     reason = "a copy is exact: any difference is a stale copy"
@@ -719,12 +756,15 @@ fn sync_impostor_sky(
     mut materials: ResMut<Assets<FarTreeMaterial>>,
 ) {
     for handle in store.materials() {
-        if materials
-            .get(handle)
-            .is_some_and(|m| m.extension.uniform.shading.z != sky.strength)
-            && let Some(mut material) = materials.get_mut(handle)
+        if materials.get(handle).is_some_and(|m| {
+            m.extension.uniform.shading.z != sky.strength
+                || m.extension.uniform.shading.w != sky.canopy.rim
+                || m.extension.uniform.shade.truncate() != sky.shade_tint
+        }) && let Some(mut material) = materials.get_mut(handle)
         {
             material.extension.uniform.shading.z = sky.strength;
+            material.extension.uniform.shading.w = sky.canopy.rim;
+            material.extension.uniform.shade = sky.shade_tint.extend(1.0);
         }
     }
 }

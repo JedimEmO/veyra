@@ -1,22 +1,24 @@
 //! A settlement's buildings as colliders, on the server as on the client.
 //!
 //! The world places a settlement from the seed and the content step bakes
-//! its buildings; each baked `.ashlar` file carries its collision proxies as
-//! convex solids, readable with plain `ashlar` and no renderer. When the world
+//! its buildings; each baked `.ashlar` file has a `.collision` file beside it
+//! holding its collision proxies as convex solids, readable with plain
+//! `ashlar` and no renderer. When the world
 //! is published, a task reads every building of every settlement's layout
 //! and the collector spawns one static body per building: a compound of its
 //! nearest level's proxies at its pose. A city is a few dozen bodies, not a
 //! stream, so they are built once and kept for the world's life.
 
-use ashlar::{BakedBuilding, ConvexSolid};
+use ashlar::ConvexSolid;
+use ashlar::collision_file::{self, CollisionFile};
 use avian3d::prelude::{Position, RigidBody, Rotation};
 use bevy::ecs::prelude::*;
 use bevy::math::Quat;
 use bevy::tasks::{AsyncComputeTaskPool, Task, TaskPool, block_on, poll_once};
 use bevy::transform::components::Transform;
+use strata_app::{GeneratedRoot, RenderOrigin, Settlements, WorldPosition};
 use strata_core::WorldPos;
 use strata_registry::AssetSource;
-use strata_sim::{GeneratedRoot, RenderOrigin, Settlements, WorldPosition};
 use tracing::{info, warn};
 
 use crate::grounding::collider;
@@ -51,23 +53,21 @@ pub(crate) enum SettlementColliders {
     Built,
 }
 
-/// The nearest level's collision proxies of a baked building.
+/// The collision proxies of a baked building, from the small file the content
+/// step writes beside it (`ashlar::collision_file`), so neither a server nor
+/// the web client parses a render file, or ships one in its bundle, to
+/// collide with it. The solids are level zero's, placed per instance, exactly
+/// what the `.ashlar` reads to (`tests/collision_file.rs` holds that).
 pub(crate) fn read_collision(
     generated: &dyn AssetSource,
     path: &str,
 ) -> Result<Vec<ConvexSolid>, String> {
+    let path = collision_file::path_for(path);
     let bytes = generated
-        .read(path)
+        .read(&path)
         .map_err(|e| format!("reading {path}: {e}"))?;
-    let baked = BakedBuilding::read(&bytes).map_err(|e| format!("reading {path}: {e}"))?;
-    let level = baked
-        .level(0)
-        .ok_or_else(|| format!("{path} has no levels"))?;
-    Ok(level
-        .colliders()
-        .into_iter()
-        .map(|placed| placed.solid)
-        .collect())
+    let file = CollisionFile::read(&bytes).map_err(|e| format!("reading {path}: {e}"))?;
+    Ok(file.into_solids())
 }
 
 /// Starts reading every settlement's buildings once the world is published.

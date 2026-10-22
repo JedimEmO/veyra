@@ -15,19 +15,6 @@
 //! world space, writing its `WorldPosition` in `f64` and, being the
 //! observer when there is no player, pulling the world along.
 
-#[cfg(feature = "ui")]
-pub mod action_bar;
-pub mod combat;
-pub mod combat_art;
-mod combat_audio;
-pub mod combat_beam;
-mod combat_fx;
-#[cfg(feature = "ui")]
-pub mod combat_hud;
-mod combat_ik;
-pub mod combat_shield;
-#[cfg(feature = "ui")]
-mod combat_text;
 #[cfg(feature = "dev")]
 pub mod debug;
 pub mod flight;
@@ -35,44 +22,28 @@ pub mod flycam;
 #[cfg(feature = "ui")]
 pub mod hud;
 pub mod input;
-#[cfg(feature = "ui")]
-mod nameplates;
 pub mod net;
 pub mod orbit;
-pub mod ride_art;
-mod scope;
 #[cfg(any(feature = "dev", feature = "ui"))]
 pub mod stats;
 #[cfg(feature = "ui")]
 pub mod ui;
+pub mod view;
 pub mod visual;
-pub mod weapon_model;
 
 use bevy::app::{App, Plugin, PostUpdate, Update};
-use bevy::ecs::schedule::{IntoScheduleConfigs, SystemSet};
+use bevy::ecs::schedule::IntoScheduleConfigs;
 use bevy::state::condition::in_state;
 use bevy::transform::TransformSystems;
-use strata_sim::{AppState, OriginSet};
 use strata_stream::StreamSet;
+use veyra_sim::{AppState, OriginSet};
 
-pub use combat_audio::{EmitterSound, LoopEmitter};
-pub use combat_fx::DustPuff;
 pub use flight::FlightPath;
 pub use flycam::FlyCam;
 pub use orbit::OrbitCamera;
 pub use visual::PlayerVisual;
 
-/// The client sets, in order, in `Update`, after streaming has decided.
-#[derive(SystemSet, Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum ClientSet {
-    /// Camera input, the player's intent, new player visuals.
-    Camera,
-    /// The debug overlay.
-    Hud,
-    /// In `PostUpdate` after the origin sync: the orbit camera and the
-    /// player visuals placed from the interpolated sim positions.
-    Follow,
-}
+pub use strata_app::ClientSet;
 
 /// Registers the client sets, the cameras, the input, the player visuals
 /// (local and remote) and the flight systems; with the `ui` feature the
@@ -99,7 +70,7 @@ impl Plugin for ClientPlugin {
         )
             .chain();
         #[cfg(feature = "ui")]
-        let steer = steer.run_if(ui::game_input_allowed);
+        let steer = steer.run_if(strata_ui::game_input_allowed);
         app.configure_sets(
             Update,
             (ClientSet::Camera, ClientSet::Hud)
@@ -132,7 +103,7 @@ impl Plugin for ClientPlugin {
             PostUpdate,
             (orbit::follow, visual::place_player_visuals).in_set(ClientSet::Follow),
         );
-        ride_art::install_view(app);
+        view::install_ride(app);
         #[cfg(any(feature = "dev", feature = "ui"))]
         {
             app.init_resource::<stats::FrameStats>().add_systems(
@@ -181,7 +152,7 @@ mod smoke {
         app.add_plugins((
             bevy::time::TimePlugin,
             bevy::input::InputPlugin,
-            strata_sim::SimPlugin,
+            veyra_sim::SimPlugin,
             strata_stream::StreamPlugin,
             ClientPlugin,
         ));

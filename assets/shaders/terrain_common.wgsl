@@ -11,6 +11,14 @@ struct TerrainParams {
     // Metres per texture repeat, one f32 per layer, packed four to a vec4
     // because uniform arrays of scalars pad every element to 16 bytes.
     tiling: array<vec4<f32>, 4>,
+    // The linear luminance each layer is drawn at (the value budget), packed
+    // like tiling; zero leaves a layer as baked.
+    value: array<vec4<f32>, 4>,
+    // The grain each layer keeps, packed like tiling; zero reads `grain`.
+    layer_grain: array<vec4<f32>, 4>,
+    // A laid layer's stones, one vec4 a layer: courses, stones to a course,
+    // the joints' share of a stone, the value a stone may differ by.
+    laid: array<vec4<f32>, 16>,
     slope_start: f32,
     slope_end: f32,
     normal_strength: f32,
@@ -51,6 +59,8 @@ struct TerrainParams {
     air_lift: f32,
     air_desaturate: f32,
     air_colour: vec4<f32>,
+    // The shade's colour, a multiplier on the indirect diffuse (visual.md F4).
+    shade_tint: vec4<f32>,
 }
 
 // The region store (strata_terrain::store): every resident region's grid
@@ -259,6 +269,27 @@ fn tiling_of(params: TerrainParams, layer: u32) -> f32 {
     if i == 1u { return v.y; }
     if i == 2u { return v.z; }
     return v.w;
+}
+
+// The luminance layer `layer` is drawn at, or 0 for as baked.
+fn value_of(params: TerrainParams, layer: u32) -> f32 {
+    let v = params.value[layer / 4u];
+    let i = layer % 4u;
+    if i == 0u { return v.x; }
+    if i == 1u { return v.y; }
+    if i == 2u { return v.z; }
+    return v.w;
+}
+
+// The contrast layer `layer` keeps about its mean: its own, or the look's.
+fn grain_of(params: TerrainParams, layer: u32) -> f32 {
+    let v = params.layer_grain[layer / 4u];
+    let i = layer % 4u;
+    var g = v.w;
+    if i == 0u { g = v.x; }
+    if i == 1u { g = v.y; }
+    if i == 2u { g = v.z; }
+    return select(params.grain, g, g > 0.0);
 }
 
 // The CDLOD morph. A vertex further than morph_end node sizes from the

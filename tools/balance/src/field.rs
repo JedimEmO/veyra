@@ -23,13 +23,14 @@ use strata_registry::procurement::{BuyerDef, Wants};
 use strata_registry::progression::XpKind;
 use strata_registry::schematic::{Hand, Outcome, Schematic};
 use strata_registry::{GameRegistries, Namespaced};
-use strata_sim::crafting::{self, Holder, Picks};
-use strata_sim::deposits::{SurveyEvent, lot};
-use strata_sim::deposits::{cycle_units, skill, survey_xp};
-use strata_sim::procurement::{self, ProcurementState};
-use strata_sim::progression::CharacterSheet;
-use strata_sim::{harvest, ride};
-use strata_worldgen::{Deposit, DepositField, DepositId, ProceduralWorld};
+use strata_worldgen::ProceduralWorld;
+use veyra_rules::crafting::{self, Holder, Picks};
+use veyra_rules::deposits::{SurveyEvent, lot};
+use veyra_rules::deposits::{cycle_units, skill, survey_xp};
+use veyra_rules::procurement::{self, ProcurementState};
+use veyra_rules::progression::CharacterSheet;
+use veyra_rules::{harvest, ride};
+use veyra_world::{Deposit, DepositField, DepositId};
 
 /// The file this module reads, under the assets directory.
 pub const FILE: &str = "balance/first_hour.ron";
@@ -444,7 +445,7 @@ impl Shipped {
     pub fn open(assets: &Path, seed: u64) -> Result<Self> {
         let registries =
             Arc::new(strata_registry::load_from_dir(assets).context("loading the assets")?);
-        let tables = strata_sim::combat_tables::CombatTables::load(assets.join("combat"))
+        let tables = veyra_rules::combat_tables::CombatTables::load(assets.join("combat"))
             .context("loading the combat tables")?;
         let world = Arc::new(ProceduralWorld::new(Seed(seed), &registries));
         let home = world
@@ -1170,7 +1171,7 @@ impl State<'_> {
                 let sheet = self.sheets.get_mut(member).ok_or("no such member")?;
                 match sheet.learn(graph, id, true) {
                     Ok(()) => Ok(Done::of(screen, format!("{member} learns {id}"))),
-                    Err(strata_sim::progression::LearnRefused::AlreadyLearned(_)) => {
+                    Err(veyra_rules::progression::LearnRefused::AlreadyLearned(_)) => {
                         Ok(Done::of(0.0, format!("{member} knows {id} already")))
                     }
                     Err(e) => Err(format!("{member}: {e}")),
@@ -1184,7 +1185,7 @@ impl State<'_> {
     fn tool_skill(
         &self,
         sheet: &CharacterSheet,
-    ) -> Result<strata_sim::deposits::SurveySkill, String> {
+    ) -> Result<veyra_rules::deposits::SurveySkill, String> {
         let tool = survey_tool(self.reg).ok_or("no survey tool")?;
         Ok(skill(
             &self.reg.resources,

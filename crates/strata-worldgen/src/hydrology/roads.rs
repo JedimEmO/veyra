@@ -68,7 +68,7 @@ use walls::{Lines, Plan, Wall};
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, VecDeque};
 
-use strata_registry::RoadClass;
+use strata_data::RoadClass;
 
 use super::field::parallel_rows;
 use super::place::Grid;

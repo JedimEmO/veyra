@@ -9,8 +9,8 @@
 //! surface and belongs in one place where a wrong name is refused with the
 //! list of right ones.
 
-use strata_sim::combat::{Action, ActionSpec, Weapon, WeaponSpec};
-use strata_sim::combat_tables::{
+use veyra_rules::combat::{Action, ActionSpec, Weapon, WeaponSpec};
+use veyra_rules::combat_tables::{
     ActorTable, BulwarkTable, CombatTables, DuelistTable, MarksmanTable, OpponentTable,
     RusherTable, SentryTable,
 };

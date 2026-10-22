@@ -11,7 +11,7 @@
 //! fallback ([`trunk_collider`]) uses none.
 
 use strata_core::glam::{Quat, Vec3};
-use strata_registry::TreeParams;
+use strata_data::TreeParams;
 
 use crate::hash_unit;
 
@@ -249,7 +249,7 @@ pub fn build_understory(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use strata_registry::MetreRange;
+    use strata_data::MetreRange;
 
     #[test]
     fn a_tree_is_not_grown_here() {

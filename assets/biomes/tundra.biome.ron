@@ -14,5 +14,6 @@
     ground: (0.86, 0.90, 0.97),
     // Cold and quiet: the coolest white point and the least colour, so
     // the snow reads blue-white.
-    grade: (temperature: -0.012, saturation: 0.85),
+    // Shade colour (visual.md F4): Cold blue shade with the green kept, snow shadow.
+    grade: (temperature: -0.012, saturation: 0.85, shade: (0.90, 0.98, 1.16)),
 )

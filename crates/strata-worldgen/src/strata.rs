@@ -64,7 +64,7 @@
 //! dip, is in the constructor through `libm` (the crate's float rule).
 
 use strata_core::{Seed, mix64};
-use strata_registry::Beds as BedsDef;
+use strata_data::Beds as BedsDef;
 
 use crate::noise::{Fractal, Shape, smoothstep};
 use crate::params::WorldParams;
@@ -360,7 +360,7 @@ impl Bedded {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use strata_registry::MetreRange;
+    use strata_data::MetreRange;
 
     fn beds(dip: (f32, f32)) -> Beds {
         Beds::new(

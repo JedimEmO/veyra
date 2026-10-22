@@ -3,7 +3,7 @@
 
 use avian3d::prelude::{Position, RigidBody};
 use bevy::ecs::prelude::*;
-use strata_sim::{RenderOrigin, RenderOriginChanged, WorldPosition};
+use strata_app::{RenderOrigin, RenderOriginChanged, WorldPosition};
 
 /// `Position = origin.to_render(WorldPosition)` for every body, at the start
 /// of the tick. Writes only when the value differs so a static collider does

@@ -59,7 +59,7 @@ run-client *args="--connect 127.0.0.1:5000":
 # render layer, and the crates below the render layer build and test on
 # their own, because `cargo test --workspace` unifies Bevy's features across
 # every member (apps/game turns the defaults on) and would let a test in
-# strata-sim that reaches for a render-side API pass unnoticed.
+# veyra-sim that reaches for a render-side API pass unnoticed.
 #
 # Assert the dedicated-server dependency graph really has no renderer in it.
 server-check:
@@ -98,8 +98,10 @@ server-check:
     # (app, ecs, time, log, state) and what matters is that nothing that
     # draws, opens a window or lays out UI came with them.
     # The balance harness (tools/balance) links the sim and the physics
-    # the same way and gets the same denylist.
-    for binary in server balance; do
+    # the same way and gets the same denylist, and so does the game's headless
+    # half (veyra-game: the household, the people, the camps), which the
+    # server links beside the facade.
+    for binary in server balance veyra-game; do
         server_found=$(cargo tree -p $binary -e normal \
             | grep -oE "bevy_[a-z_]*|\bbevy\b" | sort -u || true)
         server_bad=""
@@ -117,11 +119,39 @@ server-check:
         fi
         echo "$binary graph holds only: $(echo $server_found | tr '\n' ' ')"
     done
+    # The combat view draws and plays: the server, the balance harness and the
+    # headless facade link neither it nor the engine client under it, nor the
+    # screens (strata-ui, veyra-ui).
+    for graph in "-p server" "-p balance" "-p veyra-game" "-p strata --no-default-features --features headless"; do
+        if cargo tree $graph -e normal --prefix none | rg '^(veyra-view|veyra-ui|veyra-dev|strata-client|strata-ui|strata-terrain|strata-atmosphere|strata-foliage|ashlar-bevy) '; then
+            echo "a render-layer client crate leaked into a headless graph ($graph)" >&2
+            exit 1
+        fi
+    done
+    # The two screen crates keep the boundary the split exists for: the engine's
+    # framework has no game crate and no terrain, atmosphere, foliage or client
+    # over it, and the game's screens link none of those either, so a terrain
+    # edit never waits on or rebuilds the screens.
+    if cargo tree -p strata-ui -e normal --prefix none | rg '^(veyra-|strata-(sim|terrain|atmosphere|foliage|client)) '; then
+        echo "strata-ui must not depend on a game crate or on the terrain, atmosphere, foliage or client" >&2
+        exit 1
+    fi
+    if cargo tree -p veyra-ui -e normal --prefix none | rg '^strata-(client|terrain|atmosphere|foliage) '; then
+        echo "veyra-ui must not depend on the engine client, the terrain, the atmosphere or the foliage" >&2
+        exit 1
+    fi
+    # The development half (stills, scripts, the benchmark's flags) is the game's
+    # `dev-tools` feature and nothing else's: the browser build's graph has none
+    # of it, and no headless graph above has it either (the leak check names it).
+    if cargo tree -p game --no-default-features --features web -e normal --prefix none | rg '^veyra-dev '; then
+        echo "veyra-dev leaked into the browser build's graph (the game's dev-tools feature is off there)" >&2
+        exit 1
+    fi
     # Runtime collision consumes plain solids, never the native authoring kernel,
     # and nothing that plays bakes a material: the kernel, the graph engine and
     # the content step belong to `tools/content` and the previews. The game's
     # own tests bake with the kernel, which is why only its normal edges count.
-    for graph in "-p server" "-p strata --no-default-features --features headless" "-p game"; do
+    for graph in "-p server" "-p veyra-game" "-p strata --no-default-features --features headless" "-p game"; do
         if cargo tree $graph -e normal --prefix none | rg '^(ashlar-manifold|manifold-csg|manifold-csg-sys|ashlar-material|ashlar-content|ashlar-impostor|veyra-materials|veyra-flora|veyra-rocks|veyra-settlements|ashlar-showcase) '; then
             echo "an authoring tool leaked into a runtime graph ($graph)" >&2
             exit 1
@@ -129,15 +159,48 @@ server-check:
     done
     # The Bevy-free row of the layering rule: no Bevy crate at all, and no
     # arrow up to a Bevy crate of the workspace.
-    for crate in strata-core strata-registry strata-worldgen strata-flora strata-weather veyra-buildings veyra-weapons ashlar; do
-        if cargo tree -p $crate -e normal --prefix none | rg '^(bevy[a-z_]*|strata-(sim|stream|physics|net|net-replicon|terrain|atmosphere|foliage|client)) '; then
+    for crate in strata-core strata-data veyra-data strata-registry strata-worldgen strata-flora strata-weather veyra-world veyra-buildings veyra-weapons veyra-words ashlar; do
+        if cargo tree -p $crate -e normal --prefix none | rg '^(bevy[a-z_]*|strata-(app|sim|stream|physics|net|net-replicon|terrain|atmosphere|foliage|client|ui)|veyra-(view|ui|dev)) '; then
             echo "$crate must not depend on Bevy or on a crate above it" >&2
+            exit 1
+        fi
+    done
+    # The rules crate and the plain-data crate under strata-app link bevy_ecs and
+    # bevy_math and nothing above them: no bevy_app, no umbrella crate, no
+    # state, time or transform crate, no crate of the engine core or the sim, so
+    # a rule edit rebuilds nothing under the render layer and the rules compile
+    # beside Bevy's own crates.
+    for crate in veyra-rules strata-types; do
+        if cargo tree -p $crate -e normal --prefix none | rg '^(bevy|bevy_app|bevy_state|bevy_time|bevy_transform|bevy_render|strata-(app|sim|stream|physics|net|net-replicon|terrain|atmosphere|foliage|client|ui)|veyra-(view|ui|dev)) '; then
+            echo "$crate must link bevy_ecs and bevy_math only, and nothing above strata-app" >&2
+            exit 1
+        fi
+    done
+    # The engine's physics and replication adapter sit over strata-app and take the
+    # game's contributions as data and plugins: the rules, the sim and the game's
+    # physics are nowhere in their graphs, and none of them is a direct edge.
+    for crate in strata-physics strata-net-replicon; do
+        if cargo tree -p $crate -e normal --prefix none | rg '^(veyra-sim|veyra-rules|veyra-physics) '; then
+            echo "$crate must not depend on the sim, the rules or the game's physics" >&2
+            exit 1
+        fi
+        if cargo tree -p $crate -e normal --depth 1 --prefix none | rg '^veyra-'; then
+            echo "$crate must have no direct veyra-* edge" >&2
+            exit 1
+        fi
+    done
+    # The world crates link the world half of the data alone, so an item,
+    # schematic or quest edit never rebuilds them: no arrow from them to the
+    # game's data, the game's world rules or the facade over both.
+    for crate in strata-data strata-worldgen strata-flora strata-weather; do
+        if cargo tree -p $crate -e normal --prefix none | rg '^(veyra-data|veyra-world|strata-registry) '; then
+            echo "$crate must not depend on the game's data or the registry facade" >&2
             exit 1
         fi
     done
     cargo check -p strata --no-default-features --features headless
     cargo check -p server
-    cargo test -p veyra-buildings -p strata-core -p strata-registry -p strata-worldgen -p strata-flora -p strata-weather -p strata-sim -p strata-stream -p strata-physics -p strata-net -p strata-net-replicon -- --test-threads=4
+    cargo test -p veyra-buildings -p strata-core -p strata-data -p veyra-data -p strata-registry -p strata-worldgen -p strata-flora -p strata-weather -p veyra-world -p strata-types -p strata-app -p veyra-rules -p veyra-sim -p strata-stream -p strata-physics -p veyra-physics -p veyra-words -p veyra-game -p strata-net -p strata-net-replicon -- --test-threads=4
 
 # What CI runs. The feel contracts are gated by the `contracts` test of
 # tools/balance inside `test`; `balance-check` is the same bands as a
@@ -216,16 +279,17 @@ weapon-workbench *args:
 
 # The web build into dist/ (ticket 0013, step 3): the wasm and its bindings, the
 # data bundle (the registries and layouts the game reads through its file port),
-# index.html, and the assets and baked files Bevy loads over HTTP. Run `just
+# index.html, and the assets and baked files Bevy loads over HTTP (what is
+# copied is apps/game/web/*.filter; the rest is in the bundle). Run `just
 # content` first; serve dist/ with any static server.
 web:
     rm -rf dist
     mkdir -p dist
-    cargo build -p game --release --target wasm32-unknown-unknown --no-default-features --features web
-    wasm-bindgen --target web --no-typescript --out-dir dist --out-name veyra target/wasm32-unknown-unknown/release/game.wasm
+    env -u CC -u CXX -u CFLAGS -u CXXFLAGS cargo build -p game --profile web --target wasm32-unknown-unknown --no-default-features --features web
+    wasm-bindgen --target web --no-typescript --out-dir dist --out-name veyra target/wasm32-unknown-unknown/web/game.wasm
     ls -l dist/veyra_bg.wasm
     if command -v wasm-opt >/dev/null; then wasm-opt -O2 --enable-bulk-memory --enable-nontrapping-float-to-int --enable-sign-ext --enable-mutable-globals --enable-simd -o dist/veyra_bg.opt.wasm dist/veyra_bg.wasm && mv dist/veyra_bg.opt.wasm dist/veyra_bg.wasm && ls -l dist/veyra_bg.wasm; fi
     cargo run -p xtask -- bundle dist/data.bundle.gz
     cp apps/game/web/index.html dist/index.html
-    rsync -a --exclude '*.wgsl.bak' assets/ dist/assets/
-    rsync -a --exclude /capacity generated/ dist/generated/
+    rsync -a --prune-empty-dirs --filter='. apps/game/web/assets.filter' assets/ dist/assets/
+    rsync -a --prune-empty-dirs --filter='. apps/game/web/generated.filter' generated/ dist/generated/

@@ -261,7 +261,7 @@ fn main() -> anyhow::Result<()> {
             } else {
                 &maps.sites
             };
-            let field = strata_worldgen::DepositField::new(
+            let field = veyra_world::DepositField::new(
                 std::sync::Arc::clone(&world),
                 Seed(cli.seed),
                 std::sync::Arc::clone(&registries),
@@ -275,7 +275,7 @@ fn main() -> anyhow::Result<()> {
         }
     }
     if !cli.no_factions && !registries.factions.is_empty() {
-        let map = strata_worldgen::FactionMap::new(
+        let map = veyra_world::FactionMap::new(
             std::sync::Arc::clone(&world),
             Seed(cli.seed),
             std::sync::Arc::clone(&registries),

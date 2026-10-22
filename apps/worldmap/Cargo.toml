@@ -12,6 +12,7 @@ publish = false
 strata-core = { workspace = true }
 strata-registry = { workspace = true }
 strata-worldgen = { workspace = true }
+veyra-world = { workspace = true }
 strata-weather = { workspace = true }
 clap = { workspace = true }
 image = { workspace = true }

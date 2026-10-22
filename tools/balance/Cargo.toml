@@ -14,10 +14,15 @@ publish = false
 [dependencies]
 strata-core.workspace = true
 strata-registry.workspace = true
-strata-sim.workspace = true
+veyra-sim = { workspace = true, features = ["shipped-data"] }
+# The plain rules, for everything that needs no world: the tables, the fighters,
+# the AI, the sheet and the bench.
+veyra-rules = { workspace = true, features = ["shipped-data"] }
 strata-stream.workspace = true
 strata-physics.workspace = true
+veyra-physics.workspace = true
 strata-worldgen.workspace = true
+veyra-world.workspace = true
 bevy = { workspace = true, features = ["std", "bevy_state"] }
 anyhow.workspace = true
 clap.workspace = true

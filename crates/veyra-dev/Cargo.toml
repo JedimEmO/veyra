@@ -1,0 +1,30 @@
+[package]
+name = "veyra-dev"
+description = "The game's development half: the command line of the stills, scripts and benchmark runs, the systems that serve them, and the household's scripts. Bevy with a window; linked by the game behind its `dev-tools` feature, which a web or shipped build leaves off."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+# The facade with the client, its screens and the dev toggles; the stills drive
+# them.
+strata = { workspace = true, features = ["client", "dev", "ui"] }
+strata-core = { workspace = true }
+veyra-sim = { workspace = true }
+# The household the scripts walk, and the hostiles' kinds.
+veyra-game = { workspace = true }
+# The screens a still opens (`stores::Filter`, `crafting::Still`).
+veyra-ui = { workspace = true }
+# The window (screenshots) and the UI nodes a still reads.
+bevy = { workspace = true, features = ["std", "bevy_state", "bevy_window", "bevy_render", "bevy_asset", "bevy_ui", "bevy_pbr", "bevy_camera", "bevy_text"] }
+clap = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true }
+ron = { workspace = true }
+# The stock's click, which the scripted walk sends the sim as the stores screen does.
+slotted-model = { workspace = true }
+
+[lints]
+workspace = true

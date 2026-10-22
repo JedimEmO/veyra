@@ -207,6 +207,7 @@ fn stream_roadside(
         let entity = commands
             .spawn((
                 Name::new(file.to_owned()),
+                crate::pieces::Streamed,
                 RoadsidePiece {
                     file: file.to_owned(),
                 },

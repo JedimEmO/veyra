@@ -70,7 +70,7 @@ fn a_switch_ends_every_status() {
         &registries,
         None,
         None,
-        super::super::bench::Out {
+        Out {
             position: WorldPos::new(0., 0., 0.),
             actor: &mut actor,
             sheet: &mut sheet,
@@ -133,7 +133,7 @@ fn a_change_is_copied_and_a_swap_carries_each_members_bar() {
         &registries,
         None,
         None,
-        super::super::bench::Out {
+        Out {
             position: WorldPos::new(0., 0., 0.),
             actor: &mut actor,
             sheet: &mut sheet,
@@ -185,11 +185,11 @@ fn a_granted_precision_shot_is_pressed_and_reported() {
         "--household",
         "scratch/combat/bar-test.ron",
     ]);
-    assert_eq!(cli.press, vec![(1, 5), (3, 9)]);
-    assert_eq!(cli.grant, [PRECISION]);
+    assert_eq!(cli.dev.press, vec![(1, 5), (3, 9)]);
+    assert_eq!(cli.dev.grant, [PRECISION]);
 
     let mut world = World::new();
-    world.insert_resource(cli);
+    world.insert_resource(cli.dev);
     world.insert_resource(FrameCount(4));
     let (actor, ..) = household.stats(&registries);
     let mut actor = actor.carrying([Some(Weapon::Carbine), Some(Weapon::Pistol)], 1);
@@ -199,10 +199,14 @@ fn a_granted_precision_shot_is_pressed_and_reported() {
     let player = world
         .spawn((LocalPlayer, CombatIntent::default(), actor))
         .id();
-    world.run_system_once(crate::press_for_shot).unwrap();
+    world
+        .run_system_once(veyra_dev::stills::press_for_shot)
+        .unwrap();
     assert_eq!(world.get::<CombatIntent>(player).unwrap().ability, None);
     world.insert_resource(FrameCount(5));
-    world.run_system_once(crate::press_for_shot).unwrap();
+    world
+        .run_system_once(veyra_dev::stills::press_for_shot)
+        .unwrap();
     assert_eq!(world.get::<CombatIntent>(player).unwrap().ability, Some(1));
 
     let mut input = *world.get::<CombatIntent>(player).unwrap();
@@ -301,7 +305,7 @@ fn a_granted_precision_shot_is_pressed_in_a_headless_app() {
         std::thread::sleep(std::time::Duration::from_millis(2));
     };
     let now = app.world().resource::<bevy::diagnostic::FrameCount>().0;
-    app.world_mut().resource_mut::<crate::Cli>().press = vec![(1, now + 10)];
+    app.world_mut().resource_mut::<veyra_dev::DevArgs>().press = vec![(1, now + 10)];
     for _ in 0..240 {
         app.update();
     }
@@ -407,7 +411,7 @@ fn a_granted_thrust_carries_the_member_and_sends_its_strike() {
     let settled = last;
     let strikes = app.world().resource::<StrikesSent>().0;
     let now = app.world().resource::<bevy::diagnostic::FrameCount>().0;
-    app.world_mut().resource_mut::<crate::Cli>().press = vec![(1, now + 5)];
+    app.world_mut().resource_mut::<veyra_dev::DevArgs>().press = vec![(1, now + 5)];
     for _ in 0..120 {
         app.update();
     }

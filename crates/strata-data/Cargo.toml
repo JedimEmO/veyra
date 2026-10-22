@@ -1,0 +1,24 @@
+[package]
+name = "strata-data"
+description = "The engine's data layer: the files port, packs, the loader frame and the world schemas (biomes, materials, flora, geology, sites, settlements) on slotted-registry. No Bevy."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+# `std-fs` is on for `DirSource`, the plain `std::fs` adapter `load_world_from_dir`
+# reads through; the loader itself only speaks the `AssetSource` port so a
+# pack layer can replace the directory later.
+slotted-registry = { workspace = true, features = ["std-fs"] }
+slotted-model = { workspace = true }
+serde = { workspace = true }
+ron = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+
+[lints]
+workspace = true

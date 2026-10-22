@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 """Level existing Forge renders for playback. No generators or audio device needed.
 
-Run: python3 tools/combat_audio.py
-Outputs include the exact recipe, input/output hashes and EBU R128 measurements.
-The retained raw archive is the source when disposable out/ renders are removed.
+Run: python3 tools/combat_audio.py            (level the takes, then encode them)
+     python3 tools/combat_audio.py --encode-only   (encode the masters already levelled)
+
+The levelled 48 kHz WAV masters are written to scratch/audio-masters/combat and
+are not kept in assets/: the game plays the Ogg Vorbis the last step encodes
+from them into assets/audio/combat (a tenth of the bytes, and the download of
+a browser session). Outputs include the exact recipe, input/output hashes and
+EBU R128 measurements. The retained raw archive is the source when disposable
+out/ renders are removed, so the masters are regenerated, not stored.
 """
 
 import argparse
@@ -20,7 +26,10 @@ import shutil
 ROOT = Path(__file__).resolve().parents[1]
 PROJECT = ROOT / "assets-src/combat/forge"
 DEST = ROOT / "assets/audio/combat"
+MASTERS = ROOT / "scratch/audio-masters/combat"
 RATE = 48000
+# libvorbis quality: transients and the hums are mono, so this is about 90 kbit/s.
+OGG_QUALITY = 5
 TARGETS = {
     "blaster_shot": -14, "sentry_shot": -14,
     "impact_stone": -16, "impact_metal": -16,
@@ -130,16 +139,42 @@ def render(source, dest, target, temp, prefilter=""):
             "level_filter": filters, "dc_removed": dc, "final_peak_scale": scale, **measured}
 
 
+def encode(masters):
+    """The final step: every levelled WAV master to an Ogg Vorbis in assets/."""
+    DEST.mkdir(parents=True, exist_ok=True)
+    encoded = {}
+    for master in sorted(masters.glob("*.wav")):
+        ogg = DEST / (master.stem + ".ogg")
+        ffmpeg("-i", master, "-map_metadata", "-1", "-fflags", "+bitexact",
+               "-flags:a", "+bitexact", "-c:a", "libvorbis", "-q:a", OGG_QUALITY,
+               "-ac", 1, "-ar", RATE, ogg)
+        encoded[master.stem] = {"encoded_sha256": digest(ogg), "ogg_quality": OGG_QUALITY,
+                                "ogg_bytes": ogg.stat().st_size}
+        print(f"{ogg.name:32} {ogg.stat().st_size:8} bytes", flush=True)
+    return encoded
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, help="Raw Forge WAV directory")
+    parser.add_argument("--encode-only", action="store_true",
+                        help="encode the masters already in scratch/audio-masters/combat")
     args = parser.parse_args()
+    if args.encode_only:
+        encoded = encode(MASTERS)
+        report_path = DEST / "levelling.json"
+        report = json.loads(report_path.read_text())
+        for take, extra in encoded.items():
+            report["takes"][take].update(extra)
+        report_path.write_text(json.dumps(report, indent=2) + "\n")
+        return
     source = args.source or PROJECT / "out/audio/sfx"
     if not source.exists():
         source = PROJECT / "assets-src/sfx/takes"
     sources = sorted(source.glob("*.wav"))
     if not sources:
         raise SystemExit(f"No rendered takes in {source}")
+    MASTERS.mkdir(parents=True, exist_ok=True)
     DEST.mkdir(parents=True, exist_ok=True)
     archive = PROJECT / "assets-src/sfx/takes"
     archive.mkdir(parents=True, exist_ok=True)
@@ -162,10 +197,12 @@ def main():
             event = path.stem.rsplit("_", 1)[0]
             # Compress anticipation into the AI's 650 ms charge, preserving pitch.
             prefix = "atempo=1.538461538,atrim=duration=0.65," if event == "sentry_charge" else ""
-            result = render(path, DEST / path.name, TARGETS[event], Path(tmp), prefix)
+            result = render(path, MASTERS / path.name, TARGETS[event], Path(tmp), prefix)
             report["takes"][path.stem] = result
             print(f'{path.stem:24} {result["lufs"]:6.1f} LUFS  '
                   f'{result["true_peak_dbfs"]:6.1f} dBTP', flush=True)
+    for take, extra in encode(MASTERS).items():
+        report["takes"][take].update(extra)
     (DEST / "levelling.json").write_text(json.dumps(report, indent=2) + "\n")
 
 

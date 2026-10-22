@@ -9,19 +9,48 @@ structural.
 ## The layering rule
 
 ```
-strata-core <- strata-registry <- strata-worldgen <- strata-flora    no Bevy at all
-                                     strata-worldgen <- strata-weather  (where fog lies; the server links it)
-strata-sim <- strata-stream <- strata-physics           bevy_app, bevy_ecs, bevy_math, bevy_state, bevy_time, bevy_transform, bevy_tasks
-                                                           (physics adds avian3d and its bevy_log, bevy_heavy, bevy_transform_interpolation)
-strata-net (port) <- strata-net-replicon (adapter)       above physics, below the render crates; replicon and renet, no socket in the sim
-ashlar (buildings), veyra-buildings (the game's own kits over it), veyra-weapons   no Bevy either; `ashlar-manifold`, the native mesher, is authoring only
+strata-core <- strata-data <- strata-worldgen <- strata-flora    no Bevy at all (strata-data: the files port, packs, the loader frame, the world schemas)
+                                 strata-worldgen <- strata-weather  (where fog lies; the server links it)
+strata-data <- veyra-data (items, schematics, quests, ...; strata-registry is the facade over both, with `GameRegistries`)
+veyra-data, strata-worldgen <- veyra-world (deposit field, faction map)   no Bevy; veyra-sim links it, the world crates do not
+strata-registry, strata-worldgen <- strata-types              bevy_ecs and bevy_math only: PlayerIntent, PlayerCommand, NearSite(s), WaterHere, Registries; strata-app re-exports them
+strata-types, veyra-world <- veyra-rules                      the game's plain rules (combat, abilities, AI, gear, crafting, the factory, the land, the people): bevy_ecs and
+                                                           bevy_math only, never bevy_app; veyra-sim and tools/balance link it, the render crates do not
+strata-app, veyra-rules <- veyra-sim, strata-app <- strata-stream <- strata-physics   bevy_app, bevy_ecs, bevy_math, bevy_state, bevy_time, bevy_transform, bevy_tasks
+                                                           (strata-app is the engine core: states, SimTick, origin, loader, the request kit; veyra-sim is the adapters
+                                                           over veyra-rules: the inboxes, the consume systems, the one request order, the plugins; the render crates see
+                                                           strata-app, not the rules)
+                                                           (physics adds avian3d and its bevy_log, bevy_heavy, bevy_transform_interpolation;
+                                                           strata-physics and strata-net-replicon link no veyra-sim and no veyra-* crate, `just server-check` asserts it)
+strata-physics, veyra-rules <- veyra-physics                the game's physics: bolts and blades (`combat`), the hoverbike motor (`ride`), `VeyraPhysicsPlugin`;
+                                                           the facade's headless group, the balance harness and the client's tests add it beside `PhysicsPlugin`
+veyra-sim, veyra-physics, veyra-words, strata (headless facade) <- veyra-game   the game's headless half: the household and its file, the questline's people, the camps and posts, the props' placement,
+                                                           the hostiles' making, `GamePlugin`; the game and the server link it, never a render crate (`just server-check` asserts it
+                                                           on its graph and on the server's; veyra-words is the English table, no Bevy, no dependency, which veyra-ui links too)
+strata-net (port) <- strata-net-replicon (adapter)       above physics, below the render crates; replicon and renet, no socket in the sim; over strata-app alone, the game's
+                                                           numbers reach the handshake as the `VersionParts` resource the game and the server fill
+ashlar (buildings), veyra-buildings (the game's own kits over it), veyra-weapons, veyra-words   no Bevy either; `ashlar-manifold`, the native mesher, is authoring only
 veyra-materials, veyra-flora, veyra-rocks, veyra-settlements, tools/content   authoring only: ashlar-content, ashlar-material, ashlar-impostor and the kernel
-tools/balance                                              the duel harness: strata-sim, strata-stream and strata-physics, no render crate
+tools/balance                                              the duel harness: veyra-rules for what needs no world, veyra-sim, strata-stream, strata-physics and veyra-physics for the bouts, no render crate
+strata-ui                                                  the screen framework over slotted: strata-app and bevy_ui, no terrain, atmosphere or foliage; strata-client links it
 strata-terrain, strata-atmosphere, strata-foliage, strata-client, ashlar-bevy   bevy_render and friends (client's `ui` feature adds bevy_ui and slotted)
+veyra-ui <- strata-ui, veyra-sim, strata-physics, ashlar-bevy   the game's screens and their words; a sibling of strata-client, never over it
+                                                           (strata-physics for the place chip's grounded test, ashlar-bevy, a render crate, for the baked weapon pieces on the
+                                                           hand and the fitting stage; neither is under the terrain, and `just server-check` keeps the terrain,
+                                                           atmosphere, foliage and engine client out of its graph)
+veyra-view <- strata-client, strata-ui, veyra-ui           the combat view (HUD, art, effects, audio, scope, the bike on screen)
+                                                           and veyra-sim; only the game links it (`just server-check` keeps it out of the server's graph)
+veyra-dev <- strata (client, dev, ui), veyra-game, veyra-ui   the development half: `DevArgs` (the flags of the stills, scripts and benchmark runs), the still systems,
+                                                           the household's scripts, the exit rule and the benchmark's summary; only the game links it, behind its `dev-tools`
+                                                           feature (default natively, off in `web`), and `just server-check` keeps it out of every headless graph and the browser's
 strata (facade), apps/game, apps/server, apps/worldmap    see everything (the server only the headless feature set plus `net-replicon`)
 ```
 
-An arrow never points from a lower crate to a higher one. `ashlar` and
+An arrow never points from a lower crate to a higher one. `strata-data`,
+`veyra-data`, `veyra-world` and the facade `strata-registry` are Bevy-free, and
+the world crates link `strata-data` alone, so an item, schematic or quest edit
+rebuilds none of them (`GameRegistries` derefs to the world half, `WorldDefs`,
+which worldgen, flora and weather take). `ashlar` and
 `veyra-buildings` are Bevy-free and may be used from the physics layer up;
 `ashlar-bevy` is a render crate; `ashlar-manifold` carries the native Manifold
 kernel and, with `ashlar-material`, `ashlar-content`, `veyra-materials` and
@@ -31,15 +60,57 @@ city generators), belongs to `tools/content`, the preview tool and tests alone, 
 by name. `just content` bakes buildings, materials, trees, the tree
 library and each settlement's layout and skyline into `generated/`
 (gitignored, regenerated, never edited), and the game mounts it as the
-`generated://` asset source; the game reads baked files and bakes nothing. Crates below
-`strata-sim` have no Bevy. `strata-sim`, `strata-stream`,
-`strata-physics` and `strata-net-replicon` use the non-render Bevy
+`generated://` asset source; the game reads baked files and bakes nothing. Baked maps are
+block-compressed: colour and ORM BC7, normals BC5 (z rebuilt in the shader), emissive BC6H,
+impostor atlases BC7, and a building material bakes no height map (`ashlar-material`'s `bc`
+feature; `just content --raw-textures` bakes the old RGBA8 set). The terrain's layers
+(`terrain:*`) stay raw with their heights, and `just content` folds them (`content --terrain-only`
+does only that) into two BC7 KTX2 arrays, `generated/terrain/colour.ktx2` (colour with the cavity
+shade at 0.8, roughness in alpha) and `normal.ktx2` (normal, height in alpha), one layer per terrain
+material in the registry's order, with an index `arrays.ron` (`strata_registry::terrain_arrays`:
+layer sets, size, cavity) that `strata-terrain` loads through the asset server (the normal one with
+`is_srgb` off, or Bevy reads its unorm BC7 as sRGB). Only a start with no index, or one that does not
+match the registry or the look's cavity, loads the layer maps and stacks them on the CPU, and says so in
+a log line; `--raw-textures` writes no arrays for that comparison. The web build leaves the raw layer
+maps out of `dist/`. A device without `TEXTURE_COMPRESSION_BC` is outside the floor: `ashlar_bevy` logs one
+error line at start-up and the maps fail to load. A rebake never deletes what it no longer writes, so after moving a checkout from the RGBA8 set delete `generated/materials` first to drop the dead height and RGBA8 files. Crates below
+`strata-app` have no Bevy, except `strata-types` and `veyra-rules`, which link `bevy_ecs` and `bevy_math` alone
+(`just server-check` asserts it by name: no `bevy_app`, no umbrella crate, nothing of the engine core or above). `strata-app`,
+`veyra-sim`, `strata-stream`, `strata-physics`, `veyra-physics`, `veyra-game` and `strata-net-replicon` use the non-render Bevy
 crates listed above and nothing else. Only crates above them see
 `bevy_render`. `just server-check` asserts that exact allowlist on the
 facade's headless feature set and a render/window/UI denylist on the
 server binary's graph, then builds and tests the lower crates on their
 own (feature unification in `cargo test --workspace` would hide a
 render-side use in them), and is part of CI.
+
+The client is four crates (review step seven, `strata-ui`, `veyra-ui`, `veyra-view`). `strata-client` is the engine
+client: cameras, input, statistics, the settings and graphics screens, the look wiring (`ui/settings`, `ui/graphics`,
+`ui/render`) and the HUD layers. `strata-ui` is the screen framework under it, over `strata-app` and slotted and
+nothing of the terrain: `sim_screen` (`SimScreen`, `add_sim_screen`, `ScreenWork`, `Seen`), the run conditions
+(`screen_up`, `screen_on_top`, `game_input_allowed`), the pause flow, `scale`, `fonts`, `painted`, `world_ui`
+(`ui_point`, `ui_scale`, `world_ui_shown`), and `strata_ui::register`, which both `strata-client` and `veyra-ui` call
+first so the order the plugins are added in does not matter; `strata-client` re-exports these under `strata_client::ui`.
+`veyra-ui` is the game's screens (`bench`, `board`, `card`, `claims`, `crafting`, `dialogue`, `factory`, `fitting`,
+`harvester`, `icons`, `journal`, `loot`, `map`, `place`, `progress`, `prompt`, `ride`, `sheet`, `stores`, `survey`,
+`tracker`, `weapon_diagram`, `weapon_stage`), the `Localizer` over the English for every key (`strings`; the table itself is `veyra-words`, still code, which
+the headless household links too), `weapon_model` (the
+baked pieces on the hand and the stage), the theme path and `veyra_ui::VeyraUiPlugin`, which the game adds beside
+`ClientPlugin`; it links `strata-ui`, `veyra-sim`, `strata-physics`, `ashlar-bevy` and `strata-app` (`OffWorld` and `NoSky`, the markers the weapon
+stage puts on its camera, and `ClientSet` live there) and not the engine client, the terrain, the atmosphere or the
+foliage, so a screen edit rebuilds neither the engine client nor anything under the terrain. `veyra-view` is the combat
+view over `strata-client` and the two UI crates (`combat`, `combat_hud`, `action_bar`, `nameplates`, `combat_text`,
+`combat_art`, `combat_ik`, `combat_fx`, `combat_audio`, `combat_beam`, `combat_shield`, `scope`, `ride_art`; its one
+plugin is `veyra_view::combat::CombatViewPlugin`, which the game adds). What the orbit camera and the screens both
+read of the view lives in `veyra_sim::view` (`CombatCamera`, `CameraShake`, `RideView`, `BikeModels`, `BodyTint`,
+re-exported as `strata_client::view`), and so does what the headless household and the screens say to each other
+(`BenchView`, `BenchRequest`, `BenchOutcome`, `FallFade`, `ProgressCue`, `WorldNotice`, the body colour and the
+`AimBeam` and `Shield` markers); the household's tracking chain is `order::HouseholdTracked`, which the screens that
+word the sim's answer run after. `veyra-ui` dev-depends on `veyra-view` and `strata-client` for its screen tests
+(`hud_only`, the HUD's widget ids, `ClientPlugin`), a dev-dependency cycle cargo allows for integration tests, which are
+the only users; `veyra-ui`'s tests also dev-depend on `strata-atmosphere` for the look panel's tests in `tests/ui/pause.rs`.
+The prose below writes a screen as `ui::X`: that is `veyra_ui::X`, except `ui::graphics`, `ui::settings` and `ui::render`,
+which are `strata_client::ui`'s.
 
 Positions below the render layer are `WorldPos` (`f64`); `Transform` is
 derived from them through `RenderOrigin`, never the other way (ADR 0002).
@@ -68,7 +139,7 @@ baked per land mass, the carve that cuts their valleys into every sample,
 and `Sample.water`, the record at the point (its `cut_dm` is how far the
 carve lowered the ground, which marks a valley's cut wall for the terrain's
 look and the placement). The water a character is in is
-`strata_sim::water_here` (the sea, or a river or lake standing higher
+`veyra_sim::water_here` (the sea, or a river or lake standing higher
 there), which the character step in `strata_physics::character` reads
 once a tick for wading, swimming and the current, the same on a server;
 its tunables sit on `CharacterController` beside `swim_factor`. River and
@@ -91,10 +162,14 @@ ground, and `Sample::water` carries the river or lake at the point
 follow; `ProceduralWorld::water_at` reads the network alone. A sample that
 meets an unbaked mass bakes it on its own thread, so the game and the server
 bake round the spawn and the settlements before their app starts
-(`strata_sim::prepare_water_before_start`, `PrepareWater`, 128 km) and the
+(`veyra_sim::prepare_water_before_start`, `PrepareWater`, 128 km) and the
 loader bakes ahead of the observers on two threads as they move; a test
 world prepares its own (`prepare_water`). `just worldmap` draws the
-`-rivers` layer. The roads (ADR 0012, decision 7; ticket 0005, steps 5 and
+`-rivers` layer. A native start and the server keep the baked rivers in
+`generated/hydrology/` as `water.index` and a file a land mass in `mass/` (review step five,
+`water-per-mass`; an old `water.bin` there is ignored and can go), trusted whenever the stamp (seed, params,
+registries, `GENERATOR_VERSION`) matches, so after editing hydrology code (shape, carve, roads, grade)
+delete that directory or the run shows the old rivers until the version is bumped. The roads (ADR 0012, decision 7; ticket 0005, steps 5 and
 6) are baked in the same bake, after a mass's sites, by
 `hydrology/roads.rs`: a least-cost network of service roads, tracks and
 trails with its junctions and its river crossings
@@ -120,19 +195,20 @@ server does exactly the same with intents that arrived over the wire (ADR
 graph is `assets/progression/trees.ron`, loaded and checked by
 `strata_registry::progression` (no Bevy); the `CharacterSheet` component,
 the learn and forget rules, the merge `apply(tables, graph, sheet)` and the
-XP ledger are `strata_sim::progression`; a fitted `Combatant` reads its
+XP ledger are `veyra_sim::progression`; a fitted `Combatant` reads its
 own rows through `Combatant::spec` and friends, never `Action::spec`
 directly, and one never fitted reads the global tables live. The world
-side (section 10) is `apps/game/src/household.rs`: the `Household`
+side (section 10) is `veyra_game::household` (`crates/veyra-game`, the headless half of the game binary that
+the server links too; the scripts and the shots' set-ups are `veyra_dev::household`, the props' art stays in `apps/game/src/household/`): the `Household`
 resource (the bench of four, who is out, who can still join), saved as
 RON to `--household` (default `scratch/household.ron`) on every change
 and read back at startup (`--fresh` ignores it); `Interaction` props
 (a terminal, a blade and a marksman trainer, at the staging spawn and on
-the Exchange) that `strata_sim::progression::find_reach` measures into
+the Exchange) that `veyra_sim::progression::find_reach` measures into
 the `Reach` resource, which is the trainer rule's `teacher`; the client's
 F raises `Interact`; the swap retints the body through
-`strata_client::combat_art::BodyTint`. The screens (section 11) are the
-client's, on the slotted stack beside the pause: `strata_client::ui::sheet`
+`veyra_sim::view::BodyTint` (`veyra_view::combat_art` re-exports it). The screens (section 11) are the
+client's, on the slotted stack beside the pause: `veyra_ui::sheet`
 (key C, a trainer's F, the pause's Character button) rebuilds its
 definition from the local player's sheet, the graph and the reach on
 every change and calls `learn` and `forget` itself; `ui::bench` (a
@@ -142,7 +218,7 @@ terminal's F live, the pause's Bench button read-only) shows the
 with a `BenchOutcome` toast; a switch runs behind the client's fade.
 `ui::prompt` is the F chip on the HUD, `ui::progress` the XP toasts and
 the box hint. `--script-progression` walks the whole path headless
-(learning and swapping directly) and the test in `household.rs` runs it;
+(learning and swapping directly) and the test in `apps/game/src/household/tests/script.rs` runs it (the game's tests run with `dev-tools` on, as the scripts are its tools);
 `--open-sheet` and `--open-bench` open a screen on frame 120, or, with
 the script, at the trainer and the terminal, for the screenshots in
 `docs/design/progression/`. Local-only: neither the sheet nor the
@@ -152,19 +228,65 @@ and the game directly, not through a `PlayerIntent` message consumed in
 the tick; moving them onto that path is the next structural step before
 a server can own them (progression.md, section 12).
 
+The rules moved out of `veyra-sim` into `veyra-rules` (review step seven, `veyra-rules`): each rule module there holds the plain
+functions, the state types (`Component`, `Resource` and `Message` derives from `bevy_ecs`) and the checks a screen asks, and the
+file of the same name in `veyra-sim` holds what needs `bevy_app` or the engine core, which is its request types, `*Inbox`
+aliases, `consume` systems, plugins and `SystemParam`s, and glob re-exports the rules, so every `veyra_sim::items::Pack`-style
+path below still resolves. A module that is rules and nothing else (`blueprint`, `chart`, `combat_ai`, `combat_curves`,
+`combat_loadout`, `combat_tables`, `combat_tiers`, `fall`, `household`, `standing`) is re-exported whole from `veyra-sim`'s
+`lib.rs`. The combat tables' process-wide slot (`install`, `current`) is in `veyra-rules`, and so is the `shipped-data`
+feature that compiles the shipped files in (`veyra-sim`'s turns it on); each rule file's tests live in a `test_support` module of that file (compiled for `cargo test` and, for the sim's own
+tests, behind the `test-support` feature, which `veyra-sim` enables as a dev-dependency); the helpers the sim's tests share
+(`shipped`, `part`, `put`; the ones that build an app, `first_day` and `ask`, stay in the sim) are in the same module, and the sim's
+`tests` module re-exports it, so an old `crate::crafting::tests::shipped` path in a sim test still resolves.
+
+Inside `veyra-rules` the modules are layered, lowest first (review step seven, `sim-layers`): state
+(`household`: `Purse`, `Stable`, `Riding`, `Calling`; `standing`: `EncounterId`, `PlayedClock`, `Fights`; `factions`,
+`deeds`), combat and progression (`combat_loadout` holds `Loadout`, `Row`, `merge`; `combat` holds `enemies`),
+gear (`items` holds `kind_of` and `reachable`; `fitting`, `wear`, `equip`), crafting (`crafting`, `blueprint`,
+`factory`, `rework`), land (`deposits`, `harvest`, `ride`) and life (`encounters`, `loot`, `postings`,
+`procurement`, `quests`, `fall`, `chart`). A `crate::` path never points up: `crates/veyra-rules/tests/layers.rs`
+holds the table and fails on a climb or on a module with no layer, as `just server-check` does for crates, and
+`crates/veyra-sim/tests/layers.rs` holds it for what is left in `veyra-sim` (the adapters, and `order`). The
+old paths (`ride::Stable`, `deposits::Purse`, `fitting::Loadout`, `encounters::Fights`, `crafting::kind_of`)
+are re-exports. The order the requests are answered in is `veyra_sim::order::RequestSet`, one
+`configure_sets(..).chain()` in `OrderPlugin`; a module puts its `consume` in its set and names no other
+module's system. The plain data the engine core writes and the rules read (the player's intent and command,
+`NearSite` and `NearSites`, `WaterHere`, the `Registries` resource) is `strata-types`, below both, and
+`strata-app` re-exports it at the old paths.
+
+Requests (review step seven, `request-kit`): every `*Inbox` of the sim is `strata_app::request::Inbox<R>` for a
+`Request` (its `Answer` message, `no_actor` for the refusal when nobody is there, `needs_actor` false for a request that is the
+household's alone, a conversation or what is tracked). A screen pushes with `inbox.push(r)` (the local player's) or
+`push_for(Actor, r)`; the one system `address::<R>` that `App::add_request::<R, _>(set, consume)` puts first in the module's
+`RequestSet` turns each pending request into an `(Actor, R)` or refuses it once, and `consume` drains `Inbox::take()` and reads the
+actor's components with `get_mut(actor.0)`, never `single_mut()` over `LocalPlayer`. `StockInbox` and the others are aliases
+(`Inbox<StockRequest>`), so a caller names what it did. Procurement and postings drain one inbox (`take_if`,
+`add_request_consumer`). A test that runs a `consume` by `run_system_once` runs `address::<R>` before it. The net arm (a client
+event carrying `R` that the server pushes with `push_for`) is not built; the household state is still resources.
+
 Every combat number is `assets/combat/*.ron` (actions, weapons,
-actor, opponents), loaded by `strata_sim::combat_tables` into one
+actor, opponents), loaded by `veyra_sim::combat_tables` into one
 process-wide slot (`install`, `current`) that `Action::spec`,
 `Weapon::spec` and `Combatant::step` read; the game and the server load the
 directory at startup and fold `CombatTables::version` into the replication
 handshake, so a client on other numbers is refused. The encounter's
-opponent AI is `strata_sim::combat_ai`, which the game and `tools/balance`
+opponent AI is `veyra_sim::combat_ai`, which the game and `tools/balance`
 both run. `tools/balance` (`just balance`) fights policies over the real sim
 and physics headless, sweeps a grid of table values and checks the feel
 contracts of `assets/combat/contracts.ron` (`just balance-check`, and the
 `contracts` test in `just test`); `docs/balance/README.md` is the procedure.
 
-Port Serein's walkability is held by `port_serein_is_walked_from_the_quay` in `apps/game/src/household/tests/nav.rs` (ticket 0015,
+The dedicated server links `veyra_game::GamePlugin` too: it reads and writes a household
+(`--household`, default `scratch/server-household.ron`; `--fresh` starts over) and stands the household, the
+people, the camps, the caches and the city's bench place. It does not yet give a server `Reach` that a workbench
+fills: `find_reach` measures from the `LocalPlayer`, which a server's players are not, and the household is one
+resource, not a component a connection owns; that waits on migration step 10 (docs/review/2026-10-16), and no test
+holds it until then. `apps/game` keeps `grounding` (an opt-in fixture whose collider half is
+mixed with the groundworks' drawing) and `standing` (`--stance`, `--lease`, a still) by decision, as it keeps the
+camps', deposits' and factions' stills.
+
+Port Serein's walkability is held by `port_serein_is_walked_from_the_quay` in `crates/veyra-game/tests/household/nav.rs` (ticket 0015,
 step 2): a half-metre grid walk over the colliders the game builds, from the quay arrival to every bench place and the training ground,
 with every stair checked clear foot to head; it writes `scratch/combat/nav/audit.png`, and `content --city-only` bakes the city alone.
 
@@ -175,7 +297,7 @@ the bake places them per land mass after its rivers
 and hashed into `world_version`, and each lays a level pad in the sample
 (`strata_worldgen::sites::Pad`, developed, gravel only in its yard).
 `just content` bakes a building group per kind into
-`generated/sites/<ns>/<group>.ron` and its files; `strata_sim::sites`
+`generated/sites/<ns>/<group>.ron` and its files; `veyra_sim::sites`
 reads them, keeps `NearSites` round the observers and stands each group
 with `place_group`, a pure function of the site and the layout, from
 which the physics builds colliders (server and client) and the game draws
@@ -188,12 +310,12 @@ posts, stepping stones), `just content` bakes it into
 `generated/crossings/veyra/` with its layout `kit.ron`;
 `strata_worldgen::crossings::place_crossing` stands it at a network
 crossing from the record, the layout and the ground (reporting
-`Unplaced` rather than a deck in the air), `strata_sim::crossings` keeps
+`Unplaced` rather than a deck in the air), `veyra_sim::crossings` keeps
 `NearCrossings`, the physics collides it and `apps/game/src/crossings.rs`
 draws it; `site_groups_version` hashes the kit too. The roadside kit (ticket 0005
 step 8c) is the same again: `veyra_buildings::roadside` bakes a marker post and a
 lamp to `generated/crossings/veyra/roadside.ron`, `strata_worldgen::roadside::place_roadside`
-stands them along the roads, `strata_sim::roadside` keeps `NearRoadside`, the physics
+stands them along the roads, `veyra_sim::roadside` keeps `NearRoadside`, the physics
 collides them and `apps/game/src/roadside.rs` draws them.
 
 Weapons (ticket 0008): `veyra-weapons` (no Bevy) is
@@ -208,7 +330,7 @@ rectangle in its chassis's frame, `hidden` and `same_as` where a picture says
 nothing, and the square `icon` baked beside every picture as
 `icon.<stem>.png`), and `just review` writes a contact sheet a maker to
 `scratch/review/weapons/`. Client art only: not in `world_version` or the
-handshake. The client draws them with `strata_client::ui::weapon_diagram`: the
+handshake. The client draws them with `veyra_ui::weapon_diagram`: the
 `WeaponPictures` resource the game fills at startup, the slotted widget
 `strata:weapon_diagram` (pieces placed by their rectangles, tinted by state
 from `strata.weapon.*` roles, each mount a button that writes `MountPicked`,
@@ -224,7 +346,7 @@ every chassis, standard part and module to `generated/weapons/veyra/<chassis>/
 <stem>.ashprop` (one level, no collider, materials `weapon:<maker>.<slot>`,
 a plain library `weapons/veyra/library.materials.ron` of `Issued` colours) and
 the index `strata_registry::models` (`MODELS_PATH`, with each muzzle's
-`veyra_weapons::model::muzzle_tip`). `strata_client::weapon_model`
+`veyra_weapons::model::muzzle_tip`). `veyra_ui::weapon_model`
 (`WeaponModels`, `wanted`, `frame`) names the pieces a record wants; `combat_art`
 `dress_weapons` stands them as `AshlarProp`s under a gun's root once the
 actor's `Hands` change and the wanted set differs, `settle_models` swaps the
@@ -233,7 +355,7 @@ glTF rifle and cubes, and the muzzle marker follows the tip. No `Hands` or
 no baked files keeps the old art. Not in a version or the handshake.
 `--orbit-distance <metres>` sets the combat camera's boom for stills.
 The fitting screen's well draws the weapon as a turning model
-(`strata_client::ui::weapon_stage`): a `WeaponStage` resource (a 1024x512
+(`veyra_ui::weapon_stage`): a `WeaponStage` resource (a 1024x512
 target image, there when models are baked) and, only while a fitting screen
 in Model view is on top, one extra `Camera3d` and two lights on
 `STAGE_LAYER`, released when it leaves. The widget is `strata:weapon_model`;
@@ -248,7 +370,7 @@ with `carry.ron` (the sizes of the pack, the bags and the store) and
 `strata_registry::item` into `GameRegistries.items` (`ItemCatalogue`), in no
 world version and no handshake. A record is a `slotted_model::ItemStack`
 whose patch holds the batch, the maker, a quality figure per line and, for a
-weapon, its condition and what is fitted; `strata_sim::items::{read, write}`
+weapon, its condition and what is fitted; `veyra_sim::items::{read, write}`
 is the only reader and writer. The sim owns the stock: `Pack` (a grid, two
 bag slots whose bag opens its own cells, the cursor) and `Hands` on the
 player, `HouseholdStore` as a resource, and a click is a `StockRequest` put in
@@ -270,7 +392,7 @@ factors are `veyra_weapons::MODULES`', which a `tools/content` test holds
 them to) and a weapon's file lists its mounts with the moddability each
 opens at. `assets/crafting/fitting.ron` holds the bands a quality line moves
 a factor in, how a magazine is made whole and which way each property is
-better (`strata_registry::item::FittingRules`). `strata_sim::fitting` is
+better (`strata_registry::item::FittingRules`). `veyra_sim::fitting` is
 every rule and every figure: `live` says which properties the fight has a
 number for (the rest stay in the data and are shown as not in the fight
 yet), `loadout` and `merge` put the fitted factors on a weapon's row after
@@ -283,7 +405,7 @@ fit or a removal is a `FitRequest` put in
 `FitInbox`, consumed in `SimSet::Input` after the stock's own, allowed with
 a workbench in reach (`Reach::workbench`, `WorkbenchAccess`) and answered
 with a `FitAnswer`. A workbench (`InteractionKind::Workbench`) stands one
-spacing past the locker at each bench place. The client's `ui::fitting`
+spacing past the locker at each bench place. The `veyra_ui::fitting`
 (kind `strata:fitting`) builds a `FittingView` from those functions and
 decides no rule: a workbench's F opens it live, a weapon's cell on the
 stores screen opens it from anywhere as a reading, focus or the pointer on a
@@ -318,20 +440,20 @@ Resources (ticket 0007, step 3): the class tree and the resource types are
 `assets/resources/` (`classes.ron`, a `*.resource.ron` a type, `deposits.ron`
 with every dial), loaded and checked by `strata_registry::resource` into
 `GameRegistries.resources`, in no world version and no handshake. Where
-deposits are is `strata_worldgen::deposits` (`DepositField::{near, get,
+deposits are is `veyra_world::deposits` (`DepositField::{near, get,
 nearest}`), a pure function of the seed, that data and the samples: not in
 the hydrology bake, not in `world_version`, and a deposit's id is its
 lattice cell. A deposit is an area (ticket 0009, step 1): `radius_m` and
 `peak` roll per cell inside `deposits.ron`'s `area`, `Deposit::concentration`
 is the per-mille at a point, `DepositField::covering` every deposit holding
-it and `strata_sim::deposits::concentration_here` asks it. `LotOrigin`
+it and `veyra_sim::deposits::concentration_here` asks it. `LotOrigin`
 reads past an old `terms`. `just worldmap` draws the `-deposits` layer as
 discs. A lot is a stack: the catalogue makes an item a type
 (`strata:lot.<type>`, kind `Lot`) and a record's `origin` names its
 deposit, so lots of two deposits never merge. Surveying is by hand (ticket
 0009, step 3): `assets/resources/survey.ron` holds the ping, sample and
 reading dials, and the carried tool `veyra:tool.survey` (`ItemKind::Tool`,
-a `range` line) scales the ping. `strata_sim::deposits` holds `Survey` (the
+a `range` line) scales the ping. `veyra_sim::deposits` holds `Survey` (the
 field), `NearDeposits`, `Purse` and `Surveyed` (`found`: what each deposit's
 `Reading` is, whether sampled, the best reading; `tracked`; `lead`), with
 Ping, Sample, Stop, Track and ToggleTrack as `SurveyRequest`s in
@@ -343,7 +465,7 @@ reads it Exact. `lot`, `lot_lines`, `best_line` and `register` (found
 deposits only, and the tracked one always) are what a screen asks. The game
 saves the purse and `Surveyed` in the household file (version 3; an old
 `visited` reads as found and sampled; the tool is given once to an old
-household), stamped with the world (`SurveyedIn`). The client's `ui::survey`
+household), stamped with the world (`SurveyedIn`). The `veyra_ui::survey`
 (G) is the ping grid and Sample here, the terminal's second tab the register
 (`ui::bench`), `ui::tracker` the tracked deposit's and the lead's markers,
 `ui::card` a lot or deposit by its `Reading`, and `ui::place` names a deposit
@@ -360,7 +482,7 @@ carries), with the session's dials in `assets/crafting/session.ron`
 (`SessionRules`: the assembly share, the points by complexity, the roll
 table, the workability rule); in no world version and no handshake. Items
 gain the kinds `Component` and `Commodity`, a `price` and an optional
-`article`. `strata_sim::crafting` is every rule, in whole per-mille:
+`article`. `veyra_sim::crafting` is every rule, in whole per-mille:
 `ceiling`, `candidates` (best first), `best_stock`, `check_picks`,
 `can_make`, `preview` and `now` (each line's floor and ceiling and what they
 are worth in the game's units, a part's read through the first schematic
@@ -374,7 +496,7 @@ each batch was made from; the game saves it in the household file (version
 a session left open is there again, and at load `CraftState::repair` holds
 it to the data as it now is (a retuned dial, a changed item) with the file
 as it was kept as `.mended.bak`, where `check` refuses only what nothing can
-work on. The client's `ui::crafting` (kind `strata:crafting`) is the
+work on. The `veyra_ui::crafting` (kind `strata:crafting`) is the
 workbench's second tab and decides no rule: the strip of two tabs both
 screens start with (`bench_tabs`, `switch_tabs`, `open_bench`), a
 `CraftingView` built from those functions in three states (the slots, the
@@ -395,13 +517,13 @@ the runs a blueprint starts with by complexity, the played seconds a unit a
 point of complexity, the unattended share), in no world version and no
 handshake. A blueprint is the item `veyra:blueprint.production` (kind
 `Blueprint`, a stack of one) whose body is in the household's ledger
-`strata_sim::blueprint::Blueprints` under the stack's batch number, so the
-patch gained no key. `strata_sim::blueprint` is the recording, in whole
+`veyra_sim::blueprint::Blueprints` under the stack's batch number, so the
+patch gained no key. `veyra_sim::blueprint` is the recording, in whole
 per-mille: `draft` (what the Record box shows and what is written),
 `check_record` (every refusal, asked by the screen and the request alike),
 `record` behind `CraftRequest::Record` with a workbench in reach, `prototypes`
 and `held`; the prototype is not consumed and is recorded once.
-`strata_sim::factory` is the run, one job a household: `meets`, `feeds`,
+`veyra_sim::factory` is the run, one job a household: `meets`, `feeds`,
 `cheapest`, `limit`, `check_start`, `seconds`, `left` and `can_stop` are what
 a screen asks, Start, Assign and Stop are `FactoryRequest`s in `FactoryInbox`,
 consumed in `SimSet::Input` after the bench's with a fabricator in reach
@@ -414,7 +536,7 @@ save keeps its unit. The worker is a benched member by name (`Benched`, which
 the game publishes); the game refuses a switch to them (`household::swap_to`)
 and the bench card says so (`BenchCard.work`). The game saves `Blueprints` and
 `FactoryState` in the household file (version 5, a version 4 file kept as
-`.v4.bak`). The client's `ui::factory` (kind `strata:factory`) is a
+`.v4.bak`). The `veyra_ui::factory` (kind `strata:factory`) is a
 fabricator's F and decides no rule; Record as blueprint is the crafting tab's
 finished card, with MADE EARLIER for a prototype still in stock; `ui::card`
 draws a blueprint and a factory stack, and the stores have a Blueprints chip.
@@ -431,7 +553,7 @@ start to slide, what a shot, a cut and a fall cost, the step, the `worst`
 factors, the field repair), in no world version and no handshake. A weapon
 and a module carry a condition (`Fitted::condition`, absent at full), and a
 kit is the item kind `Kit` with a `restore` line (`veyra:kit.field_repair`,
-made by a schematic). `strata_sim::wear` is every rule in whole numbers:
+made by a schematic). `veyra_sim::wear` is every rule in whole numbers:
 `slide`, `band`, `cost`, `field_amount`, `can_repair` and `repair` behind
 `WearRequest::Repair` in `WearInbox`, consumed in `SimSet::Input` after the
 factory's and answered with a `RepairAnswer`; the tick charges shots and
@@ -447,7 +569,7 @@ Procurement (ticket 0007, step 7): a buyer is `assets/procurement/*.buyer.ron`
 quantity, a price, an Upkeep line's refill), loaded and checked by
 `strata_registry::procurement` into `GameRegistries.buyers` (`BuyerSet`),
 in no world version and no handshake; one ships, Pelagic Works.
-`strata_sim::procurement` is every rule in whole numbers: `wanted`,
+`veyra_sim::procurement` is every rule in whole numbers: `wanted`,
 `taken_pm`, `grade_of` (a worn kind under `slide_below` is not graded),
 `pays`, `pay_for`, `offers`, `best_short`, `at_board`, `check_sale` and
 `sell` behind `ProcurementRequest::Sell` in `ProcurementInbox`, consumed in
@@ -467,13 +589,13 @@ The smith (ticket 0007, step 9): the elite tree `weaponsmith` in
 `assets/progression/trees.ron` (Fabrication XP, 98 points) has one new
 effect, `Effect::CraftPoints { add }`, on its four tuning boxes. A schematic's
 `profession` must name a box that exists (`check_professions`); in
-`strata_sim::crafting` `taught` gates `check_picks`, so opening a session
+`veyra_sim::crafting` `taught` gates `check_picks`, so opening a session
 without the box is `CraftRefusal::NotTaught`, while finishing one, recording
 and a fabricator's run need none. `crafting::points` is the dials' points plus
 the sheet's `CraftPoints`; a weapon is a schematic's product
 (`veyra:schematic.patrol_carbine`) made whole via `made_condition`, which
 `Blueprint::unit` shares. Its lines read as mounts open, shots to the slide
-or not in the fight. `strata_sim::equip` (`EquipRequest::Take` in
+or not in the fight. `veyra_sim::equip` (`EquipRequest::Take` in
 `EquipInbox`, `can_take`) swaps a weapon from the pack, or the open store at a
 locker, into a hand; the hands stay locked for clicks. The client greys an
 untaught schematic with its reason, and the stores' pinned pane has Take in
@@ -483,7 +605,7 @@ his carbine in the arrival's hand. `--as <member>` and `--crafted-carbine
 (`strata_registry::rework`) names the mount blank
 (`veyra:component.mount_blank`, a temper line, taught by
 `weaponsmith.frames.2`) and the share of the gap an outcome closes;
-`strata_sim::rework` has `check_rework`, `best_blank`, `result_of` and
+`veyra_sim::rework` has `check_rework`, `best_blank`, `result_of` and
 `ReworkRequest::Rework` in `ReworkInbox` (one roll, one blank, a refusal
 changes nothing). Crafting XP is `crafting::craft_xp` to the maker of a
 finished bench session, rates in `trees.ron`'s `rates.craft`; `CraftState`
@@ -494,14 +616,15 @@ Rework and Buy blank live; `--blanks <n>` and `--rework-first` are for stills.
 The ride (ticket 0009, step 2): a vehicle is `assets/vehicles/*.vehicle.ron`
 (every dial: speeds, turn, slope, water, road, crash, call, view), loaded and
 checked by `strata_registry::vehicle` into `GameRegistries.vehicles`, in no
-version and no handshake. `strata_sim::ride` holds `Stable` (the
+version and no handshake. `veyra_sim::ride` holds `Stable` (the
 household's bike record and its saddle), `Riding` (the dials copied at the mount, heading, speed, the bike's
 velocity), `RideRequest::{Call, Dismount}` in `RideInbox` with `can_call` as
 the one rule, and `RideNotice`; a hit, a crash or deep water throws the rider.
-The motor is `CharacterController::ride` (`strata_physics::character::ride`),
-the same capsule and slide with the bike's own stop angle as its wall. The kit
+The motor is `veyra_physics::ride::{ride, step_riders}`, which drives the engine's
+`CharacterController` (the walk step skips a character marked `ExternalMotor`, which `Riding` gets from
+an observer), the same capsule and slide with the bike's own stop angle as its wall. The kit
 is `veyra_buildings::vehicle`, baked to `generated/vehicles/`. V calls or gets
-off (client `ui::ride`, `ride_art`); `--bike`, `--mounted`, `--script-ride`.
+off (`veyra_ui::ride`, `veyra_view::ride_art`); `--bike`, `--mounted`, `--script-ride`.
 The bike is owned (step 2, second half): the item `veyra:vehicle.courier_bike`
 (kind `Vehicle`, lines speed, handling, durability, a condition) is bought at
 Pelagic's board (`sells`, `ProcurementRequest::Buy`, `check_purchase`);
@@ -535,7 +658,7 @@ Harvesters (ticket 0009, step 6): `assets/resources/harvest.ron` holds the
 dials; the item `veyra:station.field_harvester` (kind `Harvester`) has a
 schematic (Fabricator Materials 4) and sells at Pelagic's board. `Station {
 field, op, value }` (`count`, `rate`, `hopper`) is read by `station_field`; no
-Stations box is count 0. `strata_sim::harvest`: `Harvesters` (each keeps the
+Stations box is count 0. `veyra_sim::harvest`: `Harvesters` (each keeps the
 figures it was planted with), `can_plant`, `station`,
 `Plant`/`Collect`/`PickUp`/`Lead` in `HarvestInbox`, `advance` on the
 factory's `nominal_ticks`. The game stands props (`harvesters.rs`) and saves
@@ -601,7 +724,7 @@ Abilities (ticket 0010, step 5): `assets/combat/abilities.ron` (a table of
 Fortified: no posture damage taken and half of every blow) and a row an ability:
 slot, works_with, stamina, cooldown, windup, length, cancel, pace and an effect (Cut, Shot,
 Strike, Own). A box has `Grant` and `Ability` effects. The member's `Bar`
-(`strata_sim::ability`, beside the sheet, saved with the member) is held by
+(`veyra_sim::ability`, beside the sheet, saved with the member) is held by
 `can_slot` and `BarRequest` in `BarInbox`; a press is `CombatIntent.ability`,
 asked of `can_use` (`AbilityRefusal`), and runs as `Action::Ability`. Harness:
 `--abilities`, `--b-abilities`, `PressAbilities`. Game: `--grant`, `--press`.
@@ -629,7 +752,7 @@ in reach and from a 6 m thrust, open ground is the gun's; `melee-can-close`
 The bar and the loadout (ticket 0010, step 6): `strata_registry::icons`
 reads `assets/icons/catalogue.json` (`IconCatalogue::file`, serde_json; a test
 holds every exported path and every icon `abilities.ron` names).
-`strata_client::ui::icons` names the weapon symbols and loads handles.
+`veyra_ui::icons` names the weapon symbols and loads handles.
 `action_bar::bar_view` maps `Combatant::can_use` to the `strata:bar` layer's
 squares, `BarFeedback` flashes a refusal and a taken press; `status_view`
 draws statuses over the vitals and under a hostile's plate. The sheet's
@@ -654,7 +777,7 @@ opponents draw nothing.
 Opponents (ticket 0010, step 8): `OpponentKind` picks `OpponentBrain`'s arm,
 and `Seen` is what it sees of the target. The marksman holds 40 to 80 m, its
 charge follows the aim until `lock` seconds before the shot
-(`MarksmanTable::locked`), and `strata_client::combat_beam` draws that as a
+(`MarksmanTable::locked`), and `veyra_view::combat_beam` draws that as a
 beam. The duelist guards, is open while it swings, and lowers its guard once
 to meet a Heavy it sees begin. Harness: `Policy::{Marksman, Duelist, Close}`.
 Game: `--hostiles <kind>[@metres][,...]`.
@@ -667,7 +790,7 @@ arrival in reach, a cut its guard met holds its own back for `pinned`
 (`Combatant::guard_met_for`; a bolt holds nothing) and a broken guard stays
 down for `stagger_cooldown`. Harness: `Policy::{Bulwark, Punish}`.
 `--hostiles bulwark[@m]` (the default fight has one); the client's slab is
-`strata_client::combat_shield` (marker `Shield`).
+`veyra_view::combat_shield` (marker `Shield`).
 
 Polish (ticket 0011, step 1): a weapon on the cursor can be taken
 (`equip::find_for_take`, the old one leaving for the cursor) and a take
@@ -675,7 +798,7 @@ while the `Combatant` is not Ready is `EquipRefusal::MidAction`; T on a
 pack weapon (pack-only screen) and a click on a hand with one carried push
 the take. Every screen's root has `min_height` equal to `max_height`, with
 scrolling regions inside, so a card or list moves nothing outside itself.
-L opens the Loadout; `strata_sim::ability::unlearned` feeds its NOT LEARNED
+L opens the Loadout; `veyra_sim::ability::unlearned` feeds its NOT LEARNED
 rows, the bar draws `[+]` and "L: abilities" for a place that could be
 filled, the crafting list has Known, Ready and All chips (`--crafting-filter`)
 and six groups. Icons (step 2): `IconSpec.symbol` and `ClassDef.symbol` name
@@ -684,12 +807,12 @@ picture, else symbol, else the stand-in shape; a painted square is never
 tinted) and every drawer asks it. The bike's icon is baked by `content
 --vehicles-only` (`VehicleModels.icons`); `--give <item>,..` fills a
 still's pack.
-Map (step 3): `strata_sim::chart` (`Chart::square`, `ground`, `site_marks`,
+Map (step 3): `veyra_sim::chart` (`Chart::square`, `ground`, `site_marks`,
 `marks`; north `+z` up, east `-x` right, as `Compass`) and the client's
 `ui::map` on M: one picture a scale (3, 12, 48 km), made on the task pool
 and kept, with the marks laid over it. Only found deposits are marked (and
 the tracked one); `--open-map near|region|far` is for stills.
-Sound and effects (step 4): the field's sounds are arms of the one `Sound`
+Sound and effects (step 4; the takes are Ogg Vorbis in `assets/audio/combat`, encoded by the last step of `tools/combat_audio.py` from WAV masters kept under `scratch/audio-masters/`, and an event's takes load on its first play): the field's sounds are arms of the one `Sound`
 table, hung on the sim's own events and answers (`combat_audio/field.rs`);
 `LoopEmitter(EmitterSound)` is the looping emitter a game prop carries while
 it runs. `Pulse` gained `Shape::Arc` and an optional mesh (a ping's standing
@@ -699,9 +822,9 @@ shakes the camera unless the Display tab's Camera shake is off; `PULSE_CAP`
 
 Factions (ticket 0012, step 1): kinds, anchors and rules are
 `assets/factions/` (`strata_registry::faction`);
-`strata_worldgen::factions::FactionMap` makes a world's factions per land
+`veyra_world::factions::FactionMap` makes a world's factions per land
 mass from the seed and the sites (`holder_of`, `territory`; in no version,
-no handshake; Port Serein is held by Pelagic Works); `strata_sim::factions`
+no handshake; Port Serein is held by Pelagic Works); `veyra_sim::factions`
 has `Factions` and `HeldHere`; the place card names whose ground and who
 holds a site, the map has a Holders chip, `just worldmap` a `-factions`
 layer (`--no-factions`). An anchor holds its core (`core_m`), a faction's name
@@ -710,26 +833,26 @@ is rooted in its seat's place, and the outlaw camp is a site kind
 
 Encounters (ticket 0012, step 2): `assets/encounters`
 (`strata_registry::encounter`) and `assets/combat/tiers.ron` (`tier_at`,
-`opponent_pools`) are read by `strata_sim::encounters`: `plan`,
+`opponent_pools`) are read by `veyra_sim::encounters`: `plan`,
 `NearEncounters`, `Allegiance`, `PlayedClock`, `Cleared` (saved in the
 household), `Fights` (engagement per encounter; F5 lets a camp go). The game's
-`camps.rs` shares `spawn_hostile` with the staging fight; the harness mixes
+`veyra_game::camps` shares `hostiles::spawn_hostile` with the staging fight; the harness mixes
 sides (`camp-t1..3-vs-carbine`); `--camp-tier`, `--cleared`.
 
 Claims and deeds (ticket 0012, step 3): `assets/factions/claims.ron` and
 `deeds.ron` (`strata_registry::faction`); `Deposit::grade_pm` and
 `FactionMap::claim_of` (the top fifth by grade in held ground is a concession,
-commons or reserve by the holder's nature). `strata_sim::deeds`: `Deeds` (a
+commons or reserve by the holder's nature). `veyra_sim::deeds`: `Deeds` (a
 hidden ledger, never shown), `score`, `stance`, `board_terms`, `Leases` (bought
 at an anchor's board for played hours); the stance sets prices, shown only as
 words. `--stance <faction>=<stance>` and `--lease` are for stills.
 
-Caches and the fall (ticket 0012, step 4): `assets/loot` and `strata_sim::loot`
+Caches and the fall (ticket 0012, step 4): `assets/loot` and `veyra_sim::loot`
 (`roll`, `Caches`, `CacheRequest`) leave a cache at a cleared camp; F empties
-it into the pack. `assets/household/fall.ron` and `strata_sim::fall` carry a
+it into the pack. `assets/household/fall.ron` and `veyra_sim::fall` carry a
 member who falls in the world home, hurt (`Character::injured_until`) while the
 next able member goes out. `--fall`, `--injured <member>` and `--cache`. Postings (step 4b):
-`assets/procurement/postings.ron`, `strata_sim::postings` (`offered`, `Jobs`, `Known`),
+`assets/procurement/postings.ron`, `veyra_sim::postings` (`offered`, `Jobs`, `Known`),
 `TakeJob` and `Collect`; the map shows a camp only heard of or found; `--take-job`,
 `--job-done`, `--found`.
 Posts (step 3b): `Allegiance::Faction`, `EncounterId::Post`, the neutral team
@@ -746,37 +869,119 @@ ids `strata:` (both were `scrolls`). Every seed and world hash salted with an
 id reads it through `strata_core::stable_label`, which spells it `scrolls:`,
 so no world moved and `world_version` is unchanged; the hash salts keep the
 old word too. A household file under the old ids is read renamed and kept as
-`.ids.bak` (`OLD_DATA_NAMESPACE` in `apps/game/src/household/save.rs`).
+`.ids.bak` (`OLD_DATA_NAMESPACE` in `crates/veyra-game/src/household/save.rs`).
 
 Native and web (ticket 0013): `strata_core::platform` has `par` (the one
 parallel map) and `time` (`Instant`); data is read through the installed
-`AssetSource` (`strata_registry::files`), saves through `strata_sim::store`;
+`AssetSource` (`strata_registry::files`), saves through `veyra_sim::store`;
 apps/game has default `net` and empty `web` features. The wasm32 check:
-`cargo check -p game --target wasm32-unknown-unknown --no-default-features --features web`
-`cargo run -p xtask -- bundle <out.gz> [--raw f]` packs the readable data; `game --data-bundle <raw>`
-reads it natively and `strata_sim::store::LocalStorage` (wasm) keeps saves under `veyra/*.ron`.
+`env -u CC -u CXX -u CFLAGS -u CXXFLAGS cargo check -p game --target wasm32-unknown-unknown --no-default-features --features web`
+`cargo run -p xtask -- bundle <out.gz> [--raw f]` packs the readable data (an allow-list of what the files port reads, `read_by_port` in tools/xtask; the layouts and registries are there and not in `dist/`, whose copy is `apps/game/web/*.filter`); `game --data-bundle <raw>`
+reads it natively and `veyra_sim::store::LocalStorage` (wasm) keeps saves under `veyra/*.ron`.
 The page's query string is the command line (`?fresh&at=city`). `just web` builds `dist/`
 (about 10 min); serve it with `python3 -m http.server` and open Chrome under `xvfb-run`.
 In the browser the page takes the pointer lock in its own `pointerdown` handler (`window.veyraWantsLock`, read back
-through `document.pointerLockElement`; `CursorOptions` is left alone); the bundle holds the 128 km rivers baked natively
-by `xtask bundle` (`generated/hydrology/water.bin`, `hydrology::persist`, 108 MB gzipped), so the first frame is 7 s
-on localhost, and the ahead bake runs a cell a frame (ticket 0015, step 3).
+through `document.pointerLockElement`; `CursorOptions` is left alone); the bundle holds the rivers baked natively
+by `xtask bundle`, a file a land mass (`hydrology::persist`, `Hydrology::save_masses`) and their index: the masses within
+`WEB_PREPARE_RADIUS_M` (96 km) of the spawn ride in the bundle (21 of seed 42's 42, 56 of 63 MB gzipped, the home mass
+alone 35), the others are written beside it as `dist/generated/hydrology/mass/*.mass` and the sim's fetch ahead of the
+observer (`strata_app::MassFetcher`, installed by `apps/game/src/water_fetch.rs` over the asset server) merges them
+with `Hydrology::load_mass` before the ahead bake would run, a mass with no file being baked as before (a road's points
+and a reach's vertices are stored as columns each guessed from the two words before it, `persist::planes`, a lossless
+encoding that took the bundle from 70 to 57 MB gzipped; a `generated/hydrology/` of an older layout has its index refused,
+is baked over and rewritten by the next native start; `cargo run --release -p strata-worldgen --example water_dump` prints what a cache
+answers, for comparing two layouts bit for bit); `game
+--data-bundle` takes the same path natively, fetching from `--generated`. The ahead bake runs a cell a frame (ticket
+0015, step 3).
+Physics reads each baked building's solids from the `.collision` file `just content` writes beside its `.ashlar`
+(`ashlar::collision_file`), never the `.ashlar`, and the data bundle carries only the former; a `generated/` baked before
+that has no such files, so buildings draw but do not collide (a warn per building) until `just content` is rerun.
+The `.ashlar` the game reads is the cooked version 2 file (review step five, `mesh-v2`): `just content` cuts it from the
+full version 1 file its cache keeps (`ashlar::BakedBuilding::write_cooked`, with `ashlar_content::mikktspace_tangents` as
+the tangent generator) and writes no recipe and no face provenance, only the instances with their palettes, the levels and
+groups, rooms, portals, collision hulls and a table of meshes quantised across their own bounds (positions and UVs `u16`,
+octahedral normal and tangent, tangents baked, `meshopt` 0.6.2 coded, `u16` indices under 65 536 vertices); Port Serein's
+buildings went from 115.7 to 32.1 MB. `ashlar-bevy`'s loader branches on the version (`CookedBuilding::is_cooked`): a cooked
+file's meshes are labelled sub-assets (`x.ashlar#mesh3`) made on the IO pool with `RenderAssetUsages::RENDER_WORLD`, so a
+spawn is a walk over handles and the pieces carry the `Aabb` the file recorded (no CPU mesh is left to measure); a version 1
+file still loads the old way, so an old `generated/` works, and `content --full-buildings` writes version 1 for a tool that
+wants the recipe. A `.ashprop` whose faces are all body faces stores no face sources (a new flag bit): a `generated/`
+rebaked here does not load in a binary built before this step. Anything that reads a baked building for its proxies
+or stats takes either version (`content::file_stats`, `CookedBuilding::colliders`, the game tests' `placed_proxies`).
+The web build compiles `meshopt`'s C++ for wasm32 with clang: a stray `CC`, `CXX` or `CFLAGS` in the environment (a conda
+one is on this machine) is read for that target too and breaks the link, so `just web` and the check above run under `env -u CC -u CXX -u CFLAGS -u CXXFLAGS`.
 The graphics preset Low, Medium or High is `settings.graphics` on the Display tab (`assets/look/graphics.ron`,
 `ui::graphics`, `--graphics low|medium|high` for a run); Low is the default on an integrated adapter.
+The 3D camera's render scale (`RenderLook::render_scale`, 0.5 to 1, `--render-scale`, Low 0.75) is `strata_atmosphere::render_scale`:
+under 1 the camera draws to an `Image` and a 2D window camera (the UI's default camera) stretches it with `ContrastAdaptiveSharpening`;
+the image target's `scale_factor` keeps the 3D camera's logical viewport the window's, so `world_to_viewport` and `ui_point` need no change.
+At 1 there is no second camera. `--screenshot` is the window as presented.
+
+The value budget in the foliage and the body (review step six, F1 items 3 and 4): the flora graphs are remapped
+when they are baked (`content::values::budget_flora`, called by `content::graphs()`: the base colour output becomes
+`colour * scale + floor` from the graph's measured mean and `assets/look/values.ron`'s `flora/<set>` targets), so the
+near levels and the impostors share one texture value and `strata-foliage` multiplies nothing (`LEAF_LIFT` and
+`BARK_LIFT` are gone). A change to a flora target needs `just content`. The ranger's glb is levelled and split into
+`Cloth` and `Gear` primitives by `tools/character_values.py` (record beside it, `frontier_ranger.values.json`);
+`combat_art::tint` colours only the `Cloth` material, with `values.ron`'s `character:` lift, glow and metal.
 
 The first questline (ticket 0014, step 1): `assets/quests`, `assets/dialogue` and `assets/people` (RON, one
 conversation file a person) are loaded and checked by `strata_registry::quest` into `GameRegistries.quests`, in no
-world version. `strata_sim::quests` has `QuestLog`, `QuestEvent` (raised beside the existing answers), `advance`,
+world version. `veyra_sim::quests` has `QuestLog`, `QuestEvent` (raised beside the existing answers), `advance`,
 `DialogueRequest` in `DialogueInbox`, `replies`, `apply`, `fill` and `places` (the station and Wim's channel, a pure
-function of the world). People are bodies in `apps/game/src/household/people.rs` with `InteractionKind::Person`; a
+function of the world). People are bodies in `crates/veyra-game/src/household/people.rs` with `InteractionKind::Person`; a
 new household starts on the quay facing Maren Coyle; the log is saved with the household. `--script-quest
 <keepers|assembly|holder>`, `--script-pell <fight|pay|talk>` and `--quest-stage <quest>:<stage>` are for the script and stills.
-Step 2: the client's `ui::dialogue` (F at a person: numbered replies, keys 1 to 4, a greyed reply's reason) and
+Step 2: The `veyra_ui::dialogue` (F at a person: numbered replies, keys 1 to 4, a greyed reply's reason) and
 `ui::journal` (J, the pause button: stage line, ticked objectives, decisions) decide no rule; `journal::target_of`
 gives the first unmet objective with a place, which `ui::tracker` marks with its distance and the map marks
 (`MarkKey::Quest`). `--open-dialogue <person>` and `--open-journal` (with `--quest-stage`) are for stills in
 `docs/design/quests/`. The bike is bought at the board and stabled in the questline; endings give a tool, a harvester or a sale. Teague's field camp (ticket 0015: a terminal and a workbench 16 m
-back from the mast, `strata_sim::quests::camp`) is where the mending stage is done; the station stands 900 m from the city.
+back from the mast, `veyra_sim::quests::camp`) is where the mending stage is done; the station stands 900 m from the city.
+
+The value budget (review step six): `assets/look/values.ron` gives each family of
+surface a band of mean luminance and puts every shipped material in one
+(`strata_data::values`, `WorldDefs::values`; look data, in no world version).
+The terrain draws a layer remapped to its target by one multiply in
+`sample_layer` (`TerrainParams::value`, a vec4 per four layers like tiling; the
+mean it divides by is the layer's last mip, already read), and each biome's far
+colour is its ground hue at its surface layer's target
+(`strata_registry::far_colour` in `BiomeLayers::from_registries`, scaled in linear and stored sRGB like every tint), so the plain
+no longer outshines the ground it blends from. The near hue pull (`ground_near_tint`) is 0.95, so the near ground and the far plain agree in hue as well as value. `tools/content/tests/values.rs`
+decodes every baked base map (`content::bc7`) and holds it to its band, with
+`pending` on members a later step lands; `cargo run -p content --example
+value_table --release` prints the measured table.
+The rest of the look (review step six) is data beside it, outside every world version and
+handshake: `assets/look/clouds.ron` (`strata_data::CloudLook`, the deck's dials for the bake, the
+opacity functions, the shadow mask, the sun's veil and the shader alike), `canopy.ron`
+(`CanopyLook`: a crown's dark cool core by depth, lighter clumps by curvature, a sun rim; applied to
+masked leaf pieces in `foliage.wgsl` and baked into the impostor atlases through a vertex grade, so an
+edit needs `just content` for the far trees), `buildings.ron` (`BuildingLook`: a world-space height
+gradient on ashlar's anti-tiled walls from each building's lowest point, the skyline marked
+`NoHeightGradient`), and a `shade:` colour beside each biome's `grade:` and in `times.ron`, blended and
+luminance-normalised into a `LookUniform` that terrain, trees, grass, impostors and the anti-tiling
+material multiply into `diffuse_occlusion` (it colours all indirect diffuse, lit or not). The flora
+graphs are remapped to the budget when baked, the ranger's texture was levelled and split into Cloth
+and Gear by `tools/character_values.py` (the household and faction colours tint Cloth), the settlement
+palette goes through `veyra_materials::palette` (sRGB once, look-preserving), the plaza flags vary by
+`laid` in `materials.ron`, and a layer's `grain` there is the share of baked contrast it keeps.
+`veyra_buildings::props` is the bench prop kit, baked by `just content` (`content --props-only`) to
+`generated/props/veyra/` with its index (`veyra_data::props::PropModels`), which the game stands where
+the cuboids stood (a checkout with no kit keeps the cuboids); hostiles wear `veyra_view::combat_art::HostileRim`
+with its dials under `character:` in `values.ron`, and `nameplates::declutter` lifts overlapping plates
+apart nearest first. The UI theme is `assets/themes/veyra.theme.ron` (`veyra_ui::THEME_PATH`); glass stays in
+the tree. The Low preset sets `TERRAIN_SINGLE_TAP`, one tap per terrain map, whose gain on an integrated
+GPU is unmeasured.
+
+The development half (review step seven, `veyra-dev`): `apps/game`'s `Cli` flattens `veyra_dev::DevArgs`
+(`#[command(flatten)] dev`) behind the game's `dev-tools` feature, which is on by default and which `just web`'s
+`--no-default-features --features web` leaves off, so a browser or shipped build parses none of the `--open-*`,
+`--script-*`, `--hold-*`, `--bench-*`, `--screenshot`, `--stats` or `--wireframe` flags and links neither `veyra-dev`
+nor the facade's `dev` feature (the F4 wireframe, the time scrub and the F6 look panel's key). `veyra_dev::install` adds a still's or a
+script's systems only when its flag is set and reads the few flags the game keeps (`--frames`, `--flight`) as `RunFacts`.
+`--frames`, `--at`, `--hostiles`, `--camp-tier`, `--flight`, `--route` and the study and render-look flags stay in the
+game's own `Cli`. The household tests that drive the scripts stay in `apps/game/src/household/tests` and need the
+feature on; they are `cfg(feature = "dev-tools")`.
 
 ## Commands
 
@@ -840,7 +1045,7 @@ day. `--script-progression --script-hurt n` has the nearest hostile land
 (1 for the hurt screenshot, 8 for the fall). The UI scales with the
 window's height (`ui/scale.rs`, 1.25 at 1080p, 2 at 4K; the Display
 tab pins it), so anything that writes a projected point into a node
-divides by it through `combat_hud::ui_point`. Run screenshot checks under `xvfb-run -a -s "-screen 0 2560x1440x24"`:
+divides by it through `strata_ui::world_ui::ui_point`. Run screenshot checks under `xvfb-run -a -s "-screen 0 2560x1440x24"`:
 the window stays off the desktop and Vulkan still renders on the GPU,
 though presenting is slower, so its frame times are not a benchmark. A
 `--flycam` with `--spawn` starts exactly there, over water too.
@@ -865,14 +1070,22 @@ command line mentions the path).
 - The replication protocol (`strata-net-replicon/src/protocol.rs`) is
   registered in one function in one order; add to the end, never in the
   middle, or every older client is refused.
+- A screen over the sim's state is a `strata_ui::sim_screen::SimScreen`
+  (journal, harvester, board, factory, fitting, crafting, survey and the map on a key
+  of its own; the sheet and the bench keep their dirty flag): its `Inputs` is a `SystemParam` whose members
+  answer `is_changed`, so a quiet frame costs one dirty check and not the view, and
+  `add_sim_screen` registers its presses and its rebuild in `ScreenWork`. A value the
+  view reads through a sim function is an input through the resources that function
+  reads; what the sim writes without a mark (`bypass_change_detection`, a run's clock)
+  or writes every tick (the `Combatant`) is read by value with `Seen`.
 - Client-side input systems that steer anything are gated with
-  `.run_if(strata_client::ui::game_input_allowed)`; a screen on the
+  `.run_if(strata_ui::game_input_allowed)`; a screen on the
   slotted stack owns the keys and the mouse while it is up.
 - Workspace lints: clippy pedantic warn, `unsafe_code` deny, `missing_docs`
   warn. Allow a pedantic lint locally with a one-line reason, not globally.
 - Doc comments explain why, not what. No em-dashes in prose or comments.
 - No combat literal in code: a tunable goes in `assets/combat/*.ron` and is
-  read through `strata_sim::combat_tables`; the reproduction test in
+  read through `veyra_sim::combat_tables`; the reproduction test in
   `combat_tables::tests` is what a table edit must update, and a changed
   number is a changed handshake version.
 - `slotted-registry`, `slotted` and `slotted-test` come from the pinned
@@ -883,7 +1096,7 @@ command line mentions the path).
   after which they become git dependencies patched the same way; a change
   to a building crate is therefore visible here with no push and no rev
   bump, and needs ashlar's own `just ci` to pass. The
-  glass theme and its fonts are copied into `assets/themes/` and
+  Veyra theme (derived from slotted's glass theme; both stay in the tree) and its fonts are copied into `assets/themes/` and
   `assets/fonts/` from that workspace. While that patch is in effect every
   cargo command rewrites `Cargo.lock` to the path sources, so the lockfile
   on a dev machine never matches a clean clone; CI drops the patch and

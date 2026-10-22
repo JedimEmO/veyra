@@ -1,0 +1,20 @@
+// The height gradient of built surfaces (review step six, F7; ticket 0006
+// pass 3). A wall is darker, and a little warmer, in the first metres above the
+// ground, where splash, dirt and damp gather, and lighter toward its cornice,
+// the single most painted cue on a hand-painted building. Measured in world
+// metres from the *building's* base (the shader reads it from a tag each piece
+// carries), so a second storey is not a second ground. Look data: no world
+// version, no handshake, no rebake; the game writes it to every building
+// material at start-up. `grime` and `lift` of 0 turn it off.
+(
+    // Metres of ground grime at the foot of a wall.
+    grime_m: 1.5,
+    // How much darker the very foot is than the plain wall, 0 to 1.
+    grime: 0.30,
+    // The grime's colour lean at the foot (a multiplier: warm, brown).
+    warm: (1.06, 1.0, 0.88),
+    // Metres above the grime over which the wall lifts toward the cornice.
+    reach_m: 10.0,
+    // How much lighter the cornice is than the plain wall, 0 to 1.
+    lift: 0.10,
+)

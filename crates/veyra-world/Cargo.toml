@@ -1,0 +1,22 @@
+[package]
+name = "veyra-world"
+description = "Veyra's rules over the world: the deposit field and the faction map, over strata-worldgen and veyra-data. No Bevy."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+strata-core = { workspace = true }
+strata-data = { workspace = true }
+strata-worldgen = { workspace = true }
+veyra-data = { workspace = true }
+serde = { workspace = true }
+ron = { workspace = true }
+
+[dev-dependencies]
+rayon = { workspace = true }
+
+[lints]
+workspace = true

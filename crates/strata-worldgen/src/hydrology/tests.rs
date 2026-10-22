@@ -7,7 +7,7 @@ use crate::hydrology::mass::{Domain, NEIGHBOURS, OutletKind};
 
 fn world() -> ProceduralWorld {
     let registries =
-        strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+        strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
             .expect("the shipped assets load");
     ProceduralWorld::new(Seed(42), &registries)
 }
@@ -333,9 +333,9 @@ const CANARIES_BEFORE_SITES: [u64; 4] = [
 #[test]
 fn without_site_kinds_the_networks_are_the_ones_before_sites() {
     let mut registries =
-        strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+        strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
             .expect("the shipped assets load");
-    registries.sites = strata_registry::SiteKindStore::default();
+    registries.sites = strata_data::SiteKindStore::default();
     let bare = ProceduralWorld::new(Seed(42), &registries);
     assert_eq!(
         canary_hashes(&bare, &canary_window(&bare)),
@@ -904,7 +904,7 @@ fn probe_node_cost() {
 #[ignore = "a probe: run in release"]
 fn probe_version_cost() {
     let registries =
-        strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+        strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
             .expect("the shipped assets load");
     let params = crate::WorldParams::default();
     for _ in 0..3 {

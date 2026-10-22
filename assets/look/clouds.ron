@@ -1,0 +1,66 @@
+// The cloud deck's look (review step six, F3): what `strata_atmosphere::clouds`
+// bakes into its density image, how that density becomes an opacity (on the
+// GPU, in the shadow mask and in the sun's veil alike) and how the deck is
+// lit. `strata_data::CloudLook` is the schema; the file is read at startup
+// over a compiled-in copy, so an edit needs a restart, not a rebuild. The
+// density image is a CPU bake, so none of this costs a frame anything.
+// The cover itself (how much of the sky) stays on the sky settings.
+(
+    density: (
+        // Heaps: a dome per jittered point, merged by a smooth max. A heap
+        // is (period to the 6 km tile, height). The period-24 heaps (about
+        // 250 m) were the speckle and are gone.
+        heaps: [(5, 1.0), (11, 0.8)],
+        // The shares of the detail: heaps, the fine fractal that creases an
+        // edge, the squared ridge. They are normalised after, so only their
+        // ratios matter.
+        heap_weight: 0.8,
+        fine_weight: 0.14,
+        ridge_weight: 0.06,
+        // The fine fractal's periods; 64 pitted the heaps, 16 and 32 crease
+        // their edges.
+        fine_periods: [16, 32],
+        // The broad domain warp, in tiles, that bends whole clouds.
+        warp: 0.12,
+        // The fraying warp as a share of it, at its own periods: it shears
+        // a heap into a streak when it is strong.
+        fray: 0.1,
+        fray_periods: [20, 40],
+        // The coverage's gate, eased between these two values of its noise.
+        group_lo: 0.36,
+        group_hi: 0.64,
+    ),
+    shape: (
+        // The share of the detail density that a gap between groups keeps:
+        // low enough that a gap is clear sky at fair-weather cover (0.15
+        // left a thin haze over one gap texel in six).
+        gate_floor: 0.08,
+        // The optical depth at a group's fringe as a share of that in its
+        // middle: a fringe has to be thin to read as one.
+        thin_group: 0.25,
+        // How far inside its edge a cloud reaches full opacity, in tiles.
+        edge_fade: 0.05,
+        // Optical depth at a cloud's edge and at its densest.
+        tau_edge: 1.0,
+        tau_heart: 10.0,
+        // The share of the sun a fully grown cloud takes off the ground.
+        shadow_strength: 0.85,
+        // The finer read that frays an edge (shader only): how far it moves
+        // the density, its frequency over the image's and the share a
+        // group's middle keeps. 0.08 pitted the gaps into a zenith speckle.
+        fray_amount: 0.03,
+        fray_frequency: 7.0,
+        fray_middle: 0.5,
+    ),
+    light: (
+        // The body's optical depth top to bottom, in tau_heart units: a
+        // base seen from below is lit through it, so less is a brighter base.
+        body: 1.5,
+        // The sky's light on the deck as a share of the sun's, at a high sun.
+        sky_share: (0.15, 0.21, 0.34),
+        // The albedo's tint on a face turned up (a warm top) and on one
+        // seen from below (a cool base), multiplying the neutral albedo.
+        top_tint: (1.04, 1.0, 0.93),
+        base_tint: (0.94, 0.99, 1.07),
+    ),
+)

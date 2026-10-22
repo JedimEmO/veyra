@@ -4,10 +4,10 @@
 //! Replicon refuses a client whose protocol hash is not the server's, and
 //! says only "protocol mismatch". The hash carries more than the
 //! registrations: the baked tree library's version, the world's version
-//! (`strata_worldgen::world_version`), the world's seed, the combat
-//! tables' version and the baked site groups' version are folded in after
-//! them, so a client on other trees, other ground, other numbers or other
-//! buildings on its sites is refused like an older build.
+//! (`strata_worldgen::world_version`), the world's seed and then each of the
+//! game's own [`VersionParts`] (the combat tables, the baked site groups) are
+//! folded in after them, so a client on other trees, other ground, other
+//! numbers or other buildings on its sites is refused like an older build.
 //! A player refused for that needs to hear which it was, so the server,
 //! as it refuses, sends its own [`Versions`] to that client, and the
 //! client compares them with its own and says in words what differs
@@ -22,10 +22,50 @@ use bevy::ecs::prelude::*;
 use bevy_replicon::prelude::{FromClient, ProtocolHash, SendTargets, ServerTriggerExt, ToClients};
 use serde::{Deserialize, Serialize};
 
+/// One thing besides the engine's own that both ends must share, as the game
+/// or the server names it: folded into the protocol hash in the order the
+/// parts were pushed, and worded in a refusal from `what` and `fix`.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct VersionPart {
+    /// The label the version is hashed under. Part of the handshake: renaming
+    /// one refuses every older client.
+    pub name: String,
+    /// The version.
+    pub version: u64,
+    /// What a refused player is told differs, as a plural noun phrase
+    /// ("combat tables").
+    pub what: String,
+    /// What a refused player is told to do about it.
+    pub fix: String,
+}
+
+/// The game's contributions to the handshake, filled by the game and the
+/// server before [`ReplicationPlugin`](crate::ReplicationPlugin) is added (the
+/// plugin reads it at build and folds each part in after the seed, in order).
+/// The engine names none of them, so a new game number joins the handshake
+/// by a push and no edit here.
+#[derive(Resource, Debug, Clone, PartialEq, Eq, Default)]
+pub struct VersionParts(pub Vec<VersionPart>);
+
+impl VersionParts {
+    /// Appends a part; order is part of the handshake, so later additions go
+    /// last.
+    #[must_use]
+    pub fn with(mut self, name: &str, version: u64, what: &str, fix: &str) -> Self {
+        self.0.push(VersionPart {
+            name: name.to_owned(),
+            version,
+            what: what.to_owned(),
+            fix: fix.to_owned(),
+        });
+        self
+    }
+}
+
 /// The versions of what both ends must share, as this process has them:
 /// a resource on both ends, and the event a server sends a client it
 /// refuses.
-#[derive(Resource, Event, Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+#[derive(Resource, Event, Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub struct Versions {
     /// The baked tree library's version, if the plugin was given one.
     pub tree_library: Option<u64>,
@@ -33,19 +73,13 @@ pub struct Versions {
     pub world: Option<u64>,
     /// The world's seed, if the plugin was given one.
     pub seed: Option<u64>,
-    /// The combat tables' version (`CombatTables::version`), if the plugin
-    /// was given one.
-    pub combat_tables: Option<u64>,
-    /// The baked site groups' and crossings' kit's version
-    /// (`strata_sim::sites::site_groups_version`, which since ticket 0005
-    /// step 7 also hashes the crossings' kit and its files), if the plugin
-    /// was given one. Last, as every later addition must be.
-    pub site_groups: Option<u64>,
+    /// The game's parts, in the order they were folded into the hash.
+    pub parts: Vec<VersionPart>,
 }
 
 /// On a client the server refused, what differed. Inserted when the
 /// server's [`Versions`] arrive.
-#[derive(Resource, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Resource, Debug, Clone, PartialEq, Eq)]
 pub struct Refused {
     /// The server's versions.
     pub server: Versions,
@@ -72,16 +106,17 @@ impl Refused {
         self.server.seed != self.client.seed
     }
 
-    /// Whether the two combat tables differ.
+    /// Whether the two ends differ in the game part called `name`.
     #[must_use]
-    pub fn combat_tables_differ(&self) -> bool {
-        self.server.combat_tables != self.client.combat_tables
-    }
-
-    /// Whether the two ends stand other buildings on the sites.
-    #[must_use]
-    pub fn site_groups_differ(&self) -> bool {
-        self.server.site_groups != self.client.site_groups
+    pub fn part_differs(&self, name: &str) -> bool {
+        let find = |versions: &Versions| {
+            versions
+                .parts
+                .iter()
+                .find(|part| part.name == name)
+                .map(|part| part.version)
+        };
+        find(&self.server) != find(&self.client)
     }
 
     /// What a player is told: which of the shared things is another
@@ -117,21 +152,22 @@ impl Refused {
                 hex(self.client.tree_library)
             ));
         }
-        if self.combat_tables_differ() {
-            reasons.push(format!(
-                "this server's combat tables are another version than yours (server {}, yours \
-                 {}): update the game's assets/combat/, or join a server of your version",
-                hex(self.server.combat_tables),
-                hex(self.client.combat_tables)
-            ));
-        }
-        if self.site_groups_differ() {
-            reasons.push(format!(
-                "this server's site buildings are another version than yours (server {}, yours \
-                 {}): run `just content` or update the game",
-                hex(self.server.site_groups),
-                hex(self.client.site_groups)
-            ));
+        for part in &self.server.parts {
+            if self.part_differs(&part.name) {
+                let ours = self
+                    .client
+                    .parts
+                    .iter()
+                    .find(|ours| ours.name == part.name)
+                    .map(|ours| ours.version);
+                reasons.push(format!(
+                    "this server's {} are another version than yours (server {}, yours {}): {}",
+                    part.what,
+                    hex(Some(part.version)),
+                    hex(ours),
+                    part.fix
+                ));
+            }
         }
         if reasons.is_empty() {
             reasons.push(
@@ -160,7 +196,7 @@ pub fn explain_refusal(
     );
     commands.server_trigger(ToClients {
         targets: SendTargets::Single(hash.client_id),
-        message: *versions,
+        message: versions.clone(),
     });
 }
 
@@ -168,8 +204,8 @@ pub fn explain_refusal(
 /// what differs, and keep it for whatever shows it.
 pub fn on_server_versions(server: On<Versions>, ours: Res<Versions>, mut commands: Commands) {
     let refused = Refused {
-        server: *server,
-        client: *ours,
+        server: (*server).clone(),
+        client: ours.clone(),
     };
     tracing::error!("{}", refused.message());
     commands.insert_resource(refused);
@@ -179,21 +215,37 @@ pub fn on_server_versions(server: On<Versions>, ours: Res<Versions>, mut command
 mod tests {
     use super::*;
 
+    fn parts(tables: u64, sites: u64) -> Vec<VersionPart> {
+        VersionParts::default()
+            .with(
+                "combat tables",
+                tables,
+                "combat tables",
+                "update the game's assets/combat/, or join a server of your version",
+            )
+            .with(
+                "site groups",
+                sites,
+                "site buildings",
+                "run `just content` or update the game",
+            )
+            .0
+    }
+
     #[test]
     fn a_refusal_says_which_thing_differs() {
         let client = Versions {
             tree_library: Some(1),
             world: Some(2),
             seed: Some(42),
-            combat_tables: Some(5),
-            site_groups: Some(8),
+            parts: parts(5, 8),
         };
         let world = Refused {
             server: Versions {
                 world: Some(3),
-                ..client
+                ..client.clone()
             },
-            client,
+            client: client.clone(),
         };
         assert!(world.world_differs() && !world.trees_differ());
         assert!(
@@ -206,20 +258,21 @@ mod tests {
         let trees = Refused {
             server: Versions {
                 tree_library: Some(9),
-                ..client
+                ..client.clone()
             },
-            client,
+            client: client.clone(),
         };
         assert!(trees.message().contains("trees are another version"));
         assert!(!trees.message().contains("world"));
         let tables = Refused {
             server: Versions {
-                combat_tables: Some(6),
-                ..client
+                parts: parts(6, 8),
+                ..client.clone()
             },
-            client,
+            client: client.clone(),
         };
-        assert!(tables.combat_tables_differ() && !tables.trees_differ());
+        assert!(tables.part_differs("combat tables") && !tables.trees_differ());
+        assert!(!tables.part_differs("site groups"));
         assert!(
             tables
                 .message()
@@ -227,19 +280,19 @@ mod tests {
         );
         let sites = Refused {
             server: Versions {
-                site_groups: Some(9),
-                ..client
+                parts: parts(5, 9),
+                ..client.clone()
             },
-            client,
+            client: client.clone(),
         };
-        assert!(sites.site_groups_differ() && !sites.world_differs());
+        assert!(sites.part_differs("site groups") && !sites.world_differs());
         assert!(
             sites
                 .message()
                 .contains("site buildings are another version")
         );
         let protocol = Refused {
-            server: client,
+            server: client.clone(),
             client,
         };
         assert!(protocol.message().contains("protocol is another version"));

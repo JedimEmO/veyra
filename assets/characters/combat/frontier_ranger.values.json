@@ -1,0 +1,22 @@
+{
+  "tool": "tools/character_values.py",
+  "why": "review step six, F1 item 4: the body drew at a mean luminance of 0.02 and the household colour multiplied it",
+  "input_mean": 0.02264274963111048,
+  "output_mean": 0.2239434891077024,
+  "cloth_share_of_texels": 0.23819351196289062,
+  "cloth_mean_before": 0.04457020395912364,
+  "gear_mean_before": 0.015786707530113152,
+  "cloth_target": 0.38,
+  "gear_target": 0.18,
+  "gear_floor": 0.06,
+  "desaturate": 0.7,
+  "triangles": {
+    "cloth": 4894,
+    "gear": 19615
+  },
+  "materials": [
+    "Cloth",
+    "Gear"
+  ],
+  "note": "the generator was not rerun; frontier_ranger.bundle.json still names the generator's body"
+}

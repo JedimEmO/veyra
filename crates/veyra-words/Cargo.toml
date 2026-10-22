@@ -1,0 +1,11 @@
+[package]
+name = "veyra-words"
+description = "English for the game's own locale keys, as plain functions: the string table, the purse's grouping and the fall's words. No Bevy, no dependency; the screens and the headless household both link it."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[lints]
+workspace = true

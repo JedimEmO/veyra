@@ -1,12 +1,12 @@
 //! Shared fixtures: the shipped assets and a world over them.
 
 use strata_core::Seed;
+use strata_data::WorldDefs;
 use strata_flora::FloraTable;
-use strata_registry::GameRegistries;
 use strata_worldgen::ProceduralWorld;
 
-pub fn registries() -> GameRegistries {
-    strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+pub fn registries() -> WorldDefs {
+    strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
         .expect("the shipped assets load")
 }
 

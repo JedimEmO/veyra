@@ -15,7 +15,7 @@ use std::collections::BTreeMap;
 use std::path::Path;
 
 use serde::{Deserialize, Serialize};
-use strata_registry::{AssetSource, DirSource, SourceError};
+use strata_data::{AssetSource, DirSource, SourceError};
 
 /// Where the library is written, under the content step's output root.
 pub const LIBRARY_PATH: &str = "flora/library.ron";

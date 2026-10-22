@@ -53,18 +53,18 @@ bevy_replicon_renet = { version = "0.20.0", default-features = false }
 
 # Pinned to a rev so a clean clone builds. `.cargo/config.toml` patches it to
 # the sibling checkout for day-to-day work; Bevy versions must match exactly.
-slotted-registry = { git = "https://github.com/JedimEmO/bevy-slotted", rev = "dfe0c6e416a12b35b3ac29593f69fa55d573e7fd", default-features = false }
+slotted-registry = { git = "https://github.com/JedimEmO/bevy-slotted", rev = "c6e811555ce811f678df8f38361c25c5a7984028", default-features = false }
 # `Namespaced` ids come from here; slotted-registry does not re-export them.
-slotted-model = { git = "https://github.com/JedimEmO/bevy-slotted", rev = "dfe0c6e416a12b35b3ac29593f69fa55d573e7fd" }
-# strata-client: the slotted UI facade (screens, themes, HUD layers, the
-# menu templates) behind its `ui` feature. Default features off: the Lua
+slotted-model = { git = "https://github.com/JedimEmO/bevy-slotted", rev = "c6e811555ce811f678df8f38361c25c5a7984028" }
+# strata-ui, strata-client (behind its `ui` feature) and veyra-ui: the slotted
+# UI (screens, themes, HUD layers, the menu templates). Default features off: the Lua
 # runtime, the packs loader, the item browser and the GPU icon bake are
 # not part of the slice, and each would be compile time for nothing. The
 # same rev as the registry crate, patched to the same checkout.
-slotted = { git = "https://github.com/JedimEmO/bevy-slotted", rev = "dfe0c6e416a12b35b3ac29593f69fa55d573e7fd", default-features = false }
+slotted = { git = "https://github.com/JedimEmO/bevy-slotted", rev = "c6e811555ce811f678df8f38361c25c5a7984028", default-features = false }
 # The headless UI harness the client's screen tests drive (no window, no
 # GPU, virtual time).
-slotted-test = { git = "https://github.com/JedimEmO/bevy-slotted", rev = "dfe0c6e416a12b35b3ac29593f69fa55d573e7fd", default-features = false }
+slotted-test = { git = "https://github.com/JedimEmO/bevy-slotted", rev = "c6e811555ce811f678df8f38361c25c5a7984028", default-features = false }
 # strata-client: the platform's configuration directory, where the
 # settings file lives.
 dirs = "6.0.0"
@@ -73,7 +73,8 @@ strata-core = { path = "crates/strata-core", version = "0.1.0" }
 strata-registry = { path = "crates/strata-registry", version = "0.1.0" }
 strata-worldgen = { path = "crates/strata-worldgen", version = "0.1.0" }
 strata-flora = { path = "crates/strata-flora", version = "0.1.0" }
-strata-sim = { path = "crates/strata-sim", version = "0.1.0" }
+strata-app = { path = "crates/strata-app", version = "0.1.0" }
+veyra-sim = { path = "crates/veyra-sim", version = "0.1.0" }
 strata-stream = { path = "crates/strata-stream", version = "0.1.0" }
 strata-physics = { path = "crates/strata-physics", version = "0.1.0" }
 strata-terrain = { path = "crates/strata-terrain", version = "0.1.0" }
@@ -101,17 +102,17 @@ veyra-buildings = { path = "crates/veyra-buildings", version = "0.1.0" }
 # never to the server or the headless facade, which `just server-check`
 # asserts. The pinned rev these will carry is
 # 2b463d0367d329a6236b2fa06b0cf4bbd995b09f.
-ashlar = { git = "https://github.com/JedimEmO/ashlar", rev = "b6148290f272075f099605173969b71ce1ebc793" }
-ashlar-manifold = { git = "https://github.com/JedimEmO/ashlar", rev = "b6148290f272075f099605173969b71ce1ebc793" }
-ashlar-bevy = { git = "https://github.com/JedimEmO/ashlar", rev = "b6148290f272075f099605173969b71ce1ebc793" }
+ashlar = { git = "https://github.com/JedimEmO/ashlar", rev = "b12d929815c6487f0f37c08a6d247d475de8e181" }
+ashlar-manifold = { git = "https://github.com/JedimEmO/ashlar", rev = "b12d929815c6487f0f37c08a6d247d475de8e181" }
+ashlar-bevy = { git = "https://github.com/JedimEmO/ashlar", rev = "b12d929815c6487f0f37c08a6d247d475de8e181" }
 # Defaults off: the preview library's `showcase` feature pulls ashlar's own
 # example content, and the game previews its own.
-ashlar-preview = { git = "https://github.com/JedimEmO/ashlar", rev = "b6148290f272075f099605173969b71ce1ebc793", default-features = false }
+ashlar-preview = { git = "https://github.com/JedimEmO/ashlar", rev = "b12d929815c6487f0f37c08a6d247d475de8e181", default-features = false }
 # The content step's half of ashlar: the baker and the material graph engine.
 # Tools only, like `ashlar-manifold`: `just server-check` keeps them out of the
 # server, and `game` loads what they write.
-ashlar-content = { git = "https://github.com/JedimEmO/ashlar", rev = "b6148290f272075f099605173969b71ce1ebc793" }
-ashlar-material = { git = "https://github.com/JedimEmO/ashlar", rev = "b6148290f272075f099605173969b71ce1ebc793" }
+ashlar-content = { git = "https://github.com/JedimEmO/ashlar", rev = "b12d929815c6487f0f37c08a6d247d475de8e181" }
+ashlar-material = { git = "https://github.com/JedimEmO/ashlar", rev = "b12d929815c6487f0f37c08a6d247d475de8e181" }
 veyra-materials = { path = "crates/veyra-materials", version = "0.1.0" }
 # Scratch directories in tests, such as a baked `generated/` for the grounding fixture.
 tempfile = "3.27.0"
@@ -119,8 +120,32 @@ veyra-flora = { path = "crates/veyra-flora", version = "0.1.0" }
 veyra-rocks = { path = "crates/veyra-rocks", version = "0.1.0" }
 veyra-settlements = { path = "crates/veyra-settlements", version = "0.1.0" }
 # Where the weather is: the fog field over the ground, no Bevy, above
-# strata-worldgen and below strata-sim, linked by the server too.
+# strata-worldgen and below veyra-sim, linked by the server too.
 strata-weather = { path = "crates/strata-weather", version = "0.1.0" }
+# The registry split (review step three, item 3): the engine's data layer
+# under the world crates, and Veyra's own schemas and world rules beside them.
+strata-data = { path = "crates/strata-data", version = "0.1.0" }
+veyra-data = { path = "crates/veyra-data", version = "0.1.0" }
+veyra-world = { path = "crates/veyra-world", version = "0.1.0" }
+# Review step seven: the game's plain rules (combat, gear, crafting, the land,
+# the people) out of veyra-sim, over bevy_ecs and bevy_math alone, with the
+# player's intent in a crate of its own below strata-app.
+bevy_ecs = { version = "0.19.1", default-features = false }
+bevy_math = { version = "0.19.1", default-features = false }
+strata-types = { path = "crates/strata-types", version = "0.1.0" }
+veyra-rules = { path = "crates/veyra-rules", version = "0.1.0" }
+# Veyra's physics (review step seven): bolts, blades and the hoverbike motor over
+# strata-physics, so the engine's physics crate links no game rule.
+veyra-physics = { path = "crates/veyra-physics", version = "0.1.0" }
+# Veyra's combat view (review step seven): the combat HUD, art, audio and effects
+# over the engine client, so a combat edit rebuilds none of the engine client.
+# Defaults off like strata-client; the game turns `ui` on.
+veyra-view = { path = "crates/veyra-view", version = "0.1.0", default-features = false }
+# The screens (review step seven): the engine's screen framework over slotted, and
+# Veyra's twelve screens over it, so a screen edit rebuilds neither the engine
+# client nor the terrain and the terrain no longer holds the screens up.
+strata-ui = { path = "crates/strata-ui", version = "0.1.0" }
+veyra-ui = { path = "crates/veyra-ui", version = "0.1.0" }
 # The shader compiler wgpu uses, for a test that validates a WGSL file;
 # the version already in the graph.
 naga = { version = "29.0.4", default-features = false }
@@ -145,6 +170,16 @@ js-sys = { version = "0.3", default-features = false }
 # of baking (ticket 0015, step 3); the version the graph already holds.
 postcard = { version = "1.1.3", default-features = false, features = ["alloc"] }
 
+# The English table and the fall's words, plain functions with no Bevy (review
+# step seven, veyra-game): the screens and the headless household both link it.
+veyra-words = { path = "crates/veyra-words", version = "0.1.0" }
+# The headless half of the game binary (review step seven): the household, the
+# people, the camps and the props' placement, linked by the game and the server.
+veyra-game = { path = "crates/veyra-game", version = "0.1.0" }
+# The stills, scripts and benchmark runs (review step seven): the game links it behind
+# its `dev-tools` feature, which the web build leaves off.
+veyra-dev = { path = "crates/veyra-dev", version = "0.1.0" }
+
 # Bevy is slow in a plain dev profile; optimise dependencies as slotted does.
 # Keep dev builds fast to run but small on disk: dependencies optimised, and
 # debuginfo limited to line tables.
@@ -165,6 +200,9 @@ debug = false
 [profile.dev.package.strata-core]
 opt-level = 3
 
+[profile.dev.package.strata-data]
+opt-level = 3
+
 [profile.dev.package.strata-worldgen]
 opt-level = 3
 
@@ -176,6 +214,21 @@ opt-level = 3
 
 [profile.test]
 debug = "line-tables-only"
+
+# Thin LTO on release: fat LTO with one codegen unit would multiply every
+# bench build's time on this machine, so that goes in the web profile alone.
+[profile.release]
+lto = "thin"
+
+# The browser download is the cost that matters on the web: size-optimised,
+# stripped, aborting on panic and fully linked across crates.
+[profile.web]
+inherits = "release"
+opt-level = "s"
+strip = true
+panic = "abort"
+lto = true
+codegen-units = 1
 
 [workspace.lints.rust]
 unsafe_code = "deny"

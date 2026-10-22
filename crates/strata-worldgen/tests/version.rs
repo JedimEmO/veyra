@@ -46,17 +46,17 @@ fn one_biomes_amplitude_changes_the_version() {
         "/../../assets/biomes/plains.biome.ron"
     ))
     .expect("the plains ship");
-    let def: strata_registry::BiomeDef = ron::from_str(&text).expect("the plains parse");
+    let def: strata_data::BiomeDef = ron::from_str(&text).expect("the plains parse");
     let mut taller = def.clone();
     taller.relief.amplitude_m += 1.0;
     assert_ne!(def, taller);
     // The copy with the file as it was is the same world, so what the
     // taller copy changes is the amplitude and nothing the copy lost.
     let assets = copy_assets_with("biomes/plains.biome.ron", &def);
-    let same = strata_registry::load_from_dir(&assets).expect("the copy loads");
+    let same = strata_data::load_world_from_dir(&assets).expect("the copy loads");
     assert_eq!(before, world_version(&params, &same));
     let assets = copy_assets_with("biomes/plains.biome.ron", &taller);
-    let changed = strata_registry::load_from_dir(&assets).expect("the copy loads");
+    let changed = strata_data::load_world_from_dir(&assets).expect("the copy loads");
     assert_ne!(before, world_version(&params, &changed));
     let _ = std::fs::remove_dir_all(&assets);
 }
@@ -72,11 +72,11 @@ fn a_biomes_colour_grade_does_not_change_the_version() {
     ))
     .expect("the forest ships");
     // Its own file: each replaced file gets one scratch directory.
-    let mut def: strata_registry::BiomeDef = ron::from_str(&text).expect("the forest parses");
+    let mut def: strata_data::BiomeDef = ron::from_str(&text).expect("the forest parses");
     def.grade.temperature += 0.01;
     def.grade.saturation = 0.5;
     let assets = copy_assets_with("biomes/forest.biome.ron", &def);
-    let regraded = strata_registry::load_from_dir(&assets).expect("the copy loads");
+    let regraded = strata_data::load_world_from_dir(&assets).expect("the copy loads");
     assert_eq!(before, world_version(&params, &regraded));
     let _ = std::fs::remove_dir_all(&assets);
 }
@@ -105,17 +105,17 @@ fn one_site_kind_changes_the_version() {
     ))
     .expect("the hamlet ships");
     let value: ron::Value = ron::from_str(&text).expect("it parses");
-    let def: strata_registry::SiteKindDef = value.into_rust().expect("it is a kind");
+    let def: strata_data::SiteKindDef = value.into_rust().expect("it is a kind");
     let assets = copy_assets_with("sites/hamlet.site.ron", &def);
-    let same = strata_registry::load_from_dir(&assets).expect("the copy loads");
+    let same = strata_data::load_world_from_dir(&assets).expect("the copy loads");
     assert_eq!(before, world_version(&params, &same));
     let mut wider = def.clone();
     wider.footprint_m += 1.0;
     let assets = copy_assets_with("sites/hamlet.site.ron", &wider);
-    let changed = strata_registry::load_from_dir(&assets).expect("the copy loads");
+    let changed = strata_data::load_world_from_dir(&assets).expect("the copy loads");
     assert_ne!(before, world_version(&params, &changed));
     let _ = std::fs::remove_dir_all(&assets);
-    registries.sites = strata_registry::SiteKindStore::default();
+    registries.sites = strata_data::SiteKindStore::default();
     assert_ne!(before, world_version(&params, &registries));
 }
 
@@ -134,7 +134,7 @@ fn one_flora_species_changes_the_version() {
     // Through a value, as the loader reads it (a flora file leans on RON's
     // untyped forms that a typed parse refuses).
     let value: ron::Value = ron::from_str(&text).expect("it parses");
-    let parsed: strata_registry::FloraDef = value.into_rust().expect("it is a species");
+    let parsed: strata_data::FloraDef = value.into_rust().expect("it is a species");
     assert_eq!(&parsed, def, "{} is the file of {name}", file.display());
     let mut denser = parsed.clone();
     denser.spacing_m *= 0.8;
@@ -146,10 +146,10 @@ fn one_flora_species_changes_the_version() {
         .expect("utf-8")
         .to_owned();
     let assets = copy_assets_with(&relative, &parsed);
-    let same = strata_registry::load_from_dir(&assets).expect("the copy loads");
+    let same = strata_data::load_world_from_dir(&assets).expect("the copy loads");
     assert_eq!(before, world_version(&params, &same));
     let assets = copy_assets_with(&relative, &denser);
-    let changed = strata_registry::load_from_dir(&assets).expect("the copy loads");
+    let changed = strata_data::load_world_from_dir(&assets).expect("the copy loads");
     assert_ne!(before, world_version(&params, &changed));
     let _ = std::fs::remove_dir_all(&assets);
 }
@@ -178,16 +178,16 @@ fn a_dressing_species_leaves_the_version_alone() {
     let mut sparser = def.clone();
     sparser.spacing_m *= 1.25;
     let assets = copy_assets_with(&relative, &sparser);
-    let changed = strata_registry::load_from_dir(&assets).expect("the copy loads");
+    let changed = strata_data::load_world_from_dir(&assets).expect("the copy loads");
     assert_eq!(before, world_version(&params, &changed), "sparser reeds");
     std::fs::remove_file(assets.join(&relative)).expect("the copy's reeds");
-    let without = strata_registry::load_from_dir(&assets).expect("the copy loads");
+    let without = strata_data::load_world_from_dir(&assets).expect("the copy loads");
     assert!(without.flora.iter().all(|(_, _, def)| !def.dressing));
     assert_eq!(before, world_version(&params, &without), "no reeds");
     let mut worldly = def.clone();
     worldly.dressing = false;
     let assets = copy_assets_with(&relative, &worldly);
-    let changed = strata_registry::load_from_dir(&assets).expect("the copy loads");
+    let changed = strata_data::load_world_from_dir(&assets).expect("the copy loads");
     assert_ne!(
         before,
         world_version(&params, &changed),
@@ -207,15 +207,15 @@ fn one_province_changes_the_version() {
     ))
     .expect("the badlands ship");
     let value: ron::Value = ron::from_str(&text).expect("it parses");
-    let def: strata_registry::ProvinceDef = value.into_rust().expect("it is a province");
+    let def: strata_data::ProvinceDef = value.into_rust().expect("it is a province");
     let mut greener = def.clone();
     greener.rock.cover += 0.1;
     assert_ne!(def, greener);
     let assets = copy_assets_with("geology/badlands.geology.ron", &def);
-    let same = strata_registry::load_from_dir(&assets).expect("the copy loads");
+    let same = strata_data::load_world_from_dir(&assets).expect("the copy loads");
     assert_eq!(before, world_version(&params, &same));
     let assets = copy_assets_with("geology/badlands.geology.ron", &greener);
-    let changed = strata_registry::load_from_dir(&assets).expect("the copy loads");
+    let changed = strata_data::load_world_from_dir(&assets).expect("the copy loads");
     assert_ne!(before, world_version(&params, &changed));
     let _ = std::fs::remove_dir_all(&assets);
 }

@@ -20,14 +20,14 @@ use bevy::math::Vec3;
 use bevy::state::state::State;
 use bevy::time::TimeUpdateStrategy;
 use bevy::transform::components::Transform;
+use strata_app::{
+    AppPlugin, AppState, LocalPlayer, Player, PlayerIntent, RenderOrigin, ScriptedIntent,
+    WorldPosition, WorldSourceRes,
+};
 use strata_core::WorldPos;
 use strata_physics::avian3d::prelude::{Collider, Position, RigidBody};
 use strata_physics::{CharacterController, PhysicsPlugin, TerrainCollider, TerrainColliderStats};
 use strata_registry::BiomeId;
-use strata_sim::{
-    AppState, LocalPlayer, Player, PlayerIntent, RenderOrigin, ScriptedIntent, SimPlugin,
-    WorldPosition, WorldSourceRes,
-};
 use strata_stream::{StreamConfig, StreamPlugin};
 use strata_worldgen::{Sample, WorldSource};
 
@@ -103,7 +103,7 @@ fn app_over(source: Arc<dyn WorldSource>, cfg: StreamConfig) -> App {
         // Avian's broad phase runs on the compute pool.
         bevy::app::TaskPoolPlugin::default(),
         bevy::time::TimePlugin,
-        SimPlugin,
+        AppPlugin,
         StreamPlugin,
         PhysicsPlugin,
     ));
@@ -186,6 +186,37 @@ fn a_dropped_player_lands_on_the_sampled_height() {
         "{at:?}"
     );
     assert!(app.world().resource::<TerrainColliderStats>().loaded > 0);
+}
+
+#[test]
+fn a_standing_player_rests_and_a_moved_one_lands_again() {
+    let source = hills();
+    let mut app = app_over(source.clone(), stream_config());
+    let (x, z) = (37.0, 51.0);
+    let player = spawn_player(&mut app, source.as_ref(), x, z, 0.2);
+    run(&mut app, 200);
+    let ctl = controller(&app, player);
+    assert!(ctl.grounded);
+    assert!(ctl.rested > 0, "the rest path never fired: {ctl:?}");
+    // Put the body 5 m away, a little above the ground there, as a reset
+    // or a script would. It must not hang there for the rest of its rest.
+    let (x2, z2) = (42.0, 51.0);
+    let ground = f64::from(source.sample(x2, z2).height);
+    let center = ground + 0.3 + f64::from(ctl.half_height());
+    app.world_mut()
+        .entity_mut(player)
+        .insert(WorldPosition::new(x2, center, z2));
+    // One tick: a body still counted as resting would skip its step and
+    // hang 0.3 m up; one that noticed the move snaps down at once.
+    run(&mut app, 1);
+    let feet = feet_height(&app, player);
+    assert!(
+        (feet - ground).abs() < 0.1,
+        "hanging after a move: feet at {feet}, ground at {ground}"
+    );
+    run(&mut app, 60);
+    let ctl = controller(&app, player);
+    assert!(ctl.grounded && ctl.rested > 0, "{ctl:?}");
 }
 
 #[test]
@@ -517,7 +548,7 @@ fn trees_get_trunk_colliders_where_placement_puts_them_and_stop_a_walker() {
     app.add_plugins((
         bevy::app::TaskPoolPlugin::default(),
         bevy::time::TimePlugin,
-        SimPlugin,
+        AppPlugin,
         StreamPlugin,
         PhysicsPlugin,
     ));
@@ -530,7 +561,7 @@ fn trees_get_trunk_colliders_where_placement_puts_them_and_stop_a_walker() {
     }
     let seed = app
         .world()
-        .get_resource::<strata_sim::WorldSeed>()
+        .get_resource::<strata_app::WorldSeed>()
         .map_or(Seed(0), |s| s.0);
 
     // The cell the player will stand in, placed the way the server does.
@@ -719,7 +750,7 @@ fn a_character_never_reaches_a_region_whose_bodies_are_pending() {
     app.add_plugins((
         bevy::app::TaskPoolPlugin::default(),
         bevy::time::TimePlugin,
-        SimPlugin,
+        AppPlugin,
         StreamPlugin,
         PhysicsPlugin,
     ));
@@ -732,7 +763,7 @@ fn a_character_never_reaches_a_region_whose_bodies_are_pending() {
     }
     let seed = app
         .world()
-        .get_resource::<strata_sim::WorldSeed>()
+        .get_resource::<strata_app::WorldSeed>()
         .map_or(Seed(0), |s| s.0);
     let mut expected = std::collections::HashMap::new();
     let mut trunks_in = |cell: strata_core::RegionCoord| {
@@ -919,12 +950,12 @@ fn fitted_ramp(corporate: bool) {
     // query met last, which a new resource's archetype reordered.
     app.world_mut()
         .entity_mut(player)
-        .remove::<(ScriptedIntent, strata_sim::PrimaryObserver)>();
+        .remove::<(ScriptedIntent, strata_app::PrimaryObserver)>();
     let observer = app
         .world_mut()
         .spawn((
-            strata_sim::WorldObserver,
-            strata_sim::PrimaryObserver,
+            strata_app::WorldObserver,
+            strata_app::PrimaryObserver,
             WorldPosition::new(5000.0, 20.0, 0.0),
         ))
         .id();

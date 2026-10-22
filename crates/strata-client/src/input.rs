@@ -11,7 +11,7 @@ use bevy::ecs::prelude::*;
 use bevy::input::ButtonInput;
 use bevy::input::keyboard::KeyCode;
 use bevy::math::Vec2;
-use strata_sim::{LocalPlayer, PlayerIntent, ScriptedIntent};
+use veyra_sim::{LocalPlayer, PlayerIntent, ScriptedIntent};
 
 use crate::orbit::OrbitCamera;
 

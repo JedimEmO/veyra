@@ -64,7 +64,7 @@ pub fn install_ports() {
 /// is the page's to ask for, and the settings live under a `localStorage`
 /// key.
 pub fn insert_resources(app: &mut bevy::prelude::App) {
-    app.insert_resource(strata::client::combat::PointerLockOnClick::default());
+    app.insert_resource(veyra_view::combat::PointerLockOnClick::default());
     if let Some(adapter) = browser_adapter() {
         console(&format!("webgpu adapter {adapter}"));
         app.insert_resource(strata::client::ui::graphics::BrowserAdapter(adapter));
@@ -150,7 +150,7 @@ fn release_lock() {
 /// the browser in a lock, so no key reaches the game) opens the pause, as
 /// Escape does on a desktop.
 fn pointer_lock(
-    mut lock: bevy::prelude::ResMut<strata::client::combat::PointerLockOnClick>,
+    mut lock: bevy::prelude::ResMut<veyra_view::combat::PointerLockOnClick>,
     keys: bevy::prelude::Res<bevy::prelude::ButtonInput<bevy::prelude::KeyCode>>,
     mut commands: bevy::prelude::Commands,
     mut before: bevy::prelude::Local<bool>,

@@ -3,11 +3,14 @@
 //!
 //! The binary is a thin command line over this, and the tests bake the same
 //! tables with the same functions, so what is snapshotted is what ships.
-use ashlar::{BakedBuilding, Building, LodCell, LodPolicy};
+use ashlar::{BakedBuilding, Building, CookedBuilding, LodCell, LodPolicy};
 use serde::Serialize;
 use veyra_buildings::Scene;
 
+pub mod bc7;
 pub mod sheet;
+pub mod terrain;
+pub mod values;
 
 /// The buildings the game spawns, by the path under `generated/` it loads each from.
 pub const BUILDINGS: [(&str, Scene); 2] = [
@@ -92,7 +95,65 @@ pub fn graphs() -> ashlar_material::MaterialGraphLibrary {
         .output(PbrOutput::new().base_color("colour").opacity("blade"))
         .into_graph();
     library.graphs.insert(CAPACITY_LEAF_GRAPH.to_owned(), leaf);
+    budget_flora_graphs(&mut library);
     library
+}
+
+/// The crown's grouping (`assets/look/canopy.ron`, review step six, F5) as the
+/// impostor bake applies it to a tree's `shade` attribute, so a far tree wears
+/// the factor the near shader repeats. Read per call: it is a dozen bytes and
+/// the cache key hashes what it holds, so an edit rebakes the atlases.
+///
+/// # Panics
+///
+/// When the file is missing or does not parse: the shipped look is part of the
+/// checkout, and a bake with another factor would not match the near trees.
+#[must_use]
+pub fn canopy_grade() -> ashlar_content::VertexGrade<'static> {
+    let text = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../assets/look/canopy.ron"
+    ))
+    .expect("assets/look/canopy.ron");
+    let look = strata_data::CanopyLook::parse(&text).expect("a valid canopy look");
+    ashlar_content::VertexGrade {
+        attribute: "shade",
+        core: [
+            look.core * look.cool[0],
+            look.core * look.cool[1],
+            look.core * look.cool[2],
+        ],
+        lift: look.lift,
+    }
+}
+
+/// The flora graphs remapped to the value budget (`assets/look/values.ron`,
+/// review step six, F1), measured once a process because every stage asks for
+/// the library.
+fn budget_flora_graphs(library: &mut ashlar_material::MaterialGraphLibrary) {
+    use std::sync::OnceLock;
+    static REMAPPED: OnceLock<ashlar_material::MaterialGraphLibrary> = OnceLock::new();
+    let remapped = REMAPPED.get_or_init(|| {
+        let text = std::fs::read_to_string(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../assets/look/values.ron"
+        ))
+        .expect("assets/look/values.ron");
+        let budget = strata_data::ValueBudget::parse(&text).expect("a valid value budget");
+        let mut graphs = library.clone();
+        let done = values::budget_flora(&mut graphs, &veyra_materials::flora(), &budget)
+            .expect("the flora graphs bake");
+        for (path, r) in &done {
+            eprintln!(
+                "value budget {path}: mean {:.3} spread {:.3} -> {:.3}, scale {:.2} floor {:.3}",
+                r.from.mean, r.from.spread, r.target, r.scale, r.floor
+            );
+        }
+        graphs
+    });
+    for (key, graph) in &remapped.graphs {
+        library.graphs.insert(key.clone(), graph.clone());
+    }
 }
 
 /// The capacity fixture's leaf graph: one capsule-shaped leaf per card,
@@ -779,6 +840,49 @@ pub fn building_stats(path: &str, baked: &BakedBuilding) -> BuildingStats {
     }
 }
 
+/// The stats of one building file as written, whichever version it is: the
+/// full file the content step caches or the cooked file the game draws. The
+/// two give the same numbers, since cooking changes bytes and not triangles.
+///
+/// # Errors
+///
+/// A file neither reader accepts.
+pub fn file_stats(path: &str, bytes: &[u8]) -> Result<BuildingStats, ashlar::BakedError> {
+    if CookedBuilding::is_cooked(bytes) {
+        return Ok(cooked_stats(path, &CookedBuilding::read(bytes)?));
+    }
+    Ok(building_stats(path, &BakedBuilding::read(bytes)?))
+}
+
+/// [`building_stats`] of a cooked building.
+#[must_use]
+pub fn cooked_stats(path: &str, cooked: &CookedBuilding) -> BuildingStats {
+    let unique = cooked.triangles();
+    let levels = (0..cooked.levels.len())
+        .map(|index| {
+            let (pieces, drawn) = cooked.pieces(index).fold((0, 0), |(pieces, drawn), piece| {
+                let triangles = cooked
+                    .meshes
+                    .get(piece.mesh as usize)
+                    .map_or(0, |mesh| mesh.indices.len() / 3);
+                (pieces + 1, drawn + triangles)
+            });
+            LevelStats {
+                until: cooked.levels[index].until,
+                pieces,
+                unique_triangles: unique[index],
+                drawn_triangles: drawn,
+            }
+        })
+        .collect();
+    BuildingStats {
+        path: path.to_owned(),
+        instances: cooked.instances.len(),
+        colliders: cooked.colliders().len(),
+        levels,
+    }
+}
+
 /// The budget every Veyra building is held to, so a kit change that would
 /// cost a frame is a failing test and not a surprise in the ledger.
 pub mod budget {
@@ -1011,6 +1115,129 @@ pub fn vehicle_models() -> anyhow::Result<VehicleModelFiles> {
         )],
         index,
     ))
+}
+
+/// Where the prop kit's material library is written, under `generated/`.
+pub const PROP_LIBRARY: &str = "props/veyra/library.materials.ron";
+
+/// Where the prop kit's baked materials are written.
+pub const PROP_MATERIALS: &str = "props/veyra";
+
+/// The prop kit's materials (review step six, visual.md F6): the ivory shell
+/// at the middle of the value budget's `shell` family, the dark inset
+/// machinery, the colony's orange and one panel a role. A panel is a muted
+/// colour with a low glow, so it reads at dusk without the old strips' blaze.
+#[must_use]
+pub fn prop_definitions() -> ashlar::MaterialLibrary {
+    let mut library = ashlar::MaterialLibrary::default();
+    let mut add =
+        |key: String, base_color: [f32; 3], roughness: f32, metallic: f32, emissive: [f32; 3]| {
+            library.materials.insert(
+                key,
+                ashlar::MaterialDefinition {
+                    base_color,
+                    roughness,
+                    metallic,
+                    emissive,
+                    ..Default::default()
+                },
+            );
+        };
+    add(
+        "prop:shell".to_owned(),
+        [0.74, 0.72, 0.66],
+        0.55,
+        0.05,
+        [0.0; 3],
+    );
+    add(
+        "prop:inset".to_owned(),
+        [0.12, 0.13, 0.15],
+        0.6,
+        0.5,
+        [0.0; 3],
+    );
+    add(
+        "prop:accent".to_owned(),
+        [0.86, 0.42, 0.14],
+        0.5,
+        0.1,
+        [0.0; 3],
+    );
+    for (role, colour) in veyra_buildings::props::ROLES.iter().enumerate() {
+        // The panel is the role colour pulled towards a muted teal-grey and
+        // lit by a share of itself.
+        let base = colour.map(|c| 0.3 + 0.5 * c);
+        let glow = colour.map(|c| 0.5 * c * c);
+        add(
+            veyra_buildings::props::panel_key(role),
+            base,
+            0.35,
+            0.0,
+            glow,
+        );
+    }
+    library
+}
+
+/// The prop kit, one prop a piece, and its index.
+pub type PropKitFiles = (
+    Vec<(String, ashlar::prop::Prop)>,
+    strata_registry::props::PropModels,
+);
+
+/// Bake the household's interaction props (review step six): one prop of one
+/// level and no collider a piece, in the recipe's frame, and the index.
+///
+/// # Errors
+///
+/// A recipe that does not validate or mesh.
+pub fn prop_kit() -> anyhow::Result<PropKitFiles> {
+    use anyhow::Context;
+    use ashlar::prop::{Prop, PropLevel, PropPiece};
+    use ashlar_manifold::{ManifoldMesher, mesh_building};
+    use strata_registry::props::{MODELS_PATH, PropModels};
+    use veyra_buildings::props::Piece;
+    let dir = MODELS_PATH.rsplit_once('/').map_or("", |(dir, _)| dir);
+    let mut index = PropModels {
+        materials: PROP_LIBRARY.to_owned(),
+        files: std::collections::BTreeMap::new(),
+    };
+    let mut props = Vec::new();
+    for piece in Piece::ALL {
+        let building = piece
+            .building()
+            .with_context(|| format!("the recipe of {}", piece.name()))?;
+        let built = mesh_building(&building, &ManifoldMesher::default())
+            .with_context(|| format!("the mesh of {}", piece.name()))?;
+        let part = &built
+            .building
+            .instance("piece")
+            .context("a prop piece has no instance")?
+            .part;
+        let elements = built.parts.get(part).context("a prop piece has no part")?;
+        let level = PropLevel {
+            pieces: elements
+                .iter()
+                .filter(|element| !element.mesh.indices.is_empty())
+                .map(|element| PropPiece {
+                    mesh: element.mesh.clone(),
+                    material: match element.material_slot.as_str() {
+                        "panel" => veyra_buildings::props::panel_key(piece.role()),
+                        slot => format!("prop:{slot}"),
+                    },
+                })
+                .collect(),
+            ..Default::default()
+        };
+        let file = format!("{dir}/{}", piece.file_name());
+        index.files.insert(piece.name().to_owned(), file.clone());
+        props.push((
+            file,
+            Prop::new(format!("props:{}", piece.name()), vec![level], Vec::new()),
+        ));
+    }
+    Ok((props, index))
 }
 
 /// The file of the bike's square icon beside its prop.

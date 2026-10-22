@@ -1,0 +1,37 @@
+[package]
+name = "veyra-rules"
+description = "Veyra's rules as plain functions and state types: combat, abilities, the opponents' AI, gear, crafting, the factory, the land and the people. bevy_ecs and bevy_math only, no bevy_app."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[features]
+# The shipped combat tables and progression files compiled in, and the test
+# helpers other crates' tests share (`first_day` and friends).
+shipped-data = ["strata-registry/shipped-data"]
+test-support = ["shipped-data"]
+
+[dependencies]
+strata-core = { workspace = true }
+strata-types = { workspace = true }
+strata-registry = { workspace = true }
+# The chart and the encounters read the ground and the sites.
+strata-worldgen = { workspace = true }
+veyra-world = { workspace = true }
+# Component, Resource and Message derives on the state types, and the plain
+# system-free parts of the ECS; never bevy_app.
+bevy_ecs = { workspace = true, features = ["std"] }
+bevy_math = { workspace = true, features = ["std"] }
+tracing = { workspace = true }
+serde = { workspace = true }
+ron = { workspace = true }
+thiserror = { workspace = true }
+slotted-model = { workspace = true }
+
+[dev-dependencies]
+strata-registry = { workspace = true, features = ["shipped-data"] }
+
+[lints]
+workspace = true

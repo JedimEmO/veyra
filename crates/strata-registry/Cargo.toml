@@ -1,29 +1,20 @@
 [package]
 name = "strata-registry"
-description = "The game's registry set on slotted-registry: biomes, terrain materials, later everything else. No Bevy."
+description = "The game's registry set at its old paths: a facade over strata-data (the world schemas) and veyra-data (the game's own). No Bevy."
 version = "0.1.0"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 authors.workspace = true
 
-[dependencies]
-# `std-fs` is on for `DirSource`, the plain `std::fs` adapter `load_from_dir`
-# reads through; the loader itself only speaks the `AssetSource` port so a
-# pack layer can replace the directory later.
-slotted-registry = { workspace = true, features = ["std-fs"] }
-slotted-model = { workspace = true }
-# The tick rate alone: the factory's dial is seconds in the file and whole
-# ticks in the sim, and a second that is no whole number of ticks is refused
-# here, at load.
-strata-core = { workspace = true }
-serde = { workspace = true }
-ron = { workspace = true }
-serde_json = { workspace = true }
-thiserror = { workspace = true }
+[features]
+# The shipped progression files compiled in (`SkillGraph::shipped` and friends),
+# for tests and tools. The game and the server read the same files from disk.
+shipped-data = ["veyra-data/shipped-data"]
 
-[dev-dependencies]
-pretty_assertions = { workspace = true }
+[dependencies]
+strata-data = { workspace = true }
+veyra-data = { workspace = true }
 
 [lints]
 workspace = true

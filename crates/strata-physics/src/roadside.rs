@@ -12,9 +12,9 @@ use std::collections::BTreeSet;
 
 use bevy::ecs::prelude::*;
 use bevy::math::Quat;
+use strata_app::roadside::{NearRoadside, RoadsidePieceKey, pieces_within};
+use strata_app::{GeneratedRoot, Observers, RenderOrigin};
 use strata_core::WorldPos;
-use strata_sim::roadside::{NearRoadside, RoadsidePieceKey, pieces_within};
-use strata_sim::{GeneratedRoot, Observers, RenderOrigin};
 
 use crate::sites::{Streamed, Wanted};
 

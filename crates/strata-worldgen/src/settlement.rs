@@ -26,7 +26,7 @@
 //! headings go through `libm` once, when the site is placed.
 
 use serde::{Deserialize, Serialize};
-use strata_registry::SettlementDef;
+use strata_data::SettlementDef;
 
 /// A placed site: where the settlement frame stands and how the ground is
 /// shaped in it.
@@ -140,7 +140,7 @@ pub struct Shaped {
 }
 
 /// A kind of city ground, which a settlement lays in its own terrain
-/// material (`strata_registry::GroundDef`).
+/// material (`strata_data::GroundDef`).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum GroundKind {
     /// A terrace's level ground.
@@ -1049,13 +1049,13 @@ impl Road {
 
 #[cfg(test)]
 mod tests {
-    use strata_registry::{ExtentDef, LandformDef, PlatformDef, RoadDef, SpurDef, TerracesDef};
+    use strata_data::{ExtentDef, LandformDef, PlatformDef, RoadDef, SpurDef, TerracesDef};
 
     use super::*;
 
     fn def() -> SettlementDef {
         SettlementDef {
-            id: strata_registry::Namespaced::parse("strata:test").expect("valid"),
+            id: strata_data::Namespaced::parse("strata:test").expect("valid"),
             name: "Test".to_owned(),
             at: [0.0, 0.0],
             downhill_deg: 90.0,

@@ -1,0 +1,67 @@
+[package]
+name = "veyra-ui"
+description = "Veyra's screens over the engine's screen framework: the character sheet, bench, stores, fitting, crafting, factory, board, survey, harvester, journal, dialogue and map, the HUD chips, and the English for every key. Bevy with a window."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+strata-core = { workspace = true }
+# The camera markers the weapon stage puts on its own camera (`OffWorld`,
+# `NoSky`), which is the one render-side edge the screens have.
+strata-app = { workspace = true }
+strata-registry = { workspace = true }
+# The screen framework; the engine client is a sibling, never a dependency.
+strata-ui = { workspace = true }
+veyra-sim = { workspace = true }
+# The English table, shared with the headless household.
+veyra-words = { workspace = true }
+# The place chip waits for the local character to land (`CharacterController`'s
+# `grounded` and `swimming`): the one physics type a screen reads.
+strata-physics = { workspace = true }
+# The baked weapon pieces on the fitting screen's stage are props over a
+# material library of their own. Featureless, as the foliage crate takes it: no
+# kernel.
+ashlar-bevy = { workspace = true }
+bevy = { workspace = true, features = [
+    "std",
+    "bevy_state",
+    "bevy_window",
+    "bevy_asset",
+    "bevy_mesh",
+    "bevy_camera",
+    "bevy_pbr",
+    "bevy_ui",
+    "bevy_ui_render",
+    "bevy_text",
+    "bevy_input_focus",
+    "bevy_ui_widgets",
+    "default_font",
+] }
+tracing = { workspace = true }
+slotted = { workspace = true, features = ["ui", "menu"] }
+# The weapon diagram's parameters, read from a `custom` node's value.
+serde = { workspace = true }
+
+[dev-dependencies]
+# Tests read the shipped data compiled in; the shipped binaries read it from disk.
+veyra-sim = { workspace = true, features = ["shipped-data"] }
+slotted-test = { workspace = true, features = ["menu"] }
+ron = { workspace = true }
+# The screens' tests stand the whole client beside them: the engine client's
+# plugin (settings, cameras), the combat HUD (`hud_only`, its widget ids) and
+# the streamer. A dev-dependency cycle with `veyra-view`, which links this
+# crate; cargo allows it for integration tests, which is all that use it.
+strata-client = { workspace = true, features = ["ui", "dev"] }
+veyra-view = { workspace = true, features = ["ui"] }
+strata-stream = { workspace = true }
+strata-foliage = { workspace = true }
+# The look panel and graphics tests (tests/ui/pause.rs) read the atmosphere's look.
+strata-atmosphere = { workspace = true }
+# A real faction map under the claim words' tests.
+strata-worldgen = { workspace = true }
+
+[lints]
+workspace = true

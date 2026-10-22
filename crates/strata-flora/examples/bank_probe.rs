@@ -25,8 +25,8 @@ fn main() {
     let mut num = |default: f64| args.next().and_then(|a| a.parse().ok()).unwrap_or(default);
     let (x, z, radius) = (num(7_404.0), num(-4_940.0), num(12_000.0));
     let root = concat!(env!("CARGO_MANIFEST_DIR"), "/../..");
-    let registries =
-        strata_registry::load_from_dir(format!("{root}/assets")).expect("the shipped assets load");
+    let registries = strata_data::load_world_from_dir(format!("{root}/assets"))
+        .expect("the shipped assets load");
     let library = TreeLibrary::read(std::path::Path::new(&format!("{root}/generated"))).ok();
     let table = FloraTable::from_registries_and_library(&registries, library.as_ref());
     let reed = table

@@ -14,9 +14,7 @@
 //! different worlds.
 
 use strata_core::Seed;
-use strata_registry::{
-    BiomeId, ClimateWindow, GameRegistries, ProvinceShape, ReliefKind, UnitRange,
-};
+use strata_data::{BiomeId, ClimateWindow, ProvinceShape, ReliefKind, UnitRange, WorldDefs};
 
 use crate::erosion::Erosion;
 use crate::geology::{ProvinceField, ProvinceMix, ProvinceRule};
@@ -181,7 +179,7 @@ struct ProvinceRelief {
 }
 
 /// The most variants a biome can have: its own and one a province.
-const MAX_VARIANTS: usize = strata_registry::MAX_PROVINCES + 1;
+const MAX_VARIANTS: usize = strata_data::MAX_PROVINCES + 1;
 
 /// A biome's relief at a point with the provinces' shapes blended: what the
 /// sample's relief stage accumulates.
@@ -624,7 +622,7 @@ impl Geology {
 
     fn new(
         seed: Seed,
-        registries: &GameRegistries,
+        registries: &WorldDefs,
         params: &WorldParams,
         range_axis: (f64, f64),
     ) -> Option<Self> {
@@ -731,9 +729,9 @@ impl ProceduralWorld {
     ///
     /// If `registries` holds no biomes. A frozen registry set cannot be
     /// empty (the freeze refuses it), so this only fires on a
-    /// `GameRegistries::default()`.
+    /// `WorldDefs::default()`.
     #[must_use]
-    pub fn new(seed: Seed, registries: &GameRegistries) -> Self {
+    pub fn new(seed: Seed, registries: &WorldDefs) -> Self {
         Self::with_params(seed, registries, WorldParams::default())
     }
 
@@ -747,7 +745,7 @@ impl ProceduralWorld {
         clippy::too_many_lines,
         reason = "every stage's noise, then the sites chosen over them"
     )]
-    pub fn with_params(seed: Seed, registries: &GameRegistries, params: WorldParams) -> Self {
+    pub fn with_params(seed: Seed, registries: &WorldDefs, params: WorldParams) -> Self {
         assert!(
             !registries.biomes.is_empty(),
             "a world needs at least one biome; freeze the registries first"
@@ -871,21 +869,21 @@ impl ProceduralWorld {
                 seed,
                 crate::version::network_key(seed, &params, registries),
             ),
-            road_layer: strata_registry::Namespaced::parse(ROAD_MATERIAL)
+            road_layer: strata_data::Namespaced::parse(ROAD_MATERIAL)
                 .ok()
                 .and_then(|name| registries.material_id(&name))
-                .map(strata_registry::TerrainMaterialId::layer),
+                .map(strata_data::TerrainMaterialId::layer),
             way_layers: WAY_MATERIALS.map(|material| {
-                strata_registry::Namespaced::parse(material)
+                strata_data::Namespaced::parse(material)
                     .ok()
                     .and_then(|name| registries.material_id(&name))
-                    .map(strata_registry::TerrainMaterialId::layer)
+                    .map(strata_data::TerrainMaterialId::layer)
             }),
             bed_layers: [ROAD_MATERIAL, SAND_MATERIAL].map(|material| {
-                strata_registry::Namespaced::parse(material)
+                strata_data::Namespaced::parse(material)
                     .ok()
                     .and_then(|name| registries.material_id(&name))
-                    .map(strata_registry::TerrainMaterialId::layer)
+                    .map(strata_data::TerrainMaterialId::layer)
             }),
             site_kinds: {
                 let mut kinds: Vec<crate::sites::SiteKind> = registries
@@ -915,10 +913,10 @@ impl ProceduralWorld {
             .iter()
             .map(|def| {
                 let ground = def.ground.as_ref()?;
-                let layer = |name: &strata_registry::Namespaced| {
+                let layer = |name: &strata_data::Namespaced| {
                     registries
                         .material_id(name)
-                        .map(strata_registry::TerrainMaterialId::layer)
+                        .map(strata_data::TerrainMaterialId::layer)
                 };
                 Some([
                     layer(&ground.lanes)?,
@@ -1744,7 +1742,7 @@ impl ProceduralWorld {
 /// what a [`Classification`]'s indices mean.
 fn biome_samplers(
     seed: Seed,
-    registries: &GameRegistries,
+    registries: &WorldDefs,
     params: &WorldParams,
     range_axis: (f64, f64),
 ) -> Vec<BiomeSampler> {
@@ -1859,8 +1857,8 @@ fn biome_samplers(
 /// every province for a biome that `keep_own`s its relief.
 fn province_reliefs(
     seed: Seed,
-    registries: &GameRegistries,
-    def: &strata_registry::BiomeDef,
+    registries: &WorldDefs,
+    def: &strata_data::BiomeDef,
     name: &str,
     (own, keep_own): (Shape, bool),
     range_axis: (f64, f64),
@@ -2243,7 +2241,7 @@ struct Natural {
     climate: Climate,
     /// The provinces' pair and their blended `rock.cover`, in a world with
     /// geology.
-    provinces: Option<([(strata_registry::ProvinceId, f32); 2], f64)>,
+    provinces: Option<([(strata_data::ProvinceId, f32); 2], f64)>,
     /// Every province weighing at the point, in a world with geology.
     mix: Option<ProvinceMix>,
     best: usize,
@@ -2256,7 +2254,7 @@ struct Natural {
     beds_m: f64,
     /// Where the surface lies in the heaviest bedded province's beds, and
     /// that province.
-    bed: Option<(BedAt, strata_registry::ProvinceId)>,
+    bed: Option<(BedAt, strata_data::ProvinceId)>,
     height: f64,
     gradient: (f64, f64),
     /// The blended coarse relief at the point and at the four hydration taps
@@ -2567,7 +2565,7 @@ struct BedsHere {
     gradient: (f64, f64),
     /// The bed that shaped the ground, of the heaviest province whose beds
     /// did, and that province.
-    bed: Option<(BedAt, strata_registry::ProvinceId)>,
+    bed: Option<(BedAt, strata_data::ProvinceId)>,
 }
 
 /// How much a range's mountain relief is multiplied by at `flank`
@@ -2732,7 +2730,7 @@ impl ProceduralWorld {
         // under a site's pad, which a road arrives at its level.
         let mut road_cut = 0.0;
         let mut cleared = 0.0;
-        let mut way: Option<(f64, strata_registry::RoadClass)> = None;
+        let mut way: Option<(f64, strata_data::RoadClass)> = None;
         if graded
             && let Some(grid) = cell.and_then(|cell| cell.roads.as_ref())
             && let Some(mut graded) =
@@ -2787,9 +2785,9 @@ impl ProceduralWorld {
         {
             natural = 1.0 - developed;
             paved = self.way_layers[match class {
-                strata_registry::RoadClass::Service => 0,
-                strata_registry::RoadClass::Track => 1,
-                strata_registry::RoadClass::Trail => 2,
+                strata_data::RoadClass::Service => 0,
+                strata_data::RoadClass::Track => 1,
+                strata_data::RoadClass::Trail => 2,
             }];
         }
         if let Some(pad) = pad
@@ -2910,13 +2908,13 @@ mod tests {
 
     fn world() -> ProceduralWorld {
         let registries =
-            strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+            strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
                 .expect("the shipped assets load");
         ProceduralWorld::new(Seed(42), &registries)
     }
 
-    fn registries() -> GameRegistries {
-        strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+    fn registries() -> WorldDefs {
+        strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
             .expect("the shipped assets load")
     }
 

@@ -18,7 +18,7 @@ use bevy::math::{DVec3, EulerRot, Quat, Vec3};
 use bevy::time::Time;
 use bevy::transform::components::Transform;
 use bevy::window::{CursorGrabMode, CursorOptions, PrimaryWindow};
-use strata_sim::{PrimaryObserver, WorldPosition};
+use veyra_sim::{PrimaryObserver, WorldPosition};
 
 /// The free camera's state and tuning. Attach to the camera entity.
 ///

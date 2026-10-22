@@ -1,5 +1,5 @@
 //! The duel harness of the progression design, section 7: bouts between
-//! policies over the real `strata-sim` and `strata-physics` combat, run
+//! policies over the real `veyra-sim` and `strata-physics` combat, run
 //! headless as fast as the CPU allows over a grid of combat table values,
 //! and reported as CSV. The binary is `balance`; `README.md` has the CLI.
 //!
@@ -23,8 +23,8 @@ use std::collections::BTreeMap;
 use std::time::Instant;
 
 use serde::{Deserialize, Serialize};
-use strata_sim::combat::Weapon;
-use strata_sim::combat_tables::CombatTables;
+use veyra_rules::combat::Weapon;
+use veyra_rules::combat_tables::CombatTables;
 
 pub use bout::{BoutResult, Matchup, Profile, Side, SideMod, SideStats, Winner};
 pub use contracts::{Band, Contracts, Metric, SideMetric, Verdict};
@@ -208,7 +208,7 @@ fn stand_aim(cadence: f32) -> Policy {
 /// Seconds between the trigger pulls that fire `weapon`'s row at its own
 /// pace: its interval, and for a burst the burst itself.
 pub(crate) fn tap_of(weapon: Weapon) -> f32 {
-    use strata_sim::combat::FireMode;
+    use veyra_rules::combat::FireMode;
     let row = weapon.spec();
     match row.mode {
         FireMode::Burst { count, gap } => row.interval + gap * f32::from(count.saturating_sub(1)),
@@ -301,7 +301,7 @@ pub fn presets() -> Vec<Matchup> {
     // there: the chain, a Heavy asked for every third opening (stamina
     // seldom covers it before the dummy falls), from the first step.
     let at_reach =
-        |weapon: Weapon| strata_sim::combat_tables::with_melee(|melee| melee.reach_m(weapon));
+        |weapon: Weapon| veyra_rules::combat_tables::with_melee(|melee| melee.reach_m(weapon));
     let cutting = |weapon: Weapon| Policy::CloseAndCut {
         chain: true,
         heavy_every: 3,
@@ -2020,7 +2020,7 @@ pub fn run_grid(
     }
     for cell in grid::cells(&variations) {
         // One grid point at a time: the tables are process-wide.
-        strata_sim::combat_tables::install(cell.apply(base)?);
+        veyra_rules::combat_tables::install(cell.apply(base)?);
         for matchup in &matchups {
             bout::check_abilities(matchup)?;
             let started = Instant::now();
@@ -2033,6 +2033,6 @@ pub fn run_grid(
             });
         }
     }
-    strata_sim::combat_tables::install(base.clone());
+    veyra_rules::combat_tables::install(base.clone());
     Ok(())
 }

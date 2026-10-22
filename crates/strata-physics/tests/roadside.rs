@@ -12,15 +12,15 @@ use std::sync::Arc;
 use ashlar::LodPolicy;
 use bevy::app::App;
 use bevy::time::TimeUpdateStrategy;
+use strata_app::roadside::{NearPiece, NearRoadside};
+use strata_app::{
+    AppPlugin, GeneratedRoot, PrimaryObserver, RenderOrigin, WorldObserver, WorldPosition,
+    WorldSourceRes,
+};
 use strata_physics::PhysicsPlugin;
 use strata_physics::avian3d::prelude::{Position, RigidBody};
 use strata_physics::roadside::{COLLIDE_M, RoadsideCollider};
 use strata_registry::BiomeId;
-use strata_sim::roadside::{NearPiece, NearRoadside};
-use strata_sim::{
-    GeneratedRoot, PrimaryObserver, RenderOrigin, SimPlugin, WorldObserver, WorldPosition,
-    WorldSourceRes,
-};
 use strata_stream::{StreamConfig, StreamPlugin};
 use strata_worldgen::crossings::PlacedPiece;
 use strata_worldgen::{Sample, WorldSource};
@@ -59,11 +59,15 @@ fn bake(root: &std::path::Path) {
         )
         .unwrap();
         std::fs::create_dir_all(root.join("roadside")).unwrap();
+        let file = root.join("roadside").join(piece.file_name());
         std::fs::write(
-            root.join("roadside").join(piece.file_name()),
-            baked.write().unwrap(),
+            ashlar::collision_file::path_for(file.to_str().unwrap()),
+            ashlar::collision_file::CollisionFile::from_baked(&baked)
+                .unwrap()
+                .write(),
         )
         .unwrap();
+        std::fs::write(file, baked.write().unwrap()).unwrap();
     }
 }
 
@@ -98,7 +102,7 @@ fn roadside_pieces_collide_where_the_list_stands_them_and_only_near() {
     app.add_plugins((
         bevy::app::TaskPoolPlugin::default(),
         bevy::time::TimePlugin,
-        SimPlugin,
+        AppPlugin,
         StreamPlugin,
         PhysicsPlugin,
     ));

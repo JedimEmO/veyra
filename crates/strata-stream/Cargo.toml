@@ -9,7 +9,7 @@ authors.workspace = true
 
 [dependencies]
 strata-core = { workspace = true }
-strata-sim = { workspace = true }
+strata-app = { workspace = true }
 bevy = { workspace = true, features = ["std", "bevy_state"] }
 
 [lints]

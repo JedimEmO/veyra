@@ -37,7 +37,7 @@
 //!   answer. Without that resource the streamer marks regions ready itself
 //!   the frame after they load, which is what a headless server wants.
 //! - Never despawns a region entity and never writes its `Transform`: the
-//!   position is a `WorldPosition` and `strata-sim` derives the transform
+//!   position is a `WorldPosition` and `strata-app` derives the transform
 //!   from it (ADR 0002).
 //!
 //! Both systems do work only on a change. The walk reruns when an observer
@@ -65,8 +65,8 @@ use bevy::app::{App, Plugin, Update};
 use bevy::ecs::prelude::*;
 use bevy::ecs::schedule::{IntoScheduleConfigs, SystemSet};
 use bevy::state::condition::in_state;
+use strata_app::{AppState, Observers, WorldPosition};
 use strata_core::{RegionCoord, WorldPos};
-use strata_sim::{AppState, Observers, WorldPosition};
 
 pub use select::{
     DetailZone, DetailZones, Selector, StreamConfig, distance_to_region, nearest_distance,
@@ -280,7 +280,7 @@ const SETTLEMENT_REACH_M: f64 = 2_600.0;
 /// Keeps [`DetailZones`] in step with the placed settlements.
 fn zone_settlements(
     mut commands: Commands,
-    settlements: Option<Res<strata_sim::Settlements>>,
+    settlements: Option<Res<strata_app::Settlements>>,
     zones: Option<Res<DetailZones>>,
 ) {
     let Some(settlements) = settlements else {
@@ -548,7 +548,7 @@ mod tests {
     use bevy::state::state::State;
     use bevy::time::TimeUpdateStrategy;
     use std::collections::{HashSet, VecDeque};
-    use strata_sim::{PrimaryObserver, SimPlugin};
+    use strata_app::{AppPlugin, PrimaryObserver};
 
     fn small() -> StreamConfig {
         StreamConfig {
@@ -567,7 +567,7 @@ mod tests {
     fn app_with_observer(cfg: StreamConfig, at: WorldPos) -> (App, Entity) {
         let mut app = App::new();
         app.insert_resource(cfg);
-        app.add_plugins((bevy::time::TimePlugin, SimPlugin, StreamPlugin));
+        app.add_plugins((bevy::time::TimePlugin, AppPlugin, StreamPlugin));
         app.insert_resource(TimeUpdateStrategy::FixedTimesteps(1));
         app.update();
         app.update();
@@ -609,7 +609,7 @@ mod tests {
     #[test]
     fn builds_over_the_sim() {
         let mut app = App::new();
-        app.add_plugins((bevy::time::TimePlugin, SimPlugin, StreamPlugin));
+        app.add_plugins((bevy::time::TimePlugin, AppPlugin, StreamPlugin));
         app.update();
     }
 

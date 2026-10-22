@@ -1,0 +1,136 @@
+// The value budget (review step six, visual.md F1): the albedo each family of
+// surface may have, as linear luminance, and which family every shipped
+// material belongs to. Read by `strata_data::values` (Bevy-free). The terrain
+// draws a `terrain/` member remapped to its target at runtime and derives each
+// biome's far colour from its surface layer's target (terrain.wgsl and
+// `strata_terrain::mesh`); `tools/content/tests/values.rs` reads every baked base
+// map and holds the rest to their family's band, with `pending` naming the step
+// that lands a member still out of it (the test fails if a pending member is in
+// band, so the list shrinks as the steps land).
+//
+// Family bands: `min` to `max` the mean, `spread` the most the standard
+// deviation of a member's luminance may be. `target` is what a member is drawn
+// at where it names none of its own. The trailing numbers are the baked mean
+// and spread when the table was written; `cargo run -p content --example
+// value_table --release` prints the current ones.
+(
+    families: {
+        "ground": (target: 0.19, min: 0.14, max: 0.24, spread: 0.14),
+        "sand": (target: 0.29, min: 0.26, max: 0.32, spread: 0.1),
+        "snow": (target: 0.65, min: 0.6, max: 0.7, spread: 0.08),
+        "stone": (target: 0.2, min: 0.08, max: 0.35, spread: 0.12),
+        "paving": (target: 0.18, min: 0.1, max: 0.3, spread: 0.1),
+        "leaves": (target: 0.15, min: 0.1, max: 0.16, spread: 0.06),
+        // A tree's far picture: the leaves' band with room above for the crown
+        // grouping (`canopy.ron`) baked into the atlas, whose lit clumps lift
+        // the mean of a pale species (birch) a few points.
+        "crown": (target: 0.15, min: 0.1, max: 0.19, spread: 0.06),
+        "bark": (target: 0.12, min: 0.08, max: 0.2, spread: 0.1),
+        "shell": (target: 0.48, min: 0.4, max: 0.55, spread: 0.1),
+        "finish": (target: 0.22, min: 0.1, max: 0.4, spread: 0.16),
+        "dark": (target: 0.04, min: 0.005, max: 0.12, spread: 0.06),
+        // The spread is a little wide: lit cloth panels and darker gear are two
+        // populations in one map, 0.38 against 0.18 (tools/character_values.py).
+        "character": (target: 0.22, min: 0.15, max: 0.3, spread: 0.18),
+    },
+    // How a body wears a household or faction colour: the lift added to the
+    // cloth beside the multiply, the share of it given off as light (a lamp's,
+    // not a lit body's) and the most metal the body keeps. The rim is a
+    // hostile's alone (visual.md F6): its colour in sRGB, the share of it a
+    // grazing pixel adds and the fresnel exponent (`hostile_rim.wgsl`).
+    character: (own_lift: 0.1, own_glow: 0.03, own_metallic: 0.3, rim_colour: (1.0, 0.45, 0.3), rim_strength: 0.6, rim_power: 2.5),
+    materials: {
+        "terrain/clay": (family: "ground", target: Some(0.24)),  // 0.342 / 0.066
+        "terrain/forest_floor": (family: "ground", target: Some(0.22)),  // 0.065 / 0.037
+        "terrain/grass": (family: "ground", target: Some(0.19)),  // 0.093 / 0.047
+        "terrain/gravel": (family: "ground", target: Some(0.16)),  // 0.143 / 0.091
+        "terrain/soil": (family: "ground", target: Some(0.19)),  // 0.055 / 0.018
+        "terrain/sand": (family: "sand"),  // 0.417 / 0.051
+        "terrain/snow": (family: "snow"),  // 0.805 / 0.034
+        "bridge/ford-stone": (family: "stone"),  // 0.338 / 0.026
+        "bridge/masonry": (family: "stone"),  // 0.113 / 0.034
+        "impostors/granite_boulder": (family: "stone"),  // 0.332 / 0.02
+        "impostors/granite_cliff": (family: "stone"),  // 0.338 / 0.015
+        "impostors/sandstone_boulder": (family: "stone"),  // 0.287 / 0.057
+        "impostors/sandstone_cliff": (family: "stone"),  // 0.294 / 0.022
+        "rock/sandstone": (family: "stone"),  // 0.293 / 0.054
+        "terrain/basalt": (family: "stone", target: Some(0.1)),  // 0.049 / 0.01
+        "terrain/granite": (family: "stone", target: Some(0.31)),  // 0.314 / 0.086
+        "terrain/rock": (family: "stone", target: Some(0.17)),  // 0.172 / 0.027
+        "terrain/sandstone": (family: "stone", target: Some(0.29)),  // 0.288 / 0.093
+        "terrain/slate": (family: "stone", target: Some(0.12)),  // 0.08 / 0.015
+        "terrain/flagstones": (family: "paving", target: Some(0.268)),  // 0.268 / 0.057
+        "terrain/setts": (family: "paving", target: Some(0.131)),  // 0.131 / 0.058
+        "flora/leaves-birch": (family: "leaves"),  // 0.15 / 0.043
+        "flora/leaves-fern": (family: "leaves"),  // 0.15 / 0.043
+        "flora/leaves-fir": (family: "leaves"),  // 0.15 / 0.054
+        "flora/leaves-oak": (family: "leaves"),  // 0.15 / 0.05
+        "flora/leaves-pine": (family: "leaves"),  // 0.15 / 0.054
+        "flora/leaves-shrub": (family: "leaves"),  // 0.15 / 0.046
+        "impostors/birch": (family: "crown"),  // 0.172 / 0.027
+        "impostors/fir": (family: "crown"),  // 0.144 / 0.032
+        "impostors/oak": (family: "crown"),  // 0.149 / 0.033
+        "impostors/pine": (family: "crown"),  // 0.145 / 0.027
+        "impostors/scrub": (family: "crown"),  // 0.145 / 0.031
+        "flora/bark-birch": (family: "bark", target: Some(0.19)),  // 0.19 / 0.05
+        "flora/bark-fir": (family: "bark", target: Some(0.18)),  // 0.18 / 0.036
+        "flora/bark-oak": (family: "bark"),  // 0.12 / 0.044
+        "flora/bark-pine": (family: "bark"),  // 0.12 / 0.06
+        "flora/bark-shrub": (family: "bark"),  // 0.12 / 0.04
+        "serein/composite": (family: "shell"),  // 0.463 / 0.092
+        "serein/composite-new": (family: "shell"),  // 0.479 / 0.093
+        "serein/container-white": (family: "shell"),  // 0.485 / 0.042
+        "serein/corrugated": (family: "shell"),  // 0.527 / 0.055
+        "serein/joinery-white": (family: "shell"),  // 0.488 / 0.032
+        "serein/paint-cream": (family: "shell"),  // 0.501 / 0.033
+        "serein/paint-white": (family: "shell"),  // 0.483 / 0.032
+        "serein/white-steel": (family: "shell"),  // 0.478 / 0.028
+        "metro/spine": (family: "finish"),  // 0.164 / 0.023
+        "serein/boards": (family: "finish"),  // 0.312 / 0.036
+        "serein/canopy": (family: "finish"),  // 0.111 / 0.076
+        "serein/composite-teal": (family: "finish"),  // 0.328 / 0.063
+        "serein/container-blue": (family: "finish"),  // 0.177 / 0.021
+        "serein/container-green": (family: "finish"),  // 0.236 / 0.033
+        "serein/container-grey": (family: "finish"),  // 0.339 / 0.034
+        "serein/container-rust": (family: "finish"),  // 0.178 / 0.035
+        "serein/curtain": (family: "finish"),  // 0.108 / 0.15
+        "serein/grid-concrete": (family: "finish"),  // 0.324 / 0.045
+        "serein/hazard": (family: "finish"),  // 0.253 / 0.018
+        "serein/hedge": (family: "finish"),  // 0.104 / 0.069
+        "serein/joinery-blue": (family: "finish"),  // 0.155 / 0.013
+        "serein/joinery-green": (family: "finish"),  // 0.195 / 0.015
+        "serein/joinery-ochre": (family: "finish"),  // 0.334 / 0.024
+        "serein/joinery-oxide": (family: "finish"),  // 0.128 / 0.013
+        "serein/joinery-teal": (family: "finish"),  // 0.192 / 0.015
+        "serein/neon-teal": (family: "finish", pending: Some("step six, the building gradient and the settlement palette")),  // 0.726 / 0.021
+        "serein/pad-deck": (family: "finish"),  // 0.162 / 0.023
+        "serein/paint-green": (family: "finish"),  // 0.265 / 0.018
+        "serein/paint-ochre": (family: "finish"),  // 0.343 / 0.022
+        "serein/paint-oxide": (family: "finish"),  // 0.175 / 0.017
+        "serein/paint-teal": (family: "finish"),  // 0.272 / 0.019
+        "serein/pipe": (family: "finish"),  // 0.344 / 0.059
+        "serein/terrace-masonry": (family: "finish"),  // 0.233 / 0.089
+        "serein/terrace-wall": (family: "finish"),  // 0.235 / 0.041
+        "serein/tower-concrete": (family: "finish"),  // 0.121 / 0.03
+        "study/paint": (family: "finish"),  // 0.152 / 0.027
+        "study/repair": (family: "finish"),  // 0.149 / 0.021
+        "study/rust": (family: "finish"),  // 0.142 / 0.058
+        "metro/dark": (family: "dark"),  // 0.007 / 0.001
+        "metro/metal": (family: "dark"),  // 0.015 / 0.01
+        "metro/paving": (family: "dark"),  // 0.031 / 0.004
+        "metro/reveal": (family: "dark"),  // 0.008 / 0.001
+        "metro/stone": (family: "dark"),  // 0.05 / 0.007
+        "serein/charcoal-concrete": (family: "dark"),  // 0.033 / 0.009
+        "serein/company-concrete": (family: "dark"),  // 0.073 / 0.01
+        "serein/dark-steel": (family: "dark"),  // 0.038 / 0.023
+        "serein/glass": (family: "dark"),  // 0.051 / 0.0
+        "serein/painted-steel": (family: "dark"),  // 0.098 / 0.037
+        "serein/pane": (family: "dark"),  // 0.05 / 0.012
+        "serein/recess": (family: "dark"),  // 0.011 / 0.0
+        "serein/sea-wall": (family: "dark"),  // 0.019 / 0.005
+        "study/concrete": (family: "dark"),  // 0.1 / 0.014
+        "study/cut": (family: "dark"),  // 0.081 / 0.011
+        "study/metal": (family: "dark"),  // 0.024 / 0.013
+        "characters/frontier_ranger": (family: "character"),  // 0.263 / 0.222
+    },
+)

@@ -1,6 +1,6 @@
 //! Boxes as a dimension of the harness. A side may carry a set of learned
 //! boxes; at spawn the bout fits the sheet to its combatant through the
-//! same `strata_sim::progression::apply` the game uses, so a box's
+//! same `veyra_rules::progression::apply` the game uses, so a box's
 //! marginal effect here is what it is in play. A side with no boxes is
 //! unfitted and reads the installed tables live, as every preset did
 //! before the trees existed, so the older rows and bands keep their
@@ -14,7 +14,7 @@
 use std::sync::{Arc, LazyLock, PoisonError, RwLock};
 
 use strata_registry::progression::{Effect, SheetDef, SkillGraph};
-use strata_sim::CharacterSheet;
+use veyra_rules::progression::CharacterSheet;
 
 use crate::bout::{BoutResult, Matchup, Profile, Winner};
 

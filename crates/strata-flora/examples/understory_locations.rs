@@ -6,7 +6,7 @@ use strata_worldgen::ProceduralWorld;
 
 fn main() {
     let registries =
-        strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+        strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
             .expect("shipped assets");
     let table = FloraTable::from_registries(&registries);
     let world = ProceduralWorld::new(Seed(42), &registries);

@@ -297,7 +297,7 @@ fn a_world_without_sites_is_the_world_before_them() {
     let shipped = common::world(42);
     assert_eq!(shipped.sites()[0].fingerprint(), FINGERPRINT);
     let mut registries = common::registries();
-    registries.sites = strata_registry::SiteKindStore::default();
+    registries.sites = strata_data::SiteKindStore::default();
     let bare = ProceduralWorld::new(Seed(42), &registries);
     let city = shipped.sites()[0].centre;
     bare.hydrology().set_threads(common::THREADS);

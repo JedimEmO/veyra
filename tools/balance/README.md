@@ -1,7 +1,7 @@
 # balance
 
 The duel harness of `docs/design/progression.md` section 7. It runs bouts
-between policies over the real combat: `strata-sim`'s `CombatPlugin` (the
+between policies over the real combat: `veyra-sim`'s `CombatPlugin` (the
 action clocks, stamina, posture, magazines), `strata-physics`'s
 `resolve_attacks`, bolt flight, blade sweeps and character motor, in a
 headless Bevy app on a flat floor, stepped at exactly 60 Hz with no wall
@@ -105,7 +105,7 @@ A side may carry `boxes`, a list of box ids from
 "blade.cuts.1"]`) or on the command line (`--boxes blade:cuts-1,blade:cuts-2`
 for side `a`, `--b-boxes` for `b`; the colon-and-dash spelling is the
 same id). At spawn the bout builds the sheet and fits it to the
-combatant through `strata_sim::progression::apply`, the merge the game
+combatant through `veyra_sim::progression::apply`, the merge the game
 runs, so the side's rows, pools, magazine, bolt and motor are the fitted
 ones and it may begin only the actions its boxes unlock and fire only the
 weapons they certify. A side with no boxes is unfitted and reads the
@@ -147,7 +147,7 @@ side with `--line` or a `bought-` preset reads a bought record at 500.
 
 At spawn, after the boxes, the bout fits each module to a bought example
 of the weapon it is made for and equips the combatant with the loadout
-`strata_sim::fitting` makes of them, which is what the game does with
+`veyra_sim::fitting` makes of them, which is what the game does with
 the weapons in a player's hands: the tables' row, then the boxes, then
 each module's factor once, and the magazines start full at their fitted
 size. Only what the fight has a number for reaches the row (capacity,
@@ -198,7 +198,7 @@ encounter AI do, and nothing else.
   and never fires; with the flag it dodges as `Kite` does. The dodge's
   pair, with the gun and the footwork out of the number.
 - `Sentry` and `Rusher`: the game's opponents. They run
-  `strata_sim::combat_ai`, the code `game --combat` runs, on the
+  `veyra_sim::combat_ai`, the code `game --combat` runs, on the
   installed `opponents.ron` row every tick: the sentry waits `cooldown`,
   holds between `hold_near` and `hold_far`, charges `charge` seconds with
   its aim locked where the target stood (the telegraph `actor.charge`
@@ -223,7 +223,7 @@ is a field of the four combat tables: `actions.<Action>.<field>`,
 `weapons.<Weapon>.<field>`, `actor.<field>`, `opponents.<field>`,
 `opponents.sentry.<field>`, `opponents.rusher.<field>`; `balance list`
 prints every one. Each cell is installed process-wide
-(`strata_sim::combat_tables::install`) and its bouts run before the
+(`veyra_sim::combat_tables::install`) and its bouts run before the
 next, `--jobs` at a time; the base tables are `--assets`'s `combat/`
 (default `assets`), or the compiled-in ones.
 
@@ -250,7 +250,7 @@ Grid(
 
 A side's `count` (default 1) fields several of them abreast.
 
-The four tables are compiled into `strata-sim` as well as read from
+The four tables are compiled into `veyra-sim` as well as read from
 `--assets`, so an edit to `assets/combat/*.ron` rebuilds the sim, the
 physics and this binary before the run starts, about a minute in release
 on a warm cache.

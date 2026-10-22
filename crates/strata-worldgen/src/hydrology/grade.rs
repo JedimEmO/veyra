@@ -39,7 +39,7 @@
 
 use std::sync::Arc;
 
-use strata_registry::RoadClass;
+use strata_data::RoadClass;
 
 use super::dual::{D, smooth_c, soft};
 use super::field::parallel_rows;

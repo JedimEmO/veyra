@@ -13,7 +13,7 @@ strata-worldgen = { workspace = true }
 serde = { workspace = true }
 
 [dev-dependencies]
-strata-registry = { workspace = true }
+strata-data = { workspace = true }
 
 [lints]
 workspace = true

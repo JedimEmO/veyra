@@ -48,6 +48,13 @@ const WORKSPACE_ASSETS: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../../asset
 /// The workspace `generated/` directory, where `just content` writes.
 const WORKSPACE_GENERATED: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../../generated");
 
+/// Where the household is kept when `--household` does not say. Apart from the
+/// game's own default, so a server beside a played game does not share its file.
+const WORKSPACE_HOUSEHOLD: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../../scratch/server-household.ron"
+);
+
 /// Frames between the status lines: two seconds at 60 Hz.
 const LOG_EVERY: u32 = 120;
 
@@ -75,6 +82,14 @@ struct Cli {
     /// trees and trunk colliders come from. `just content` writes it.
     #[arg(long, default_value = WORKSPACE_GENERATED)]
     generated: PathBuf,
+    /// The household's file: the characters, their stock and what they have
+    /// done, read at start and written as it changes (singleplayer-local;
+    /// nothing in it is replicated).
+    #[arg(long, default_value = WORKSPACE_HOUSEHOLD)]
+    household: PathBuf,
+    /// Start the household's first day over, ignoring an existing file.
+    #[arg(long)]
+    fresh: bool,
     /// Put new players at a named place of the first settlement: `city`, its
     /// street, or `road`, the far end of its road. Near the origin without.
     #[arg(long, value_parser = ["city", "road"])]
@@ -130,7 +145,12 @@ fn main() -> AppExit {
         places: vec![(0.0, 0.0)],
         ..Default::default()
     };
-    match strata::sim::prepare_water_before_start(&cli.assets, Seed(cli.seed), &prepare) {
+    match strata::sim::prepare_water_before_start(
+        &cli.assets,
+        Seed(cli.seed),
+        &prepare,
+        Some(&cli.generated.join("hydrology")),
+    ) {
         Ok((masses, seconds)) => {
             println!("rivers: {masses} land masses baked in {seconds:.2} s");
         }
@@ -142,6 +162,9 @@ fn main() -> AppExit {
     let mut app = App::new();
     app.insert_resource(WorldSeed(Seed(cli.seed)));
     app.insert_resource(prepare);
+    // The game's numbers in the handshake, read by the replication plugin when
+    // it is built, in the order every older client folded them.
+    app.insert_resource(strata::game_version_parts(combat, site_groups));
     app.add_plugins((
         MinimalPlugins.set(ScheduleRunnerPlugin::run_loop(Duration::from_secs_f64(
             1.0 / 60.0,
@@ -152,10 +175,9 @@ fn main() -> AppExit {
         ReplicationPlugin::server(cli.port)
             .with_tree_library(library)
             .with_world_version(world)
-            .with_seed(cli.seed)
-            .with_combat_tables(combat)
-            .with_site_groups(site_groups),
+            .with_seed(cli.seed),
     ))
+    .add_plugins(game_plugin(&cli))
     .init_resource::<TickCost>()
     .add_systems(
         SimTick,
@@ -168,12 +190,39 @@ fn main() -> AppExit {
         Update,
         (log_status, exit_when_done).run_if(in_state(AppState::InWorld)),
     )
-    .add_systems(OnEnter(AppState::InWorld), spawn_at_place);
+    .add_systems(
+        OnEnter(AppState::InWorld),
+        (
+            spawn_at_place,
+            // After the household is read: the city's bench place, with the
+            // workbench a player's reach is measured to.
+            veyra_game::household::stand_city_props.after(veyra_game::GameSet::Household),
+        ),
+    );
     if cli.tick_log {
         app.add_systems(SimTick, log_tick.in_set(SimSet::Observe));
     }
     app.insert_resource(cli);
     app.run()
+}
+
+/// The household and the camps: the game's headless half, kept as `--household`
+/// says. A server has no window, so what the screens would say is not written.
+fn game_plugin(cli: &Cli) -> veyra_game::GamePlugin {
+    veyra_game::GamePlugin::new(
+        veyra_game::Launch {
+            combat: true,
+            headless: true,
+            at: cli.at.clone(),
+            deposits: true,
+            ..Default::default()
+        },
+        veyra_game::HouseholdFile {
+            path: cli.household.clone(),
+            fresh: cli.fresh,
+            ..Default::default()
+        },
+    )
 }
 
 /// Moves where new players spawn to the settlement place `--at` names, once

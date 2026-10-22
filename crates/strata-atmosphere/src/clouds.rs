@@ -74,7 +74,7 @@
 //!   behind a cloud and come back as it clears.
 //!
 //! The wind moves the image by the sim's clock along the sim's wind
-//! direction ([`strata_sim::Wind`], fixed today), at
+//! direction ([`strata_app::Wind`], fixed today), at
 //! [`SkySettings::cloud_speed`], so two clients at the same tick see the
 //! same shadows. The finer read that frays a cloud's edge slides through it
 //! across the wind at [`SkySettings::cloud_evolution`], so shapes change as
@@ -90,7 +90,7 @@
 //! every machine, as the world's own noise is.
 
 use crate::{SkySettings, Sun};
-use bevy::app::{App, PostUpdate, Update};
+use bevy::app::{App, PostUpdate, Startup, Update};
 use bevy::asset::{Asset, AssetEventSystems, Assets, Handle, RenderAssetUsages};
 use bevy::camera::visibility::{Visibility, VisibilitySystems};
 use bevy::ecs::prelude::*;
@@ -113,10 +113,11 @@ use bevy::tasks::{AsyncComputeTaskPool, Task, TaskPool, block_on, poll_once};
 use bevy::transform::TransformSystems;
 use bevy::transform::components::{GlobalTransform, Transform};
 use std::sync::Arc;
-use strata_core::{Seed, WorldPos, mix64};
-use strata_sim::{
+use strata_app::{
     Observers, OriginSet, RenderOrigin, SimClock, Wind, WorldPosition, WorldSeed, WorldSourceRes,
 };
+use strata_core::{Seed, WorldPos, mix64};
+use strata_registry::{CLOUDS_FILE, CloudLook, DensityLook, ShapeLook};
 
 /// The layer's shader, loaded from disk like the fog's.
 pub const CLOUD_SHADER_PATH: &str = "shaders/clouds.wgsl";
@@ -197,29 +198,6 @@ const EDGE_RAMP: f32 = 1.8;
 /// one.
 const SLOPE_RANGE: f32 = 24.0;
 
-/// How far inside its edge a cloud reaches full opacity, in tiles: 0.02 is
-/// 120 m at the default 6 km tile, so an edge is soft over the same
-/// distance where the noise rises steeply and where it rises slowly.
-const EDGE_FADE: f32 = 0.02;
-
-/// The optical depth at a group's fringe as a share of that in its middle:
-/// a group thins towards its edge.
-const THIN_GROUP: f32 = 0.55;
-
-/// Optical depth at a cloud's edge and at its densest.
-const TAU_EDGE: f32 = 2.0;
-const TAU_HEART: f32 = 10.0;
-
-/// The domain warp's reach, in tiles: the detail noise is read up to this
-/// far from where it is drawn, which drags round heaps into ragged ones.
-const WARP: f64 = 0.12;
-
-/// The share of the sun a fully grown cloud takes off the ground. Not all:
-/// a cumulus a few hundred metres thick still passes some diffuse light
-/// down, and a shadow that blacked out the sun would read as night under
-/// the sky fill's blue.
-const SHADOW_STRENGTH: f32 = 0.85;
-
 /// The coverage field's repeat, in tiles of the density image: the groups
 /// it gathers the clouds into are several kilometres across, larger than a
 /// tile, and the tile's own repeat no longer shows in where clouds gather.
@@ -231,11 +209,6 @@ pub const MASK_SIZE: usize = 1024;
 
 /// Density texels per mask texel along a side.
 const MASK_STEP: usize = DENSITY_SIZE * COVER_TILES / MASK_SIZE;
-
-/// The share of the detail density the gaps between groups keep: low
-/// enough that a gap is mostly clear sky at the default cover, high enough
-/// that a big heap still stands in it alone.
-const GATE_FLOOR: f32 = 0.62;
 
 /// Texels of box blur, applied twice, on the shadow mask: a sun half a
 /// degree wide over a cloud two kilometres up softens its shadow's edge by
@@ -267,20 +240,31 @@ pub struct CloudParams {
     pub sun: Vec4,
     /// How the edges are drawn, the constants [`opacity`] uses, so the
     /// shader and the CPU's mask and veil cannot drift apart:
-    /// `EDGE_RAMP`, `SLOPE_RANGE`, `EDGE_FADE` and `THIN_GROUP`.
+    /// `EDGE_RAMP`, `SLOPE_RANGE`, the look's `edge_fade` and `thin_group`.
     pub edge: Vec4,
-    /// `TAU_EDGE` and `TAU_HEART` in `xy`, `HORIZON_BAND` in `z`, the
+    /// The look's `tau_edge` and `tau_heart` in `xy`, `HORIZON_BAND` in `z`, the
     /// deck's own scale on both in `w` (one for the lower deck,
     /// `UPPER_TAU` for the upper).
     pub depth: Vec4,
     /// The coverage field's frame, which repeats every [`COVER_TILES`]
     /// tiles: its texture coordinate offset in `xy` and one over its size in
-    /// metres in `z`, as `layer` has the tile's; `GATE_FLOOR` in `w`.
+    /// metres in `z`, as `layer` has the tile's; the look's `gate_floor` in `w`.
     pub cover: Vec4,
     /// The height field the shader shades the density as: its height at a
     /// heart in metres in `x`, the fraying read's offset in its own
     /// repeats in `yz` (the evolution), `BASE_BULGE` in `w`.
     pub relief: Vec4,
+    /// The sky's share of the light on a deck in `xyz`, the body's optical
+    /// depth multiplier in `w` (`LightLook`).
+    pub sky: Vec4,
+    /// The albedo's tint on a face turned up, `xyz` (`LightLook::top_tint`).
+    pub top: Vec4,
+    /// The albedo's tint on a base seen from below, `xyz`.
+    pub base: Vec4,
+    /// The finer read that frays an edge, which only the shader makes: how
+    /// far it moves the density in `x`, its frequency over the image's in
+    /// `y`, the share of that a group's middle keeps in `z`.
+    pub fray: Vec4,
 }
 
 /// The layer's material: the density image and how to read it this frame.
@@ -348,11 +332,20 @@ pub enum CloudDeck {
 #[derive(Component, Debug, Clone, Copy, Default)]
 pub struct CloudLayer(pub CloudDeck);
 
+/// The deck's look, `assets/look/clouds.ron`, read once at start-up: the
+/// density image bakes from it and the GPU, the shadow mask and the sun's
+/// veil all read the same dials.
+#[derive(Resource, Debug, Clone, Default, PartialEq)]
+pub struct CloudDials(pub CloudLook);
+
 /// The generated image and what is derived from it.
 #[derive(Resource)]
 pub struct CloudField {
     /// The baked image, shared with the mask's task.
     texels: Arc<CloudTexels>,
+    /// The look's density-to-opacity dials the image and its ladder were
+    /// made with, so the mask and the veil read what the shader does.
+    shape: ShapeLook,
     /// Each mask texel's [`half_opaque`] threshold, sorted, so a cover is
     /// a quantile of it.
     sorted: Arc<Vec<f32>>,
@@ -434,11 +427,13 @@ impl Default for SunVeil {
 
 /// The density being generated off the frame.
 #[derive(Resource)]
-struct CloudBake(Task<(CloudTexels, Vec<f32>)>);
+struct CloudBake(Task<(CloudTexels, Vec<f32>, ShapeLook)>);
 
 pub(crate) fn register(app: &mut App) {
     app.init_resource::<CloudProjection>()
         .init_resource::<SunVeil>()
+        .init_resource::<CloudDials>()
+        .add_systems(Startup, load_look)
         .add_systems(Update, (start_bake, finish_bake))
         .add_systems(
             PostUpdate,
@@ -463,6 +458,21 @@ pub(crate) fn register(app: &mut App) {
     }
 }
 
+/// Reads the deck's look from the asset root, when the app has one, over the
+/// compiled-in copy; a broken file is reported and the shipped look kept.
+fn load_look(root: Option<Res<strata_app::WorldAssetRoot>>, mut look: ResMut<CloudDials>) {
+    let Some(root) = root else {
+        return;
+    };
+    match root.0.read_string(CLOUDS_FILE) {
+        Ok(text) => match CloudLook::parse(&text) {
+            Ok(read) => look.0 = read,
+            Err(error) => tracing::warn!("{CLOUDS_FILE}: {error}; the shipped look stays"),
+        },
+        Err(error) => tracing::debug!("{CLOUDS_FILE}: {error}; the shipped look stays"),
+    }
+}
+
 /// Starts generating the density once the world's seed is known, on the
 /// async compute pool: about half a second of work (the image and the
 /// cover's ladder) that would otherwise be a hitch.
@@ -470,6 +480,7 @@ fn start_bake(
     mut commands: Commands,
     seed: Option<Res<WorldSeed>>,
     field: Option<Res<CloudField>>,
+    look: Res<CloudDials>,
     bake: Option<Res<CloudBake>>,
     materials: Option<Res<Assets<CloudMaterial>>>,
 ) {
@@ -480,11 +491,12 @@ fn start_bake(
         return;
     }
     let seed = seed.0;
+    let (density, shape) = (look.0.density.clone(), look.0.shape);
     let pool = AsyncComputeTaskPool::get_or_init(TaskPool::new);
     commands.insert_resource(CloudBake(pool.spawn(async move {
-        let texels = density_field(seed);
-        let sorted = cover_ladder(&texels);
-        (texels, sorted)
+        let texels = density_field(seed, &density);
+        let sorted = cover_ladder(&shape, &texels);
+        (texels, sorted, shape)
     })));
 }
 
@@ -499,7 +511,7 @@ fn finish_bake(
     let Some(mut bake) = bake else {
         return;
     };
-    let Some((texels, sorted)) = block_on(poll_once(&mut bake.0)) else {
+    let Some((texels, sorted, shape)) = block_on(poll_once(&mut bake.0)) else {
         return;
     };
     commands.remove_resource::<CloudBake>();
@@ -533,6 +545,7 @@ fn finish_bake(
     let upper = deck("upper cloud layer", CloudDeck::Upper, UPPER_ALTITUDE);
     commands.insert_resource(CloudField {
         texels: Arc::new(texels),
+        shape,
         sorted: Arc::new(sorted),
         remask: None,
         mask,
@@ -561,6 +574,7 @@ pub(crate) fn update_layer(
     wind: Option<Res<Wind>>,
     source: Option<Res<WorldSourceRes>>,
     field: Option<ResMut<CloudField>>,
+    look: Res<CloudDials>,
     images: Option<ResMut<Assets<Image>>>,
     materials: Option<ResMut<Assets<CloudMaterial>>>,
     suns: Query<&Transform, With<Sun>>,
@@ -613,8 +627,8 @@ pub(crate) fn update_layer(
     let clear = match observers.primary {
         Some(eye) if active => {
             let eye = DVec3::new(eye.x(), eye.y(), eye.z());
-            sun_clear(&field.texels, &lower, to_sun, eye)
-                * sun_clear(&field.texels, &upper, to_sun, eye)
+            sun_clear(&field.shape, &field.texels, &lower, to_sun, eye)
+                * sun_clear(&field.shape, &field.texels, &upper, to_sun, eye)
         }
         _ => 1.0,
     };
@@ -627,7 +641,7 @@ pub(crate) fn update_layer(
         (&lower, &field.material, lower_far),
         (&upper, &field.upper, !lower_far),
     ] {
-        let params = deck_params(frame, origin, to_sun, shown, fray);
+        let params = deck_params(frame, &look.0, origin, to_sun, shown, fray);
         let sort_bias = if far { 0.0 } else { DECK_SORT };
         // `AssetMut` marks the material changed only when written through.
         if let Some(mut material) = materials.get_mut(handle)
@@ -728,6 +742,7 @@ pub fn deck_frames(
 /// clouds downwind) and its height in render space.
 fn deck_params(
     frame: &DeckFrame,
+    look: &CloudLook,
     origin: WorldPos,
     to_sun: Vec3,
     shown: f32,
@@ -756,19 +771,38 @@ fn deck_params(
             shown,
         ),
         sun: to_sun.extend(0.0),
-        edge: Vec4::new(EDGE_RAMP, SLOPE_RANGE, EDGE_FADE, THIN_GROUP),
-        depth: Vec4::new(TAU_EDGE, TAU_HEART, HORIZON_BAND, frame.tau),
+        edge: Vec4::new(
+            EDGE_RAMP,
+            SLOPE_RANGE,
+            look.shape.edge_fade,
+            look.shape.thin_group,
+        ),
+        depth: Vec4::new(
+            look.shape.tau_edge,
+            look.shape.tau_heart,
+            HORIZON_BAND,
+            frame.tau,
+        ),
         cover: Vec4::new(
             cover_offset.x as f32,
             cover_offset.y as f32,
             cover_inv_scale as f32,
-            GATE_FLOOR,
+            look.shape.gate_floor,
         ),
         relief: Vec4::new(
             frame.thickness as f32,
             fray.x as f32,
             fray.y as f32,
             BASE_BULGE,
+        ),
+        sky: Vec3::from(look.light.sky_share).extend(look.light.body),
+        top: Vec3::from(look.light.top_tint).extend(0.0),
+        base: Vec3::from(look.light.base_tint).extend(0.0),
+        fray: Vec4::new(
+            look.shape.fray_amount,
+            look.shape.fray_frequency,
+            look.shape.fray_middle,
+            0.0,
         ),
     }
 }
@@ -786,11 +820,11 @@ fn refresh_mask(field: &mut CloudField, images: &mut Assets<Image>, cover: f32) 
         field.mean_light = done.mean_light;
     }
     if field.remask.is_none() && field.cover.is_none_or(|c| c.to_bits() != cover.to_bits()) {
-        let (texels, sorted) = (field.texels.clone(), field.sorted.clone());
+        let (texels, sorted, shape) = (field.texels.clone(), field.sorted.clone(), field.shape);
         let pool = AsyncComputeTaskPool::get_or_init(TaskPool::new);
         field.remask = Some(pool.spawn(async move {
             let threshold = cover_threshold(&sorted, cover);
-            let mask = shadow_mask(&texels, threshold);
+            let mask = shadow_mask(&shape, &texels, threshold);
             #[allow(
                 clippy::cast_precision_loss,
                 clippy::cast_possible_truncation,
@@ -819,7 +853,13 @@ fn refresh_mask(field: &mut CloudField, images: &mut Assets<Image>, cover: f32) 
 /// eye above the deck and for a sun under the horizon, whose rays never
 /// cross it.
 #[must_use]
-pub fn sun_clear(texels: &CloudTexels, deck: &DeckFrame, to_sun: Vec3, eye: DVec3) -> f32 {
+pub fn sun_clear(
+    shape: &ShapeLook,
+    texels: &CloudTexels,
+    deck: &DeckFrame,
+    to_sun: Vec3,
+    eye: DVec3,
+) -> f32 {
     if to_sun.y <= 0.0 || eye.y >= deck.altitude {
         return 1.0;
     }
@@ -831,7 +871,7 @@ pub fn sun_clear(texels: &CloudTexels, deck: &DeckFrame, to_sun: Vec3, eye: DVec
     let cover_uv = (crossing - deck.drift) * (deck.inv_scale / tiles);
     let [lift_density, group, _] =
         texels.sample((crossing - deck.drift) * deck.inv_scale, cover_uv);
-    let lift = f64::from(relief_height(lift_density, group, deck.threshold))
+    let lift = f64::from(relief_height(shape, lift_density, group, deck.threshold))
         * deck.thickness
         * f64::from(BASE_BULGE)
         * PARALLAX;
@@ -842,15 +882,22 @@ pub fn sun_clear(texels: &CloudTexels, deck: &DeckFrame, to_sun: Vec3, eye: DVec
     let [density, group, slope] =
         texels.sample((crossing + shift - deck.drift) * deck.inv_scale, cover_uv);
     let horizon = smoothstep(0.0, HORIZON_BAND, to_sun.y);
-    1.0 - deck_opacity(density, group, slope, deck.threshold, [deck.tau, deck.ramp]) * horizon
+    1.0 - deck_opacity(
+        shape,
+        density,
+        group,
+        slope,
+        deck.threshold,
+        [deck.tau, deck.ramp],
+    ) * horizon
 }
 
 /// The height field's profile the shader shades a deck as, `0` to `1`:
 /// zero at the threshold, rising steeply at the edge and flattening over
 /// the heart, as a heap of cumulus does. `clouds.wgsl`'s `relief_height`.
 #[must_use]
-pub fn relief_height(density: f32, group: f32, threshold: f32) -> f32 {
-    let gate = GATE_FLOOR + (1.0 - GATE_FLOOR) * group;
+pub fn relief_height(shape: &ShapeLook, density: f32, group: f32, threshold: f32) -> f32 {
+    let gate = shape.gate_floor + (1.0 - shape.gate_floor) * group;
     let m = ((density * gate - threshold) / (1.0 - threshold).max(0.05)).clamp(0.0, 1.0);
     m * (2.0 - m)
 }
@@ -1025,15 +1072,15 @@ pub fn shadow_projection(to_sun: Vec3, height: f64, offset: DVec2, inv_scale: f6
 /// cover's threshold at which the texel turns from sky to cloud. Zero for a
 /// texel too thin to be half opaque at any threshold.
 #[must_use]
-pub fn half_opaque(density: f32, group: f32, slope: f32) -> f32 {
-    if opacity(density, group, slope, 0.0) <= 0.5 {
+pub fn half_opaque(shape: &ShapeLook, density: f32, group: f32, slope: f32) -> f32 {
+    if opacity(shape, density, group, slope, 0.0) <= 0.5 {
         return 0.0;
     }
     // Opacity falls as the threshold rises, so the crossing is bracketed.
     let (mut lo, mut hi) = (0.0_f32, density);
     for _ in 0..20 {
         let mid = f32::midpoint(lo, hi);
-        if opacity(density, group, slope, mid) > 0.5 {
+        if opacity(shape, density, group, slope, mid) > 0.5 {
             lo = mid;
         } else {
             hi = mid;
@@ -1047,11 +1094,11 @@ pub fn half_opaque(density: f32, group: f32, slope: f32) -> f32 {
 /// cover is the share of the sky the drawn cloud covers at least half,
 /// thin fringes not counted.
 #[must_use]
-pub fn cover_ladder(texels: &CloudTexels) -> Vec<f32> {
+pub fn cover_ladder(shape: &ShapeLook, texels: &CloudTexels) -> Vec<f32> {
     let mut ladder: Vec<f32> = (0..MASK_SIZE * MASK_SIZE)
         .map(|i| {
             let [d, g, s] = texels.at((i / MASK_SIZE) * MASK_STEP, (i % MASK_SIZE) * MASK_STEP);
-            half_opaque(d, g, s)
+            half_opaque(shape, d, g, s)
         })
         .collect();
     ladder.sort_by(f32::total_cmp);
@@ -1081,19 +1128,18 @@ pub fn cover_threshold(sorted: &[f32], cover: f32) -> f32 {
 /// layer's [`opacity`] at the shadow's strength, blurred, so a thin cloud
 /// at a group's fringe casts a lighter shadow than a full one.
 #[must_use]
-pub fn shadow_mask(texels: &CloudTexels, threshold: f32) -> Vec<u8> {
+pub fn shadow_mask(shape: &ShapeLook, texels: &CloudTexels, threshold: f32) -> Vec<u8> {
     let n = MASK_SIZE;
-    let mut shade: Vec<f32> = (0..n * n)
+    let mut dim: Vec<f32> = (0..n * n)
         .map(|i| {
             let [d, g, s] = texels.at((i / n) * MASK_STEP, (i % n) * MASK_STEP);
-            SHADOW_STRENGTH * opacity(d, g, s, threshold)
+            shape.shadow_strength * opacity(shape, d, g, s, threshold)
         })
         .collect();
     for _ in 0..2 {
-        shade = box_blur(&box_blur(&shade, n, true), n, false);
+        dim = box_blur(&box_blur(&dim, n, true), n, false);
     }
-    shade
-        .iter()
+    dim.iter()
         .map(|&s| {
             #[allow(
                 clippy::cast_possible_truncation,
@@ -1145,7 +1191,7 @@ pub struct CloudTexels {
     /// it.
     pub density: Vec<f32>,
     /// The coverage field, `0` in a gap between groups of clouds and `1` in
-    /// a group's middle: it gates the density (down to `GATE_FLOOR` of
+    /// a group's middle: it gates the density (down to the look's `shape.gate_floor` of
     /// it), widens the edge's ramp and thins the cloud towards a group's
     /// edge.
     pub group: Vec<f32>,
@@ -1220,21 +1266,22 @@ fn bilinear<const K: usize>(channels: [&[f32]; K], uv: DVec2) -> [f32; K] {
 /// mask, the cover's ladder and the sun's veil are made from it, so the
 /// shadow, the cover and the dimmed sun agree with the drawn cloud.
 #[must_use]
-pub fn opacity(density: f32, group: f32, slope: f32, threshold: f32) -> f32 {
-    deck_opacity(density, group, slope, threshold, [1.0, 1.0])
+pub fn opacity(shape: &ShapeLook, density: f32, group: f32, slope: f32, threshold: f32) -> f32 {
+    deck_opacity(shape, density, group, slope, threshold, [1.0, 1.0])
 }
 
 /// [`opacity`] with the deck's optical depth and cover ramp scaled, as the
 /// shader's `depth.w` and `shape.y` scale them: the upper deck is thinner
 /// and softer.
 fn deck_opacity(
+    shape: &ShapeLook,
     density: f32,
     group: f32,
     slope: f32,
     threshold: f32,
     [tau, ramp_scale]: [f32; 2],
 ) -> f32 {
-    let gate = GATE_FLOOR + (1.0 - GATE_FLOOR) * group;
+    let gate = shape.gate_floor + (1.0 - shape.gate_floor) * group;
     let excess = density * gate - threshold;
     if excess <= 0.0 {
         return 0.0;
@@ -1242,12 +1289,12 @@ fn deck_opacity(
     let ramp = COVER_RAMP * ramp_scale * (EDGE_RAMP + (1.0 - EDGE_RAMP) * group);
     let grown = smoothstep(0.0, ramp, excess);
     let inside = excess / (slope * gate * SLOPE_RANGE).max(1e-3);
-    let edge = smoothstep(0.0, EDGE_FADE, inside);
+    let edge = smoothstep(0.0, shape.edge_fade, inside);
     let heart = smoothstep(0.0, 1.0, excess / (1.0 - threshold).max(0.05));
     let depth = grown
         * edge
-        * (TAU_EDGE + (TAU_HEART - TAU_EDGE) * heart)
-        * (THIN_GROUP + (1.0 - THIN_GROUP) * group)
+        * (shape.tau_edge + (shape.tau_heart - shape.tau_edge) * heart)
+        * (shape.thin_group + (1.0 - shape.thin_group) * group)
         * tau;
     1.0 - exp_neg(depth)
 }
@@ -1266,8 +1313,8 @@ fn exp_neg(t: f32) -> f32 {
 
 /// The tileable cloud image for a world seed.
 ///
-/// The detail, one tile: heaps of three sizes (domes over jittered points
-/// with radii of their own, at periods 5, 11 and 24 to the tile, about two
+/// The detail, one tile: heaps of the look's sizes (domes over jittered points
+/// with radii of their own, at periods 5 and 11 to the tile by default, about two
 /// kilometres down to a hundred metres across at the default tile), merged
 /// by a smooth max so touching heaps round into one, plus a fine fractal
 /// and a ridged octave that crease the edge, all read through a domain warp
@@ -1279,7 +1326,7 @@ fn exp_neg(t: f32) -> f32 {
 /// Every lattice wraps at its image's edge and the warps are tileable, so
 /// both tile.
 #[must_use]
-pub fn density_field(seed: Seed) -> CloudTexels {
+pub fn density_field(seed: Seed, look: &DensityLook) -> CloudTexels {
     let n = DENSITY_SIZE;
     let salt = |label: &str| seed.derive(label);
     let (cover_salt, warp_x, warp_y) = (
@@ -1312,34 +1359,34 @@ pub fn density_field(seed: Seed) -> CloudTexels {
         // A broad warp that bends whole clouds and a short one, a fifth as
         // far, that frays their edges.
         let (wu, wv) = (
-            u + WARP * (2.0 * fractal(u, v, &[2, 4], warp_x) - 1.0),
-            v + WARP * (2.0 * fractal(u, v, &[2, 4], warp_y) - 1.0),
+            u + look.warp * (2.0 * fractal(u, v, &[2, 4], warp_x) - 1.0),
+            v + look.warp * (2.0 * fractal(u, v, &[2, 4], warp_y) - 1.0),
         );
+        let fray = look.fray * look.warp;
         let (fu, fv) = (
-            wu + 0.2 * WARP * (2.0 * fractal(wu, wv, &[20, 40], warp_x ^ 2) - 1.0),
-            wv + 0.2 * WARP * (2.0 * fractal(wu, wv, &[20, 40], warp_y ^ 2) - 1.0),
+            wu + fray * (2.0 * fractal(wu, wv, &look.fray_periods, warp_x ^ 2) - 1.0),
+            wv + fray * (2.0 * fractal(wu, wv, &look.fray_periods, warp_y ^ 2) - 1.0),
         );
         let mut heaps: f64 = 0.0;
-        for (i, (period, height)) in [(5_i64, 1.0), (11, 0.8), (24, 0.55)]
-            .into_iter()
-            .enumerate()
-        {
+        for (i, &(period, height)) in look.heaps.iter().enumerate() {
             #[allow(clippy::cast_precision_loss, reason = "periods are small integers")]
             let p = period as f64;
             heaps = heaps.max(height * cell_heap(fu * p, fv * p, period, heap_salt ^ i as u64));
         }
-        let fine = fractal(fu, fv, &[16, 32, 64], fine_salt);
+        let fine = fractal(fu, fv, &look.fine_periods, fine_salt);
         let ridge = 1.0 - (2.0 * octave(fu, fv, 22, ridge_salt) - 1.0).abs();
-        detail.push(0.8 * heaps + 0.14 * fine + 0.06 * ridge * ridge);
+        detail.push(
+            look.heap_weight * heaps + look.fine_weight * fine + look.ridge_weight * ridge * ridge,
+        );
         // The coverage, in its own frame of COVER_TILES tiles, through a
         // warp of its own.
         let (cu, cv) = (
-            u + WARP * (2.0 * octave(u, v, 2, cover_salt ^ 2) - 1.0),
-            v + WARP * (2.0 * octave(u, v, 2, cover_salt ^ 3) - 1.0),
+            u + look.warp * (2.0 * octave(u, v, 2, cover_salt ^ 2) - 1.0),
+            v + look.warp * (2.0 * octave(u, v, 2, cover_salt ^ 3) - 1.0),
         );
         let coverage =
             0.65 * octave(cu, cv, 3, cover_salt) + 0.35 * octave(cu, cv, 6, cover_salt ^ 1);
-        group.push(smoothstep64(0.36, 0.64, coverage));
+        group.push(smoothstep64(look.group_lo, look.group_hi, coverage));
     }
     let (lo, hi) = detail
         .iter()
@@ -1582,9 +1629,9 @@ mod tests {
 
     #[test]
     fn the_density_is_the_same_bits_for_a_seed_and_differs_between_seeds() {
-        let a = density_field(Seed(7));
-        let b = density_field(Seed(7));
-        let c = density_field(Seed(8));
+        let a = density_field(Seed(7), &DensityLook::default());
+        let b = density_field(Seed(7), &DensityLook::default());
+        let c = density_field(Seed(8), &DensityLook::default());
         let bits = |t: &CloudTexels| {
             [&t.density, &t.group, &t.slope]
                 .into_iter()
@@ -1604,7 +1651,7 @@ mod tests {
         // Across the wrap the image changes no more than between any two
         // neighbouring columns or rows inside it.
         let n = DENSITY_SIZE;
-        let texels = density_field(Seed(3));
+        let texels = density_field(Seed(3), &DensityLook::default());
         for field in [&texels.density, &texels.group, &texels.slope] {
             let at = |r: usize, c: usize| field[r * n + c];
             let mut inside = 0.0_f32;
@@ -1625,9 +1672,9 @@ mod tests {
 
     #[test]
     fn a_cover_is_that_share_of_the_sky() {
-        let texels = density_field(Seed(11));
+        let texels = density_field(Seed(11), &DensityLook::default());
         let field = &texels.density;
-        let sorted = cover_ladder(&texels);
+        let sorted = cover_ladder(&ShapeLook::default(), &texels);
         // Measured on the texels between those the ladder was made from,
         // over the coverage's whole repeat.
         let opaque = |threshold: f32| {
@@ -1637,27 +1684,39 @@ mod tests {
                         (i / MASK_SIZE) * MASK_STEP + 1,
                         (i % MASK_SIZE) * MASK_STEP + 1,
                     );
-                    opacity(d, g, s, threshold)
+                    opacity(&ShapeLook::default(), d, g, s, threshold)
                 })
                 .collect::<Vec<_>>()
         };
-        for cover in [0.2_f32, 0.45, 0.8] {
+        // Under the gate a gap between groups never clouds over, so the
+        // dial reaches the share of the sky the groups cover and no
+        // further, which a lower gate floor brings to about 0.58, so the
+        // test stops at 0.5.
+        for cover in [0.2_f32, 0.32, 0.5] {
             let seen = opaque(cover_threshold(&sorted, cover));
             #[allow(clippy::cast_precision_loss, reason = "a count of texels")]
             let share = seen.iter().filter(|&&o| o > 0.5).count() as f32 / seen.len() as f32;
             assert!((share - cover).abs() < 0.01, "{cover}: {share}");
         }
         assert!(field.iter().all(|&d| d < cover_threshold(&sorted, 0.0)));
-        let clear = shadow_mask(&texels, cover_threshold(&sorted, 0.0));
+        let clear = shadow_mask(
+            &ShapeLook::default(),
+            &texels,
+            cover_threshold(&sorted, 0.0),
+        );
         assert!(clear.iter().all(|&m| m == 255));
-        let mask = shadow_mask(&texels, cover_threshold(&sorted, 0.45));
+        let mask = shadow_mask(
+            &ShapeLook::default(),
+            &texels,
+            cover_threshold(&sorted, 0.45),
+        );
         assert!(mask.contains(&255));
         #[allow(
             clippy::cast_possible_truncation,
             clippy::cast_sign_loss,
             reason = "a byte"
         )]
-        let darkest = ((1.0 - SHADOW_STRENGTH) * 255.0).round() as u8;
+        let darkest = ((1.0 - ShapeLook::default().shadow_strength) * 255.0).round() as u8;
         assert!(mask.iter().all(|&m| m >= darkest - 1));
         assert!(mask.iter().any(|&m| m < 128));
     }
@@ -1667,13 +1726,13 @@ mod tests {
     /// where it is low, and their sizes span an order of magnitude.
     #[test]
     fn clouds_gather_in_groups_and_vary_in_size() {
-        let texels = density_field(Seed(5));
-        let threshold = cover_threshold(&cover_ladder(&texels), 0.45);
+        let texels = density_field(Seed(5), &DensityLook::default());
+        let threshold = cover_threshold(&cover_ladder(&ShapeLook::default(), &texels), 0.45);
         let n = MASK_SIZE;
         let cloud: Vec<bool> = (0..n * n)
             .map(|i| {
                 let [d, g, s] = texels.at((i / n) * MASK_STEP, (i % n) * MASK_STEP);
-                opacity(d, g, s, threshold) > 0.5
+                opacity(&ShapeLook::default(), d, g, s, threshold) > 0.5
             })
             .collect();
         let group = |i: usize| texels.at((i / n) * MASK_STEP, (i % n) * MASK_STEP)[1];
@@ -1726,19 +1785,29 @@ mod tests {
 
     #[test]
     fn opacity_is_nothing_under_the_threshold_and_falls_as_it_rises() {
-        assert!(opacity(0.4, 1.0, 0.3, 0.5).abs() < f32::EPSILON);
-        assert!(opacity(0.9, 1.0, 0.3, 1.0 + COVER_RAMP).abs() < f32::EPSILON);
+        assert!(opacity(&ShapeLook::default(), 0.4, 1.0, 0.3, 0.5).abs() < f32::EPSILON);
+        assert!(
+            opacity(&ShapeLook::default(), 0.9, 1.0, 0.3, 1.0 + COVER_RAMP).abs() < f32::EPSILON
+        );
         for (d, g, s) in [(0.9, 1.0, 0.2), (0.7, 0.3, 0.5), (0.6, 0.0, 0.05)] {
             let mut last = 1.0;
             for step in 0..=50_u8 {
-                let o = opacity(d, g, s, f32::from(step) / 50.0);
+                let o = opacity(&ShapeLook::default(), d, g, s, f32::from(step) / 50.0);
                 assert!(o <= last + 1e-6 && (0.0..=1.0).contains(&o), "{d} {g} {s}");
                 last = o;
             }
         }
         // A full group's middle is opaque; its fringe is thinner.
-        assert!(opacity(1.0, 1.0, 0.1, 0.3) > 0.99);
-        assert!(opacity(1.0, 0.0, 0.1, 0.3 * GATE_FLOOR) < opacity(1.0, 1.0, 0.1, 0.3));
+        assert!(opacity(&ShapeLook::default(), 1.0, 1.0, 0.1, 0.3) > 0.99);
+        assert!(
+            opacity(
+                &ShapeLook::default(),
+                1.0,
+                0.0,
+                0.1,
+                0.3 * ShapeLook::default().gate_floor
+            ) < opacity(&ShapeLook::default(), 1.0, 1.0, 0.1, 0.3)
+        );
         for t in [0.0_f32, 0.5, 2.0, 10.0] {
             assert!((exp_neg(t) - (-t).exp()).abs() < 3e-4, "{t}");
         }
@@ -1746,8 +1815,8 @@ mod tests {
 
     #[test]
     fn the_sun_is_veiled_by_the_cloud_on_the_line_of_sight_to_it() {
-        let texels = density_field(Seed(9));
-        let threshold = cover_threshold(&cover_ladder(&texels), 0.45);
+        let texels = density_field(Seed(9), &DensityLook::default());
+        let threshold = cover_threshold(&cover_ladder(&ShapeLook::default(), &texels), 0.45);
         let inv_scale = 1.0 / 6_000.0;
         let to_sun = Vec3::new(0.3, 0.8, -0.2).normalize();
         let layer_y = 1_800.0;
@@ -1759,7 +1828,7 @@ mod tests {
         for row in (0..side).step_by(7) {
             for col in (0..side).step_by(7) {
                 let [density, group, slope] = texels.at(row, col);
-                let seen = opacity(density, group, slope, threshold);
+                let seen = opacity(&ShapeLook::default(), density, group, slope, threshold);
                 #[allow(clippy::cast_precision_loss, reason = "texel indices")]
                 let at = DVec2::new(col as f64 + 0.5, row as f64 + 0.5) / 512.0 / inv_scale;
                 // Kept clear of the edges, since the coverage is read
@@ -1790,7 +1859,8 @@ mod tests {
             tau: 1.0,
             ramp: 1.0,
         };
-        let clear = |eye: DVec3, sun: Vec3| sun_clear(&texels, &deck, sun, eye);
+        let clear =
+            |eye: DVec3, sun: Vec3| sun_clear(&ShapeLook::default(), &texels, &deck, sun, eye);
         let (heart, gap) = (heart.expect("a cloud's heart"), gap.expect("a clear gap"));
         let (behind, beside) = (eye_under(heart), eye_under(gap));
         assert!(clear(behind, to_sun) < 0.05, "{}", clear(behind, to_sun));
@@ -1803,6 +1873,7 @@ mod tests {
         // The wind carries the cloud off the sun: drifted by the step
         // from the gap to the heart, the gap stands where the heart was.
         let drifted = sun_clear(
+            &ShapeLook::default(),
             &texels,
             &DeckFrame {
                 drift: heart - gap,
@@ -1824,10 +1895,13 @@ mod tests {
             .map(|i| {
                 let at = gap + (heart - gap) * (f64::from(i) / 64.0);
                 let eye = eye_under(at);
-                (clear(eye, to_sun) - sun_clear(&texels, &tall, to_sun, eye)).abs()
+                (clear(eye, to_sun) - sun_clear(&ShapeLook::default(), &texels, &tall, to_sun, eye))
+                    .abs()
             })
             .fold(0.0_f32, f32::max);
-        assert!(moved > 0.05, "{moved}");
+        // The thin fringe (`thin_group` 0.25) leaves the veil less to move
+        // across than it had at 0.55, so the bar is a few hundredths.
+        assert!(moved > 0.03, "{moved}");
     }
 
     #[test]
@@ -1858,6 +1932,7 @@ mod tests {
             .init_resource::<Observers>()
             .init_resource::<CloudProjection>()
             .init_resource::<SunVeil>()
+            .init_resource::<CloudDials>()
             .init_resource::<Assets<Image>>()
             .init_resource::<Assets<CloudMaterial>>()
             .insert_resource(Wind {
@@ -1869,8 +1944,11 @@ mod tests {
                 step: 1.0 / 60.0,
             }))
             .add_systems(Update, update_layer);
-        let texels = density_field(Seed(3));
-        let sorted = cover_ladder(&texels);
+        let texels = density_field(Seed(3), &DensityLook::default());
+        let sorted = cover_ladder(&ShapeLook::default(), &texels);
+        // The lower deck's threshold is the default cover's own, so the
+        // upper deck's thinner cover is a higher one whatever the gate.
+        let lower_threshold = cover_threshold(&sorted, 0.32);
         let blank = || CloudMaterial {
             params: CloudParams::default(),
             density: Handle::default(),
@@ -1880,13 +1958,14 @@ mod tests {
         let (material, upper) = (materials.add(blank()), materials.add(blank()));
         app.insert_resource(CloudField {
             texels: Arc::new(texels),
+            shape: ShapeLook::default(),
             sorted: Arc::new(sorted),
             remask: None,
             mask: Handle::default(),
             material: material.clone(),
             upper: upper.clone(),
-            cover: Some(0.45),
-            threshold: 0.5,
+            cover: Some(0.32),
+            threshold: lower_threshold,
             mean_light: 0.8,
         });
         app.update();
@@ -1984,6 +2063,7 @@ mod tests {
         });
         app.insert_resource(CloudField {
             texels: Arc::default(),
+            shape: ShapeLook::default(),
             sorted: Arc::default(),
             remask: None,
             mask: Handle::default(),
@@ -2109,7 +2189,7 @@ mod tests {
     fn the_cloud_tunables_are_range_checked_and_round_trip() {
         use crate::look::LookFile;
         let file = LookFile::default();
-        assert!((file.sky.cloud_cover - 0.45).abs() < 1e-6);
+        assert!((file.sky.cloud_cover - 0.32).abs() < 1e-6);
         assert_eq!(
             LookFile::from_ron(&file.to_ron().expect("export")).expect("import"),
             file

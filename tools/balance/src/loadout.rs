@@ -1,6 +1,6 @@
 //! Modules as a dimension of the harness. A side may carry modules on its
 //! weapons; at spawn the bout equips its combatant with the loadout the
-//! game would give it, through the same `strata_sim::fitting` the game
+//! game would give it, through the same `veyra_rules::fitting` the game
 //! uses, so what a module is worth here is what it is worth in play. A
 //! side with none is not equipped at all, and every older row and band
 //! keeps its number.
@@ -17,8 +17,8 @@ use strata_registry::item::{
     Fitted, HANDS, ItemCatalogue, ItemKind, QUALITY_MAX, Record, STORE_GRADE,
 };
 use strata_registry::{Namespaced, load_from_dir};
-use strata_sim::combat::Weapon;
-use strata_sim::fitting::{self, Loadout};
+use veyra_rules::combat::Weapon;
+use veyra_rules::fitting::{self, Loadout};
 
 use crate::bout::{Matchup, Side, SideMod};
 

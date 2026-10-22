@@ -355,7 +355,7 @@ mod tests {
     use crate::roads::{Crossing, RoadPoint};
     use crate::sites::SiteId;
     use crate::{Landform, Sample};
-    use strata_registry::BiomeId;
+    use strata_data::BiomeId;
 
     /// Level ground at 10 m, a river's water under `|z - 450| < 10`, and
     /// another way's carriageway over `x > 30`.
@@ -426,7 +426,7 @@ mod tests {
             points,
             ends: [
                 RoadEnd::Site(SiteId {
-                    kind: strata_registry::SiteKindId(0),
+                    kind: strata_data::SiteKindId(0),
                     mass: [0, 0],
                     node: [0, 0],
                 }),

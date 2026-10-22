@@ -187,6 +187,18 @@ pub struct WindParams {
     /// rims its edges, 0 to 2 (lighting plan phase 5b); zero skips the
     /// term and its shadow lookup. Grass alone reads it.
     pub grass_rim: f32,
+    /// The shade's colour, a luminance-one multiplier on the indirect
+    /// diffuse of trees and grass (visual.md F4), as three floats because a
+    /// `vec3` would raise the struct's alignment to sixteen.
+    pub shade_tint: [f32; 3],
+    /// The crown's core multiplier per colour lane, the core share times its
+    /// cool lean (`CanopyLook`, visual.md F5); in the wind's buffer because
+    /// every tree shader already binds it.
+    pub canopy_core: [f32; 3],
+    /// How much a bulging clump lifts and a crease darkens a leaf.
+    pub canopy_lift: f32,
+    /// The sunlight through the outer leaves seen against the sun, 0 to 2.
+    pub canopy_rim: f32,
 }
 
 /// The gust lattice repeats every this many metres; the origin offset is
@@ -207,6 +219,10 @@ impl Default for WindParams {
             prev_origin_z: 0.0,
             sky_visibility: 1.0,
             grass_rim: 1.0,
+            shade_tint: [1.0; 3],
+            canopy_core: [1.0; 3],
+            canopy_lift: 0.0,
+            canopy_rim: 0.0,
         }
     }
 }
@@ -304,9 +320,9 @@ pub fn wind_buffer(device: &RenderDevice) -> Buffer {
     })
 }
 
-/// The size of `FoliageWind` in the shader: twelve floats, a multiple of
-/// the struct's alignment of eight.
-pub const WIND_BYTES: usize = 48;
+/// The size of `FoliageWind` in the shader: twenty floats, a multiple of the
+/// struct's alignment of eight.
+pub const WIND_BYTES: usize = 80;
 
 /// [`WindParams`] as bytes in the shader's layout.
 #[must_use]
@@ -325,13 +341,18 @@ pub fn wind_bytes(w: &WindParams) -> Vec<u8> {
         w.prev_origin_z,
         w.sky_visibility,
         w.grass_rim,
+        w.shade_tint[0],
+        w.shade_tint[1],
+        w.shade_tint[2],
+        w.canopy_core[0],
+        w.canopy_core[1],
+        w.canopy_core[2],
+        w.canopy_lift,
+        w.canopy_rim,
     ] {
         out.extend_from_slice(&v.to_le_bytes());
     }
-    // The struct's size rounds up to its `vec2` alignment of 8, which
-    // twelve floats already are; the resize keeps that true for an odd
-    // count.
-    out.resize(WIND_BYTES, 0);
+    debug_assert_eq!(out.len(), WIND_BYTES);
     out
 }
 
@@ -781,6 +802,10 @@ mod tests {
             prev_origin_z: 10.0,
             sky_visibility: 11.0,
             grass_rim: 12.0,
+            shade_tint: [13.0, 14.0, 15.0],
+            canopy_core: [16.0, 17.0, 18.0],
+            canopy_lift: 19.0,
+            canopy_rim: 20.0,
         };
         let bytes = wind_bytes(&wind);
         assert_eq!(bytes.len(), WIND_BYTES);
@@ -790,7 +815,7 @@ mod tests {
             .iter()
             .map(|chunk| u32::from_le_bytes(*chunk))
             .collect();
-        let expected: Vec<u32> = (1u8..=12).map(|v| f32::from(v).to_bits()).collect();
+        let expected: Vec<u32> = (1u8..=20).map(|v| f32::from(v).to_bits()).collect();
         assert_eq!(actual, expected);
     }
 

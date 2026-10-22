@@ -26,13 +26,11 @@ pub use library::{Collider, TreeLibrary, TreeVariant, Trunk};
 
 use serde::{Deserialize, Serialize};
 use strata_core::{RegionCoord, Seed, mix64};
-use strata_registry::flora::{
+use strata_data::flora::{
     MAX_EXCLUSION_M, MAX_GRASS_BLADES_PER_CELL, MAX_GRASS_CANDIDATES_PER_CELL,
     MAX_PLANT_CANDIDATES_PER_CELL,
 };
-use strata_registry::{
-    Clustering, FloraFit, FloraId, FloraKind, GameRegistries, GroundPrefs, TreeParams,
-};
+use strata_data::{Clustering, FloraFit, FloraId, FloraKind, GroundPrefs, TreeParams, WorldDefs};
 use strata_worldgen::hydrology::WaterKind;
 use strata_worldgen::{Sample, SampleWater, WorldSource};
 
@@ -41,7 +39,7 @@ use strata_worldgen::{Sample, SampleWater, WorldSource};
 pub const GRID: usize = 65;
 
 /// The cell size placement is defined on. Placement is per lod 0 region.
-pub const CELL_M: f32 = strata_registry::flora::FOLIAGE_CELL_M;
+pub const CELL_M: f32 = strata_data::flora::FOLIAGE_CELL_M;
 
 /// Stable identity of a procedural candidate, independent of dense registry IDs
 /// and render entity lifetime. Persist together with the world's seed/version.
@@ -135,7 +133,7 @@ pub struct GrassBlade {
 
 impl GrassBlade {
     /// Bits of [`species`](Self::species) the palette index takes; the
-    /// palette holds [`MAX_GRASS_SPECIES`](strata_registry::flora::MAX_GRASS_SPECIES).
+    /// palette holds [`MAX_GRASS_SPECIES`](strata_data::flora::MAX_GRASS_SPECIES).
     pub const PALETTE_BITS: u32 = 5;
 
     /// Crown shade levels above the open: the high three bits.
@@ -280,19 +278,35 @@ impl Species {
 
 /// Every species, in id order, ready for placement. Built once from the
 /// frozen registries and shared by every task.
-#[derive(Debug, Clone, PartialEq, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct FloraTable {
     species: Vec<Species>,
     /// Places no dressing species: a server's table, or a client's
     /// physics', whose plants are the same as a full table's but for them.
     skip_dressing: bool,
+    /// Which table this is, for the [`CandidateCache`]: a clone keeps it, a
+    /// table built or changed afterwards takes a new one, so a memo of one
+    /// table's candidates is never read for another's.
+    serial: u64,
+}
+
+impl PartialEq for FloraTable {
+    fn eq(&self, other: &Self) -> bool {
+        self.species == other.species && self.skip_dressing == other.skip_dressing
+    }
+}
+
+/// The next table identity; zero stays the default table's.
+fn next_serial() -> u64 {
+    static NEXT: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(1);
+    NEXT.fetch_add(1, std::sync::atomic::Ordering::Relaxed)
 }
 
 impl FloraTable {
     /// The table for a frozen registry set, with no baked trees: every trunk
     /// derived from its species' parameters.
     #[must_use]
-    pub fn from_registries(registries: &GameRegistries) -> Self {
+    pub fn from_registries(registries: &WorldDefs) -> Self {
         Self::from_registries_and_library(registries, None)
     }
 
@@ -301,7 +315,7 @@ impl FloraTable {
     /// so placement picks only variants that were baked.
     #[must_use]
     pub fn from_registries_and_library(
-        registries: &GameRegistries,
+        registries: &WorldDefs,
         library: Option<&TreeLibrary>,
     ) -> Self {
         let species = registries
@@ -365,6 +379,7 @@ impl FloraTable {
         Self {
             species,
             skip_dressing: false,
+            serial: next_serial(),
         }
     }
 
@@ -374,6 +389,7 @@ impl FloraTable {
         Self {
             species,
             skip_dressing: false,
+            serial: next_serial(),
         }
     }
 
@@ -385,6 +401,7 @@ impl FloraTable {
     #[must_use]
     pub fn without_dressing(mut self) -> Self {
         self.skip_dressing = true;
+        self.serial = next_serial();
         self
     }
 
@@ -392,6 +409,31 @@ impl FloraTable {
     /// a table [`without_dressing`](Self::without_dressing).
     fn places(&self, species: &Species) -> bool {
         !(self.skip_dressing && species.dressing)
+    }
+
+    /// Whether a far cell's candidates include `species`: everything placed
+    /// but grass and dressing. A bush outranks nothing a tree is thinned by,
+    /// but the impostor-bearing scrub is a bush and is thinned by every other
+    /// bush, so leaving any out would move it. Dressing ranks below everything
+    /// and takes the budget last, so leaving it out moves nothing else.
+    fn is_far_species(species: &Species) -> bool {
+        !species.dressing && species.kind != FloraKind::Grass
+    }
+
+    /// Whether [`place_cell_trees`] gives exactly a full placement's plants
+    /// but for the children, the dressing and the grass. It does while no
+    /// dressing species is a tree (it would shade its neighbours and be
+    /// missing) and no species raises a tree as a child (the same, placed
+    /// only by the full path). The shipped data meets both.
+    fn trees_only_is_exact(&self) -> bool {
+        self.species.iter().all(|s| {
+            (!s.dressing || s.kind != FloraKind::Tree)
+                && s.children.iter().all(|c| {
+                    self.species
+                        .get(c.species.0 as usize)
+                        .is_none_or(|child| child.kind != FloraKind::Tree)
+                })
+        })
     }
 
     /// Whether the species of `id` is dressing.
@@ -467,7 +509,24 @@ pub fn cell_seed(seed: Seed, coord: RegionCoord) -> u64 {
 /// The world's 65 x 65 height sample of a cell, interpolated on the same
 /// `(i + 1, j)` to `(i, j + 1)` diagonal as terrain and collision.
 pub struct HeightGrid<'a> {
-    samples: &'a [Sample],
+    backing: Backing<'a>,
+}
+
+/// Where a grid's nodes come from.
+enum Backing<'a> {
+    /// All of them, sampled up front.
+    Samples(&'a [Sample]),
+    /// Each when first read.
+    Lazy(LazyNodes<'a>),
+}
+
+/// A grid that samples a node the first time anything reads it. A far
+/// cell's trees probe a third of the 4,225 nodes, so the rest are never
+/// paid for.
+struct LazyNodes<'a> {
+    source: &'a dyn WorldSource,
+    origin: [f64; 2],
+    nodes: Vec<std::cell::OnceCell<Sample>>,
 }
 
 impl<'a> HeightGrid<'a> {
@@ -480,7 +539,26 @@ impl<'a> HeightGrid<'a> {
     #[must_use]
     pub fn new(samples: &'a [Sample]) -> Self {
         assert_eq!(samples.len(), GRID * GRID, "a cell is GRID x GRID samples");
-        Self { samples }
+        Self {
+            backing: Backing::Samples(samples),
+        }
+    }
+
+    /// The grid of `coord` that samples `source` on first read. A node is
+    /// the same bits [`sample`](Self::sample) fills it with, since a source
+    /// must return from `sample_grid` exactly what `sample` would.
+    #[must_use]
+    pub fn lazy(coord: RegionCoord, source: &'a dyn WorldSource) -> Self {
+        let min = coord.min_corner();
+        let mut nodes = Vec::new();
+        nodes.resize_with(GRID * GRID, std::cell::OnceCell::new);
+        Self {
+            backing: Backing::Lazy(LazyNodes {
+                source,
+                origin: [min.x(), min.z()],
+                nodes,
+            }),
+        }
     }
 
     /// Fills `scratch` with the cell's samples and wraps it.
@@ -494,8 +572,16 @@ impl<'a> HeightGrid<'a> {
         Self::new(scratch)
     }
 
+    #[allow(clippy::cast_precision_loss, reason = "grid indices are at most 64")]
     fn at(&self, i: usize, j: usize) -> &Sample {
-        &self.samples[j.min(GRID - 1) * GRID + i.min(GRID - 1)]
+        let (i, j) = (i.min(GRID - 1), j.min(GRID - 1));
+        match &self.backing {
+            Backing::Samples(samples) => &samples[j * GRID + i],
+            Backing::Lazy(lazy) => lazy.nodes[j * GRID + i].get_or_init(|| {
+                lazy.source
+                    .sample(lazy.origin[0] + i as f64, lazy.origin[1] + j as f64)
+            }),
+        }
     }
 
     /// Height, normal and the nearest sample at cell-local `x, z`.
@@ -800,7 +886,7 @@ pub fn fit_at(species: &Species, probe: &Probe<'_>, sea_level: f32) -> f32 {
 /// alone and counts as weight one, as placement was before provinces: a
 /// hand-built world keeps its rocks rather than losing every one of them.
 #[must_use]
-pub fn province_gain(fit: &strata_registry::FloraFit, sample: &Sample) -> f32 {
+pub fn province_gain(fit: &strata_data::FloraFit, sample: &Sample) -> f32 {
     sample
         .provinces
         .iter()
@@ -1106,7 +1192,7 @@ pub fn place_cell_with(
 
 // The palette must fit under the crown shade's bits.
 const _: () = assert!(
-    strata_registry::flora::MAX_GRASS_SPECIES <= 1 << GrassBlade::PALETTE_BITS,
+    strata_data::flora::MAX_GRASS_SPECIES <= 1 << GrassBlade::PALETTE_BITS,
     "the grass palette outgrew its bits"
 );
 
@@ -1300,6 +1386,7 @@ pub fn place_on_grid_with(
         flora,
         seed,
         [0.0, CELL_M, 0.0, CELL_M],
+        false,
     );
     let mut plants = thin_candidates(&candidates, flora);
     let children = place_children(coord, grid, sea_level, flora, &plants);
@@ -1336,18 +1423,110 @@ pub fn place_on_grid_with_source(
     seed: Seed,
     with_grass: bool,
 ) -> CellFlora {
-    let mut candidates = plant_candidates(
-        coord,
-        grid,
-        source.sea_level(),
-        flora,
-        seed,
-        [0.0, CELL_M, 0.0, CELL_M],
-    );
+    place_halo(coord, grid, source, flora, seed, with_grass, None)
+}
+
+/// [`place_cell_with`] reading the halo's candidates from `cache` instead of
+/// sampling the neighbours' strips, and leaving this cell's own there for
+/// the cells round it. The same bits.
+#[must_use]
+pub fn place_cell_cached(
+    coord: RegionCoord,
+    source: &dyn WorldSource,
+    flora: &FloraTable,
+    seed: Seed,
+    scratch: &mut Vec<Sample>,
+    grass: bool,
+    cache: &CandidateCache,
+) -> CellFlora {
+    let grid = HeightGrid::sample(coord, source, scratch);
+    place_halo(coord, &grid, source, flora, seed, grass, Some(cache))
+}
+
+/// The halo of `coord` as a list of candidates in the cell's frame: the
+/// neighbours' candidates inside `2 * radius` of the shared edge, in the
+/// order the strip walk gives them (row by row, then each cell's own order).
+fn halo_candidates(
+    coord: RegionCoord,
+    source: &dyn WorldSource,
+    flora: &FloraTable,
+    seed: Seed,
+    trees_only: bool,
+    cache: &CandidateCache,
+    out: &mut Vec<Plant>,
+) {
+    let halo = flora.exclusion_reach() * 2.0;
+    for dz in -1_i32..=1 {
+        for dx in -1_i32..=1 {
+            if dx == 0 && dz == 0 {
+                continue;
+            }
+            let (Some(x), Some(z)) = (coord.x.checked_add(dx), coord.z.checked_add(dz)) else {
+                continue;
+            };
+            let axis_bounds = |offset: i32| match offset {
+                -1 => [CELL_M - halo, CELL_M],
+                1 => [0.0, halo],
+                _ => [0.0, CELL_M],
+            };
+            let [xmin, xmax] = axis_bounds(dx);
+            let [zmin, zmax] = axis_bounds(dz);
+            let list = cache.candidates(
+                RegionCoord::new(x, z, 0),
+                trees_only,
+                flora,
+                seed,
+                source,
+                None,
+            );
+            // The test `plant_candidates` applies to a slot, so the strip is
+            // the same set.
+            out.extend(
+                list.iter()
+                    .filter(|p| !(p.x < xmin || p.x > xmax || p.z < zmin || p.z > zmax)),
+            );
+        }
+    }
+}
+
+#[allow(
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::cast_precision_loss,
+    clippy::too_many_lines,
+    reason = "halo offsets at most one; grid indices bounded to 64"
+)]
+fn place_halo(
+    coord: RegionCoord,
+    grid: &HeightGrid<'_>,
+    source: &dyn WorldSource,
+    flora: &FloraTable,
+    seed: Seed,
+    with_grass: bool,
+    cache: Option<&CandidateCache>,
+) -> CellFlora {
+    let mut candidates = match cache {
+        Some(cache) => cache
+            .candidates(coord, false, flora, seed, source, Some(grid))
+            .to_vec(),
+        None => plant_candidates(
+            coord,
+            grid,
+            source.sea_level(),
+            flora,
+            seed,
+            [0.0, CELL_M, 0.0, CELL_M],
+            false,
+        ),
+    };
     let radius = flora.exclusion_reach();
     // Grass needs accepted neighboring plants, whose own competitors can be
     // another radius away. 2r fits within one neighboring cell (r <= 16m).
-    if radius > 0.0 {
+    if radius > 0.0
+        && let Some(cache) = cache
+    {
+        halo_candidates(coord, source, flora, seed, false, cache, &mut candidates);
+    } else if radius > 0.0 {
         let mut samples = Vec::new();
         for dz in -1_i32..=1 {
             for dx in -1_i32..=1 {
@@ -1376,7 +1555,7 @@ pub fn place_on_grid_with_source(
                     .filter(|s| s.tree.form == "log")
                     .map(|s| (s.tree.height_m.max * s.size.1 * 0.5).clamp(0.0, CELL_M))
                     .fold(1.0_f32, f32::max);
-                samples.resize(GRID * GRID, grid.samples[0]);
+                samples.resize(GRID * GRID, *grid.at(0, 0));
                 let corner = neighbor.min_corner();
                 let lo = |v: f32| (v - support).floor().max(0.0) as usize;
                 let hi = |v: f32| (v + support).ceil().min(CELL_M) as usize;
@@ -1394,6 +1573,7 @@ pub fn place_on_grid_with_source(
                     flora,
                     seed,
                     bounds,
+                    false,
                 ));
             }
         }
@@ -1428,6 +1608,239 @@ pub fn place_on_grid_with_source(
         coord,
         plants,
         grass,
+    }
+}
+
+/// The plants of `coord` a far cell draws, as a full placement gives them
+/// but for the children, the dressing and the grass: the rocks, trees and
+/// bushes that survive thinning, with their sky. A far cell exists only for
+/// its impostors (the trees and the scrub), so the children, the reeds and
+/// the grass are never worked out, and the ground is read only where a
+/// candidate probes it (the grid samples a node on first read) instead of
+/// all 4,225 nodes and the 5,184 of the halo, which the cache replaces.
+///
+/// Exact, not approximate: the plants come out in the same order with the
+/// same bytes as the full placement's (a test holds it over a few thousand
+/// cells). Dressing ranks below everything in thinning and takes the
+/// candidate budget last, a child is placed after thinning from the retained
+/// plants and (when none is a tree) shades no crown, so none of them moves
+/// a plant that is placed. A bush that is deadwood still runs its footprint
+/// check on the lazy grid. A table where a dressing tree or a tree child
+/// exists takes the full path and drops the grass.
+#[must_use]
+pub fn place_cell_trees(
+    coord: RegionCoord,
+    source: &dyn WorldSource,
+    flora: &FloraTable,
+    seed: Seed,
+    cache: &CandidateCache,
+) -> CellFlora {
+    if !flora.trees_only_is_exact() {
+        return place_cell_cached(coord, source, flora, seed, &mut Vec::new(), false, cache);
+    }
+    let own = cache.candidates(coord, true, flora, seed, source, None);
+    let mut candidates = own.to_vec();
+    if flora.exclusion_reach() > 0.0 {
+        halo_candidates(coord, source, flora, seed, true, cache, &mut candidates);
+    }
+    let retained = thin_candidates(&candidates, flora);
+    let local: Vec<Plant> = retained
+        .iter()
+        .copied()
+        .map(|mut p| {
+            #[allow(clippy::cast_possible_truncation, reason = "a whole number of cells")]
+            {
+                p.x += (f64::from(p.id.cell.x) - f64::from(coord.x)) as f32 * CELL_M;
+                p.z += (f64::from(p.id.cell.z) - f64::from(coord.z)) as f32 * CELL_M;
+            }
+            p
+        })
+        .collect();
+    let mut plants: Vec<Plant> = retained
+        .iter()
+        .copied()
+        .filter(|p| p.id.cell == coord)
+        .collect();
+    sky_terms(&mut plants, &local, flora);
+    CellFlora {
+        coord,
+        plants,
+        grass: Vec::new(),
+    }
+}
+
+/// Which candidate lists a [`CandidateCache`] holds: a cell's, for a table
+/// and a seed, either all of them or a far cell's (no dressing).
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+struct CandidateKey {
+    table: u64,
+    seed: u64,
+    coord: RegionCoord,
+    trees_only: bool,
+}
+
+#[derive(Default)]
+struct CandidateStore {
+    entries: std::collections::HashMap<CandidateKey, (u64, std::sync::Arc<[Plant]>)>,
+    order: std::collections::VecDeque<(u64, CandidateKey)>,
+    next: u64,
+    bytes: usize,
+}
+
+impl CandidateStore {
+    fn take(&mut self, key: &CandidateKey) {
+        if let Some((_, list)) = self.entries.remove(key) {
+            self.bytes -= list.len() * size_of::<Plant>();
+        }
+    }
+}
+
+/// A bounded memo of each cell's candidates before thinning. The halo of a
+/// cell is its neighbours' candidates inside a strip, and a neighbour has
+/// just been placed or is about to be, so each cell's list is computed once
+/// from its own grid and every cell round it filters it by bounds instead
+/// of sampling the strip and rolling the hashes again. The oldest entries
+/// go first.
+pub struct CandidateCache {
+    store: std::sync::Mutex<CandidateStore>,
+    max_entries: usize,
+    max_bytes: usize,
+}
+
+impl Default for CandidateCache {
+    /// Room for a streamed ring of foliage: a few thousand lists.
+    fn default() -> Self {
+        Self::new(8192, 96 << 20)
+    }
+}
+
+impl CandidateCache {
+    /// A cache holding at most `max_entries` lists and `max_bytes` of plants.
+    #[must_use]
+    pub fn new(max_entries: usize, max_bytes: usize) -> Self {
+        Self {
+            store: std::sync::Mutex::new(CandidateStore::default()),
+            max_entries,
+            max_bytes,
+        }
+    }
+
+    fn lock(&self) -> std::sync::MutexGuard<'_, CandidateStore> {
+        self.store
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+    }
+
+    /// The lists held now.
+    #[must_use]
+    pub fn len(&self) -> usize {
+        self.lock().entries.len()
+    }
+
+    /// Whether nothing is held.
+    #[must_use]
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
+    /// Drops every list.
+    pub fn clear(&self) {
+        *self.lock() = CandidateStore::default();
+    }
+
+    fn get(&self, key: &CandidateKey) -> Option<std::sync::Arc<[Plant]>> {
+        self.lock().entries.get(key).map(|(_, list)| list.clone())
+    }
+
+    fn put(&self, key: CandidateKey, list: std::sync::Arc<[Plant]>) {
+        let mut store = self.lock();
+        store.take(&key);
+        store.bytes += list.len() * size_of::<Plant>();
+        store.next += 1;
+        let stamp = store.next;
+        store.entries.insert(key, (stamp, list));
+        store.order.push_back((stamp, key));
+        while store.bytes > self.max_bytes || store.entries.len() > self.max_entries {
+            let Some((stamp, old)) = store.order.pop_front() else {
+                break;
+            };
+            if store.entries.get(&old).is_some_and(|(s, _)| *s == stamp) {
+                store.take(&old);
+            }
+        }
+        // Keys replaced since they were queued would pile up.
+        if store.order.len() > 4 * self.max_entries.max(1) {
+            let store = &mut *store;
+            let entries = &store.entries;
+            store
+                .order
+                .retain(|(stamp, key)| entries.get(key).is_some_and(|(s, _)| s == stamp));
+        }
+    }
+
+    /// The candidates of `coord` (`trees_only`: all but the dressing, which
+    /// is all a far cell reads), from the memo, or worked out from `grid`
+    /// when the caller has the cell's own, else from a grid that samples
+    /// what it reads. The list holds every slot that passed its chance in
+    /// placement order, whole-cell, so a halo filters it by bounds.
+    #[must_use]
+    pub fn candidates(
+        &self,
+        coord: RegionCoord,
+        trees_only: bool,
+        flora: &FloraTable,
+        seed: Seed,
+        source: &dyn WorldSource,
+        grid: Option<&HeightGrid<'_>>,
+    ) -> std::sync::Arc<[Plant]> {
+        let key = CandidateKey {
+            table: flora.serial,
+            seed: seed.0,
+            coord,
+            trees_only,
+        };
+        if let Some(hit) = self.get(&key) {
+            return hit;
+        }
+        // The rocks and trees of a whole list are the far list, in order.
+        if trees_only
+            && let Some(all) = self.get(&CandidateKey {
+                trees_only: false,
+                ..key
+            })
+        {
+            let far: std::sync::Arc<[Plant]> = all
+                .iter()
+                .copied()
+                .filter(|p| {
+                    flora
+                        .species()
+                        .get(p.species.0 as usize)
+                        .is_some_and(FloraTable::is_far_species)
+                })
+                .collect();
+            self.put(key, far.clone());
+            return far;
+        }
+        let lazy;
+        let grid = if let Some(grid) = grid {
+            grid
+        } else {
+            lazy = HeightGrid::lazy(coord, source);
+            &lazy
+        };
+        let list: std::sync::Arc<[Plant]> = plant_candidates(
+            coord,
+            grid,
+            source.sea_level(),
+            flora,
+            seed,
+            [0.0, CELL_M, 0.0, CELL_M],
+            trees_only,
+        )
+        .into();
+        self.put(key, list.clone());
+        list
     }
 }
 
@@ -1519,6 +1932,7 @@ fn plant_candidates(
     flora: &FloraTable,
     seed: Seed,
     bounds: [f32; 4],
+    trees_only: bool,
 ) -> Vec<Plant> {
     let cell = cell_seed(seed, coord);
     let mut plants: Vec<Plant> = Vec::new();
@@ -1529,6 +1943,7 @@ fn plant_candidates(
         .species()
         .iter()
         .filter(|s| s.kind != FloraKind::Grass && flora.places(s))
+        .filter(|s| !trees_only || FloraTable::is_far_species(s))
         .collect();
     placed.sort_by_key(|s| (s.dressing, kind_rank(s.kind), s.id));
     let mut remaining = MAX_PLANT_CANDIDATES_PER_CELL;
@@ -1786,7 +2201,7 @@ fn place_grass(
             .round()
             .clamp(1.0, 256.0) as i64;
         let count = (per_side * per_side) as usize;
-        if count > remaining || palette >= strata_registry::flora::MAX_GRASS_SPECIES {
+        if count > remaining || palette >= strata_data::flora::MAX_GRASS_SPECIES {
             continue;
         }
         remaining -= count;
@@ -1921,7 +2336,7 @@ mod grass_field_tests {
 
     #[test]
     fn deadwood_rejects_unseen_edges_and_uneven_support() {
-        let biome = strata_registry::BiomeId(0);
+        let biome = strata_data::BiomeId(0);
         let mut samples = vec![
             Sample {
                 height: 10.0,

@@ -10,14 +10,15 @@
     forward_io::FragmentOutput,
     pbr_fragment::pbr_input_from_standard_material,
     pbr_functions::{alpha_discard, apply_pbr_lighting, main_pass_post_lighting_processing},
-    pbr_types::STANDARD_MATERIAL_FLAGS_UNLIT_BIT,
+    pbr_types::{STANDARD_MATERIAL_FLAGS_UNLIT_BIT, STANDARD_MATERIAL_FLAGS_ALPHA_MODE_RESERVED_BITS, STANDARD_MATERIAL_FLAGS_ALPHA_MODE_MASK},
 }
 
 #ifdef VISIBILITY_RANGE_DITHER
 #import bevy_pbr::pbr_functions
 #endif
 
-#import strata::foliage_common::{FoliageVertex, bend_vertex, wind}
+#import strata::foliage_common::{FoliageVertex, bend_vertex, tree_wind}
+#import strata::canopy::canopy_rim
 
 // The locations of forward_io::VertexOutput for the fields carried.
 struct FoliageVertexOutput {
@@ -54,7 +55,8 @@ fn tag_tint(tag: u32) -> vec3<f32> {
 fn vertex(vertex: FoliageVertex) -> FoliageVertexOutput {
     var out: FoliageVertexOutput;
     let world_from_local = mesh_functions::get_world_from_local(vertex.instance_index);
-    let bent = bend_vertex(vertex, world_from_local, wind[0], wind[0].time);
+    let wind_now = tree_wind(vertex.instance_index);
+    let bent = bend_vertex(vertex, world_from_local, wind_now, wind_now.time);
     out.world_position = bent.world_position;
     out.position = position_world_to_clip(out.world_position.xyz);
     out.world_normal = mesh_functions::mesh_normal_local_to_world(bent.normal, vertex.instance_index);
@@ -112,15 +114,32 @@ fn fragment(
     // crown's top sees over them, so it opens towards the top. Nothing goes
     // under a quarter, so the deepest shade keeps the sky's colour.
     let plant_sky = mix(in.tint.w, 1.0, 0.6 * in.shade.y);
-    let sky_occlusion = mix(1.0, max(plant_sky, 0.25), wind[0].sky_visibility);
-    pbr_input.diffuse_occlusion = pbr_input.diffuse_occlusion * sky_occlusion;
+    let sky_occlusion = mix(1.0, max(plant_sky, 0.25), tree_wind(in.instance_index).sky_visibility);
+    let shade_wind = tree_wind(in.instance_index);
+    let shade_tint = vec3<f32>(shade_wind.shade_r, shade_wind.shade_g, shade_wind.shade_b);
+    pbr_input.diffuse_occlusion = pbr_input.diffuse_occlusion * sky_occlusion * shade_tint;
     pbr_input.specular_occlusion = pbr_input.specular_occlusion * sky_occlusion;
     let lift = mix(0.85, 1.1, in.shade.y);
-    pbr_input.material.base_color = vec4<f32>(pbr_input.material.base_color.rgb * lift, pbr_input.material.base_color.a);
+    // The crown's grouping (visual.md F5): a dark cool core inside by the
+    // crown depth (0 outside, 1 deep) and lighter clumps by the curvature,
+    // the factor the impostor bake has in its atlas. Only the masked pieces
+    // (leaves) wear it: bark and rocks draw opaque and read the same lanes
+    // for other things (a rock's curvature is centred at 0.5 and its fourth
+    // lane is moss), and the bake grades cut-outs alone to match.
+    let leaves = (pbr_input.material.flags & STANDARD_MATERIAL_FLAGS_ALPHA_MODE_RESERVED_BITS) == STANDARD_MATERIAL_FLAGS_ALPHA_MODE_MASK;
+    let core = vec3<f32>(shade_wind.canopy_r, shade_wind.canopy_g, shade_wind.canopy_b);
+    var group = vec3<f32>(1.0);
+    if leaves {
+        group = mix(vec3<f32>(1.0), core, in.shade.w) * max(1.0 + shade_wind.canopy_lift * in.shade.z, 0.0);
+    }
+    pbr_input.material.base_color = vec4<f32>(pbr_input.material.base_color.rgb * (lift * group), pbr_input.material.base_color.a);
 
     var out: FragmentOutput;
     if (pbr_input.material.flags & STANDARD_MATERIAL_FLAGS_UNLIT_BIT) == 0u {
         out.color = apply_pbr_lighting(pbr_input);
+        // Sun through the outer leaves seen against it.
+        let rim_open = mix(0.5, 1.0, 1.0 - in.shade.w) * sky_occlusion;
+        out.color = vec4<f32>(out.color.rgb + canopy_rim(pbr_input.V, pbr_input.material.base_color.rgb, rim_open, select(0.0, shade_wind.canopy_rim, leaves)), out.color.a);
     } else {
         out.color = pbr_input.material.base_color;
     }

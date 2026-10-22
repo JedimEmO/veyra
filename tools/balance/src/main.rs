@@ -20,7 +20,7 @@ use balance::grid::Variation;
 use balance::{Grid, MatchupRef, SideMod, boxes, loadout, report};
 use clap::{Parser, Subcommand};
 use strata_registry::progression::SkillGraph;
-use strata_sim::combat_tables::CombatTables;
+use veyra_rules::combat_tables::CombatTables;
 
 #[derive(Parser)]
 #[command(about = "Bouts between policies over the real combat sim, as CSV")]
@@ -299,7 +299,7 @@ fn main() -> anyhow::Result<()> {
             cap,
             write,
         } => {
-            strata_sim::combat_tables::install(base);
+            veyra_rules::combat_tables::install(base);
             let page = balance::worth::page(&cli.assets, bouts, seed, cap, jobs)?;
             match write {
                 Some(path) => std::fs::write(&path, page)
@@ -314,7 +314,7 @@ fn main() -> anyhow::Result<()> {
             } else {
                 Contracts::shipped()
             };
-            strata_sim::combat_tables::install(base);
+            veyra_rules::combat_tables::install(base);
             let started = std::time::Instant::now();
             let verdicts = contracts.check(jobs)?;
             println!("{}", balance::contracts::table(&verdicts));

@@ -12,7 +12,7 @@ strata-core = { workspace = true }
 strata-registry = { workspace = true }
 strata-worldgen = { workspace = true }
 strata-flora = { workspace = true }
-strata-sim = { workspace = true }
+strata-app = { workspace = true }
 strata-stream = { workspace = true }
 strata-terrain = { workspace = true }
 # Baked trees: props, the material library and impostor atlases. Featureless,

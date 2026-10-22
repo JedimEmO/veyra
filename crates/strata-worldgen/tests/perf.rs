@@ -7,8 +7,8 @@ use std::time::Instant;
 use strata_core::{GRID_N, Seed};
 use strata_worldgen::{ProceduralWorld, WorldSource};
 
-fn registries() -> strata_registry::GameRegistries {
-    strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+fn registries() -> strata_data::WorldDefs {
+    strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
         .expect("the shipped assets load")
 }
 

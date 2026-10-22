@@ -1,15 +1,15 @@
 //! Exercise the renderer contract with dense, hand-built placement inputs.
 
 use strata_core::{RegionCoord, Seed};
+use strata_data::flora::MAX_GRASS_BLADES_PER_CELL;
+use strata_data::{BiomeId, FloraFit, FloraId, FloraKind};
 use strata_flora::{FloraTable, GRID, HeightGrid, place_on_grid};
-use strata_registry::flora::MAX_GRASS_BLADES_PER_CELL;
-use strata_registry::{BiomeId, FloraFit, FloraId, FloraKind};
 use strata_worldgen::Sample;
 
 #[test]
 fn dense_grass_thins_all_species_and_uses_grass_only_palette_slots() {
     let registries =
-        strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+        strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
             .expect("shipped registry");
     let original = FloraTable::from_registries(&registries);
     let template = original

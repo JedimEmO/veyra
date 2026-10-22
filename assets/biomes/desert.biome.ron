@@ -14,5 +14,6 @@
     ground: (0.88, 0.72, 0.46),
     // Heat: warm and bleached, the brights pushed and the colour a
     // little down so the sun reads as hard.
-    grade: (temperature: 0.01, saturation: 0.97, gain: 1.04),
+    // Shade colour (visual.md F4): Warm violet-rose shade: the painter's answer to hot sand, red and blue over green.
+    grade: (temperature: 0.01, saturation: 0.97, gain: 1.04, shade: (1.08, 0.92, 1.08)),
 )

@@ -17,5 +17,6 @@
     // brights a touch brighter and the colour held back so the sand
     // reads pale. No contrast: Bevy's pivots at linear 0.5, so above 1
     // it crushes every dark paint and shade.
-    grade: (temperature: -0.008, saturation: 0.95, gain: 1.03),
+    // Shade colour (visual.md F4): Teal shade: green and blue over red, the water's colour in the shadows of sand and rock.
+    grade: (temperature: -0.008, saturation: 0.95, gain: 1.03, shade: (0.86, 1.04, 1.10)),
 )

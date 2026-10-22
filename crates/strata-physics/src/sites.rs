@@ -20,9 +20,9 @@ use bevy::ecs::prelude::*;
 use bevy::math::Quat;
 use bevy::tasks::{AsyncComputeTaskPool, Task, TaskPool, block_on, poll_once};
 use bevy::transform::components::Transform;
+use strata_app::sites::{NearSites, PlacedSiteBuilding, SiteBuildingKey, buildings_within};
+use strata_app::{GeneratedRoot, Observers, RenderOrigin, WorldPosition};
 use strata_core::WorldPos;
-use strata_sim::sites::{NearSites, PlacedSiteBuilding, SiteBuildingKey, buildings_within};
-use strata_sim::{GeneratedRoot, Observers, RenderOrigin, WorldPosition};
 use tracing::warn;
 
 use crate::grounding::collider;

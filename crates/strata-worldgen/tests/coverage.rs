@@ -35,10 +35,10 @@ fn mountains_reach_the_plan_height_and_plains_stay_low() {
     let registries = common::registries();
     let world = common::world(42);
     let mountains = registries
-        .biome_id(&strata_registry::Namespaced::parse("strata:mountains").expect("valid"))
+        .biome_id(&strata_data::Namespaced::parse("strata:mountains").expect("valid"))
         .expect("ships");
     let plains = registries
-        .biome_id(&strata_registry::Namespaced::parse("strata:plains").expect("valid"))
+        .biome_id(&strata_data::Namespaced::parse("strata:plains").expect("valid"))
         .expect("ships");
     let mut peak = f32::MIN;
     let mut plains_max = f32::MIN;
@@ -75,7 +75,7 @@ fn the_land_within_100_km_keeps_its_variety() {
     let registries = common::registries();
     let world = common::world(42);
     let step = 500.0;
-    let rows: Vec<Vec<strata_registry::BiomeId>> = std::thread::scope(|scope| {
+    let rows: Vec<Vec<strata_data::BiomeId>> = std::thread::scope(|scope| {
         let world = &world;
         let workers: Vec<_> = (-200_i32..=200)
             .collect::<Vec<_>>()
@@ -113,7 +113,7 @@ fn the_land_within_100_km_keeps_its_variety() {
         land += 1;
     }
     let ocean = registries
-        .biome_id(&strata_registry::Namespaced::parse("strata:ocean").expect("valid"))
+        .biome_id(&strata_data::Namespaced::parse("strata:ocean").expect("valid"))
         .expect("ships");
     for (id, name, _) in registries.biomes.iter() {
         if id == ocean {

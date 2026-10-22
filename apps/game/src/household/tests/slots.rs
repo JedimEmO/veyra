@@ -94,7 +94,7 @@ fn walk(
                 state: slotted_model::MenuState::new(&slotted_model::MenuDef::new()),
                 saddle: slotted_model::Inventory::new(0),
             });
-            inbox.0.push(EquipRequest::Take {
+            inbox.push(EquipRequest::Take {
                 kind: glaive.clone(),
                 hand: 1,
             });

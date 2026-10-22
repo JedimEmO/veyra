@@ -9,7 +9,7 @@ use bevy::light::FogVolume;
 use bevy::math::Vec3;
 use bevy::render::render_resource::{Extent3d, TextureDimension, TextureFormat};
 use bevy::transform::components::Transform;
-use strata_sim::{WorldPosition, WorldSourceRes};
+use strata_app::{WorldPosition, WorldSourceRes};
 
 /// Stable fixture names used by the CLI.
 pub const SCENES: [&str; 4] = ["woodland", "grove", "valley", "coast"];
@@ -172,9 +172,9 @@ mod tests {
     #[test]
     fn fog_keeps_its_world_anchor_and_scale_across_rebases() {
         use bevy::app::App;
-        use strata_sim::{PrimaryObserver, RenderOrigin};
+        use strata_app::{PrimaryObserver, RenderOrigin};
         let mut app = App::new();
-        app.add_plugins((bevy::time::TimePlugin, strata_sim::SimPlugin));
+        app.add_plugins((bevy::time::TimePlugin, strata_app::AppPlugin));
         for _ in 0..3 {
             app.update();
         }

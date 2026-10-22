@@ -9,6 +9,9 @@ authors.workspace = true
 publish = false
 
 [dependencies]
+# The household, the people, the camps and the props' placement, the headless
+# half of the game: `just server-check` asserts it holds no renderer.
+veyra-game = { workspace = true }
 # The tree library: Bevy-free, read for the handshake and the world.
 strata-flora = { workspace = true }
 # The headless facade and the replication adapter, and nothing that draws:

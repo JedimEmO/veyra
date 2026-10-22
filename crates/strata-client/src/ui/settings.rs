@@ -24,6 +24,7 @@ use slotted::ui::{
 use crate::flycam::FlyCam;
 use crate::orbit::OrbitCamera;
 use crate::ui::graphics::Graphics;
+use strata_ui::scale::{self, choice};
 
 /// The generated settings screen's kind.
 pub const KIND: &str = "strata:settings";
@@ -45,7 +46,7 @@ pub mod keys {
     /// Interface volume in percent of the master (`Float`): the screens'
     /// own sounds only.
     pub const UI_VOLUME: &str = "settings.ui_volume";
-    /// The UI scale (`Text`): one of [`crate::ui::scale::choice`]'s ids.
+    /// The UI scale (`Text`): one of [`strata_ui::scale::choice`]'s ids.
     pub const UI_SCALE: &str = "settings.ui_scale";
     /// The camera shakes a little when the member is hurt (`Bool`).
     pub const CAMERA_SHAKE: &str = "settings.camera_shake";
@@ -77,7 +78,7 @@ pub fn default_settings_path() -> PathBuf {
         .join("settings.ron")
 }
 
-/// The settings in the sim's installed [`strata_sim::store::Store`] under the
+/// The settings in the sim's installed [`veyra_sim::store::Store`] under the
 /// file's path as the key: the same RON file natively, the browser's storage
 /// on the web, and nothing when no store can keep it.
 #[derive(Debug, Clone)]
@@ -97,7 +98,7 @@ impl StoredSettings {
 
 impl slotted::menu::SettingsStore for StoredSettings {
     fn load(&self) -> Option<slotted::menu::SavedSettings> {
-        let text = match strata_sim::store::current().read(&self.key) {
+        let text = match veyra_sim::store::current().read(&self.key) {
             Ok(Some(text)) => text,
             Ok(None) => return None,
             Err(e) => {
@@ -122,7 +123,7 @@ impl slotted::menu::SettingsStore for StoredSettings {
                 return;
             }
         };
-        if let Err(e) = strata_sim::store::current().write(&self.key, &text) {
+        if let Err(e) = veyra_sim::store::current().write(&self.key, &text) {
             tracing::warn!(key = %self.key, %e, "writing the settings");
         }
     }
@@ -177,7 +178,7 @@ pub fn spec() -> SettingsSpec {
             key: keys::UI_SCALE.into(),
             label: key("strata.settings.ui_scale"),
             options: ui_scale_options(),
-            default: crate::ui::scale::choice::AUTO.into(),
+            default: choice::AUTO.into(),
         })
         .row(SettingsRow::Toggle {
             key: keys::CAMERA_SHAKE.into(),
@@ -236,7 +237,7 @@ fn graphics_options() -> Vec<SelectOption> {
 /// The UI scale's choices, Auto first: the one that is right on any
 /// window. The ids are what the file stores.
 fn ui_scale_options() -> Vec<SelectOption> {
-    use crate::ui::scale::choice;
+    use strata_ui::scale::choice;
     [
         (choice::AUTO, "strata.settings.ui_scale.auto"),
         (choice::P100, "strata.settings.ui_scale.100"),
@@ -252,6 +253,28 @@ fn ui_scale_options() -> Vec<SelectOption> {
     .collect()
 }
 
+/// `Update`: the stored choice and the primary window's height onto
+/// [`UiScale`](bevy::ui::UiScale). Written only when it differs, so the UI's change detection
+/// fires on a resize or a new choice and not every frame. Without a
+/// window (a headless app) there is nothing to scale.
+pub fn apply_ui_scale(
+    store: Res<ValueStore>,
+    windows: Query<&bevy::window::Window, With<bevy::window::PrimaryWindow>>,
+    scale: Option<ResMut<bevy::ui::UiScale>>,
+) {
+    let (Some(mut scale), Ok(window)) = (scale, windows.single()) else {
+        return;
+    };
+    let choice = store
+        .get(keys::UI_SCALE)
+        .and_then(Value::as_str)
+        .unwrap_or(choice::AUTO);
+    let wanted = scale::scale_for(choice, window.height());
+    if (scale.0 - wanted).abs() > f32::EPSILON {
+        scale.0 = wanted;
+    }
+}
+
 /// `Update`: the stored field of view onto every game camera's projection.
 /// Only a perspective projection has one, and only a change is written, so
 /// change detection on the projection fires when the setting moves and not
@@ -259,7 +282,7 @@ fn ui_scale_options() -> Vec<SelectOption> {
 pub fn apply_field_of_view(
     store: Res<ValueStore>,
     mut cameras: Query<
-        (&mut Projection, Option<&mut crate::combat::CombatCamera>),
+        (&mut Projection, Option<&mut crate::view::CombatCamera>),
         Or<(With<OrbitCamera>, With<FlyCam>)>,
     >,
 ) {
@@ -327,10 +350,7 @@ pub fn apply_hud_toggle(store: Res<ValueStore>, mut layers: ResMut<HudLayers>) {
 }
 
 /// `Update`: the Camera shake switch onto the camera's own resource.
-pub fn apply_camera_shake(
-    store: Res<ValueStore>,
-    shake: Option<ResMut<crate::combat::CameraShake>>,
-) {
+pub fn apply_camera_shake(store: Res<ValueStore>, shake: Option<ResMut<crate::view::CameraShake>>) {
     let (Some(on), Some(mut shake)) = (
         store.get(keys::CAMERA_SHAKE).and_then(Value::as_bool),
         shake,
@@ -414,7 +434,7 @@ mod tests {
         );
         assert_eq!(
             defaults.get(keys::UI_SCALE),
-            Some(&Value::Text(crate::ui::scale::choice::AUTO.to_owned()))
+            Some(&Value::Text(choice::AUTO.to_owned()))
         );
         assert_eq!(
             defaults.get(keys::CAMERA_SHAKE),

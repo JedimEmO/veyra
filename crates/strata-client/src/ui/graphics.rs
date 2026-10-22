@@ -63,6 +63,10 @@ impl Graphics {
 /// The limits one preset lays over the look.
 #[derive(Debug, Clone, Copy, PartialEq, Deserialize)]
 #[serde(default, deny_unknown_fields)]
+#[allow(
+    clippy::struct_excessive_bools,
+    reason = "each bool is one independent limit the file names"
+)]
 pub struct Preset {
     /// Whether the sun may cast shadows at all.
     pub shadows: bool,
@@ -76,6 +80,21 @@ pub struct Preset {
     pub antialiasing: bool,
     /// The share of the foliage distance the slider's value is, percent.
     pub foliage_percent: f32,
+    /// Whether screen-space ambient occlusion, and the normal prepass it
+    /// needs, may be drawn.
+    pub ssao: bool,
+    /// Whether the local fog volumes may be drawn.
+    pub local_fog: bool,
+    /// The most raymarch steps the valley fog may take a pixel.
+    pub valley_fog_steps: Option<u32>,
+    /// The farthest the terrain's detail textures may reach, metres.
+    pub detail_far: Option<f32>,
+    /// The most of the window's size the 3D camera may render at (the look's
+    /// `render_scale`, review F8): the pixel-bound passes shrink with it.
+    pub render_scale: Option<f32>,
+    /// Whether the terrain reads one texture tap per layer instead of three
+    /// stochastic ones (`TERRAIN_SINGLE_TAP`, review F10).
+    pub terrain_single_tap: bool,
 }
 
 impl Default for Preset {
@@ -87,6 +106,12 @@ impl Default for Preset {
             shadow_distance: None,
             antialiasing: true,
             foliage_percent: 100.0,
+            ssao: true,
+            local_fog: true,
+            valley_fog_steps: None,
+            detail_far: None,
+            render_scale: None,
+            terrain_single_tap: false,
         }
     }
 }
@@ -106,6 +131,11 @@ impl Preset {
             sky.shadow_distance = sky.shadow_distance.min(distance);
         }
         file.look.no_aa |= !self.antialiasing;
+        file.look.ssao &= self.ssao;
+        file.look.local_fog &= self.local_fog;
+        if let Some(cap) = self.render_scale {
+            file.look.render_scale = file.look.render_scale.min(cap);
+        }
     }
 
     /// The foliage distance as a multiple of the slider's.
@@ -213,7 +243,7 @@ pub struct Active {
 }
 
 /// `Startup`: the file under the asset root over the compiled-in presets.
-pub fn load_table(root: Option<Res<strata_sim::WorldAssetRoot>>, mut table: ResMut<Table>) {
+pub fn load_table(root: Option<Res<veyra_sim::WorldAssetRoot>>, mut table: ResMut<Table>) {
     let Some(root) = root else { return };
     match root.0.read_string(FILE) {
         Ok(text) => match Table::from_ron(&text) {
@@ -326,6 +356,39 @@ pub(crate) fn register(app: &mut bevy::app::App) {
         .add_systems(Update, (decide, resolve).chain());
 }
 
+/// `Update`: the valley fog's steps and the terrain's detail reach under the
+/// preset's ceilings. Neither is a look field, so the first value seen
+/// (the default or a `--fog-steps`) is kept as the base and a ceiling is laid
+/// over it, which leaves High, and a switch back up to it, as it was.
+pub fn apply_fog_and_detail(
+    active: Res<Active>,
+    fog: Option<ResMut<strata_atmosphere::fog_pass::GroundFog>>,
+    terrain: Option<ResMut<strata_terrain::TerrainLook>>,
+    mut bases: Local<(Option<u32>, Option<f32>)>,
+) {
+    if let Some(mut fog) = fog {
+        let base = *bases.0.get_or_insert(fog.steps);
+        let wanted = active
+            .preset
+            .valley_fog_steps
+            .map_or(base, |cap| base.min(cap));
+        if fog.steps != wanted {
+            fog.steps = wanted;
+        }
+    }
+    if let Some(mut terrain) = terrain {
+        if terrain.single_tap != active.preset.terrain_single_tap {
+            terrain.single_tap = active.preset.terrain_single_tap;
+        }
+        let base = *bases.1.get_or_insert(terrain.params.detail_far);
+        let wanted = active.preset.detail_far.map_or(base, |cap| base.min(cap));
+        #[allow(clippy::float_cmp, reason = "a copy is exact: any difference is stale")]
+        if terrain.params.detail_far != wanted {
+            terrain.params.detail_far = wanted;
+        }
+    }
+}
+
 /// `Update`: the shadow map's side follows the look's, which the preset
 /// limits; Bevy reallocates it when the resource changes.
 pub fn apply_shadow_map(
@@ -367,6 +430,41 @@ mod tests {
         dark.sky.shadows = false;
         table.high.limit(&mut dark);
         assert!(!dark.sky.shadows, "a look with no shadows keeps none");
+    }
+
+    #[test]
+    fn low_drops_the_fill_bound_passes_and_the_others_keep_them() {
+        let table = Table::shipped();
+        let mut low = LookFile::default();
+        table.low.limit(&mut low);
+        assert!(!low.look.ssao && !low.look.local_fog);
+        assert_eq!(table.low.valley_fog_steps, Some(6));
+        assert_eq!(table.low.detail_far, Some(300.0));
+        assert!(table.low.terrain_single_tap);
+        assert!(!table.medium.terrain_single_tap && !table.high.terrain_single_tap);
+        for preset in [&table.medium, &table.high] {
+            let mut file = LookFile::default();
+            preset.limit(&mut file);
+            assert!(file.look.ssao && file.look.local_fog);
+            assert_eq!((preset.valley_fog_steps, preset.detail_far), (None, None));
+        }
+    }
+
+    #[test]
+    fn low_renders_at_three_quarters_and_a_ceiling_never_raises_a_scale() {
+        let table = Table::shipped();
+        let mut low = LookFile::default();
+        table.low.limit(&mut low);
+        assert!((low.look.render_scale - 0.75).abs() < f32::EPSILON);
+        let mut chosen = LookFile::default();
+        chosen.look.render_scale = 0.6;
+        table.low.limit(&mut chosen);
+        assert!((chosen.look.render_scale - 0.6).abs() < f32::EPSILON);
+        for preset in [&table.medium, &table.high] {
+            let mut file = LookFile::default();
+            preset.limit(&mut file);
+            assert!((file.look.render_scale - 1.0).abs() < f32::EPSILON);
+        }
     }
 
     #[test]

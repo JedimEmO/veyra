@@ -1,6 +1,6 @@
 // Per action: the contact interval, the commitment, what it costs and
 // what it does. Seconds and metres, independent of any clip's frame rate.
-// Loaded by `strata_sim::combat_tables`; every row must be present.
+// Loaded by `veyra_sim::combat_tables`; every row must be present.
 (
     version: 1,
     actions: {

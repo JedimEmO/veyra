@@ -1,0 +1,24 @@
+// The crown's grouping (review step six, F5; ticket 0006 pass 2): how a tree's
+// leaves are shaded by where they sit in the crown. Each vertex of a tree mesh
+// carries its crown depth (0 on the outer surface, 1 deep inside) and its
+// curvature (positive on a bulging clump, negative in the crease between two).
+// The albedo is multiplied by
+//     mix(1, core * cool, depth) * (1 + lift * curvature)
+// so the inside of a crown is a dark cool core and its outer clumps stand
+// lighter. Only leaf pieces (the masked materials) wear it, near and baked;
+// bark and rock keep their own lanes. `cool` is a fixed lean, not the
+// biome's shade tint, because an impostor atlas cannot carry a tint that
+// changes with the hour. The impostor bake (`just content`) applies the same factor, so a
+// far tree matches a near one at the swap and a change here needs a rebake of
+// the impostors as well as a restart. `rim` is the one dial a bake cannot
+// carry: the share of sunlight that comes through the outer leaves of a crown
+// seen against the sun, added by the near shader and the impostor shader alike
+// (0 turns it off, as grass's `grass_rim` does). At 0.04 the near and far
+// crowns gain the same from it, measured on the canopy fixture; more makes the
+// near tree outshine its impostor at the swap.
+(
+    core: 0.60,
+    cool: (0.92, 1.0, 1.08),
+    lift: 0.50,
+    rim: 0.04,
+)

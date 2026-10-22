@@ -12,7 +12,8 @@ publish = false
 # on purpose. `game` and `server` load what it writes and link neither.
 [dependencies]
 ashlar.workspace = true
-ashlar-content.workspace = true
+# `bc`: the maps are written as BC7, BC5 and BC6H.
+ashlar-content = { workspace = true, features = ["bc"] }
 ashlar-material.workspace = true
 veyra-buildings.workspace = true
 veyra-materials.workspace = true
@@ -36,6 +37,9 @@ serde.workspace = true
 veyra-weapons.workspace = true
 ashlar-manifold.workspace = true
 image.workspace = true
+serde_json.workspace = true
+# The value budget the content test holds the baked maps to.
+strata-data.workspace = true
 
 # The stats tests bake the buildings in-process and snapshot what they cost;
 # the terrain test reads the game's own terrain registry.

@@ -714,7 +714,7 @@ fn stones(
 mod tests {
     use super::*;
     use crate::{Sample, roads::Crossing};
-    use strata_registry::BiomeId;
+    use strata_data::BiomeId;
 
     /// Level ground at `height`, a creek's record everywhere flowing `+x`,
     /// and a channel `half` either side of `z = 0` down to `bed`.

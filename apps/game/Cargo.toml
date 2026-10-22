@@ -11,7 +11,7 @@ publish = false
 [dependencies]
 # The client defaults; the replication adapter for `--connect` is the `net`
 # feature, which a browser build leaves out.
-strata = { workspace = true, features = ["client", "dev", "ui"] }
+strata = { workspace = true, features = ["client", "ui"] }
 # Named here as well as in the target tables below because Bevy's derives look
 # for the crate in `[dependencies]` alone. `png` is for the screenshot writer.
 bevy = { workspace = true, features = ["png"] }
@@ -22,6 +22,16 @@ serde = { workspace = true }
 ron = { workspace = true }
 
 veyra-buildings.workspace = true
+# The household, the people, the camps and the props' placement: the headless
+# half of this binary, which the server links too.
+veyra-game.workspace = true
+# The combat view over the engine client: HUD, art, effects, audio, the bike on
+# screen. The game turns its `ui` on with the client's.
+veyra-view = { workspace = true, features = ["ui"] }
+# Veyra's screens, beside the engine client's own UI; the game adds both.
+veyra-ui.workspace = true
+# Stills, scripts and the benchmark runs; only with `dev-tools`.
+veyra-dev = { workspace = true, optional = true }
 # The tree library, read before the app runs for the handshake.
 strata-flora.workspace = true
 # Buildings arrive baked from `just content`; the game reads their proxies with
@@ -57,6 +67,9 @@ web-sys = { workspace = true, features = ["Window", "Location", "console"] }
 # The grounding tests bake the two study buildings themselves, so they need the
 # kernel; the binary never does, which `just server-check` asserts.
 [dev-dependencies]
+# Tests read the shipped data compiled in; the shipped binaries read it from disk.
+veyra-sim = { workspace = true, features = ["shipped-data"] }
+veyra-game = { workspace = true, features = ["test-support"] }
 ashlar-manifold.workspace = true
 tempfile.workspace = true
 
@@ -66,8 +79,12 @@ workspace = true
 [features]
 # `--connect`: the renet and replicon adapter. On by default; a wasm build
 # turns defaults off, so no socket crate is in its graph.
-default = ["net", "pcss"]
+default = ["net", "pcss", "dev-tools"]
 net = ["strata/net-replicon"]
+# The stills, scripts and benchmark runs (`veyra-dev`) and the client's wireframe,
+# statistics and time scrub. On natively; the browser build and a shipped build
+# leave it off.
+dev-tools = ["dep:veyra-dev", "strata/dev"]
 # Soft shadows from the sun, which the browser's shader compiler rejects.
 pcss = ["strata/pcss"]
 # The feature set the wasm build names (`--no-default-features --features

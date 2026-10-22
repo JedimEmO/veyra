@@ -30,7 +30,7 @@ use crate::TERRAIN;
 mod city;
 mod faces;
 
-pub use city::{flagstones, setts, soil};
+pub use city::{FLAGSTONES_LAYOUT, flagstones, setts, soil};
 pub use faces::{basalt, clay, granite, sandstone, slate};
 
 fn m(op: MathOp, a: impl Into<Input>, b: impl Into<Input>) -> Math {
@@ -614,7 +614,7 @@ pub fn forest_floor() -> MaterialGraph {
 
 /// Loose gravel: rounded pebbles of three sizes bedded in dark soil, each an
 /// ellipse turned its own way with a lit crown and a dusty foot. 60 mm of
-/// relief over a 4 m repeat, the stones standing near the top of the height
+/// relief over a 6 m repeat, the stones standing near the top of the height
 /// so they win a blend against sand, snow or grass.
 ///
 /// A pebble is an ellipse about its Voronoi point, capped by the cell's edge

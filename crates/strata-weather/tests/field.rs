@@ -102,7 +102,7 @@ fn world() -> &'static ProceduralWorld {
     static WORLD: OnceLock<ProceduralWorld> = OnceLock::new();
     WORLD.get_or_init(|| {
         let registries =
-            strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
+            strata_data::load_world_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
                 .expect("the shipped assets load");
         let world = ProceduralWorld::new(Seed(42), &registries);
         // The rivers under every tile here first, on the bake's own threads

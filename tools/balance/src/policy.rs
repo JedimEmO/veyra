@@ -8,7 +8,7 @@
 //!
 //! [`Policy::Sentry`], [`Policy::Rusher`], [`Policy::Marksman`] and
 //! [`Policy::Duelist`] are the game's own opponents:
-//! they run `strata_sim::combat_ai`, the code the encounter runs, on the
+//! they run `veyra_rules::combat_ai`, the code the encounter runs, on the
 //! installed `opponents.ron` row every tick, so a sweep of an opponent
 //! number here is a sweep of the game's.
 
@@ -19,10 +19,10 @@ use serde::{Deserialize, Serialize};
 use strata_core::{Rng, WorldPos};
 use strata_physics::CharacterController;
 use strata_physics::avian3d::prelude::{SpatialQuery, SpatialQueryFilter};
-use strata_sim::ability::{AbilityEffect, AbilityRow, Along, Own};
-use strata_sim::combat::{Action, BlasterBolt, CombatIntent, Combatant};
-use strata_sim::combat_ai::{OpponentBrain, OpponentKind, Seen};
-use strata_sim::{PlayerIntent, RenderOrigin, WorldPosition};
+use veyra_rules::ability::{AbilityEffect, AbilityRow, Along, Own};
+use veyra_rules::combat::{Action, BlasterBolt, CombatIntent, Combatant};
+use veyra_rules::combat_ai::{OpponentBrain, OpponentKind, Seen};
+use veyra_sim::{PlayerIntent, RenderOrigin, WorldPosition};
 
 /// Serde's default for a flag that is on unless a file says otherwise.
 fn yes() -> bool {
@@ -122,7 +122,7 @@ pub enum Policy {
         /// Dodge on the opponent's wind-up, its charge and a bolt's launch.
         dodge_on_telegraph: bool,
     },
-    /// The game's sentry, `strata_sim::combat_ai` on the installed
+    /// The game's sentry, `veyra_rules::combat_ai` on the installed
     /// `opponents.sentry` row: holds between its near and far distances,
     /// charges with its aim locked, fires, recovers.
     Sentry,
@@ -195,7 +195,7 @@ pub struct ScriptRow {
     pub combat: CombatIntent,
     /// A weapon named by family, drawn from whichever slot holds it on the
     /// side the script drives; a number in the file is a slot instead.
-    pub family: Option<strata_sim::combat::Weapon>,
+    pub family: Option<veyra_rules::combat::Weapon>,
 }
 
 impl ScriptRow {
@@ -227,7 +227,7 @@ impl ScriptRow {
             let named = |name: &str| {
                 let mut chars = name.chars();
                 let first = chars.next()?.to_ascii_uppercase();
-                strata_sim::combat::Weapon::from_name(&format!("{first}{}", chars.as_str()))
+                veyra_rules::combat::Weapon::from_name(&format!("{first}{}", chars.as_str()))
             };
             let (weapon, family) = match columns[11] {
                 "" | "-" => (None, None),
@@ -437,7 +437,7 @@ impl Driver {
                 };
                 Some(OpponentBrain::new(
                     kind,
-                    &strata_sim::combat_tables::current().opponents,
+                    &veyra_rules::combat_tables::current().opponents,
                 ))
             }
             _ => None,
@@ -732,7 +732,7 @@ impl PressAbilities {
     )]
     fn wants(&self, row: &AbilityRow, actor: &Combatant, sight: &Sight) -> bool {
         let weapon_reach =
-            || strata_sim::combat_tables::with_melee(|melee| melee.reach_m(actor.weapon));
+            || veyra_rules::combat_tables::with_melee(|melee| melee.reach_m(actor.weapon));
         let within = |metres: f32| sight.metres < f64::from(metres);
         match &row.effect {
             AbilityEffect::Cut(_) => within(crate::BLADE_RANGE),
@@ -807,7 +807,7 @@ impl PressAbilities {
                 if actor.statuses().iter().any(|(borne, _)| borne == id) {
                     return false;
                 }
-                let tables = strata_sim::combat_tables::current();
+                let tables = veyra_rules::combat_tables::current();
                 let Some(status) = tables.abilities.status(id) else {
                     return false;
                 };
@@ -827,7 +827,7 @@ impl PressAbilities {
 
 /// The reach in metres of the weapon `actor` holds.
 fn reach_of(actor: &Combatant) -> f64 {
-    f64::from(strata_sim::combat_tables::with_melee(|melee| {
+    f64::from(veyra_rules::combat_tables::with_melee(|melee| {
         melee.reach_m(actor.weapon)
     }))
 }
@@ -912,7 +912,7 @@ pub fn press_abilities(
         );
         // A hand that will cover itself with a move has its reflection up
         // for the bolts the cover meets, as a raised guard has.
-        let size = strata_sim::combat_tables::current().abilities.bar;
+        let size = veyra_rules::combat_tables::current().abilities.bar;
         let covered = (0..size.weapon + size.utility).any(|index| {
             matches!(
                 actor.ability_at(index).map(|row| row.effect),
@@ -1080,7 +1080,7 @@ pub fn drive(
         if let Some(brain) = &mut driver.brain {
             // The game's opponent sees its target's feet and decides the
             // rest itself, on the installed row, as the encounter does.
-            let tables = strata_sim::combat_tables::current();
+            let tables = veyra_rules::combat_tables::current();
             let ground = target.position.0 - position.0.0;
             #[allow(clippy::cast_possible_truncation, reason = "metres, render range")]
             let looks = Seen {
@@ -1392,7 +1392,10 @@ pub fn drive(
                 // A cut begun in its reach is dodged once, a reaction after
                 // it shows, and the next one after the target has been out
                 // of its cut.
-                let reach = strata_sim::combat_tables::current().opponents.bulwark.reach;
+                let reach = veyra_rules::combat_tables::current()
+                    .opponents
+                    .bulwark
+                    .reach;
                 if target.action.is_melee() && distance < reach * 1.5 {
                     let telegraph = driver.telegraph.get_or_insert_with(|| {
                         let left = driver.rng.range_f64(
@@ -1444,7 +1447,7 @@ pub fn drive(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use strata_sim::combat::Weapon;
+    use veyra_rules::combat::Weapon;
 
     #[test]
     fn a_script_row_holds_until_the_next_and_its_edges_fire_once() {
@@ -1457,7 +1460,7 @@ mod tests {
         assert_eq!(rows.len(), 2);
         assert_eq!(rows[0].tick, 2, "sorted");
         assert!(rows[0].movement.sprint);
-        assert_eq!(rows[1].family, Some(strata_sim::combat::Weapon::Pistol));
+        assert_eq!(rows[1].family, Some(veyra_rules::combat::Weapon::Pistol));
         assert!(rows[1].combat.light);
         assert!(ScriptRow::parse_csv("1,2,3").is_err());
     }
@@ -1490,7 +1493,7 @@ mod tests {
     }
 
     fn row(id: &str) -> AbilityRow {
-        strata_sim::combat_tables::current()
+        veyra_rules::combat_tables::current()
             .abilities
             .row(id)
             .expect("a shipped ability")

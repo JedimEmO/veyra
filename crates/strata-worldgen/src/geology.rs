@@ -47,7 +47,7 @@
 //! mesher's grids.
 
 use strata_core::{Seed, mix64};
-use strata_registry::ProvinceId;
+use strata_data::ProvinceId;
 
 use crate::noise::{Fractal, Shape, smoothstep};
 use crate::params::WorldParams;
@@ -57,7 +57,7 @@ use crate::params::WorldParams;
 /// substitution, so no smaller bound holds for any set of provinces; on
 /// seed 42's six the review of step 3 counted four weighing at about one
 /// point in a hundred and five at one in three thousand.
-pub const MAX_MIX: usize = strata_registry::MAX_PROVINCES;
+pub const MAX_MIX: usize = strata_data::MAX_PROVINCES;
 
 /// What the field needs of one province.
 #[derive(Debug, Clone, Copy, PartialEq)]

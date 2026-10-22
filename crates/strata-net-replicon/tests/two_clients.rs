@@ -21,6 +21,10 @@ use bevy::state::state::State;
 use bevy::time::TimeUpdateStrategy;
 use bevy_replicon::prelude::Remote;
 use bevy_replicon::test_app::{ServerTestAppExt, TestClientEntity};
+use strata_app::{
+    AppPlugin, AppState, LocalPlayer, Player, PlayerId, PlayerIntent, SimClock, WorldPosition,
+    WorldSeed, WorldSourceRes,
+};
 use strata_core::{Seed, WorldPos};
 use strata_net::{NetRole, NetStatus};
 use strata_net_replicon::{
@@ -28,10 +32,6 @@ use strata_net_replicon::{
 };
 use strata_physics::PhysicsPlugin;
 use strata_registry::BiomeId;
-use strata_sim::{
-    AppState, LocalPlayer, Player, PlayerId, PlayerIntent, SimClock, SimPlugin, WorldPosition,
-    WorldSeed, WorldSourceRes,
-};
 use strata_stream::{StreamConfig, StreamPlugin};
 use strata_worldgen::{Sample, WorldSource};
 
@@ -80,7 +80,7 @@ fn app(role: ReplicationRole) -> App {
     app.add_plugins((
         bevy::app::TaskPoolPlugin::default(),
         bevy::time::TimePlugin,
-        SimPlugin,
+        AppPlugin,
         StreamPlugin,
         PhysicsPlugin,
         ReplicationPlugin {
@@ -88,8 +88,6 @@ fn app(role: ReplicationRole) -> App {
             tree_library: None,
             world: None,
             seed: None,
-            combat_tables: None,
-            site_groups: None,
         },
     ));
     app.insert_resource(TimeUpdateStrategy::FixedTimesteps(1));
@@ -220,7 +218,7 @@ fn two_clients_see_each_other_and_move() {
         assert!(
             client
                 .world()
-                .get::<strata_sim::WorldObserver>(remote)
+                .get::<strata_app::WorldObserver>(remote)
                 .is_none(),
             "{name}: the remote player is not an observer"
         );

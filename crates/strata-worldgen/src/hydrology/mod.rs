@@ -123,6 +123,7 @@ mod index;
 mod mass;
 mod persist;
 mod place;
+mod prepare;
 mod rivers;
 mod roads;
 mod route;
@@ -142,6 +143,11 @@ pub use crate::measure::MAX_THREADS;
 pub use carve::Section;
 use field::Tile;
 use index::{Run, SegmentIndex, Shore};
+pub use persist::{MASS_DIR, MassEntry, MassLoad, WATER_INDEX, WaterFileError, WaterIndex};
+pub use prepare::{
+    PREPARE_WATER_RADIUS_M, PrepareArea, WEB_PREPARE_RADIUS_M, WaterMasses, bake_water_masses,
+    prepare_round, water_places,
+};
 
 /// Metres between the network's lattice nodes.
 pub const LATTICE_M: f64 = 512.0;
@@ -568,7 +574,7 @@ pub struct River {
 
 /// The deepest a river runs at its centreline where a walker fords it,
 /// metres: thigh deep, under the wading depth past which the character
-/// swims (`strata_sim`'s `wade_depth`, 0.85 m), with room for the flow.
+/// swims (`veyra_sim`'s `wade_depth`, 0.85 m), with room for the flow.
 /// A road or a trail looks for a ford in [`River::centreline`].
 pub const FORD_DEPTH_M: f64 = 0.65;
 

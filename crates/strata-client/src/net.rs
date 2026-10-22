@@ -20,7 +20,7 @@ use bevy::mesh::{Mesh, Mesh3d};
 use bevy::pbr::{MeshMaterial3d, StandardMaterial};
 use bevy::transform::components::Transform;
 use strata_physics::CharacterController;
-use strata_sim::{LocalPlayer, Player};
+use veyra_sim::{LocalPlayer, Player};
 
 use crate::visual::PlayerVisual;
 

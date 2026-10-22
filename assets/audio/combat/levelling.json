@@ -16,7 +16,10 @@
       "dc_removed": 8.781625575793391e-06,
       "final_peak_scale": 1.0,
       "lufs": -22.02,
-      "true_peak_dbfs": -7.61
+      "true_peak_dbfs": -7.61,
+      "encoded_sha256": "sha256:5874e1f5c0c686877edf0b418b5f98a75e833883b8a2ded685edbccd7de7572f",
+      "ogg_quality": 5,
+      "ogg_bytes": 14749
     },
     "bench_switch_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/bench_switch_2.wav",
@@ -32,7 +35,10 @@
       "dc_removed": -0.00012249680269094885,
       "final_peak_scale": 1.0,
       "lufs": -22.02,
-      "true_peak_dbfs": -6.73
+      "true_peak_dbfs": -6.73,
+      "encoded_sha256": "sha256:fa5710444728103ed5b18d33eec2e8d13aa7e9a17c9b7d5476bbd5588c1b0bc3",
+      "ogg_quality": 5,
+      "ogg_bytes": 16176
     },
     "bike_call_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/bike_call_1.wav",
@@ -48,7 +54,10 @@
       "dc_removed": -3.552169286918531e-05,
       "final_peak_scale": 1.0,
       "lufs": -20.02,
-      "true_peak_dbfs": -5.24
+      "true_peak_dbfs": -5.24,
+      "encoded_sha256": "sha256:0fb16efb3994e5bba45be8526153b63e29590ee432c473e2bf66200c7904f53e",
+      "ogg_quality": 5,
+      "ogg_bytes": 19644
     },
     "bike_dismount_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/bike_dismount_1.wav",
@@ -64,7 +73,10 @@
       "dc_removed": -0.0004476845852913143,
       "final_peak_scale": 1.0,
       "lufs": -22.0,
-      "true_peak_dbfs": -4.51
+      "true_peak_dbfs": -4.51,
+      "encoded_sha256": "sha256:3a41dd2ebbf9107a4e07a081dbd2df509ecc34e9648076c63bf57718ddd29e03",
+      "ogg_quality": 5,
+      "ogg_bytes": 15022
     },
     "bike_dismount_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/bike_dismount_2.wav",
@@ -80,7 +92,10 @@
       "dc_removed": -6.752965026515059e-05,
       "final_peak_scale": 1.0,
       "lufs": -22.03,
-      "true_peak_dbfs": -2.97
+      "true_peak_dbfs": -2.97,
+      "encoded_sha256": "sha256:1ec72e9aabec65c7b738542f018775a9cd989beb19bd280cd82979fbf8fcd592",
+      "ogg_quality": 5,
+      "ogg_bytes": 13632
     },
     "bike_hum_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/bike_hum_1.wav",
@@ -96,7 +111,10 @@
       "dc_removed": -2.456145585002419e-06,
       "final_peak_scale": 1.0,
       "lufs": -26.01,
-      "true_peak_dbfs": -13.62
+      "true_peak_dbfs": -13.62,
+      "encoded_sha256": "sha256:63e56bcf7b2c07efde9d05efe9f042484a8eb1ea4ee5265cb4ac7d70d1819987",
+      "ogg_quality": 5,
+      "ogg_bytes": 42822
     },
     "bike_mount_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/bike_mount_1.wav",
@@ -112,7 +130,10 @@
       "dc_removed": 0.00011160189121438113,
       "final_peak_scale": 1.0,
       "lufs": -21.99,
-      "true_peak_dbfs": -3.61
+      "true_peak_dbfs": -3.61,
+      "encoded_sha256": "sha256:06d041443f3981b940fd63de26256b23fc471cc292f97e3293f9d2e808f982ab",
+      "ogg_quality": 5,
+      "ogg_bytes": 14122
     },
     "bike_mount_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/bike_mount_2.wav",
@@ -128,7 +149,10 @@
       "dc_removed": 0.00016073465641781113,
       "final_peak_scale": 1.0,
       "lufs": -21.99,
-      "true_peak_dbfs": -2.99
+      "true_peak_dbfs": -2.99,
+      "encoded_sha256": "sha256:1abf44b65cd3e03b81f8ed0c2be78d1c147123fd3a54df2bc626574179d21352",
+      "ogg_quality": 5,
+      "ogg_bytes": 13544
     },
     "bike_thrown_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/bike_thrown_1.wav",
@@ -144,7 +168,10 @@
       "dc_removed": 7.115219577635297e-05,
       "final_peak_scale": 1.0,
       "lufs": -16.02,
-      "true_peak_dbfs": -4.85
+      "true_peak_dbfs": -4.85,
+      "encoded_sha256": "sha256:8a4dd1df168d38f48bbebf6ab428a5356041955c96c268d5f9771dc9c8148503",
+      "ogg_quality": 5,
+      "ogg_bytes": 16277
     },
     "bike_thrown_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/bike_thrown_2.wav",
@@ -160,7 +187,10 @@
       "dc_removed": 0.0002036999253802721,
       "final_peak_scale": 1.0,
       "lufs": -16.01,
-      "true_peak_dbfs": -2.97
+      "true_peak_dbfs": -2.97,
+      "encoded_sha256": "sha256:c5f4fcee1d7ccd1e5c347d61c556c8b9b9578acfca53625b3e84986df227f09d",
+      "ogg_quality": 5,
+      "ogg_bytes": 17508
     },
     "blade_hit_armor_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/blade_hit_armor_1.wav",
@@ -176,7 +206,10 @@
       "dc_removed": -0.00026992045018693915,
       "final_peak_scale": 1.0,
       "lufs": -14.15,
-      "true_peak_dbfs": -2.95
+      "true_peak_dbfs": -2.95,
+      "encoded_sha256": "sha256:36cf028d9a7ce6afd90b6764b64b6c1e7ae99f5e7a537b108700a4e1be56c598",
+      "ogg_quality": 5,
+      "ogg_bytes": 10420
     },
     "blade_hit_armor_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/blade_hit_armor_2.wav",
@@ -192,7 +225,10 @@
       "dc_removed": -6.590549242694728e-05,
       "final_peak_scale": 1.0,
       "lufs": -14.01,
-      "true_peak_dbfs": -4.84
+      "true_peak_dbfs": -4.84,
+      "encoded_sha256": "sha256:d0fd1636f16fd5336b70567cdb88aee262e39862fbdc13c0630e6674200f1939",
+      "ogg_quality": 5,
+      "ogg_bytes": 10114
     },
     "blade_hit_armor_3": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/blade_hit_armor_3.wav",
@@ -208,7 +244,10 @@
       "dc_removed": -0.0009249871726413855,
       "final_peak_scale": 1.0,
       "lufs": -14.05,
-      "true_peak_dbfs": -2.91
+      "true_peak_dbfs": -2.91,
+      "encoded_sha256": "sha256:251f518fd308114e0ffb708ffc85777dc77198d93261005a753d52f4d6560986",
+      "ogg_quality": 5,
+      "ogg_bytes": 10197
     },
     "blade_hit_shield_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/blade_hit_shield_1.wav",
@@ -224,7 +263,10 @@
       "dc_removed": 5.791668378069463e-05,
       "final_peak_scale": 1.0,
       "lufs": -14.04,
-      "true_peak_dbfs": -3.64
+      "true_peak_dbfs": -3.64,
+      "encoded_sha256": "sha256:08e33a513cacc0083cbaa408fcf9caf9b79de3736e9974247009da12ce91619d",
+      "ogg_quality": 5,
+      "ogg_bytes": 12821
     },
     "blade_hit_shield_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/blade_hit_shield_2.wav",
@@ -240,7 +282,10 @@
       "dc_removed": 2.7578376471914735e-05,
       "final_peak_scale": 1.0,
       "lufs": -14.01,
-      "true_peak_dbfs": -4.22
+      "true_peak_dbfs": -4.22,
+      "encoded_sha256": "sha256:0e2bb981adfe36edfdccd59753841386298e1eba5ed361abf1d08c10d5b7bd82",
+      "ogg_quality": 5,
+      "ogg_bytes": 11404
     },
     "blast_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/blast_1.wav",
@@ -256,7 +301,10 @@
       "dc_removed": 0.00042495270873437184,
       "final_peak_scale": 1.0,
       "lufs": -12.19,
-      "true_peak_dbfs": -2.93
+      "true_peak_dbfs": -2.93,
+      "encoded_sha256": "sha256:07f5d9d159453a6e097f01752b754ab56e95a6ea7cc468005e3f380eb7e3e925",
+      "ogg_quality": 5,
+      "ogg_bytes": 15167
     },
     "blast_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/blast_2.wav",
@@ -272,7 +320,10 @@
       "dc_removed": -0.0002822650847018203,
       "final_peak_scale": 1.0,
       "lufs": -12.04,
-      "true_peak_dbfs": -2.94
+      "true_peak_dbfs": -2.94,
+      "encoded_sha256": "sha256:9e8cb41e943e6e3eeb30b87526ba76e88f2b5d45df6080c82c842b2dcc7335ff",
+      "ogg_quality": 5,
+      "ogg_bytes": 14839
     },
     "blaster_shot_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/blaster_shot_1.wav",
@@ -288,7 +339,10 @@
       "dc_removed": -0.00035357732484857484,
       "final_peak_scale": 1.0,
       "lufs": -14.06,
-      "true_peak_dbfs": -2.98
+      "true_peak_dbfs": -2.98,
+      "encoded_sha256": "sha256:02f18130daf98934935c7ee490ed917093bfeec07a3bcbbe3449d8878149926c",
+      "ogg_quality": 5,
+      "ogg_bytes": 14168
     },
     "blaster_shot_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/blaster_shot_2.wav",
@@ -304,7 +358,10 @@
       "dc_removed": 6.168504398841276e-05,
       "final_peak_scale": 1.0,
       "lufs": -13.99,
-      "true_peak_dbfs": -3.0
+      "true_peak_dbfs": -3.0,
+      "encoded_sha256": "sha256:ecb6cffccef1e5b543e399a50c8449fd67b125f19ba56809481b5e5df33578dd",
+      "ogg_quality": 5,
+      "ogg_bytes": 14471
     },
     "blaster_shot_3": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/blaster_shot_3.wav",
@@ -320,7 +377,10 @@
       "dc_removed": 0.01353706099523189,
       "final_peak_scale": 1.0,
       "lufs": -14.2,
-      "true_peak_dbfs": -2.62
+      "true_peak_dbfs": -2.62,
+      "encoded_sha256": "sha256:7f23e8e6a17bf8dfca22733e074ab1eb409b187b4dabd987ce0c9d5f7bc2a6ae",
+      "ogg_quality": 5,
+      "ogg_bytes": 11152
     },
     "craft_finish_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/craft_finish_1.wav",
@@ -336,7 +396,10 @@
       "dc_removed": -0.0003291984644976676,
       "final_peak_scale": 1.0,
       "lufs": -20.17,
-      "true_peak_dbfs": -2.51
+      "true_peak_dbfs": -2.51,
+      "encoded_sha256": "sha256:a1ed4ab1cc960d298a11702f1e301de9134a93062bbb2ab39cf29e2c76ec2a83",
+      "ogg_quality": 5,
+      "ogg_bytes": 13509
     },
     "craft_finish_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/craft_finish_2.wav",
@@ -352,7 +415,10 @@
       "dc_removed": 5.9491535605760945e-05,
       "final_peak_scale": 1.0,
       "lufs": -20.12,
-      "true_peak_dbfs": -2.62
+      "true_peak_dbfs": -2.62,
+      "encoded_sha256": "sha256:8cbaebbf8bc57dc6bf6c9c43ee077f6a0e37f19654cbadd8edb1d593b3143a37",
+      "ogg_quality": 5,
+      "ogg_bytes": 17818
     },
     "craft_good_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/craft_good_1.wav",
@@ -368,7 +434,10 @@
       "dc_removed": 3.2548272472952926e-05,
       "final_peak_scale": 1.0,
       "lufs": -22.07,
-      "true_peak_dbfs": -2.96
+      "true_peak_dbfs": -2.96,
+      "encoded_sha256": "sha256:9cf04c0dddd971d2e84862122b0bd8b506f8d117af4f38bf92904a24708e1ea7",
+      "ogg_quality": 5,
+      "ogg_bytes": 9685
     },
     "craft_good_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/craft_good_2.wav",
@@ -384,7 +453,10 @@
       "dc_removed": -3.878364655531553e-06,
       "final_peak_scale": 1.0,
       "lufs": -21.99,
-      "true_peak_dbfs": -7.23
+      "true_peak_dbfs": -7.23,
+      "encoded_sha256": "sha256:14143f126095198f4ea18c9f94883900928d65c9a54ef8d6533c49e73f19b8b4",
+      "ogg_quality": 5,
+      "ogg_bytes": 8668
     },
     "craft_great_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/craft_great_1.wav",
@@ -400,7 +472,10 @@
       "dc_removed": -4.222830870775916e-06,
       "final_peak_scale": 1.0,
       "lufs": -20.06,
-      "true_peak_dbfs": -11.57
+      "true_peak_dbfs": -11.57,
+      "encoded_sha256": "sha256:6bc1c4a2931b0f661ac8d39056ccbade99321ef72a8f6cf93ccc64d948a94c92",
+      "ogg_quality": 5,
+      "ogg_bytes": 13554
     },
     "craft_poor_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/craft_poor_1.wav",
@@ -416,7 +491,10 @@
       "dc_removed": -0.00017762399866662435,
       "final_peak_scale": 1.0,
       "lufs": -24.01,
-      "true_peak_dbfs": -11.51
+      "true_peak_dbfs": -11.51,
+      "encoded_sha256": "sha256:7e1505e917f8f0e9c5eeeaba094ccb832c8076e2700270a731da9497bf14e248",
+      "ogg_quality": 5,
+      "ogg_bytes": 9798
     },
     "craft_poor_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/craft_poor_2.wav",
@@ -432,7 +510,10 @@
       "dc_removed": 3.6465311442946e-05,
       "final_peak_scale": 1.0,
       "lufs": -24.0,
-      "true_peak_dbfs": -4.39
+      "true_peak_dbfs": -4.39,
+      "encoded_sha256": "sha256:a9545fa979373355e780c36713f95740fa8693fccf296b25890c864fbde6dc8e",
+      "ogg_quality": 5,
+      "ogg_bytes": 10066
     },
     "craft_roll_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/craft_roll_1.wav",
@@ -448,7 +529,10 @@
       "dc_removed": 1.0649394954627445e-05,
       "final_peak_scale": 1.0,
       "lufs": -24.15,
-      "true_peak_dbfs": -2.88
+      "true_peak_dbfs": -2.88,
+      "encoded_sha256": "sha256:0b4db60e6901ad2c736a8c9fd48c7e12161ba788af1618f76b41692e3e0f76bb",
+      "ogg_quality": 5,
+      "ogg_bytes": 10105
     },
     "craft_roll_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/craft_roll_2.wav",
@@ -464,7 +548,10 @@
       "dc_removed": -4.245812824245948e-05,
       "final_peak_scale": 1.0,
       "lufs": -24.02,
-      "true_peak_dbfs": -4.67
+      "true_peak_dbfs": -4.67,
+      "encoded_sha256": "sha256:dba04e59b036a3dce2563c33a99141cc94688706182dabd7fd24f7d8d2602392",
+      "ogg_quality": 5,
+      "ogg_bytes": 7865
     },
     "dodge_roll_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/dodge_roll_1.wav",
@@ -480,7 +567,10 @@
       "dc_removed": 3.609219417678012e-05,
       "final_peak_scale": 1.0,
       "lufs": -24.01,
-      "true_peak_dbfs": -2.98
+      "true_peak_dbfs": -2.98,
+      "encoded_sha256": "sha256:c2940fd00b479a0a1db579f270aa7eeb5a784ad1a6c05b12b1e1e40ef98cee42",
+      "ogg_quality": 5,
+      "ogg_bytes": 11782
     },
     "dodge_roll_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/dodge_roll_2.wav",
@@ -496,7 +586,10 @@
       "dc_removed": 5.93900248972291e-07,
       "final_peak_scale": 1.0,
       "lufs": -24.05,
-      "true_peak_dbfs": -3.0
+      "true_peak_dbfs": -3.0,
+      "encoded_sha256": "sha256:50d188c08ba1773a22fa9690a482783ff3e6511d0aa09236ecc700b175aff6d0",
+      "ogg_quality": 5,
+      "ogg_bytes": 13312
     },
     "enemy_death_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/enemy_death_1.wav",
@@ -512,7 +605,10 @@
       "dc_removed": 3.8802249726630854e-07,
       "final_peak_scale": 1.0,
       "lufs": -18.0,
-      "true_peak_dbfs": -7.62
+      "true_peak_dbfs": -7.62,
+      "encoded_sha256": "sha256:c2045306ddb45a08c3693a9fc7738f8f32535019f892f7aafc5a9564886b2987",
+      "ogg_quality": 5,
+      "ogg_bytes": 26647
     },
     "enemy_death_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/enemy_death_2.wav",
@@ -528,7 +624,10 @@
       "dc_removed": -1.7829509752278894e-06,
       "final_peak_scale": 1.0,
       "lufs": -18.01,
-      "true_peak_dbfs": -7.03
+      "true_peak_dbfs": -7.03,
+      "encoded_sha256": "sha256:108556ddee5e9bf35d4db45e8659b1e4706e8fac7b27f57d0ae8e3e6cfc03d13",
+      "ogg_quality": 5,
+      "ogg_bytes": 25948
     },
     "fit_part_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/fit_part_1.wav",
@@ -544,7 +643,10 @@
       "dc_removed": -9.808260642204344e-05,
       "final_peak_scale": 1.0,
       "lufs": -22.1,
-      "true_peak_dbfs": -2.71
+      "true_peak_dbfs": -2.71,
+      "encoded_sha256": "sha256:0ca8a134e82b38cbb04b55d49cdcde087228eb3eae7031b1aa9c79b05bbf19ee",
+      "ogg_quality": 5,
+      "ogg_bytes": 7767
     },
     "fit_part_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/fit_part_2.wav",
@@ -560,7 +662,10 @@
       "dc_removed": -2.7859792401618573e-05,
       "final_peak_scale": 1.0,
       "lufs": -22.15,
-      "true_peak_dbfs": -2.76
+      "true_peak_dbfs": -2.76,
+      "encoded_sha256": "sha256:22159baf11bee6a187810dcede6c5e0135d80f305374b4d286e01de5b736b791",
+      "ogg_quality": 5,
+      "ogg_bytes": 10646
     },
     "foot_gravel_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/foot_gravel_1.wav",
@@ -576,7 +681,10 @@
       "dc_removed": 3.118266584430936e-05,
       "final_peak_scale": 1.0,
       "lufs": -27.96,
-      "true_peak_dbfs": -7.63
+      "true_peak_dbfs": -7.63,
+      "encoded_sha256": "sha256:338afbaef2554ab020073b8f97f2bd98aefd31a3080914c95d710723472525a4",
+      "ogg_quality": 5,
+      "ogg_bytes": 11009
     },
     "foot_gravel_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/foot_gravel_2.wav",
@@ -592,7 +700,10 @@
       "dc_removed": -3.6139685928417263e-06,
       "final_peak_scale": 1.0,
       "lufs": -28.05,
-      "true_peak_dbfs": -4.09
+      "true_peak_dbfs": -4.09,
+      "encoded_sha256": "sha256:c21ef2c073753ca53a246f47b982da17a35c0fc5c5f7093f47bb7340f44ea65a",
+      "ogg_quality": 5,
+      "ogg_bytes": 10077
     },
     "foot_gravel_3": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/foot_gravel_3.wav",
@@ -608,7 +719,10 @@
       "dc_removed": 0.00010409694168887637,
       "final_peak_scale": 1.0,
       "lufs": -27.95,
-      "true_peak_dbfs": -4.66
+      "true_peak_dbfs": -4.66,
+      "encoded_sha256": "sha256:70381c9478601e301f0f9b446baf07ef920d98703706c64ff29a3232b277b15e",
+      "ogg_quality": 5,
+      "ogg_bytes": 10884
     },
     "foot_gravel_4": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/foot_gravel_4.wav",
@@ -624,7 +738,10 @@
       "dc_removed": -0.0004255345507578354,
       "final_peak_scale": 1.0,
       "lufs": -27.97,
-      "true_peak_dbfs": -7.16
+      "true_peak_dbfs": -7.16,
+      "encoded_sha256": "sha256:236a6ec9170fae40c1b414d35873e96022687ecdc7a8d9da1ca429c9d2e81f5d",
+      "ogg_quality": 5,
+      "ogg_bytes": 10351
     },
     "foot_metal_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/foot_metal_1.wav",
@@ -640,7 +757,10 @@
       "dc_removed": 2.9874709560391135e-05,
       "final_peak_scale": 1.0,
       "lufs": -28.05,
-      "true_peak_dbfs": -7.87
+      "true_peak_dbfs": -7.87,
+      "encoded_sha256": "sha256:9381adda217f4c1fe2f9597f15a7a92ee39fa560cb540e7ca8d9a087d0e40a15",
+      "ogg_quality": 5,
+      "ogg_bytes": 8160
     },
     "foot_metal_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/foot_metal_2.wav",
@@ -656,7 +776,10 @@
       "dc_removed": 8.913518750139433e-05,
       "final_peak_scale": 1.0,
       "lufs": -28.15,
-      "true_peak_dbfs": -2.84
+      "true_peak_dbfs": -2.84,
+      "encoded_sha256": "sha256:e046e65efa93f3b3a00e75495e6140942eb34d9c77d402890ffd0ae00e394324",
+      "ogg_quality": 5,
+      "ogg_bytes": 9034
     },
     "foot_metal_3": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/foot_metal_3.wav",
@@ -672,7 +795,10 @@
       "dc_removed": 0.00031451302201976073,
       "final_peak_scale": 1.0,
       "lufs": -28.15,
-      "true_peak_dbfs": -3.0
+      "true_peak_dbfs": -3.0,
+      "encoded_sha256": "sha256:bcfd54e540af38ed904633e8af829febc78ec9af75c0a32937fd40f06a10b275",
+      "ogg_quality": 5,
+      "ogg_bytes": 9331
     },
     "foot_metal_4": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/foot_metal_4.wav",
@@ -688,7 +814,10 @@
       "dc_removed": -0.00010203694263773302,
       "final_peak_scale": 1.0,
       "lufs": -27.95,
-      "true_peak_dbfs": -5.09
+      "true_peak_dbfs": -5.09,
+      "encoded_sha256": "sha256:05ad21453403efe93d015939326bff27949588d58ca95f6f9703641ad755cc5f",
+      "ogg_quality": 5,
+      "ogg_bytes": 8546
     },
     "foot_stone_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/foot_stone_1.wav",
@@ -704,7 +833,10 @@
       "dc_removed": 0.00016680801048398828,
       "final_peak_scale": 1.0,
       "lufs": -28.15,
-      "true_peak_dbfs": -2.99
+      "true_peak_dbfs": -2.99,
+      "encoded_sha256": "sha256:835b7d997da2232114f1631c74b1ff5f9c46d23b77d5522fee4eea832df81401",
+      "ogg_quality": 5,
+      "ogg_bytes": 7358
     },
     "foot_stone_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/foot_stone_2.wav",
@@ -720,7 +852,10 @@
       "dc_removed": 4.3925092311221984e-05,
       "final_peak_scale": 1.0,
       "lufs": -28.02,
-      "true_peak_dbfs": -2.84
+      "true_peak_dbfs": -2.84,
+      "encoded_sha256": "sha256:0ea2c59d5b94b805f40996424308162a44281b6636773bc1746653cc6031f51a",
+      "ogg_quality": 5,
+      "ogg_bytes": 9282
     },
     "foot_stone_3": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/foot_stone_3.wav",
@@ -736,7 +871,10 @@
       "dc_removed": -6.095191720787421e-05,
       "final_peak_scale": 1.0,
       "lufs": -28.05,
-      "true_peak_dbfs": -3.0
+      "true_peak_dbfs": -3.0,
+      "encoded_sha256": "sha256:2266719bfbe5050fccfd8b7890c0fbaa199971577146fb571bea3754685952a7",
+      "ogg_quality": 5,
+      "ogg_bytes": 8311
     },
     "foot_stone_4": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/foot_stone_4.wav",
@@ -752,7 +890,10 @@
       "dc_removed": -0.00020855166544429823,
       "final_peak_scale": 1.0,
       "lufs": -28.05,
-      "true_peak_dbfs": -3.99
+      "true_peak_dbfs": -3.99,
+      "encoded_sha256": "sha256:4ef06b24f7ee281716e245ef6a8fe82a4f3e22cb45e08586f6ee017680599e89",
+      "ogg_quality": 5,
+      "ogg_bytes": 8783
     },
     "guard_break_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/guard_break_1.wav",
@@ -768,7 +909,10 @@
       "dc_removed": -5.769769644762398e-06,
       "final_peak_scale": 1.0,
       "lufs": -14.01,
-      "true_peak_dbfs": -2.94
+      "true_peak_dbfs": -2.94,
+      "encoded_sha256": "sha256:83cc4e017f6cbd5f0a3332afeee867e74a2a07b48f09f154fd67ffb91cae0868",
+      "ogg_quality": 5,
+      "ogg_bytes": 11215
     },
     "guard_break_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/guard_break_2.wav",
@@ -784,7 +928,10 @@
       "dc_removed": 0.00025917552033944964,
       "final_peak_scale": 1.0,
       "lufs": -14.03,
-      "true_peak_dbfs": -2.92
+      "true_peak_dbfs": -2.92,
+      "encoded_sha256": "sha256:06c98c50730a5e9454d92dbb63abb847ed111e050de668460565a162e9465546",
+      "ogg_quality": 5,
+      "ogg_bytes": 11680
     },
     "harvester_collect_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/harvester_collect_1.wav",
@@ -800,7 +947,10 @@
       "dc_removed": 2.1581897661333295e-05,
       "final_peak_scale": 1.0,
       "lufs": -22.09,
-      "true_peak_dbfs": -2.74
+      "true_peak_dbfs": -2.74,
+      "encoded_sha256": "sha256:a8455d2ec38c747f211b9a1e08bb6829da23d6fc59a5f2f580e0fd47aa4bf852",
+      "ogg_quality": 5,
+      "ogg_bytes": 11012
     },
     "harvester_collect_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/harvester_collect_2.wav",
@@ -816,7 +966,10 @@
       "dc_removed": -1.3577740223248142e-05,
       "final_peak_scale": 1.0,
       "lufs": -22.0,
-      "true_peak_dbfs": -3.73
+      "true_peak_dbfs": -3.73,
+      "encoded_sha256": "sha256:c76bd164fd875e90f14edcf422648d28223c8a3ca6cf6aa45909e9a729721d3b",
+      "ogg_quality": 5,
+      "ogg_bytes": 13670
     },
     "harvester_hum_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/harvester_hum_1.wav",
@@ -832,7 +985,10 @@
       "dc_removed": -8.437263032725008e-06,
       "final_peak_scale": 1.0,
       "lufs": -30.0,
-      "true_peak_dbfs": -17.78
+      "true_peak_dbfs": -17.78,
+      "encoded_sha256": "sha256:90dd62afe30561f5524e0d5aeef5b3b729d130bf2b565a235b752fcd8aeb783c",
+      "ogg_quality": 5,
+      "ogg_bytes": 44232
     },
     "harvester_plant_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/harvester_plant_1.wav",
@@ -848,7 +1004,10 @@
       "dc_removed": 0.0006641283638754782,
       "final_peak_scale": 1.0,
       "lufs": -20.03,
-      "true_peak_dbfs": -2.97
+      "true_peak_dbfs": -2.97,
+      "encoded_sha256": "sha256:6236ef3520b32581a35c5e75bd9ce6b7924e7ae466a49141d9f461c6111fecbb",
+      "ogg_quality": 5,
+      "ogg_bytes": 18473
     },
     "hit_marker_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/hit_marker_1.wav",
@@ -864,7 +1023,10 @@
       "dc_removed": -5.1336589768265004e-05,
       "final_peak_scale": 1.0,
       "lufs": -19.99,
-      "true_peak_dbfs": -11.75
+      "true_peak_dbfs": -11.75,
+      "encoded_sha256": "sha256:4292683dd709dbd7b4cb101e0a0dc06de6ce233b2cc550e62b54782b72de8662",
+      "ogg_quality": 5,
+      "ogg_bytes": 4307
     },
     "hit_marker_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/hit_marker_2.wav",
@@ -880,7 +1042,10 @@
       "dc_removed": -0.004371020905189382,
       "final_peak_scale": 1.0,
       "lufs": -20.16,
-      "true_peak_dbfs": -2.88
+      "true_peak_dbfs": -2.88,
+      "encoded_sha256": "sha256:e1ecc1765916afcf6688593617a9184bc6e4bda5c631e82b7edbc4fc3d98a21c",
+      "ogg_quality": 5,
+      "ogg_bytes": 5410
     },
     "impact_flesh_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/impact_flesh_1.wav",
@@ -896,7 +1061,10 @@
       "dc_removed": 0.029599371631880037,
       "final_peak_scale": 1.0,
       "lufs": -16.05,
-      "true_peak_dbfs": -2.51
+      "true_peak_dbfs": -2.51,
+      "encoded_sha256": "sha256:79b9f184fbf0fd9c8e1bb4e8fdc9613947e4bdb50bbdb12a1b9b31058504fa19",
+      "ogg_quality": 5,
+      "ogg_bytes": 11683
     },
     "impact_flesh_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/impact_flesh_2.wav",
@@ -912,7 +1080,10 @@
       "dc_removed": -0.0006205265448472739,
       "final_peak_scale": 1.0,
       "lufs": -16.15,
-      "true_peak_dbfs": -2.97
+      "true_peak_dbfs": -2.97,
+      "encoded_sha256": "sha256:76a4c6044b8d9822b768605dd491a9ae161f50a3fd0bbde65e26802e343b105a",
+      "ogg_quality": 5,
+      "ogg_bytes": 4826
     },
     "impact_metal_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/impact_metal_1.wav",
@@ -928,7 +1099,10 @@
       "dc_removed": 1.060914227504907e-05,
       "final_peak_scale": 1.0,
       "lufs": -16.02,
-      "true_peak_dbfs": -6.82
+      "true_peak_dbfs": -6.82,
+      "encoded_sha256": "sha256:3482b18a9a95934178cc7ae4622a2e91a69289bc445b7250dcfabdd46d76b238",
+      "ogg_quality": 5,
+      "ogg_bytes": 6527
     },
     "impact_metal_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/impact_metal_2.wav",
@@ -944,7 +1118,10 @@
       "dc_removed": 1.1733882523155279e-05,
       "final_peak_scale": 1.0,
       "lufs": -16.05,
-      "true_peak_dbfs": -7.81
+      "true_peak_dbfs": -7.81,
+      "encoded_sha256": "sha256:898d3c9088579e2328689b10404b025a5b75e66beafb8a5d2114c3e3eb724fec",
+      "ogg_quality": 5,
+      "ogg_bytes": 9440
     },
     "impact_shield_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/impact_shield_1.wav",
@@ -960,7 +1137,10 @@
       "dc_removed": -0.00015690381030401273,
       "final_peak_scale": 1.0,
       "lufs": -16.01,
-      "true_peak_dbfs": -2.86
+      "true_peak_dbfs": -2.86,
+      "encoded_sha256": "sha256:2ba3df81588b85b9072b2283b5d3c3899d0b09f457754f854b24b4f3faf56746",
+      "ogg_quality": 5,
+      "ogg_bytes": 13557
     },
     "impact_shield_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/impact_shield_2.wav",
@@ -976,7 +1156,10 @@
       "dc_removed": -1.4981854699995343e-06,
       "final_peak_scale": 1.0,
       "lufs": -16.02,
-      "true_peak_dbfs": -5.51
+      "true_peak_dbfs": -5.51,
+      "encoded_sha256": "sha256:ccaca82e1d8fdbb82761b5bc0db1d773b208760d7849df6d47443122b92419ec",
+      "ogg_quality": 5,
+      "ogg_bytes": 10496
     },
     "impact_shield_3": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/impact_shield_3.wav",
@@ -992,7 +1175,10 @@
       "dc_removed": -9.227584415938357e-06,
       "final_peak_scale": 1.0,
       "lufs": -16.05,
-      "true_peak_dbfs": -2.99
+      "true_peak_dbfs": -2.99,
+      "encoded_sha256": "sha256:a6939538c61190de0ffdf46e25ed2fab31864fc5ac57800ee287daa72295e201",
+      "ogg_quality": 5,
+      "ogg_bytes": 9296
     },
     "impact_stone_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/impact_stone_1.wav",
@@ -1008,7 +1194,10 @@
       "dc_removed": 0.0003914306278024919,
       "final_peak_scale": 1.0,
       "lufs": -16.15,
-      "true_peak_dbfs": -2.77
+      "true_peak_dbfs": -2.77,
+      "encoded_sha256": "sha256:b2b479b414b4e615f12ed7f2003a0ecc410719c9d73d27b03728b7dd405c8492",
+      "ogg_quality": 5,
+      "ogg_bytes": 10044
     },
     "impact_stone_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/impact_stone_2.wav",
@@ -1024,7 +1213,10 @@
       "dc_removed": -9.038396698374201e-05,
       "final_peak_scale": 1.0,
       "lufs": -16.05,
-      "true_peak_dbfs": -2.93
+      "true_peak_dbfs": -2.93,
+      "encoded_sha256": "sha256:a2100baa00dabaf270677c5ecf6cbee01f7d36b89267480fc29579e2c6d19c61",
+      "ogg_quality": 5,
+      "ogg_bytes": 10687
     },
     "impact_stone_3": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/impact_stone_3.wav",
@@ -1040,7 +1232,10 @@
       "dc_removed": -0.0015103016119017022,
       "final_peak_scale": 1.0,
       "lufs": -16.15,
-      "true_peak_dbfs": -2.55
+      "true_peak_dbfs": -2.55,
+      "encoded_sha256": "sha256:29bffda81fbef0bd7c1f8a6bcc292ac92738547f1cf51e28c9daa736f71b480d",
+      "ogg_quality": 5,
+      "ogg_bytes": 11140
     },
     "jump_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/jump_1.wav",
@@ -1056,7 +1251,10 @@
       "dc_removed": -9.347373404818052e-05,
       "final_peak_scale": 1.0,
       "lufs": -24.05,
-      "true_peak_dbfs": -2.98
+      "true_peak_dbfs": -2.98,
+      "encoded_sha256": "sha256:4a684d9f35a4e91f4c64c33bae7107f4145e148592dbecae7a0b2b48dffb6491",
+      "ogg_quality": 5,
+      "ogg_bytes": 9336
     },
     "jump_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/jump_2.wav",
@@ -1072,7 +1270,10 @@
       "dc_removed": -4.977305856250475e-05,
       "final_peak_scale": 1.0,
       "lufs": -24.05,
-      "true_peak_dbfs": -2.97
+      "true_peak_dbfs": -2.97,
+      "encoded_sha256": "sha256:7638fc0caed9cc8cf1ffb30a6cf721e89decf7051ae4df57d4461672032cfa53",
+      "ogg_quality": 5,
+      "ogg_bytes": 9455
     },
     "land_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/land_1.wav",
@@ -1088,7 +1289,10 @@
       "dc_removed": 0.0003573484660814878,
       "final_peak_scale": 1.0,
       "lufs": -24.11,
-      "true_peak_dbfs": -2.97
+      "true_peak_dbfs": -2.97,
+      "encoded_sha256": "sha256:f339f7115a9da7f59236c7997cf221dd62926b6757580a10737694a8141257fa",
+      "ogg_quality": 5,
+      "ogg_bytes": 10400
     },
     "land_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/land_2.wav",
@@ -1104,7 +1308,10 @@
       "dc_removed": -0.00024896779372064027,
       "final_peak_scale": 1.0,
       "lufs": -24.15,
-      "true_peak_dbfs": -2.98
+      "true_peak_dbfs": -2.98,
+      "encoded_sha256": "sha256:6115a7d188fdebb22549947fb4e0a61ec0db3031824d30cfb50cd1e87da7f963",
+      "ogg_quality": 5,
+      "ogg_bytes": 9462
     },
     "low_health_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/low_health_1.wav",
@@ -1120,7 +1327,10 @@
       "dc_removed": 6.351314000632423e-06,
       "final_peak_scale": 1.0,
       "lufs": -22.0,
-      "true_peak_dbfs": -7.29
+      "true_peak_dbfs": -7.29,
+      "encoded_sha256": "sha256:17d72d672bc570f19999b8cefbfc72ef4057a907800171779ea1d8370e2cbcc8",
+      "ogg_quality": 5,
+      "ogg_bytes": 31507
     },
     "map_open_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/map_open_1.wav",
@@ -1136,7 +1346,10 @@
       "dc_removed": -3.986652711008259e-05,
       "final_peak_scale": 1.0,
       "lufs": -26.02,
-      "true_peak_dbfs": -10.53
+      "true_peak_dbfs": -10.53,
+      "encoded_sha256": "sha256:59ecaab9ef400b6c1ae120145e668a76870bfe5e6e89f10b1614690855cda9b8",
+      "ogg_quality": 5,
+      "ogg_bytes": 10401
     },
     "player_hurt_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/player_hurt_1.wav",
@@ -1152,7 +1365,10 @@
       "dc_removed": -4.810850631651025e-06,
       "final_peak_scale": 1.0,
       "lufs": -18.05,
-      "true_peak_dbfs": -4.53
+      "true_peak_dbfs": -4.53,
+      "encoded_sha256": "sha256:864cc8f82c2824df4d9ee888d34148a8bafd389b900edd691d406873dcdbca19",
+      "ogg_quality": 5,
+      "ogg_bytes": 8904
     },
     "player_hurt_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/player_hurt_2.wav",
@@ -1168,7 +1384,10 @@
       "dc_removed": -0.00019460969191522368,
       "final_peak_scale": 1.0,
       "lufs": -18.0,
-      "true_peak_dbfs": -7.44
+      "true_peak_dbfs": -7.44,
+      "encoded_sha256": "sha256:5151ad4410ce0bea423a4ec28d7d39cc7f2f963efc86362653b877b9af150b32",
+      "ogg_quality": 5,
+      "ogg_bytes": 6184
     },
     "player_hurt_3": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/player_hurt_3.wav",
@@ -1184,7 +1403,10 @@
       "dc_removed": 3.565099492505869e-06,
       "final_peak_scale": 1.0,
       "lufs": -18.05,
-      "true_peak_dbfs": -2.97
+      "true_peak_dbfs": -2.97,
+      "encoded_sha256": "sha256:a9b8d1e598278641c67b68fad6f3253d7d8ccbc4805ef4ee2f9f42cfde7514ed",
+      "ogg_quality": 5,
+      "ogg_bytes": 8837
     },
     "reload_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/reload_1.wav",
@@ -1200,7 +1422,10 @@
       "dc_removed": -1.3498680425803754e-06,
       "final_peak_scale": 1.0,
       "lufs": -24.1,
-      "true_peak_dbfs": -2.86
+      "true_peak_dbfs": -2.86,
+      "encoded_sha256": "sha256:c5c8519fb256fe2ca43b69d6a9916c060391dd0af9fa4eb4cad4e3171b1d6819",
+      "ogg_quality": 5,
+      "ogg_bytes": 16986
     },
     "reload_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/reload_2.wav",
@@ -1216,7 +1441,10 @@
       "dc_removed": -4.130303566957554e-07,
       "final_peak_scale": 1.0,
       "lufs": -24.0,
-      "true_peak_dbfs": -7.85
+      "true_peak_dbfs": -7.85,
+      "encoded_sha256": "sha256:6dd5d381a3459d89268854b450f14851bb4c22ba9e54789e5f9572e8be8157a6",
+      "ogg_quality": 5,
+      "ogg_bytes": 10648
     },
     "repair_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/repair_1.wav",
@@ -1232,7 +1460,10 @@
       "dc_removed": -7.710867871609314e-06,
       "final_peak_scale": 1.0,
       "lufs": -22.0,
-      "true_peak_dbfs": -6.37
+      "true_peak_dbfs": -6.37,
+      "encoded_sha256": "sha256:91b8155dd0cb54209ad910f4a51a7521d85a02ec7c3ba136cd59f8409fa72cb2",
+      "ogg_quality": 5,
+      "ogg_bytes": 15312
     },
     "rusher_windup_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/rusher_windup_1.wav",
@@ -1248,7 +1479,10 @@
       "dc_removed": -0.00043667302926234705,
       "final_peak_scale": 1.0,
       "lufs": -18.16,
-      "true_peak_dbfs": -2.91
+      "true_peak_dbfs": -2.91,
+      "encoded_sha256": "sha256:0cab7320807b8312e584a42c5f850b28fb03e2f220fda57023a2000b34c4c158",
+      "ogg_quality": 5,
+      "ogg_bytes": 12154
     },
     "rusher_windup_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/rusher_windup_2.wav",
@@ -1264,7 +1498,10 @@
       "dc_removed": 9.689010419077293e-05,
       "final_peak_scale": 1.0,
       "lufs": -18.16,
-      "true_peak_dbfs": -2.93
+      "true_peak_dbfs": -2.93,
+      "encoded_sha256": "sha256:05f81be1111e520268a0092d495569391cef66156d5e673134b690bd612bf1cb",
+      "ogg_quality": 5,
+      "ogg_bytes": 6690
     },
     "sale_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/sale_1.wav",
@@ -1280,7 +1517,10 @@
       "dc_removed": 2.1498033274366024e-08,
       "final_peak_scale": 1.0,
       "lufs": -24.01,
-      "true_peak_dbfs": -16.07
+      "true_peak_dbfs": -16.07,
+      "encoded_sha256": "sha256:b86c559f030f84648175957751e1c019a71280e6f1748d91b08ad3a23b5b0605",
+      "ogg_quality": 5,
+      "ogg_bytes": 7836
     },
     "sale_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/sale_2.wav",
@@ -1296,7 +1536,10 @@
       "dc_removed": 1.375057043174955e-05,
       "final_peak_scale": 1.0,
       "lufs": -24.01,
-      "true_peak_dbfs": -14.65
+      "true_peak_dbfs": -14.65,
+      "encoded_sha256": "sha256:540a7c905f31dc6a49f279f6d10d7d645ba03835c051927194df822f9d5359d6",
+      "ogg_quality": 5,
+      "ogg_bytes": 9698
     },
     "sample_done_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/sample_done_1.wav",
@@ -1312,7 +1555,10 @@
       "dc_removed": -5.176905595888999e-06,
       "final_peak_scale": 1.0,
       "lufs": -22.06,
-      "true_peak_dbfs": -2.98
+      "true_peak_dbfs": -2.98,
+      "encoded_sha256": "sha256:94fc18433eb559d132bc72a35d96455defc843250a229718d4c5d38befa55660",
+      "ogg_quality": 5,
+      "ogg_bytes": 7912
     },
     "sample_done_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/sample_done_2.wav",
@@ -1328,7 +1574,10 @@
       "dc_removed": -0.00012149564839969768,
       "final_peak_scale": 1.0,
       "lufs": -22.15,
-      "true_peak_dbfs": -2.86
+      "true_peak_dbfs": -2.86,
+      "encoded_sha256": "sha256:9b471df9d1f261fe1939329c7fe2199aa56449462540a69222f0063694f82fa2",
+      "ogg_quality": 5,
+      "ogg_bytes": 9607
     },
     "sample_loop_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/sample_loop_1.wav",
@@ -1344,7 +1593,10 @@
       "dc_removed": -6.587979593323541e-06,
       "final_peak_scale": 1.0,
       "lufs": -28.0,
-      "true_peak_dbfs": -18.35
+      "true_peak_dbfs": -18.35,
+      "encoded_sha256": "sha256:b49ed9da3af5ad5fb3aa30c93d41cda141718f21306277c0c8de808ff566b6d9",
+      "ogg_quality": 5,
+      "ogg_bytes": 33343
     },
     "sentry_charge_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/sentry_charge_1.wav",
@@ -1360,7 +1612,10 @@
       "dc_removed": -1.8976150559178266e-06,
       "final_peak_scale": 1.0,
       "lufs": -18.0,
-      "true_peak_dbfs": -5.21
+      "true_peak_dbfs": -5.21,
+      "encoded_sha256": "sha256:94e0a02754be9bb3977035c342eea9cf4ce28a564bd7f12a51bc3357d3fac8f7",
+      "ogg_quality": 5,
+      "ogg_bytes": 11416
     },
     "sentry_charge_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/sentry_charge_2.wav",
@@ -1376,7 +1631,10 @@
       "dc_removed": 1.0408338343661835e-05,
       "final_peak_scale": 1.0,
       "lufs": -18.04,
-      "true_peak_dbfs": -10.43
+      "true_peak_dbfs": -10.43,
+      "encoded_sha256": "sha256:160b06360a2bc507fe028023e5ee77acc82431a212ad72aa6c732dd7cde78e27",
+      "ogg_quality": 5,
+      "ogg_bytes": 10671
     },
     "sentry_shot_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/sentry_shot_1.wav",
@@ -1392,7 +1650,10 @@
       "dc_removed": -0.0011719206303984044,
       "final_peak_scale": 1.0,
       "lufs": -14.1,
-      "true_peak_dbfs": -2.79
+      "true_peak_dbfs": -2.79,
+      "encoded_sha256": "sha256:4fd789f3d11402943129047b97e23065606d8dc10c782488e32247f8bef77db9",
+      "ogg_quality": 5,
+      "ogg_bytes": 15841
     },
     "sentry_shot_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/sentry_shot_2.wav",
@@ -1408,7 +1669,10 @@
       "dc_removed": -0.0005331733166652048,
       "final_peak_scale": 1.0,
       "lufs": -14.17,
-      "true_peak_dbfs": -2.95
+      "true_peak_dbfs": -2.95,
+      "encoded_sha256": "sha256:7438dfb14e8a8cc76fa1ba16dd2157022a5e243fcdd664cc51f32dd0e2341417",
+      "ogg_quality": 5,
+      "ogg_bytes": 16157
     },
     "shield_recharge_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/shield_recharge_1.wav",
@@ -1424,7 +1688,10 @@
       "dc_removed": 3.8844049731436596e-07,
       "final_peak_scale": 1.0,
       "lufs": -21.99,
-      "true_peak_dbfs": -8.46
+      "true_peak_dbfs": -8.46,
+      "encoded_sha256": "sha256:993434e797fc51951c6f93a2e9162e1b0538656ca1183b2babeebde36102dfde",
+      "ogg_quality": 5,
+      "ogg_bytes": 16235
     },
     "shield_recharge_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/shield_recharge_2.wav",
@@ -1440,7 +1707,10 @@
       "dc_removed": -2.7816759470379078e-06,
       "final_peak_scale": 1.0,
       "lufs": -22.02,
-      "true_peak_dbfs": -9.52
+      "true_peak_dbfs": -9.52,
+      "encoded_sha256": "sha256:d2e73020744572b20d42a2ff4ecb8eef823ada9876fb981657e20d879328393e",
+      "ogg_quality": 5,
+      "ogg_bytes": 16794
     },
     "skill_learn_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/skill_learn_1.wav",
@@ -1456,7 +1726,10 @@
       "dc_removed": 1.2067858810134553e-06,
       "final_peak_scale": 1.0,
       "lufs": -22.0,
-      "true_peak_dbfs": -5.85
+      "true_peak_dbfs": -5.85,
+      "encoded_sha256": "sha256:5a143058d9fee89453a29af493c080b8ded7c8830c737c0a3b627ff01c990ce3",
+      "ogg_quality": 5,
+      "ogg_bytes": 10410
     },
     "skill_learn_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/skill_learn_2.wav",
@@ -1472,7 +1745,10 @@
       "dc_removed": -1.3963832612360876e-06,
       "final_peak_scale": 1.0,
       "lufs": -21.99,
-      "true_peak_dbfs": -10.65
+      "true_peak_dbfs": -10.65,
+      "encoded_sha256": "sha256:d10a5ed95394fc61c03c66a80dd30ef27302762ef781241adc93349184fafc42",
+      "ogg_quality": 5,
+      "ogg_bytes": 10504
     },
     "survey_empty_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/survey_empty_1.wav",
@@ -1488,7 +1764,10 @@
       "dc_removed": -2.3677178999407375e-05,
       "final_peak_scale": 1.0,
       "lufs": -26.02,
-      "true_peak_dbfs": -17.51
+      "true_peak_dbfs": -17.51,
+      "encoded_sha256": "sha256:76ab3cf087ba9c7d0b2b409ab529b455b99b7eb9be8ceb60c3666a77f94ad6c6",
+      "ogg_quality": 5,
+      "ogg_bytes": 8099
     },
     "survey_found_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/survey_found_1.wav",
@@ -1504,7 +1783,10 @@
       "dc_removed": 9.173277464112613e-07,
       "final_peak_scale": 1.0,
       "lufs": -22.01,
-      "true_peak_dbfs": -16.55
+      "true_peak_dbfs": -16.55,
+      "encoded_sha256": "sha256:f4d1dbf23f5bbe5e9a9dc65e997e96c0e892a7fc5cd8f8b0bc21611526cd09f5",
+      "ogg_quality": 5,
+      "ogg_bytes": 7940
     },
     "survey_found_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/survey_found_2.wav",
@@ -1520,7 +1802,10 @@
       "dc_removed": -2.53396277792647e-06,
       "final_peak_scale": 1.0,
       "lufs": -22.0,
-      "true_peak_dbfs": -17.39
+      "true_peak_dbfs": -17.39,
+      "encoded_sha256": "sha256:618cbee79ea0f174b895b5bf6b50e06fda3fad2411564f46c1fe6f9c51967fe0",
+      "ogg_quality": 5,
+      "ogg_bytes": 11170
     },
     "survey_ping_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/survey_ping_1.wav",
@@ -1536,7 +1821,10 @@
       "dc_removed": 1.922513326197716e-05,
       "final_peak_scale": 1.0,
       "lufs": -22.07,
-      "true_peak_dbfs": -17.22
+      "true_peak_dbfs": -17.22,
+      "encoded_sha256": "sha256:f8f8f9a4a02979bf8047085ab752d64546f5c800159ebc9fb4bec7165cde96c4",
+      "ogg_quality": 5,
+      "ogg_bytes": 5345
     },
     "survey_ping_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/survey_ping_2.wav",
@@ -1552,7 +1840,10 @@
       "dc_removed": -1.1582682659510631e-05,
       "final_peak_scale": 1.0,
       "lufs": -22.05,
-      "true_peak_dbfs": -13.54
+      "true_peak_dbfs": -13.54,
+      "encoded_sha256": "sha256:f77d14d35d6d74af6ac834ed0c279371078a4e4a941b15e90fe466c7597e82bb",
+      "ogg_quality": 5,
+      "ogg_bytes": 9992
     },
     "swing_heavy_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/swing_heavy_1.wav",
@@ -1568,7 +1859,10 @@
       "dc_removed": -0.0038322526007017695,
       "final_peak_scale": 1.0,
       "lufs": -14.14,
-      "true_peak_dbfs": -2.41
+      "true_peak_dbfs": -2.41,
+      "encoded_sha256": "sha256:2519ead2e116003c6162e48eae1fbca8ecebd008aad7ab1ee567eab766f7b709",
+      "ogg_quality": 5,
+      "ogg_bytes": 10206
     },
     "swing_heavy_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/swing_heavy_2.wav",
@@ -1584,7 +1878,10 @@
       "dc_removed": 0.007253985864313541,
       "final_peak_scale": 1.0,
       "lufs": -14.15,
-      "true_peak_dbfs": -2.68
+      "true_peak_dbfs": -2.68,
+      "encoded_sha256": "sha256:c0ccdcef4ca3e4d4d8367faaf88e785ab08ff262fd74f21ec70541a0c5193b26",
+      "ogg_quality": 5,
+      "ogg_bytes": 8756
     },
     "swing_light_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/swing_light_1.wav",
@@ -1600,7 +1897,10 @@
       "dc_removed": -0.0010641767612143396,
       "final_peak_scale": 1.0,
       "lufs": -18.05,
-      "true_peak_dbfs": -2.96
+      "true_peak_dbfs": -2.96,
+      "encoded_sha256": "sha256:b007bb419bfe2c9b2a44b2a311e5af1080e0235c56a5bc397c0265b405f28f7a",
+      "ogg_quality": 5,
+      "ogg_bytes": 9151
     },
     "swing_light_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/swing_light_2.wav",
@@ -1616,7 +1916,10 @@
       "dc_removed": -0.00016730844264791931,
       "final_peak_scale": 1.0,
       "lufs": -18.02,
-      "true_peak_dbfs": -8.03
+      "true_peak_dbfs": -8.03,
+      "encoded_sha256": "sha256:83149aa1ddc8277eca6dad9a41cafe1a65e1a04418214285c1dc1745c1c9166c",
+      "ogg_quality": 5,
+      "ogg_bytes": 4876
     },
     "ui_click_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/ui_click_1.wav",
@@ -1632,7 +1935,10 @@
       "dc_removed": -2.703664147844125e-07,
       "final_peak_scale": 1.0,
       "lufs": -25.99,
-      "true_peak_dbfs": -5.04
+      "true_peak_dbfs": -5.04,
+      "encoded_sha256": "sha256:2bc23af42140357aa116b1c49778c7ad973c615cf73faec311eeecda8d39c2fa",
+      "ogg_quality": 5,
+      "ogg_bytes": 4967
     },
     "ui_click_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/ui_click_2.wav",
@@ -1648,7 +1954,10 @@
       "dc_removed": 5.236181801585012e-06,
       "final_peak_scale": 1.0,
       "lufs": -26.0,
-      "true_peak_dbfs": -7.95
+      "true_peak_dbfs": -7.95,
+      "encoded_sha256": "sha256:657ec11058243e9b5e3868f707b3e2eb1edc426f959bc2b93bee05d2ccded676",
+      "ogg_quality": 5,
+      "ogg_bytes": 7327
     },
     "ui_close_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/ui_close_1.wav",
@@ -1664,7 +1973,10 @@
       "dc_removed": -1.987228667132784e-06,
       "final_peak_scale": 1.0,
       "lufs": -26.05,
-      "true_peak_dbfs": -14.89
+      "true_peak_dbfs": -14.89,
+      "encoded_sha256": "sha256:86440faa95cd28f0760e93eb29910c532e307b63b744fb7a54459d9d0e019563",
+      "ogg_quality": 5,
+      "ogg_bytes": 10541
     },
     "ui_close_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/ui_close_2.wav",
@@ -1680,7 +1992,10 @@
       "dc_removed": 0.0004995644760972973,
       "final_peak_scale": 1.0,
       "lufs": -25.97,
-      "true_peak_dbfs": -11.65
+      "true_peak_dbfs": -11.65,
+      "encoded_sha256": "sha256:66ea11735fc79417510584762903e09810e8fe6ae9ecccb5bbb434cdc75f0d80",
+      "ogg_quality": 5,
+      "ogg_bytes": 9442
     },
     "ui_hover_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/ui_hover_1.wav",
@@ -1696,7 +2011,10 @@
       "dc_removed": 3.7762134864349543e-06,
       "final_peak_scale": 1.0,
       "lufs": -30.05,
-      "true_peak_dbfs": -22.41
+      "true_peak_dbfs": -22.41,
+      "encoded_sha256": "sha256:c2a263472e09782c8236232c3125581001dd24cb8e54c8ec2854938aa26bbd2c",
+      "ogg_quality": 5,
+      "ogg_bytes": 8816
     },
     "ui_hover_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/ui_hover_2.wav",
@@ -1712,7 +2030,10 @@
       "dc_removed": 2.390215254273603e-05,
       "final_peak_scale": 1.0,
       "lufs": -29.99,
-      "true_peak_dbfs": -7.99
+      "true_peak_dbfs": -7.99,
+      "encoded_sha256": "sha256:06f7861fc2ff26c1a44b22008d1f7c5e91789444279e3be6195c6ffb741a1aba",
+      "ogg_quality": 5,
+      "ogg_bytes": 4580
     },
     "ui_open_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/ui_open_1.wav",
@@ -1728,7 +2049,10 @@
       "dc_removed": 0.001152115398972304,
       "final_peak_scale": 1.0,
       "lufs": -26.08,
-      "true_peak_dbfs": -5.81
+      "true_peak_dbfs": -5.81,
+      "encoded_sha256": "sha256:47abade2b87042cd90dc522c0cb2408f4c2d6d5c8c48e7144eadc513e7d752f1",
+      "ogg_quality": 5,
+      "ogg_bytes": 11257
     },
     "ui_open_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/ui_open_2.wav",
@@ -1744,7 +2068,10 @@
       "dc_removed": -3.769323246866614e-06,
       "final_peak_scale": 1.0,
       "lufs": -26.02,
-      "true_peak_dbfs": -11.2
+      "true_peak_dbfs": -11.2,
+      "encoded_sha256": "sha256:bbb289b2eb2cf026da5b655b080e4e691daee2491df1fd963745ec0c9c99e0bb",
+      "ogg_quality": 5,
+      "ogg_bytes": 8693
     },
     "ui_refuse_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/ui_refuse_1.wav",
@@ -1760,7 +2087,10 @@
       "dc_removed": -0.000525777394324483,
       "final_peak_scale": 1.0,
       "lufs": -24.09,
-      "true_peak_dbfs": -5.67
+      "true_peak_dbfs": -5.67,
+      "encoded_sha256": "sha256:6a926d2406f3edfa0045c103f080b6666b24fa697c64bd0ae3056dbfaa221a02",
+      "ogg_quality": 5,
+      "ogg_bytes": 4821
     },
     "ui_refuse_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/ui_refuse_2.wav",
@@ -1776,7 +2106,10 @@
       "dc_removed": -0.029329448479390993,
       "final_peak_scale": 1.0,
       "lufs": -24.17,
-      "true_peak_dbfs": -10.01
+      "true_peak_dbfs": -10.01,
+      "encoded_sha256": "sha256:8f88c76811c3d82f0a7f6d31512dede974777e6cac96a731f5e511a1146437eb",
+      "ogg_quality": 5,
+      "ogg_bytes": 4372
     },
     "ui_toast_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/ui_toast_1.wav",
@@ -1792,7 +2125,10 @@
       "dc_removed": -1.1730431025025926e-05,
       "final_peak_scale": 1.0,
       "lufs": -24.07,
-      "true_peak_dbfs": -17.66
+      "true_peak_dbfs": -17.66,
+      "encoded_sha256": "sha256:88d5cfef2013d8ca698fa45f5801311478ecec77f49ab04de70307d1d8fdf3e5",
+      "ogg_quality": 5,
+      "ogg_bytes": 6185
     },
     "ui_toast_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/ui_toast_2.wav",
@@ -1808,7 +2144,10 @@
       "dc_removed": 2.1971870568024885e-05,
       "final_peak_scale": 1.0,
       "lufs": -24.02,
-      "true_peak_dbfs": -10.17
+      "true_peak_dbfs": -10.17,
+      "encoded_sha256": "sha256:130201476c2f876d60d0297fdb7e1c149823114bebffd4436113edd061306475",
+      "ogg_quality": 5,
+      "ogg_bytes": 8353
     },
     "weapon_swap_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/weapon_swap_1.wav",
@@ -1824,7 +2163,10 @@
       "dc_removed": -0.00014793582220285707,
       "final_peak_scale": 1.0,
       "lufs": -22.2,
-      "true_peak_dbfs": -2.77
+      "true_peak_dbfs": -2.77,
+      "encoded_sha256": "sha256:cf64361bf82cdbaacbbc9a82fc3cac1dcd91b946387e01e2fad12a4e45cdc219",
+      "ogg_quality": 5,
+      "ogg_bytes": 11089
     },
     "weapon_swap_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/weapon_swap_2.wav",
@@ -1840,7 +2182,10 @@
       "dc_removed": 3.658776139059331e-05,
       "final_peak_scale": 1.0,
       "lufs": -22.01,
-      "true_peak_dbfs": -2.97
+      "true_peak_dbfs": -2.97,
+      "encoded_sha256": "sha256:bb952bdf216e05f08167c4318af83cb5e77771453f9465d1e623e77d0dbf528f",
+      "ogg_quality": 5,
+      "ogg_bytes": 11186
     },
     "xp_credit_1": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/xp_credit_1.wav",
@@ -1856,7 +2201,10 @@
       "dc_removed": 1.095540117973218e-06,
       "final_peak_scale": 1.0,
       "lufs": -26.02,
-      "true_peak_dbfs": -17.05
+      "true_peak_dbfs": -17.05,
+      "encoded_sha256": "sha256:878b15f5ba25bbbb56d5910460ab9091b89567218e2283765e58c914b07cbd67",
+      "ogg_quality": 5,
+      "ogg_bytes": 9469
     },
     "xp_credit_2": {
       "source": "assets-src/combat/forge/assets-src/sfx/takes/xp_credit_2.wav",
@@ -1872,7 +2220,10 @@
       "dc_removed": -2.8490445336349032e-05,
       "final_peak_scale": 1.0,
       "lufs": -25.96,
-      "true_peak_dbfs": -5.89
+      "true_peak_dbfs": -5.89,
+      "encoded_sha256": "sha256:63c4a896f17ce322074afbc3456a965b66d7a7a4c2154a083c29e10c0c7a173d",
+      "ogg_quality": 5,
+      "ogg_bytes": 4422
     }
   }
 }

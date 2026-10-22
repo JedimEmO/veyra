@@ -12,8 +12,8 @@ use bevy::diagnostic::FrameCount;
 use bevy::prelude::*;
 use bevy::render::view::screenshot::{Screenshot, ScreenshotCaptured, save_to_disk};
 use clap::Parser;
+use strata_app::DayStart;
 use strata_atmosphere::AtmospherePlugin;
-use strata_sim::DayStart;
 
 #[derive(Parser, Resource, Debug, Clone)]
 struct Cli {
@@ -34,7 +34,7 @@ struct Cli {
 fn main() -> AppExit {
     let cli = Cli::parse();
     App::new()
-        .add_plugins((DefaultPlugins, strata_sim::SimPlugin, AtmospherePlugin))
+        .add_plugins((DefaultPlugins, strata_app::AppPlugin, AtmospherePlugin))
         .insert_resource(DayStart(cli.time))
         .insert_resource(cli)
         .init_resource::<ScreenshotDone>()

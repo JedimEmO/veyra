@@ -80,14 +80,14 @@ use bevy_replicon::prelude::{
 use bevy_replicon::server::visibility::registry::FilterRegistry;
 use bevy_replicon::shared::replication::registry::ReplicationRegistry;
 use bevy_replicon_renet::RepliconRenetPlugins;
+use strata_app::{AppState, Authority, Intent, IntentRejected, SimAuthority, SimSet, SimTick};
 use strata_net::{NetRole, NetStatus};
-use strata_sim::{AppState, Authority, Intent, IntentRejected, SimAuthority, SimSet, SimTick};
 
 pub use client::{
     InputSequence, LocalPlayerId, PredictionConfig, PredictionHistory, PredictionStats,
     RemotePlayer, ServerAddress,
 };
-pub use handshake::{Refused, Versions};
+pub use handshake::{Refused, VersionPart, VersionParts, Versions};
 pub use interest::{ClientInterest, InterestConfig, in_interest};
 pub use protocol::{
     AppliedInput, PlayerIntentEvent, Predicted, ReplicatedClock, ServerPosition, Welcome,
@@ -149,17 +149,6 @@ pub struct ReplicationPlugin {
     /// version: the version is the same for every seed, and a client on
     /// another seed stands on other ground just the same.
     pub seed: Option<u64>,
-    /// The combat tables' version (`strata_sim::combat_tables::CombatTables::version`),
-    /// folded in after the seed: a client predicting its player on other
-    /// numbers would disagree with the server every tick, so it is refused
-    /// and told so.
-    pub combat_tables: Option<u64>,
-    /// The baked site groups' version (`strata_sim::sites::site_groups_version`),
-    /// folded in after the combat tables: a client standing other buildings
-    /// on the procedural sites, or other bridges at the roads' crossings
-    /// (the version hashes the crossings' kit too), would draw and collide
-    /// with walls the server does not have, so it is refused and told so.
-    pub site_groups: Option<u64>,
 }
 
 impl ReplicationPlugin {
@@ -171,8 +160,6 @@ impl ReplicationPlugin {
             tree_library: None,
             world: None,
             seed: None,
-            combat_tables: None,
-            site_groups: None,
         }
     }
 
@@ -184,8 +171,6 @@ impl ReplicationPlugin {
             tree_library: None,
             world: None,
             seed: None,
-            combat_tables: None,
-            site_groups: None,
         }
     }
 
@@ -210,22 +195,6 @@ impl ReplicationPlugin {
     #[must_use]
     pub fn with_seed(mut self, seed: u64) -> Self {
         self.seed = Some(seed);
-        self
-    }
-
-    /// Refuse a peer whose combat tables are not `version`
-    /// (`CombatTables::version` of the tables it installed).
-    #[must_use]
-    pub fn with_combat_tables(mut self, version: u64) -> Self {
-        self.combat_tables = Some(version);
-        self
-    }
-
-    /// Refuse a peer whose baked site groups and crossings' kit are not
-    /// `version` (`strata_sim::sites::site_groups_version` of its content).
-    #[must_use]
-    pub fn with_site_groups(mut self, version: u64) -> Self {
-        self.site_groups = Some(version);
         self
     }
 }
@@ -267,22 +236,24 @@ impl Plugin for ReplicationPlugin {
                 .resource_mut::<bevy_replicon::shared::protocol::ProtocolHasher>()
                 .add_custom(("seed", seed));
         }
-        if let Some(version) = self.combat_tables {
+        // The game's parts after the seed, in the order they were pushed:
+        // the combat tables, then the site groups, as every older client
+        // folded them.
+        let parts = app
+            .world()
+            .get_resource::<VersionParts>()
+            .map(|parts| parts.0.clone())
+            .unwrap_or_default();
+        for part in &parts {
             app.world_mut()
                 .resource_mut::<bevy_replicon::shared::protocol::ProtocolHasher>()
-                .add_custom(("combat tables", version));
-        }
-        if let Some(version) = self.site_groups {
-            app.world_mut()
-                .resource_mut::<bevy_replicon::shared::protocol::ProtocolHasher>()
-                .add_custom(("site groups", version));
+                .add_custom((part.name.as_str(), part.version));
         }
         app.insert_resource(Versions {
             tree_library: self.tree_library,
             world: self.world,
             seed: self.seed,
-            combat_tables: self.combat_tables,
-            site_groups: self.site_groups,
+            parts,
         });
 
         match self.role {
@@ -313,7 +284,7 @@ impl Plugin for ReplicationPlugin {
                         (
                             server::dequeue_inputs
                                 .in_set(SimSet::Input)
-                                .before(strata_sim::player::consume_player_intents),
+                                .before(strata_app::player::consume_player_intents),
                             server::publish_clock.in_set(SimSet::Observe),
                         ),
                     )
@@ -405,13 +376,30 @@ mod smoke {
     use super::*;
     use bevy::state::state::State;
 
+    /// The two parts the game pushes, with these versions.
+    fn game_parts(tables: u64, sites: u64) -> VersionParts {
+        VersionParts::default()
+            .with(
+                "combat tables",
+                tables,
+                "combat tables",
+                "update the game's assets/combat/, or join a server of your version",
+            )
+            .with(
+                "site groups",
+                sites,
+                "site buildings",
+                "run `just content` or update the game",
+            )
+    }
+
     fn app(role: ReplicationRole) -> App {
         let mut app = App::new();
         app.insert_resource(NoTransport);
         app.add_plugins((
             bevy::app::TaskPoolPlugin::default(),
             bevy::time::TimePlugin,
-            strata_sim::SimPlugin,
+            strata_app::AppPlugin,
             strata_stream::StreamPlugin,
             strata_physics::PhysicsPlugin,
             ReplicationPlugin {
@@ -419,8 +407,6 @@ mod smoke {
                 tree_library: None,
                 world: None,
                 seed: None,
-                combat_tables: None,
-                site_groups: None,
             },
         ));
         app.finish();
@@ -464,7 +450,7 @@ mod smoke {
         app.add_plugins((
             bevy::app::TaskPoolPlugin::default(),
             bevy::time::TimePlugin,
-            strata_sim::SimPlugin,
+            strata_app::AppPlugin,
             strata_stream::StreamPlugin,
             strata_physics::PhysicsPlugin,
             plugin,
@@ -472,6 +458,32 @@ mod smoke {
         app.finish();
         *app.world()
             .resource::<bevy_replicon::shared::protocol::ProtocolHash>()
+    }
+
+    /// The folded handshake of a server with every version set, pinned: the
+    /// order and the labels the versions are hashed in are the contract with
+    /// every older client, so a refactor of who supplies them must not move it.
+    #[test]
+    fn the_folded_handshake_is_pinned() {
+        let mut app = App::new();
+        app.insert_resource(NoTransport);
+        app.insert_resource(game_parts(3, 4));
+        app.add_plugins((
+            bevy::app::TaskPoolPlugin::default(),
+            bevy::time::TimePlugin,
+            strata_app::AppPlugin,
+            strata_stream::StreamPlugin,
+            strata_physics::PhysicsPlugin,
+            ReplicationPlugin::server(0)
+                .with_tree_library(7)
+                .with_world_version(1)
+                .with_seed(42),
+        ));
+        app.finish();
+        let hash = *app
+            .world()
+            .resource::<bevy_replicon::shared::protocol::ProtocolHash>();
+        assert_eq!(format!("{hash:?}"), "ProtocolHash(9800350578829912043)");
     }
 
     #[test]
@@ -510,11 +522,12 @@ mod smoke {
         let build = |role: ReplicationRole, versions: Versions| {
             let mut app = App::new();
             app.insert_resource(NoTransport);
-            app.insert_resource(strata_sim::WorldSeed(strata_core::Seed(7)));
+            app.insert_resource(strata_app::WorldSeed(strata_core::Seed(7)));
+            app.insert_resource(VersionParts(versions.parts.clone()));
             app.add_plugins((
                 bevy::app::TaskPoolPlugin::default(),
                 bevy::time::TimePlugin,
-                strata_sim::SimPlugin,
+                strata_app::AppPlugin,
                 strata_stream::StreamPlugin,
                 strata_physics::PhysicsPlugin,
                 ReplicationPlugin {
@@ -522,8 +535,6 @@ mod smoke {
                     tree_library: versions.tree_library,
                     world: versions.world,
                     seed: versions.seed,
-                    combat_tables: versions.combat_tables,
-                    site_groups: versions.site_groups,
                 },
             ));
             app.finish();
@@ -553,14 +564,13 @@ mod smoke {
             tree_library: Some(7),
             world: Some(1),
             seed: Some(42),
-            combat_tables: Some(3),
-            site_groups: Some(4),
+            parts: game_parts(3, 4).0,
         };
         let (_, client) = pair(
-            ours,
+            ours.clone(),
             Versions {
                 world: Some(2),
-                ..ours
+                ..ours.clone()
             },
         );
         let refused = client
@@ -574,7 +584,7 @@ mod smoke {
                 .contains("this server's world is another version than yours")
         );
         // The same versions on both ends: no refusal.
-        let (_, client) = pair(ours, ours);
+        let (_, client) = pair(ours.clone(), ours);
         assert!(client.world().get_resource::<Refused>().is_none());
     }
 
@@ -584,25 +594,25 @@ mod smoke {
             tree_library: Some(7),
             world: Some(1),
             seed: Some(42),
-            combat_tables: Some(3),
-            site_groups: Some(4),
+            parts: game_parts(3, 4).0,
         };
         let refusal = |client: Versions| {
-            let (_, client) = pair(ours, client);
-            *client
+            let (_, client) = pair(ours.clone(), client);
+            client
                 .world()
                 .get_resource::<Refused>()
+                .cloned()
                 .expect("the refused client heard why")
         };
         let trees = refusal(Versions {
             tree_library: Some(8),
-            ..ours
+            ..ours.clone()
         });
         assert!(trees.trees_differ() && !trees.world_differs() && !trees.seed_differs());
         assert!(trees.message().contains("trees are another version"));
         let seed = refusal(Versions {
             seed: Some(43),
-            ..ours
+            ..ours.clone()
         });
         assert!(seed.seed_differs() && !seed.world_differs() && !seed.trees_differ());
         assert!(
@@ -612,10 +622,12 @@ mod smoke {
         );
         // Other buildings on the sites: refused like the rest, and told.
         let sites = refusal(Versions {
-            site_groups: Some(5),
+            parts: game_parts(3, 5).0,
             ..ours
         });
-        assert!(sites.site_groups_differ() && !sites.world_differs() && !sites.trees_differ());
+        assert!(
+            sites.part_differs("site groups") && !sites.world_differs() && !sites.trees_differ()
+        );
         assert!(
             sites
                 .message()
@@ -633,7 +645,7 @@ mod smoke {
         let carrier = carriers.single(app.world()).expect("one clock carrier");
         assert_eq!(
             carrier.time,
-            app.world().resource::<strata_sim::SimClock>().0
+            app.world().resource::<strata_app::SimClock>().0
         );
     }
 

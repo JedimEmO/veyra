@@ -33,7 +33,8 @@ pub fn materials() -> MaterialLibrary {
         }
         definition
     };
-    let color = |rgb: [f32; 3]| ParamValue::Color(rgb);
+    // sRGB, as every colour below is written; the graphs take linear light.
+    let color = veyra_materials::palette::param;
     let float = ParamValue::Float;
     let lit = |base: &str, base_color: [f32; 3], emissive: [f32; 3]| {
         let mut definition = library.materials[base].clone();
@@ -74,8 +75,8 @@ pub fn materials() -> MaterialLibrary {
         ];
         definition
     };
-    let composite = shell([0.56, 0.52, 0.43]);
-    let composite_teal = shell([0.26, 0.4, 0.38]);
+    let composite = shell([0.774, 0.748, 0.687]);
+    let composite_teal = shell([0.547, 0.665, 0.65]);
     // A city tree's canopy, stylised into lobes: the same surface, lusher.
     let mut canopy = graph(
         "library:grass",
@@ -90,7 +91,7 @@ pub fn materials() -> MaterialLibrary {
             graph(
                 "library:stained-concrete",
                 &[
-                    ("color", color([0.05, 0.058, 0.058])),
+                    ("color", color([0.248, 0.267, 0.267])),
                     ("streaks", float(1.0)),
                     ("grime", float(0.85)),
                 ],
@@ -101,7 +102,7 @@ pub fn materials() -> MaterialLibrary {
             graph(
                 "library:stained-concrete",
                 &[
-                    ("color", color([0.03, 0.033, 0.03])),
+                    ("color", color([0.19, 0.2, 0.19])),
                     ("streaks", float(1.0)),
                     ("grime", float(1.0)),
                 ],
@@ -112,14 +113,20 @@ pub fn materials() -> MaterialLibrary {
             "serein:dark-steel",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.028, 0.038, 0.04])), ("wear", float(0.5))],
+                &[
+                    ("color", color([0.183, 0.215, 0.221])),
+                    ("wear", float(0.5)),
+                ],
             ),
         ),
         (
             "serein:painted-steel",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.03, 0.12, 0.11])), ("wear", float(0.65))],
+                &[
+                    ("color", color([0.19, 0.381, 0.366])),
+                    ("wear", float(0.65)),
+                ],
             ),
         ),
         // Planters and the ledge beds, clipped.
@@ -138,7 +145,7 @@ pub fn materials() -> MaterialLibrary {
             graph(
                 "library:stained-concrete",
                 &[
-                    ("color", color([0.38, 0.355, 0.31])),
+                    ("color", color([0.65, 0.63, 0.593])),
                     ("streaks", float(0.5)),
                     ("grime", float(0.3)),
                 ],
@@ -152,7 +159,7 @@ pub fn materials() -> MaterialLibrary {
                 "library:ashlar-blocks",
                 &[
                     ("variation", float(0.6)),
-                    ("color", color([0.34, 0.31, 0.26])),
+                    ("color", color([0.618, 0.593, 0.547])),
                 ],
             ),
         ),
@@ -160,28 +167,34 @@ pub fn materials() -> MaterialLibrary {
             "serein:company-concrete",
             graph(
                 "library:formed-concrete",
-                &[("color", color([0.085, 0.09, 0.092]))],
+                &[("color", color([0.323, 0.332, 0.335]))],
             ),
         ),
         (
             "serein:pad-deck",
             graph(
                 "library:formed-concrete",
-                &[("color", color([0.2, 0.2, 0.19])), ("ties", float(0.0))],
+                &[
+                    ("color", color([0.485, 0.485, 0.473])),
+                    ("ties", float(0.0)),
+                ],
             ),
         ),
         (
             "serein:pipe",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.42, 0.38, 0.3])), ("wear", float(0.55))],
+                &[("color", color([0.68, 0.65, 0.584])), ("wear", float(0.55))],
             ),
         ),
         (
             "serein:hazard",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.6, 0.2, 0.025])), ("wear", float(0.3))],
+                &[
+                    ("color", color([0.798, 0.485, 0.172])),
+                    ("wear", float(0.3)),
+                ],
             ),
         ),
         // The housing slabs' frame: fins, floor bands and galleries cast
@@ -190,7 +203,7 @@ pub fn materials() -> MaterialLibrary {
             "serein:grid-concrete",
             graph(
                 "library:formed-concrete",
-                &[("color", color([0.4, 0.4, 0.38]))],
+                &[("color", color([0.665, 0.665, 0.65]))],
             ),
         ),
         // The exchange towers in a mid-grey cast concrete, lighter than the
@@ -200,7 +213,7 @@ pub fn materials() -> MaterialLibrary {
             graph(
                 "library:stained-concrete",
                 &[
-                    ("color", color([0.2, 0.2, 0.19])),
+                    ("color", color([0.485, 0.485, 0.473])),
                     ("streaks", float(0.8)),
                     ("grime", float(0.5)),
                 ],
@@ -214,7 +227,10 @@ pub fn materials() -> MaterialLibrary {
             "serein:composite-new",
             graph(
                 "library:hull-plating",
-                &[("color", color([0.74, 0.76, 0.76])), ("wear", float(0.08))],
+                &[
+                    ("color", color([0.752, 0.761, 0.761])),
+                    ("wear", float(0.08)),
+                ],
             ),
         ),
         (
@@ -225,7 +241,10 @@ pub fn materials() -> MaterialLibrary {
             "serein:white-steel",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.72, 0.74, 0.74])), ("wear", float(0.15))],
+                &[
+                    ("color", color([0.738, 0.747, 0.747])),
+                    ("wear", float(0.15)),
+                ],
             ),
         ),
         (
@@ -236,27 +255,27 @@ pub fn materials() -> MaterialLibrary {
         // fabric of their awnings: the palette the design gives them.
         (
             "serein:paint-cream",
-            graph("library:adobe", &[("color", color([0.55, 0.5, 0.4]))]),
+            graph("library:adobe", &[("color", color([0.767, 0.735, 0.665]))]),
         ),
         (
             "serein:paint-ochre",
-            graph("library:adobe", &[("color", color([0.5, 0.32, 0.12]))]),
+            graph("library:adobe", &[("color", color([0.735, 0.601, 0.381]))]),
         ),
         (
             "serein:paint-oxide",
-            graph("library:adobe", &[("color", color([0.36, 0.13, 0.07]))]),
+            graph("library:adobe", &[("color", color([0.634, 0.396, 0.293]))]),
         ),
         (
             "serein:paint-green",
-            graph("library:adobe", &[("color", color([0.21, 0.29, 0.18]))]),
+            graph("library:adobe", &[("color", color([0.496, 0.575, 0.461]))]),
         ),
         (
             "serein:paint-teal",
-            graph("library:adobe", &[("color", color([0.17, 0.3, 0.3]))]),
+            graph("library:adobe", &[("color", color([0.449, 0.584, 0.584]))]),
         ),
         (
             "serein:paint-white",
-            graph("library:adobe", &[("color", color([0.62, 0.61, 0.56]))]),
+            graph("library:adobe", &[("color", color([0.733, 0.727, 0.7]))]),
         ),
         // Window glass with a room behind it: the library's office window,
         // dark reflective glazing over blinds and furniture, box-mapped so
@@ -271,7 +290,7 @@ pub fn materials() -> MaterialLibrary {
                 // Young enough that the brown paint holds: older, the film
                 // weathers off to silvered timber, which under the sky read
                 // as a pale mint across every stall and bench.
-                &[("color", color([0.42, 0.28, 0.16])), ("age", float(0.25))],
+                &[("color", color([0.68, 0.566, 0.437])), ("age", float(0.25))],
             ),
         ),
         ("serein:canopy", canopy),
@@ -280,35 +299,44 @@ pub fn materials() -> MaterialLibrary {
             "serein:container-rust",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.42, 0.14, 0.07])), ("wear", float(0.6))],
+                &[("color", color([0.68, 0.41, 0.293])), ("wear", float(0.6))],
             ),
         ),
         (
             "serein:container-blue",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.1, 0.2, 0.36])), ("wear", float(0.45))],
+                &[
+                    ("color", color([0.349, 0.485, 0.634])),
+                    ("wear", float(0.45)),
+                ],
             ),
         ),
         (
             "serein:container-green",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.14, 0.3, 0.18])), ("wear", float(0.5))],
+                &[("color", color([0.41, 0.584, 0.461])), ("wear", float(0.5))],
             ),
         ),
         (
             "serein:container-grey",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.36, 0.37, 0.37])), ("wear", float(0.4))],
+                &[
+                    ("color", color([0.634, 0.642, 0.642])),
+                    ("wear", float(0.4)),
+                ],
             ),
         ),
         (
             "serein:container-white",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.62, 0.62, 0.6])), ("wear", float(0.35))],
+                &[
+                    ("color", color([0.753, 0.753, 0.742])),
+                    ("wear", float(0.35)),
+                ],
             ),
         ),
         // The night: lit glass and lamps at their full-night brightness. The
@@ -388,42 +416,57 @@ pub fn materials() -> MaterialLibrary {
             "serein:joinery-green",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.13, 0.24, 0.14])), ("wear", float(0.3))],
+                &[("color", color([0.396, 0.527, 0.41])), ("wear", float(0.3))],
             ),
         ),
         (
             "serein:joinery-teal",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.07, 0.24, 0.26])), ("wear", float(0.3))],
+                &[
+                    ("color", color([0.293, 0.527, 0.547])),
+                    ("wear", float(0.3)),
+                ],
             ),
         ),
         (
             "serein:joinery-oxide",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.32, 0.09, 0.05])), ("wear", float(0.35))],
+                &[
+                    ("color", color([0.601, 0.332, 0.248])),
+                    ("wear", float(0.35)),
+                ],
             ),
         ),
         (
             "serein:joinery-white",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.66, 0.66, 0.62])), ("wear", float(0.25))],
+                &[
+                    ("color", color([0.754, 0.754, 0.733])),
+                    ("wear", float(0.25)),
+                ],
             ),
         ),
         (
             "serein:joinery-ochre",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.52, 0.34, 0.09])), ("wear", float(0.3))],
+                &[
+                    ("color", color([0.748, 0.618, 0.332])),
+                    ("wear", float(0.3)),
+                ],
             ),
         ),
         (
             "serein:joinery-blue",
             graph(
                 "library:painted-metal",
-                &[("color", color([0.1, 0.17, 0.32])), ("wear", float(0.3))],
+                &[
+                    ("color", color([0.349, 0.449, 0.601])),
+                    ("wear", float(0.3)),
+                ],
             ),
         ),
         // Solar panels: dark blue glass, smooth enough to catch the sky.

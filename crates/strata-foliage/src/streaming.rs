@@ -24,10 +24,10 @@ use crate::tree::{MESH_LEVELS, TreeImpostorBatch};
 use bevy::camera::{Camera, Camera3d};
 use bevy::tasks::{AsyncComputeTaskPool, Task, TaskPool, block_on, poll_once};
 use bevy::transform::components::GlobalTransform;
+use strata_app::RenderOrigin;
+use strata_app::{Observers, WorldPosition, WorldSeed, WorldSourceRes};
 use strata_core::{Seed, WorldPos};
-use strata_flora::place_cell_with;
-use strata_sim::RenderOrigin;
-use strata_sim::{Observers, WorldPosition, WorldSeed, WorldSourceRes};
+use strata_flora::{CandidateCache, place_cell_cached, place_cell_trees};
 use strata_stream::{LoadedRegions, distance_to_region};
 
 use super::{
@@ -137,7 +137,6 @@ struct Resident {
     far_installed: bool,
     far_entities: Vec<Entity>,
     grass_spawned: bool,
-    tag: u32,
     grass_entities: Vec<Entity>,
     far_trees: u64,
     // Set when every plant holds what it wants, or, for a cell beyond any
@@ -365,6 +364,9 @@ pub(super) struct CellStream {
     // The grass bytes `retiring` holds.
     retiring_grass: usize,
     cache: Cache,
+    // Every placed cell's candidates before thinning, which the halo of the
+    // cells round it reads instead of sampling the strip again.
+    candidates: Arc<CandidateCache>,
     previous_eye: Option<WorldPos>,
     // The camera at the last collection, for its speed.
     previous_view: Option<WorldPos>,
@@ -469,7 +471,6 @@ impl CellStream {
             far_installed: false,
             far_entities: Vec::new(),
             grass_spawned: false,
-            tag: 0,
             grass_entities: Vec::new(),
             far_trees: 0,
             checked: None,
@@ -813,10 +814,10 @@ fn ground_ready(mut coord: RegionCoord, loaded: &LoadedRegions) -> bool {
 pub(super) fn dispatch(
     cfg: Res<FoliageConfig>,
     source: Option<Res<WorldSourceRes>>,
-    procedural: Option<Res<strata_sim::ProceduralWorldRes>>,
+    procedural: Option<Res<strata_app::ProceduralWorldRes>>,
     inputs: Option<Res<PlaceInputs>>,
-    exclusions: Option<Res<strata_sim::footprints::VegetationExclusions>>,
-    planted: Option<Res<strata_sim::footprints::PlantedFlora>>,
+    exclusions: Option<Res<strata_app::footprints::VegetationExclusions>>,
+    planted: Option<Res<strata_app::footprints::PlantedFlora>>,
     seed: Res<WorldSeed>,
     observers: Res<Observers>,
     loaded: Res<LoadedRegions>,
@@ -835,6 +836,7 @@ pub(super) fn dispatch(
         stream.tasks.clear();
         stream.ready.clear();
         stream.cache = Cache::default();
+        stream.candidates.clear();
     }
     if stream.reset {
         return;
@@ -858,6 +860,7 @@ pub(super) fn dispatch(
         ready,
         cache,
         unsatisfied,
+        candidates,
         ..
     } = stream;
     // The cells not yet resident as wanted, nearest first; the walk stops
@@ -894,20 +897,31 @@ pub(super) fn dispatch(
         let seed = seed.0;
         let coord = want.coord;
         let with_grass = want.grass;
+        let candidates = Arc::clone(candidates);
         let exclusions = exclusions.as_deref().cloned().unwrap_or_default();
         let planted = planted
             .as_deref()
-            .map(strata_sim::footprints::PlantedFlora::plants);
+            .map(strata_app::footprints::PlantedFlora::plants);
         let task = pool.spawn(async move {
             let started = Instant::now();
-            let mut flora = place_cell_with(
-                coord,
-                source.as_ref(),
-                &table,
-                seed,
-                &mut Vec::new(),
-                with_grass,
-            );
+            // A cell wants grass out to the far fade, well past where any
+            // understory, rock or bush mesh is drawn, so the whole placement is
+            // for those and a cell beyond is placed for its impostors alone: it
+            // exists only for its impostors, and is upgraded when it comes
+            // in (`satisfied` sees no grass).
+            let mut flora = if with_grass {
+                place_cell_cached(
+                    coord,
+                    source.as_ref(),
+                    &table,
+                    seed,
+                    &mut Vec::new(),
+                    true,
+                    &candidates,
+                )
+            } else {
+                place_cell_trees(coord, source.as_ref(), &table, seed, &candidates)
+            };
             exclude_occupied(&mut flora, &exclusions);
             if let Some(world) = &procedural {
                 clear_crossings(&mut flora, &table, world);
@@ -1249,7 +1263,6 @@ fn spawn_levels(
     cfg: &FoliageConfig,
     budget: &mut Budget,
 ) {
-    let tag = resident.tag;
     let plants = &mut resident.plants;
     let meshes = &mut resident.meshes;
     commands.entity(resident.root).with_children(|parent| {
@@ -1269,7 +1282,6 @@ fn spawn_levels(
                     level,
                     plant,
                     Vec3::new(plant.x, plant.y, plant.z),
-                    tag,
                 );
                 budget.spawned += entities.len() as u64;
                 *meshes += entities.len() as u64;
@@ -1905,7 +1917,7 @@ fn clear_crossings(
 // the same root accessor as rendering before testing world-space occupancy.
 fn exclude_occupied(
     flora: &mut CellFlora,
-    exclusions: &strata_sim::footprints::VegetationExclusions,
+    exclusions: &strata_app::footprints::VegetationExclusions,
 ) {
     let corner = flora.coord.min_corner();
     flora
@@ -1924,7 +1936,7 @@ mod tests {
 
     #[test]
     fn occupancy_decodes_packed_grass_roots_and_preserves_nearby_blades() {
-        use strata_sim::footprints::{Footprint, VegetationExclusions};
+        use strata_app::footprints::{Footprint, VegetationExclusions};
         let coord = RegionCoord::new(-24, -188, 0);
         let corner = coord.min_corner();
         let inside = strata_flora::GrassBlade {
@@ -1977,7 +1989,6 @@ mod tests {
             far_installed: true,
             far_entities: Vec::new(),
             grass_spawned: false,
-            tag: 123,
             grass_entities: Vec::new(),
             far_trees: 0,
             checked: None,
@@ -2001,7 +2012,7 @@ mod tests {
     }
 
     #[test]
-    fn terrain_parent_replacement_preserves_resident_entity_and_growth_tag() {
+    fn terrain_parent_replacement_preserves_resident_entity() {
         let mut world = World::new();
         let coord = RegionCoord::new(0, 0, 0);
         let mut resident = fixture_resident(&mut world, coord);
@@ -2041,7 +2052,6 @@ mod tests {
             .expect("retire system");
         let stream = world.resource::<CellStream>();
         assert_eq!(stream.residents[&coord].root, root);
-        assert_eq!(stream.residents[&coord].tag, 123);
         assert!(stream.residents[&coord].far_installed);
         assert!(stream.retiring.is_empty());
         assert!(world.get_entity(child).is_ok());
@@ -2236,7 +2246,6 @@ mod tests {
         assert!(resident.far_installed);
         assert!(resident.plants.is_empty());
         assert_eq!(resident.root, root);
-        assert_eq!(resident.tag, 123);
         assert!(stream.tasks.is_empty());
         assert!(stream.ready.is_empty());
     }
@@ -2386,6 +2395,7 @@ mod tests {
                 variants: vec![TreeVariantAssets {
                     levels: TREE_BANDS.iter().flatten().copied().map(level).collect(),
                     impostor_scale: 1.0,
+                    pivot_slot: 0,
                 }],
                 impostor: None,
             })],

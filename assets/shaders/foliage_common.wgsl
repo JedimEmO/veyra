@@ -9,10 +9,63 @@
 #import bevy_pbr::mesh_bindings::mesh
 #import strata::foliage_wind::{FoliageWind, gust}
 
-@group(#{MATERIAL_BIND_GROUP}) @binding(100) var<storage, read> wind: array<FoliageWind>;
-// Three rows per pivot: [x, y, z, parent] [axis, length]
-// [base_radius, frequency_hz, stiffness, 0], in the mesh's frame.
-@group(#{MATERIAL_BIND_GROUP}) @binding(101) var<storage, read> pivots: array<vec4<f32>>;
+// The wind and the pivots are one buffer each for every tree material. Where
+// the adapter has binding arrays the materials share a bind group (a slab) and
+// each draw finds the two buffers through its material slot's row of the
+// index table, which is `TreeWind`'s `index_table(range(50..52))`; without
+// them each material binds the two plainly. The helpers below are the only
+// readers, so the rest of the shader is the same either way.
+//
+// Every variant's pivot table is in the one pivot buffer. The first 256 rows
+// are a header: row `slot`'s x is, as a whole-number float, the row where that
+// slot's table starts (not the row's bits: those would be a denormal). A table is three rows per pivot: [x, y, z, parent] [axis,
+// length] [base_radius, frequency_hz, stiffness, 0], in the mesh's frame. The
+// slot is the third byte of the mesh tag.
+#ifdef BINDLESS
+
+struct TreeIndices {
+    wind: u32,
+    pivots: u32,
+}
+
+struct WindBuffer {
+    rows: array<FoliageWind>,
+}
+
+struct PivotBuffer {
+    rows: array<vec4<f32>>,
+}
+
+@group(#{MATERIAL_BIND_GROUP}) @binding(100) var<storage> tree_indices: array<TreeIndices>;
+@group(#{MATERIAL_BIND_GROUP}) @binding(101) var<storage, read> wind_buffers: binding_array<WindBuffer>;
+@group(#{MATERIAL_BIND_GROUP}) @binding(102) var<storage, read> pivot_buffers: binding_array<PivotBuffer>;
+
+fn tree_slot(instance_index: u32) -> u32 {
+    return mesh[instance_index].material_and_lightmap_bind_group_slot & 0xffffu;
+}
+
+fn tree_wind(instance_index: u32) -> FoliageWind {
+    return wind_buffers[tree_indices[tree_slot(instance_index)].wind].rows[0];
+}
+
+fn tree_pivot(instance_index: u32, row: u32) -> vec4<f32> {
+    return pivot_buffers[tree_indices[tree_slot(instance_index)].pivots].rows[row];
+}
+
+#else   // BINDLESS
+
+@group(#{MATERIAL_BIND_GROUP}) @binding(50) var<storage, read> wind: array<FoliageWind>;
+@group(#{MATERIAL_BIND_GROUP}) @binding(51) var<storage, read> pivots: array<vec4<f32>>;
+
+fn tree_wind(instance_index: u32) -> FoliageWind {
+    return wind[0];
+}
+
+fn tree_pivot(instance_index: u32, row: u32) -> vec4<f32> {
+    return pivots[row];
+}
+
+#endif  // BINDLESS
 
 // The vertex contract of tree.rs, in its shader locations.
 struct FoliageVertex {
@@ -55,6 +108,12 @@ fn tree_phase(instance_index: u32) -> f32 {
     return f32(h & 0xffffu) / 65535.0;
 }
 
+// The row where this instance's variant's pivot table starts.
+fn pivot_base(instance_index: u32) -> u32 {
+    let slot = (mesh[instance_index].tag >> 16u) & 0xffu;
+    return u32(tree_pivot(instance_index, slot).x);
+}
+
 // How far one pivot's branch turns at `time`: a lean with the gust and a
 // sway at the branch's own frequency, less for stiff, thick limbs.
 fn pivot_angle(index: u32, row: vec4<f32>, strength: f32, g: f32, phase: f32, time: f32) -> f32 {
@@ -78,7 +137,8 @@ fn bend_vertex(
     wind_now: FoliageWind,
     time: f32,
 ) -> BentVertex {
-    let root_world = mesh_functions::mesh_position_local_to_world(world_from_local, vec4<f32>(pivots[0].xyz, 1.0));
+    let base = pivot_base(vertex.instance_index);
+    let root_world = mesh_functions::mesh_position_local_to_world(world_from_local, vec4<f32>(tree_pivot(vertex.instance_index, base).xyz, 1.0));
     let g = gust(root_world.xz + vec2<f32>(wind_now.origin_x, wind_now.origin_z), wind_now, time);
     // Gusts travel in world space; the pivots are mesh local.
     let world_direction = vec3<f32>(wind_now.direction.x, 0.0, wind_now.direction.y);
@@ -97,9 +157,9 @@ fn bend_vertex(
     var carried = vertex.position;
     var index = u32(max(vertex.wind_data.x, 0.0));
     for (var step = 0u; step < MAX_PIVOTS; step++) {
-        let origin = pivots[index * 3u];
-        let axis_row = pivots[index * 3u + 1u];
-        let dynamics = pivots[index * 3u + 2u];
+        let origin = tree_pivot(vertex.instance_index, base + index * 3u);
+        let axis_row = tree_pivot(vertex.instance_index, base + index * 3u + 1u);
+        let dynamics = tree_pivot(vertex.instance_index, base + index * 3u + 2u);
         let axis = normalize(axis_row.xyz);
         let along = clamp(dot(carried - origin.xyz, axis) / max(axis_row.w, 0.01), 0.0, 1.0);
         var turn_axis = cross(axis, push);

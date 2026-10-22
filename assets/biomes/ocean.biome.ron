@@ -16,5 +16,6 @@
     // Seen from a boat or the shore: the coast's cool, a touch
     // further, so the bay does not warm as the camera crosses the
     // shelf.
-    grade: (temperature: -0.01, saturation: 0.95, gain: 1.03),
+    // Shade colour (visual.md F4): Teal shade, a little bluer than the coast.
+    grade: (temperature: -0.01, saturation: 0.95, gain: 1.03, shade: (0.80, 1.04, 1.16)),
 )

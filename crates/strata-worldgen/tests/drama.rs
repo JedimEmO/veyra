@@ -49,7 +49,7 @@ mod common;
 use std::fmt::Write as _;
 use std::sync::OnceLock;
 
-use strata_registry::GameRegistries;
+use strata_data::WorldDefs;
 use strata_worldgen::measure::{
     self, FLAT_DEG, HOLLOW_DEPTH_M, Measures, PATCH_CELL_M, PATCH_LARGE_AREA_KM2,
     PATCH_MIN_AREA_KM2, PATCH_RADIUS_M, Patch, PointSet, Profile, ProvinceTiles, RELIEF_FAR,
@@ -250,7 +250,7 @@ struct Taken {
     opposite: Vec<Option<Profile>>,
     seaward: Vec<Option<Profile>>,
     tiles: Vec<ProvinceTiles>,
-    registries: GameRegistries,
+    registries: WorldDefs,
 }
 
 fn taken() -> &'static Taken {
@@ -293,7 +293,7 @@ fn taken() -> &'static Taken {
 
 /// The measures as the snapshot holds them: degrees to a tenth, metres to
 /// the metre, shares to a tenth of a percent, every shipped biome named.
-fn report(m: &Measures, registries: &GameRegistries) -> String {
+fn report(m: &Measures, registries: &WorldDefs) -> String {
     let pct = |share: f64| format!("{:.1} %", share * 100.0);
     let mut out = String::new();
     let _ = writeln!(
@@ -434,7 +434,7 @@ fn profile_line(out: &mut String, p: &Profile) {
 /// Each province's landform as the snapshot holds it: its own ground's
 /// flat and steep shares and relief within 1 km, and on its tiles the
 /// closed hollows a square kilometre and the elongation of its grain.
-fn province_report(m: &Measures, tiles: &[ProvinceTiles], registries: &GameRegistries) -> String {
+fn province_report(m: &Measures, tiles: &[ProvinceTiles], registries: &WorldDefs) -> String {
     let mut out = String::new();
     let _ = writeln!(
         out,
@@ -463,9 +463,9 @@ fn province_report(m: &Measures, tiles: &[ProvinceTiles], registries: &GameRegis
     out
 }
 
-fn province(registries: &GameRegistries, name: &str) -> strata_registry::ProvinceId {
+fn province(registries: &WorldDefs, name: &str) -> strata_data::ProvinceId {
     registries
-        .province_id(&strata_registry::Namespaced::parse(name).expect("valid"))
+        .province_id(&strata_data::Namespaced::parse(name).expect("valid"))
         .unwrap_or_else(|| panic!("{name} ships"))
 }
 
@@ -475,13 +475,13 @@ fn least_large_elongation(patches: &[Patch]) -> f64 {
     measure::least_elongation_over(patches, PATCH_LARGE_AREA_KM2)
 }
 
-fn biome(registries: &GameRegistries, name: &str) -> strata_registry::BiomeId {
+fn biome(registries: &WorldDefs, name: &str) -> strata_data::BiomeId {
     registries
-        .biome_id(&strata_registry::Namespaced::parse(name).expect("valid"))
+        .biome_id(&strata_data::Namespaced::parse(name).expect("valid"))
         .unwrap_or_else(|| panic!("{name} ships"))
 }
 
-fn mountains(registries: &GameRegistries) -> strata_registry::BiomeId {
+fn mountains(registries: &WorldDefs) -> strata_data::BiomeId {
     biome(registries, "strata:mountains")
 }
 

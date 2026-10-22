@@ -38,7 +38,7 @@
 
 use std::collections::BinaryHeap;
 
-use strata_registry::RoadClass;
+use strata_data::RoadClass;
 
 use crate::roads::CrossingKind;
 

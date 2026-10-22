@@ -973,7 +973,7 @@ fn the_scripted_path_earns_learns_swaps_and_saves() {
         path.to_str().unwrap(),
     ]);
     cli.resolve_play_mode();
-    assert!(cli.combat && cli.combat_script);
+    assert!(cli.combat && cli.dev.combat_script);
     crate::install_combat_tables(&cli).unwrap();
     let exit = crate::build(cli, None).unwrap().run();
     assert_eq!(exit, AppExit::Success);
@@ -1119,7 +1119,7 @@ fn the_scripted_ride_covers_the_road_at_close_to_road_speed() {
     let exit = crate::build(cli, None).unwrap().run();
     assert_eq!(exit, AppExit::Success);
 
-    let measured: crate::ride::RideReport =
+    let measured: veyra_dev::ride::RideReport =
         ron::from_str(&std::fs::read_to_string(&report).unwrap()).unwrap();
     // The road speed is the vehicle file's, so the test follows a retune.
     let road = ron::from_str::<strata::registry::vehicle::VehicleDef>(include_str!(
@@ -1161,7 +1161,7 @@ fn the_scripted_ride_covers_the_road_at_close_to_road_speed() {
 fn run_survey(
     dir: &tempfile::TempDir,
     member: Option<&str>,
-) -> (crate::survey_script::SurveyReport, std::path::PathBuf) {
+) -> (veyra_dev::survey_script::SurveyReport, std::path::PathBuf) {
     let path = dir.path().join("household.ron");
     let report = dir.path().join("survey.ron");
     let mut args = vec![
@@ -1205,7 +1205,7 @@ fn the_scripted_survey_finds_a_deposit_by_pings_and_samples_it() {
         measured.survey_xp > 0,
         "surveying earns Survey XP: {measured:?}"
     );
-    let deposit = crate::survey_script::deposit_of(&measured).expect("a deposit was met");
+    let deposit = veyra_dev::survey_script::deposit_of(&measured).expect("a deposit was met");
     assert!(measured.units >= 15, "{measured:?}");
     assert!(measured.seconds < 240.0, "{measured:?}");
     assert!(measured.pings >= 2, "a search and a homing: {measured:?}");

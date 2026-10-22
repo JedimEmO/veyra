@@ -1,0 +1,13 @@
+# What `just web` copies from assets/ into dist/assets/: the files the browser
+# fetches over HTTP through Bevy's asset server. The registries and layouts
+# the game reads through its file port travel in data.bundle.gz instead
+# (tools/xtask `read_by_port`), so they are not copied twice.
+- *.bak
++ */
++ *.wgsl
++ *.ttf
++ *.ogg
++ *.glb
++ *.png
++ /themes/veyra.theme.ron
+- *

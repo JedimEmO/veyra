@@ -2,7 +2,7 @@
 //! finds for itself, and the level pad each one lays on the ground.
 //!
 //! A site kind is registry data (`assets/sites/*.site.ron`, see
-//! `strata_registry::site`). The bake places sites per land mass after its
+//! `strata_data::site`). The bake places sites per land mass after its
 //! rivers (`hydrology::place`), so a site is part of the network a mass
 //! bakes to: the same seed, registries and code give the same sites on any
 //! machine and any thread count, and the set is folded into the network's
@@ -37,7 +37,7 @@
 
 use serde::{Deserialize, Serialize};
 use strata_core::Rng;
-use strata_registry::{
+use strata_data::{
     NamesDef, Namespaced, RoadClass, SiteFeature, SiteKindDef, SiteKindId, SiteKindTraits,
 };
 
@@ -218,9 +218,9 @@ pub struct Pad {
 
 /// How far past a pad's edge its ground is laid and kept clear, metres:
 /// fully developed to here, then fading out over [`SKIRT_FADE_M`].
-pub const SKIRT_M: f64 = strata_registry::PAD_SKIRT_M;
+pub const SKIRT_M: f64 = strata_data::PAD_SKIRT_M;
 /// The fade of the developed skirt, metres.
-pub const SKIRT_FADE_M: f64 = strata_registry::PAD_SKIRT_FADE_M;
+pub const SKIRT_FADE_M: f64 = strata_data::PAD_SKIRT_FADE_M;
 
 /// The laid share over which a pad's ground is gravel, in `(0.15, 0.85)`,
 /// varying over a couple of metres: the material is chosen per vertex, so a
@@ -693,7 +693,7 @@ const NAME_TRIES: u32 = 256;
 /// A name from a kind's rules: a root of syllables in one of its patterns
 /// (the feature's own patterns when the site stands by one that has some).
 /// Pure in `rng`, so a site's name is a function of the seed and its id.
-pub(crate) fn name(names: &NamesDef, patterns: &[String], rng: &mut Rng) -> String {
+pub fn name(names: &NamesDef, patterns: &[String], rng: &mut Rng) -> String {
     let pick = |list: &[String], rng: &mut Rng| -> String {
         let n = u32::try_from(list.len()).expect("a short list");
         list[rng.below(n) as usize].clone()

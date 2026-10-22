@@ -201,9 +201,9 @@ fn slope_25m(world: &strata_worldgen::ProceduralWorld, x: f64, z: f64) -> f64 {
     gx.hypot(gz).atan().to_degrees()
 }
 
-fn mountains() -> strata_registry::BiomeId {
+fn mountains() -> strata_data::BiomeId {
     common::registries()
-        .biome_id(&strata_registry::Namespaced::parse("strata:mountains").expect("valid"))
+        .biome_id(&strata_data::Namespaced::parse("strata:mountains").expect("valid"))
         .expect("ships")
 }
 

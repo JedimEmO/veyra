@@ -192,7 +192,7 @@ fn fragment(
     // Sky under crowns (lighting plan phase 3a): a blade under a crown
     // takes the crown's shade on the sky's fill, never under a quarter.
     let sky_occlusion = mix(1.0, max(in.tint.w, 0.25), wind[0].sky_visibility);
-    pbr_input.diffuse_occlusion = pbr_input.diffuse_occlusion * sky_occlusion;
+    pbr_input.diffuse_occlusion = pbr_input.diffuse_occlusion * sky_occlusion * vec3<f32>(wind[0].shade_r, wind[0].shade_g, wind[0].shade_b);
     pbr_input.specular_occlusion = pbr_input.specular_occlusion * sky_occlusion;
     pbr_input.material.base_color = alpha_discard(pbr_input.material, pbr_input.material.base_color);
 

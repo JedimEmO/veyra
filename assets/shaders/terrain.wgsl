@@ -62,7 +62,7 @@
 #import bevy_pbr::pbr_functions
 #endif
 
-#import strata::terrain_common::{TerrainParams, TerrainTint, TerrainVertex, morph_vertex, terrain_attributes, terrain_slots, tint_parent, tiling_of}
+#import strata::terrain_common::{TerrainParams, TerrainTint, TerrainVertex, morph_vertex, terrain_attributes, terrain_slots, tint_parent, tiling_of, value_of, grain_of}
 
 @group(#{MATERIAL_BIND_GROUP}) @binding(100) var diffuse_array: texture_2d_array<f32>;
 @group(#{MATERIAL_BIND_GROUP}) @binding(101) var diffuse_sampler: sampler;
@@ -357,8 +357,69 @@ fn wrap_vertex(v: vec2<i32>, n: i32) -> vec2<i32> {
 
 // The layer's mean colour: the last mip of its slice. The level is clamped
 // by the sampler to the smallest mip there is.
-fn layer_mean(layer: u32) -> vec3<f32> {
+fn layer_mean_baked(layer: u32) -> vec3<f32> {
     return textureSampleLevel(diffuse_array, diffuse_sampler, vec2<f32>(0.5), layer, 24.0).rgb;
+}
+
+// What `mean` must be multiplied by for the layer to be drawn at its value
+// budget (assets/look/values.ron): its target luminance over the luminance
+// of the baked mean, or 1 for a layer with no target.
+fn layer_gain(layer: u32, baked: vec3<f32>) -> f32 {
+    let want = value_of(terrain, layer);
+    return select(1.0, want / max(dot(baked, LUMA), 1e-4), want > 0.0);
+}
+
+// The layer's mean as drawn: the baked mean at its budgeted value.
+fn layer_mean(layer: u32) -> vec3<f32> {
+    let baked = layer_mean_baked(layer);
+    return baked * layer_gain(layer, baked);
+}
+
+// The laid layers' stones (review step six, F7). The graph that bakes a
+// paving (veyra_materials::terrain::city, `courses`) lays whole stones in
+// courses, each course shifted by its own fraction of a stone and every joint
+// moved a little; this repeats that layout, hash for hash, to name the stone a
+// point is on, so each stone can take a value of its own on top of the baked
+// colour. The joints are the bake's own (the check is in tools/content's
+// terrain test), so a stone's tone steps exactly where its joint is drawn.
+
+// Hoskins' sine-free hash of a whole-number index, as the bake writes it.
+fn laid_hash(index: f32, salt: f32) -> f32 {
+    var p = fract(index * 0.1031 + salt);
+    p = p * (p + 33.33);
+    return fract(p * (p + p));
+}
+
+// A whole number folded into 0..count, exactly.
+fn laid_fold(index: f32, count: f32) -> f32 {
+    return floor(fract(index / count) * count + 0.5);
+}
+
+// The stone a point of a layer's texture repeats lies on, as one number a
+// stone: the bake's `flag_id`-style index hash, from its course and place in
+// it.
+fn laid_stone(uv: vec2<f32>, laid: vec4<f32>) -> f32 {
+    let rows = laid.x;
+    let stones = laid.y;
+    let row = laid_fold(floor(uv.y * rows), rows);
+    let across = uv.x * stones + laid_hash(row, 0.71);
+    let slot = floor(across);
+    let t = across - slot;
+    let joint = (laid_hash(laid_fold(slot, stones) + row * stones, 0.53) - 0.5) * 2.0 * laid.z;
+    let joint_next = (laid_hash(laid_fold(slot + 1.0, stones) + row * stones, 0.53) - 0.5) * 2.0 * laid.z;
+    // A joint moved past the point puts it on the stone before, one moved
+    // short of it on the stone after.
+    let back = select(0.0, 1.0, joint >= t);
+    let forward = select(0.0, 1.0, t >= 1.0 + joint_next);
+    let column = laid_fold(slot + forward - back, stones);
+    return column + row * stones;
+}
+
+// The value factor of the stone under a point: one, plus or minus the layer's
+// tone, by a hash of the stone that is not the bake's own colour hash.
+fn laid_tone(uv: vec2<f32>, laid: vec4<f32>) -> f32 {
+    let h = laid_hash(laid_stone(uv, laid), 0.913);
+    return 1.0 + (h - 0.5) * 2.0 * laid.w;
 }
 
 // A quarter-turn rotation `k` of a 2D vector, anticlockwise.
@@ -394,7 +455,13 @@ fn sample_layer(
 ) -> LayerSample {
     let tiling = tiling_of(terrain, layer);
     let uv = metres / tiling;
-    let mean = layer_mean(layer);
+    let mean = layer_mean_baked(layer);
+    // The value budget (assets/look/values.ron): the layer is drawn at its
+    // target luminance, its detail scaled with it, so ground baked at 0.05
+    // reads at the family's band and the far field blends from the same
+    // value. The remap is one multiply at each return, on the albedo and the
+    // mean alike; a layer with no target is drawn as baked.
+    let gain = layer_gain(layer, mean);
     // A laid pattern (setts, flagstones) keeps its sheen and its contrast:
     // its joints are its shapes, and a low sun along a wet or worn street
     // is the look the dusk fixture was framed on. Loose ground goes matte
@@ -402,8 +469,8 @@ fn sample_layer(
     let patterned = ((terrain.patterned >> layer) & 1u) == 1u;
     let matte = select(terrain.matte, 0.0, patterned);
     var s: LayerSample;
-    s.albedo = mean;
-    s.mean = mean;
+    s.albedo = mean * gain;
+    s.mean = mean * gain;
     s.paint = f32((terrain.palette >> layer) & 1u);
     s.normal = vec3<f32>(0.0, 0.0, 1.0);
     s.roughness = mix(
@@ -424,7 +491,13 @@ fn sample_layer(
     if patterned {
         let colour = textureSampleGrad(diffuse_array, diffuse_sampler, uv, layer, ddx, ddy);
         let texel = textureSampleGrad(normal_array, normal_sampler, uv, layer, ddx, ddy);
-        s.albedo = mix(mean, colour.rgb, detail_t);
+        s.albedo = mix(mean, colour.rgb, detail_t) * gain;
+        // Each laid stone takes a value of its own (assets/terrain/materials.ron
+        // `laid`), faded in with the detail so the far plaza keeps its mean.
+        let laid = terrain.laid[layer];
+        if laid.w > 0.0 {
+            s.albedo *= mix(1.0, laid_tone(uv, laid), detail_t);
+        }
         if normal_t > 0.0 {
             let xy = texel.xy * 2.0 - 1.0;
             s.normal = vec3<f32>(
@@ -439,6 +512,28 @@ fn sample_layer(
         s.height = 0.55;
         return s;
     }
+    let grain = grain_of(terrain, layer);
+#ifdef TERRAIN_SINGLE_TAP
+    // The Low preset (review step six, F10): one plain read a map, the
+    // repeat left to the macro variation and the colour shapes. One read has
+    // no blend to lose contrast to, so the grain applies as it stands.
+    {
+        let colour = textureSampleGrad(diffuse_array, diffuse_sampler, uv, layer, ddx, ddy);
+        let texel = textureSampleGrad(normal_array, normal_sampler, uv, layer, ddx, ddy);
+        let a = mean + (colour.rgb - mean) * grain;
+        s.albedo = mix(mean, max(a, vec3<f32>(0.0)), detail_t) * gain;
+        if normal_t > 0.0 {
+            let xy = texel.xy * 2.0 - 1.0;
+            s.normal = vec3<f32>(
+                xy * terrain.normal_strength * normal_t,
+                max(texel.z * 2.0 - 1.0, 0.05),
+            );
+        }
+        s.roughness = mix(s.roughness, mix(colour.a, 1.0, matte), detail_t);
+        s.height = mix(s.height, texel.a, detail_t);
+        return s;
+    }
+#endif
     let cells = stochastic_cells(uv * CELLS_PER_REPEAT);
     // Cells per period: CELLS_PER_REPEAT times a whole number of repeats,
     // so it is even, as wrap_vertex needs.
@@ -483,9 +578,9 @@ fn sample_layer(
     // Variance-preserving blend: the weights sum to one, so the plain
     // average loses contrast by the norm of the weight vector. The grain
     // then lowers it to the painted ground's (TerrainParams::grain).
-    let contrast = terrain.grain / max(length(weight), 1e-3);
+    let contrast = grain / max(length(weight), 1e-3);
     a = mean + (a - mean) * contrast;
-    s.albedo = mix(mean, max(a, vec3<f32>(0.0)), detail_t);
+    s.albedo = mix(mean, max(a, vec3<f32>(0.0)), detail_t) * gain;
     if normal_t > 0.0 {
         s.normal = vec3<f32>(nrm.xy * terrain.normal_strength * normal_t, max(nrm.z, 0.05));
     }
@@ -1018,7 +1113,7 @@ fn paint_at(
     // (paint::bucket_margin_m), so the footprint is held to twice that.
     let reach = 2.0 * (slot.step + 1.0);
     // A bridge's deck is drawn by the observer's horizontal distance to
-    // the crossing (strata_sim::crossings::pieces_within), so its gap is
+    // the crossing (veyra_sim::crossings::pieces_within), so its gap is
     // shown by the same measure: from altitude the distance to the camera
     // would show the road under a deck still drawn.
     let gap_shown = smoothstep(PAINT_DECK_DRAWN_M - PAINT_DECK_FADE_M, PAINT_DECK_DRAWN_M, horizontal);
@@ -1137,6 +1232,10 @@ fn fragment(
     // finds and along damp banks, dry on the open crests. Laid ground, the
     // water's beds, sand, snow and rock take none (TerrainParams::palette).
     let living = surface.paint;
+    // The value the near pull lifts the living ground by, kept for the far
+    // field so the plain matches the ground as it is drawn, not the layers
+    // before the pull.
+    var near_lift = 1.0;
     if living > 0.0 {
         let hollow = clamp((0.95 - in.height_sky.y) * 3.0, -0.15, 0.8);
         // Through a soft knee (tanh) rather than the shift's clamp, so the
@@ -1167,8 +1266,8 @@ fn fragment(
                 0.5,
                 2.5,
             );
-            surface.albedo *= mix(vec3<f32>(1.0), hue, pull)
-                * mix(1.0, value, pull * terrain.near_value);
+            near_lift = mix(1.0, value, pull * terrain.near_value);
+            surface.albedo *= mix(vec3<f32>(1.0), hue, pull) * near_lift;
         }
     }
 
@@ -1179,7 +1278,13 @@ fn fragment(
     // The far field: the biome's own colour takes over so the horizon reads
     // as a map of biomes. Applied before the slope blend so cliffs keep
     // their own colour at any distance.
-    surface.albedo = mix(surface.albedo, mix(in.tint.rgb, in.cover.rgb, in.cover.a), tint_t);
+    // The biome's colour is a hue only: scaled to the luminance of the layers
+    // drawn near (their blended mean, lifted as the near pull lifts them), so
+    // the plain does not turn a lit band several times brighter than the
+    // ground it blends from, nor a step darker than it.
+    let far_hue = in.tint.rgb
+        * (near_lift * dot(surface.mean, LUMA) / max(dot(in.tint.rgb, LUMA), 1e-4));
+    surface.albedo = mix(surface.albedo, mix(far_hue, in.cover.rgb, in.cover.a), tint_t);
 
     // Planar top-down tangent frame: u runs along +x, and the OpenGL-style
     // normal maps have green pointing at decreasing v, so the bitangent is
@@ -1334,7 +1439,7 @@ fn fragment(
     let bent = normalize(vec3<f32>(bent_xz.x, sqrt(max(1.0 - dot(bent_xz, bent_xz), 0.0)), bent_xz.y));
     let sky_normal = normalize(mix(mapped, bent, terrain.sky_visibility * (1.0 - in.height_sky.y)));
     let turn = clamp((1.0 + sky_normal.y) / max(1.0 + mapped.y, 0.05), 0.5, 2.0);
-    pbr_input.diffuse_occlusion = pbr_input.diffuse_occlusion * (sky_occlusion * turn);
+    pbr_input.diffuse_occlusion = pbr_input.diffuse_occlusion * (sky_occlusion * turn) * terrain.shade_tint.xyz;
     pbr_input.specular_occlusion = pbr_input.specular_occlusion * sky_occlusion;
 
     pbr_input.material.base_color = alpha_discard(pbr_input.material, pbr_input.material.base_color);

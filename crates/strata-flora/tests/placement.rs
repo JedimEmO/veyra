@@ -11,8 +11,8 @@ mod common;
 use proptest::prelude::*;
 use rayon::prelude::*;
 use strata_core::{RegionCoord, Seed};
+use strata_data::FloraKind;
 use strata_flora::{CellFlora, GRID, HeightGrid, place_cell};
-use strata_registry::FloraKind;
 use strata_worldgen::WorldSource;
 
 /// One test of this file at a time. Run concurrently, this binary crashes
@@ -175,7 +175,7 @@ fn plants_obey_their_species_limits_and_keep_their_distance() {
     // of a range (cover 0.25 at its centre, three trees).
     let registries = common::registries();
     let forest = registries
-        .biome_id(&strata_registry::Namespaced::parse("strata:forest").expect("valid"))
+        .biome_id(&strata_data::Namespaced::parse("strata:forest").expect("valid"))
         .expect("the shipped assets have a forest");
     let mut forest_cell = None;
     'sweep: for z in -80..80 {
@@ -221,7 +221,7 @@ fn seed_42_cell_snapshot() {
 /// hydration a test asks for: everything the fit reads except the ground's
 /// fertility is held still, so the counts differ only by cover.
 struct Uniform {
-    biome: strata_registry::BiomeId,
+    biome: strata_data::BiomeId,
     cover: f32,
     hydration: f32,
 }
@@ -250,18 +250,18 @@ impl WorldSource for Uniform {
 /// with the rocks the forest had before kits were chosen by province
 /// (ticket 0004's step 3e), so these tests see the ground they were written
 /// on. Loaded once, since a cell asks it of every sample.
-fn granite() -> strata_registry::ProvinceId {
-    static GRANITE: std::sync::OnceLock<strata_registry::ProvinceId> = std::sync::OnceLock::new();
+fn granite() -> strata_data::ProvinceId {
+    static GRANITE: std::sync::OnceLock<strata_data::ProvinceId> = std::sync::OnceLock::new();
     *GRANITE.get_or_init(|| {
         common::registries()
-            .province_id(&strata_registry::Namespaced::parse("strata:granite").expect("valid"))
+            .province_id(&strata_data::Namespaced::parse("strata:granite").expect("valid"))
             .expect("the shipped assets have granite")
     })
 }
 
-fn forest_biome() -> strata_registry::BiomeId {
+fn forest_biome() -> strata_data::BiomeId {
     common::registries()
-        .biome_id(&strata_registry::Namespaced::parse("strata:forest").expect("valid"))
+        .biome_id(&strata_data::Namespaced::parse("strata:forest").expect("valid"))
         .expect("the shipped assets have a forest")
 }
 
@@ -358,8 +358,8 @@ fn bare_ground_grows_fewer_trees_and_thinner_grass() {
 #[test]
 fn a_cover_floor_keeps_a_species_in_bare_ground() {
     let _serial = serial();
+    use strata_data::FloraKind;
     use strata_flora::cover_gain;
-    use strata_registry::FloraKind;
 
     // The floor is the share left at no cover, and full cover is full
     // chance whatever the floor.
@@ -453,8 +453,8 @@ fn uniform_ground_has_local_patches_without_raising_the_blade_budget() {
 #[test]
 fn registry_insertions_preserve_candidate_identity_shape_and_collision() {
     let _serial = serial();
+    use strata_data::{Namespaced, OpenRegistries};
     use strata_flora::FloraTable;
-    use strata_registry::{Namespaced, OpenRegistries};
     let original = common::registries();
     let mut open = OpenRegistries::new();
     for (_, _, def) in original.materials.iter() {
@@ -617,7 +617,7 @@ fn forest_trees_gather_into_groves_where_they_once_stood_evenly() {
             .iter()
             .cloned()
             .map(|mut s| {
-                s.cluster = strata_registry::Clustering::default();
+                s.cluster = strata_data::Clustering::default();
                 s
             })
             .collect(),
@@ -676,7 +676,7 @@ fn table_before_the_kits(table: &strata_flora::FloraTable) -> strata_flora::Flor
     let registries = common::registries();
     let biome = |name: &str| {
         registries
-            .biome_id(&strata_registry::Namespaced::parse(name).expect("valid"))
+            .biome_id(&strata_data::Namespaced::parse(name).expect("valid"))
             .expect("shipped")
     };
     let old: [(&str, &[(&str, f32)]); 6] = [
@@ -745,7 +745,7 @@ fn table_before_the_kits(table: &strata_flora::FloraTable) -> strata_flora::Flor
             let mut weights: Vec<f32> = (0..biomes)
                 .map(|b| {
                     s.fit
-                        .weight(strata_registry::BiomeId(u32::try_from(b).expect("few")))
+                        .weight(strata_data::BiomeId(u32::try_from(b).expect("few")))
                 })
                 .collect();
             if let Some((_, list)) = old.iter().find(|(name, _)| id.as_ref() == *name) {
@@ -754,7 +754,7 @@ fn table_before_the_kits(table: &strata_flora::FloraTable) -> strata_flora::Flor
                     weights[biome(name).0 as usize] = *weight;
                 }
             }
-            s.fit = strata_registry::FloraFit::from_weights(weights);
+            s.fit = strata_data::FloraFit::from_weights(weights);
             s
         })
         .collect();
@@ -886,7 +886,7 @@ fn each_province_wears_its_kit() {
                         species.id,
                         province
                     );
-                    let name = |id: Option<&strata_registry::Namespaced>| {
+                    let name = |id: Option<&strata_data::Namespaced>| {
                         id.map_or(String::new(), ToString::to_string)
                     };
                     *seen
@@ -920,20 +920,18 @@ fn a_province_gain_is_its_kits_by_their_shares() {
     let registries = common::registries();
     let province = |name: &str| {
         registries
-            .province_id(&strata_registry::Namespaced::parse(name).expect("valid"))
+            .province_id(&strata_data::Namespaced::parse(name).expect("valid"))
             .expect("shipped")
     };
     let boulder = registries
         .flora_fit(
             registries
                 .flora
-                .id_of(
-                    &strata_registry::Namespaced::parse("strata:granite_boulder").expect("valid"),
-                )
+                .id_of(&strata_data::Namespaced::parse("strata:granite_boulder").expect("valid"))
                 .expect("shipped"),
         )
         .expect("resolved");
-    let at = |provinces: [(strata_registry::ProvinceId, f32); 2]| {
+    let at = |provinces: [(strata_data::ProvinceId, f32); 2]| {
         let sample = strata_worldgen::Sample {
             height: 10.0,
             biomes: [(forest_biome(), 1.0), (forest_biome(), 0.0)],
@@ -1103,9 +1101,9 @@ fn nothing_clings_to_a_carved_wall() {
     assert!(clinging > 0, "no species holds to a natural cliff");
 }
 
-fn mountain_biome() -> strata_registry::BiomeId {
+fn mountain_biome() -> strata_data::BiomeId {
     common::registries()
-        .biome_id(&strata_registry::Namespaced::parse("strata:mountains").expect("valid"))
+        .biome_id(&strata_data::Namespaced::parse("strata:mountains").expect("valid"))
         .expect("the shipped assets have mountains")
 }
 
@@ -1306,7 +1304,7 @@ fn reeds_line_slow_water_and_nothing_else_grows_on_the_wetted_bed() {
     dry.water = None;
     assert!(fit(&dry, reed) <= 0.0, "away from water");
     for species in table.species() {
-        if species.ground.bank_m > 0.0 || species.kind == strata_registry::FloraKind::Rock {
+        if species.ground.bank_m > 0.0 || species.kind == strata_data::FloraKind::Rock {
             continue;
         }
         assert!(
@@ -1334,7 +1332,7 @@ fn reeds_keep_off_the_crossings() {
     let other = table
         .species()
         .iter()
-        .find(|s| s.kind == strata_registry::FloraKind::Tree)
+        .find(|s| s.kind == strata_data::FloraKind::Tree)
         .expect("a tree")
         .id;
     let coord = strata_core::RegionCoord::new(0, 0, 0);
@@ -1418,7 +1416,7 @@ fn dressing_moves_no_other_plant() {
                     s.ground.bank_m = 0.0;
                     s.exclusion_m = 2.0;
                     s.cover_floor = 1.0;
-                    s.cluster = strata_registry::Clustering::default();
+                    s.cluster = strata_data::Clustering::default();
                     s.moisture = (0.0, 1.0);
                 }
                 s
@@ -1456,4 +1454,130 @@ fn dressing_moves_no_other_plant() {
             "{reeds} reeds among {others} at ({cx}, {cz})"
         );
     }
+}
+
+/// A far cell is placed for its impostors alone (no children, no dressing, no
+/// grass), from a candidate memo and a grid that samples what it reads, and
+/// must give the very plants the full placement does: the same ones in the
+/// same order with the same bytes, sky included. Then the memo must change
+/// nothing for the full placement either.
+#[test]
+fn far_placement_equals_the_full_placements_plants() {
+    use strata_flora::{CandidateCache, place_cell_cached, place_cell_trees, place_cell_with};
+    let _serial = serial();
+    let (world, table) = common::world_and_table(42);
+    let coords: Vec<RegionCoord> = (-24..24)
+        .flat_map(|z| (-24..24).map(move |x| RegionCoord::new(x, z, 0)))
+        .collect();
+    let cache = CandidateCache::default();
+    // Children carry the top bit of their first slot word.
+    let kept = |flora: &CellFlora| {
+        flora
+            .plants
+            .iter()
+            .filter(|p| {
+                p.id.slot[0] & 0x8000_0000 == 0 && !table.species()[p.species.0 as usize].dressing
+            })
+            .copied()
+            .collect::<Vec<_>>()
+    };
+    let wrong: Vec<(RegionCoord, usize)> = common::pool().install(|| {
+        coords
+            .par_iter()
+            .enumerate()
+            .filter_map(|(n, coord)| {
+                let full =
+                    place_cell_with(*coord, &world, &table, Seed(42), &mut Vec::new(), false);
+                let far = place_cell_trees(*coord, &world, &table, Seed(42), &cache);
+                let trees = |f: &CellFlora| f.trees(&table).copied().collect::<Vec<_>>();
+                if kept(&full) != far.plants || trees(&full) != trees(&far) || !far.grass.is_empty()
+                {
+                    return Some((*coord, n));
+                }
+                // The memo on the full path, on every fifth cell.
+                if n % 5 == 0 {
+                    let cached = place_cell_cached(
+                        *coord,
+                        &world,
+                        &table,
+                        Seed(42),
+                        &mut Vec::new(),
+                        true,
+                        &cache,
+                    );
+                    let plain =
+                        place_cell_with(*coord, &world, &table, Seed(42), &mut Vec::new(), true);
+                    if cached != plain {
+                        return Some((*coord, n));
+                    }
+                }
+                None
+            })
+            .collect()
+    });
+    assert!(
+        wrong.is_empty(),
+        "differ at {:?}",
+        &wrong[..wrong.len().min(8)]
+    );
+    let planted: usize = coords
+        .iter()
+        .map(|c| {
+            place_cell_trees(*c, &world, &table, Seed(42), &cache)
+                .plants
+                .len()
+        })
+        .sum();
+    assert!(planted > 1000, "the sweep must hold plants, got {planted}");
+}
+
+/// What the far placement relies on: no dressing tree and no tree raised as a
+/// child, since either would shade a neighbour the far path never places.
+#[test]
+fn the_shipped_table_lets_far_cells_skip_children_and_dressing() {
+    let (_, table) = common::world_and_table(42);
+    for species in table.species() {
+        if species.dressing {
+            assert_ne!(species.kind, FloraKind::Tree);
+        }
+        for child in &species.children {
+            assert_ne!(table.kind(child.species), Some(FloraKind::Tree));
+        }
+    }
+}
+
+/// A probe, not a gate: what a far cell costs placed whole and placed for its
+/// impostors, one thread, a ring filled row by row as the streamer fills it.
+/// `cargo test -p strata-flora --test placement far_cell_cost -- --ignored --nocapture`.
+#[test]
+#[ignore = "a timing probe"]
+fn far_cell_cost() {
+    use std::time::Instant;
+    use strata_flora::{CandidateCache, place_cell_trees, place_cell_with};
+    let _serial = serial();
+    let (world, table) = common::world_and_table(42);
+    let coords: Vec<RegionCoord> = (-12..12)
+        .flat_map(|z| (-12..12).map(move |x| RegionCoord::new(x, z, 0)))
+        .collect();
+    let started = Instant::now();
+    let mut plants = 0;
+    for c in &coords {
+        plants += place_cell_with(*c, &world, &table, Seed(42), &mut Vec::new(), false)
+            .plants
+            .len();
+    }
+    let whole = started.elapsed();
+    let cache = CandidateCache::default();
+    let started = Instant::now();
+    let mut far = 0;
+    for c in &coords {
+        far += place_cell_trees(*c, &world, &table, Seed(42), &cache)
+            .plants
+            .len();
+    }
+    let lean = started.elapsed();
+    println!(
+        "{} cells: whole {whole:?} ({plants} plants), far {lean:?} ({far} plants)",
+        coords.len()
+    );
 }

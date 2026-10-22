@@ -24,5 +24,6 @@
     ground: (0.52, 0.55, 0.60),
     // Thin cold air: cooler, less colour, brighter snow and sky, so a
     // range feels remote and high.
-    grade: (temperature: -0.008, saturation: 0.9, gain: 1.03),
+    // Shade colour (visual.md F4): Cold blue shade for rock and snow.
+    grade: (temperature: -0.008, saturation: 0.9, gain: 1.03, shade: (0.90, 0.94, 1.16)),
 )

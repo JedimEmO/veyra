@@ -5,8 +5,8 @@
 //! One test, because the tables it installs are the process's.
 
 use balance::{Matchup, Policy, Profile, Side, bout, loadout};
-use strata_sim::combat::Weapon;
-use strata_sim::combat_tables::{self, CombatTables};
+use veyra_rules::combat::Weapon;
+use veyra_rules::combat_tables::{self, CombatTables};
 
 /// A carbine held at ten metres on a target that stands and does not
 /// fall.
@@ -69,7 +69,7 @@ fn a_fitted_feed_fires_five_more_before_the_first_reload_and_pays_them_back() {
         .weapons
         .get_mut(&Weapon::Carbine)
         .expect("the carbine's row");
-    carbine.mode = strata_sim::combat::FireMode::Auto;
+    carbine.mode = veyra_rules::combat::FireMode::Auto;
     carbine.hold = None;
     carbine.interval = 0.24;
     combat_tables::install(tables);
@@ -122,7 +122,7 @@ fn a_fitted_feed_fires_five_more_before_the_first_reload_and_pays_them_back() {
 
 #[test]
 fn a_carbine_worn_to_nothing_reads_the_worse_row_and_a_tired_one_the_unworn_row() {
-    use strata_sim::combat::Combatant;
+    use veyra_rules::combat::Combatant;
     let row = |condition: Option<u16>| {
         let mut actor = Combatant::default();
         let side = Side {
@@ -152,7 +152,7 @@ fn a_carbine_worn_to_nothing_reads_the_worse_row_and_a_tired_one_the_unworn_row(
 /// and the tail after its contact.
 #[test]
 fn the_blade_presets_read_a_made_edge_and_a_fitted_part() {
-    use strata_sim::combat::{Action, Combatant};
+    use veyra_rules::combat::{Action, Combatant};
     let read = |name: &str| {
         let matchup = balance::preset(name).expect("the preset");
         let mut actor = Combatant::default().carrying([Some(Weapon::Blade), None], 0);
@@ -175,6 +175,6 @@ fn the_blade_presets_read_a_made_edge_and_a_fitted_part() {
     assert_eq!(hooked.damage.to_bits(), bought.damage.to_bits());
     assert!((hooked_heavy.posture - bought_heavy.posture * 1.08).abs() < 1e-3);
     assert_eq!(hooked.contact_end.to_bits(), bought.contact_end.to_bits());
-    let tail = |spec: &strata_sim::combat::ActionSpec| spec.duration - spec.contact_end;
+    let tail = |spec: &veyra_rules::combat::ActionSpec| spec.duration - spec.contact_end;
     assert!((tail(&hooked) - tail(&bought) * 1.06).abs() < 1e-5);
 }

@@ -15,5 +15,6 @@
     ground: (0.56, 0.66, 0.33),
     // Serene open land: gold in the light and a touch of green in the
     // grass, a little more colour than neutral.
-    grade: (temperature: 0.005, tint: -0.004, saturation: 1.05),
+    // Shade colour (visual.md F4): A cooler blue-violet than the wood: open sky is the shade's only light, so it leans blue with a little violet.
+    grade: (temperature: 0.005, tint: -0.004, saturation: 1.05, shade: (0.94, 0.90, 1.16)),
 )

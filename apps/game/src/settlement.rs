@@ -38,7 +38,7 @@
 //! not: its roots are hidden, so its pieces would draw nothing, and every
 //! frame's visibility, range and extraction passes would still visit them
 //! (a thousand pieces at 2 km, about a millisecond of the render thread).
-use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 
 use ashlar_bevy::prelude::{
     AshlarBuilding, AshlarCollider, AshlarFailed, AshlarPiece, AshlarSpawned, MaterialLibraryAsset,
@@ -48,6 +48,10 @@ use bevy::ecs::entity_disabling::Disabled;
 use bevy::light::{CascadeShadowConfig, NotShadowCaster};
 use bevy::prelude::*;
 use strata::prelude::*;
+
+use crate::pieces::{
+    CASTER_VIEW_SLACK, Groups, ShadowCameras, building_reach, caster_limit, shadow_view,
+};
 use strata::sim::{Observers, PlacedSettlement, Settlements};
 use strata::worldgen::SettlementLayout;
 
@@ -139,7 +143,7 @@ struct Present {
     detail: BTreeMap<usize, Detail>,
     /// The settlements whose buildings draw this frame ([`buildings_shown`]),
     /// and so whose pieces may be in play; set by [`switch`] for
-    /// [`stream_pieces`], which runs after it.
+    /// [`withhold_far`], which runs after it.
     drawn: BTreeSet<usize>,
 }
 
@@ -250,201 +254,17 @@ fn edge_in_frame(layout: &SettlementLayout, local: [f64; 2]) -> f64 {
     extent(layout).map_or_else(|| local[0].hypot(local[1]), |rect| distance_to(rect, local))
 }
 
-/// The side of a streaming cell, metres: small enough that a cell past a
-/// band's edge is not held in play by its near corner, large enough that the
-/// city is a few thousand groups.
-const CELL: f32 = 40.0;
-
-/// How far past its band a group comes into play, and how much further it
-/// must be before it leaves again, metres: brought in a moment before its
-/// first piece is in range, and not switched every frame by an observer
-/// standing on the boundary.
-const EARLY: f32 = 8.0;
-const LATE: f32 = 16.0;
-
-/// How finely a group tells its pieces' band ends apart, metres.
-///
-/// Not the band itself: a piece handing over to a concatenated level has its
-/// band's end pushed out by its own distance to its cell's centre, so every
-/// piece of that level ends somewhere else and keying on the exact end
-/// would make a group of nearly every piece. Nor the level alone: a level
-/// holds pieces that end at their own level's boundary and pieces carried
-/// on unchanged to the next, and a group is in play to its farthest
-/// member's end, so the finest level's pieces, which end at 60 m, would be
-/// held in play to 300 m by the carried ones beside them. So the end is
-/// bucketed: a group reaches at most this much past any member's end.
-const END_STEP: f32 = 32.0;
-
-/// A group's key: its building, its cell, its pieces' level, and the bucket
-/// of their band's end ([`END_STEP`]).
-type GroupKey = (Entity, i32, i32, usize, i32);
-
-/// The key of a piece of `root` standing at `at` in the building's frame,
-/// first drawn at `level`, whose band ends at `end`.
-#[allow(
-    clippy::cast_possible_truncation,
-    reason = "cells of a city a kilometre across, and band ends in steps of tens of metres"
-)]
-fn group_key(root: Entity, at: Vec3, level: usize, end: f32) -> GroupKey {
-    // The last level draws to any distance, `f32::MAX`.
-    let bucket = if end < f32::MAX / 2.0 {
-        (end / END_STEP).floor() as i32
-    } else {
-        i32::MAX
-    };
-    (
-        root,
-        (at.x / CELL).floor() as i32,
-        (at.z / CELL).floor() as i32,
-        level,
-        bucket,
-    )
-}
-
-/// The pieces of one building, one level, one cell and one bucket of band
-/// ends.
-struct Group {
-    key: GroupKey,
-    root: Entity,
-    /// The bounds of the pieces' origins in the building's frame: a range is
-    /// measured to a piece's origin.
-    low: Vec3,
-    high: Vec3,
-    /// The nearest start and the farthest end of its members' bands, so the
-    /// group is in play wherever any of them could be.
-    near: f32,
-    far: f32,
-    members: Vec<Entity>,
-    enabled: bool,
-    /// Whether its pieces cast the sun's shadow ([`casts`]).
-    casts: bool,
-}
-
-// Far buildings cast no shadow (lighting plan phase 6, the profile's 4.3).
-/// How much farther than the buildings' cascade reach a group still casts,
-/// when no perspective camera says ([`view_slack`]): the corner of a 16:9
-/// frame at 45 degrees.
-const CASTER_VIEW_SLACK: f32 = 1.31;
-/// The group's bounds are its pieces' origins, so this covers the half of a
-/// far level's 80 m cell a piece reaches past its origin.
-const CASTER_CELL_SLACK: f32 = 40.0;
-
-/// How much farther than a depth along the view the frame's corner is.
-///
-/// A cascade's bound is a depth along the view, a group's distance is
-/// measured from the camera, and at the corner of the frame a depth is the
-/// cosine of the corner's angle off the axis times the distance: 0.76 at 45
-/// degrees and 16:9, 0.38 at the settings' 100. The reach over that cosine
-/// is where no piece within the bound's depth is ever taken out.
-fn view_slack(projection: &Projection) -> f32 {
-    match projection {
-        Projection::Perspective(p) => {
-            let tan_v = (p.fov * 0.5).tan();
-            let tan_h = tan_v * p.aspect_ratio;
-            (1.0 + tan_v * tan_v + tan_h * tan_h).sqrt()
-        }
-        _ => CASTER_VIEW_SLACK,
-    }
-}
-
-/// How far from the camera a group still casts, metres, when buildings cast
-/// to `reach` metres of view depth (`None`: to every cascade).
-fn caster_limit(reach: Option<f32>, slack: f32) -> Option<f32> {
-    reach.map(|reach| reach * slack + CASTER_CELL_SLACK)
-}
-
-/// And how much nearer than its reach a group that stopped casting must come
-/// before it casts again, metres: an observer walking along the line does
-/// not switch it every few steps.
-const CASTER_HYSTERESIS: f32 = 16.0;
-
-/// Whether `group` casts the sun's shadow seen from the camera at `eye`, in
-/// the building's frame, within `limit` metres of it ([`caster_limit`];
-/// `None`: at every distance). Past it the cascades a piece would cast into
-/// are metres to a texel, and the far levels there were most of the city's
-/// caster draws (`docs/perf/profile-2026-10-03.md`, 4.3).
-fn casts(group: &Group, eye: Vec3, limit: Option<f32>) -> bool {
-    let Some(limit) = limit else {
-        return true;
-    };
-    let nearest = eye.clamp(group.low, group.high).distance(eye);
-    if group.casts {
-        nearest < limit
-    } else {
-        nearest < limit - CASTER_HYSTERESIS
-    }
-}
-
-/// How far buildings cast, from the sky settings and the sun's cascades.
-fn building_reach(
-    sky: Option<&strata::atmosphere::SkySettings>,
-    suns: &Query<&CascadeShadowConfig, With<strata::atmosphere::Sun>>,
-) -> Option<f32> {
-    let sky = sky?;
-    sky.building_shadow_reach(suns.iter().next()?)
-}
-
-/// The cameras whose views the sun's cascades are fitted to.
-type ShadowCameras<'w, 's> = Query<
-    'w,
-    's,
-    (
-        &'static Camera,
-        &'static GlobalTransform,
-        &'static Projection,
-    ),
-    (With<Camera3d>, Without<strata::terrain::OffWorld>),
->;
-
-/// The active 3D camera's position in render space and its frame's slack
-/// ([`view_slack`]), if there is one.
-fn shadow_view(cameras: &ShadowCameras) -> Option<(Vec3, f32)> {
-    cameras
-        .iter()
-        .find(|(camera, _, _)| camera.is_active)
-        .map(|(_, transform, projection)| (transform.translation(), view_slack(projection)))
-}
-
-/// Every group of every building in the world.
-#[derive(Resource, Default)]
-struct Groups {
-    groups: Vec<Group>,
-    index: HashMap<GroupKey, usize>,
-}
-
-impl Groups {
-    /// Adds a piece standing at `at` with the band `near..far` to its group,
-    /// and says whether that group is in play: a piece joining a group
-    /// already out of play goes out with it.
-    fn add(&mut self, key: GroupKey, piece: Entity, at: Vec3, near: f32, far: f32) -> bool {
-        let groups = &mut self.groups;
-        let index = *self.index.entry(key).or_insert_with(|| {
-            groups.push(Group {
-                key,
-                root: key.0,
-                low: at,
-                high: at,
-                near,
-                far,
-                members: Vec::new(),
-                enabled: true,
-                casts: true,
-            });
-            groups.len() - 1
-        });
-        let group = &mut groups[index];
-        group.low = group.low.min(at);
-        group.high = group.high.max(at);
-        group.near = group.near.min(near);
-        group.far = group.far.max(far);
-        group.members.push(piece);
-        group.enabled
-    }
-
-    /// Whether the group under `key` casts; a group not yet made does.
-    fn casts(&self, key: &GroupKey) -> bool {
-        self.index.get(key).is_none_or(|&i| self.groups[i].casts)
-    }
+/// Tells the piece streamer which buildings are not drawn this frame: those
+/// of a settlement [`switch`] left far, whose roots are hidden.
+fn withhold_far(present: Res<Present>, mut withheld: ResMut<crate::pieces::Withheld>) {
+    withheld.0.clear();
+    withheld.0.extend(
+        present
+            .buildings
+            .iter()
+            .filter(|((s, _), _)| !present.drawn.contains(s))
+            .map(|(_, root)| *root),
+    );
 }
 
 pub(super) fn install(app: &mut App) {
@@ -463,6 +283,7 @@ pub(super) fn install(app: &mut App) {
     // at all.
     app.init_resource::<Present>()
         .init_resource::<Groups>()
+        .init_resource::<crate::pieces::Withheld>()
         .add_systems(
             Update,
             (
@@ -472,8 +293,9 @@ pub(super) fn install(app: &mut App) {
                 market_counters,
                 drop_proxies,
                 switch,
-                group_pieces,
-                stream_pieces,
+                withhold_far,
+                crate::pieces::group_pieces,
+                crate::pieces::stream_pieces,
                 // Far buildings cast no shadow (lighting plan phase 6).
                 shade_skylines,
                 census,
@@ -488,6 +310,10 @@ pub(super) fn install(app: &mut App) {
                 night_lights::<ashlar_bevy::anti_tiling::AntiTilingMaterial>,
             ),
         )
+        .add_systems(
+            Update,
+            log_first_building.run_if(on_message::<ashlar_bevy::prelude::AshlarBuildingSpawned>),
+        )
         .init_resource::<LampPool>()
         .add_systems(Update, lamp_lights.run_if(in_state(AppState::InWorld)))
         .add_systems(OnExit(AppState::InWorld), clear)
@@ -498,6 +324,25 @@ pub(super) fn install(app: &mut App) {
             market_fog.after(census).run_if(in_state(AppState::InWorld)),
         )
         .add_systems(OnExit(AppState::InWorld), clear_market_fog);
+}
+
+/// Says once when the first building of any kind has spawned its pieces, in
+/// the app's own time, so the cost of a building's first spawn (decoding,
+/// tangents, upload) shows in a log and not only in a frame trace. It runs
+/// only on a frame that spawned one, so a quiet frame pays no system.
+fn log_first_building(
+    mut spawned: MessageReader<ashlar_bevy::prelude::AshlarBuildingSpawned>,
+    time: Res<Time<Real>>,
+    mut done: Local<bool>,
+) {
+    spawned.clear();
+    if !*done {
+        *done = true;
+        info!(
+            "first building spawned: {:.2} s after the app started",
+            time.elapsed_secs()
+        );
+    }
 }
 
 /// Spawns and despawns each settlement's skyline and buildings by the
@@ -551,6 +396,9 @@ fn stream(
                                 building: server.load(format!("generated://{file}")),
                                 materials,
                             },
+                            // Its vertices are world heights from one merged
+                            // mesh: no base to paint a wall's gradient from.
+                            ashlar_bevy::anti_tiling::NoHeightGradient,
                             WorldPosition(at),
                             Transform::from_translation(origin.to_render(at))
                                 .with_rotation(rotation),
@@ -597,6 +445,7 @@ fn stream(
         let entity = commands
             .spawn((
                 Name::new(format!("{}/{}", layout.id, building.file)),
+                crate::pieces::Streamed,
                 SettlementBuilding {
                     settlement: layout.id.clone(),
                     file: building.file.clone(),
@@ -825,171 +674,6 @@ fn drop_proxies(
             *warned = true;
         }
         commands.entity(proxy).despawn();
-    }
-}
-
-/// Groups each newly spawned settlement piece by building, cell, level and
-/// band end ([`group_key`]). A piece with no band draws at every distance
-/// and is never streamed.
-fn group_pieces(
-    mut commands: Commands,
-    mut groups: ResMut<Groups>,
-    buildings: Query<(), With<SettlementBuilding>>,
-    pieces: Query<
-        (Entity, &ChildOf, &Transform, &AshlarPiece, &VisibilityRange),
-        Added<AshlarPiece>,
-    >,
-) {
-    for (entity, parent, transform, piece, range) in &pieces {
-        let root = parent.parent();
-        if !buildings.contains(root) {
-            continue;
-        }
-        let at = transform.translation;
-        let key = group_key(root, at, piece.level, range.end_margin.end);
-        let in_play = groups.add(
-            key,
-            entity,
-            at,
-            range.start_margin.start,
-            range.end_margin.end,
-        );
-        if !in_play {
-            commands.entity(entity).try_insert(Disabled);
-        }
-        // Far buildings cast no shadow (lighting plan phase 6): a piece
-        // joining a group that does not cast goes without, as the group's
-        // other members do.
-        if !groups.casts(&key) {
-            commands.entity(entity).try_insert(NotShadowCaster);
-        }
-    }
-}
-
-/// Whether `group` should be in play: its building draws (its settlement is
-/// near, or has no skyline to stand in for it), and one of its pieces could
-/// be in band seen from `eye`, in the building's frame. A far city's pieces
-/// are under a hidden root and draw nothing wherever the observer is.
-fn should_play(drawn: bool, group: &Group, eye: Vec3) -> bool {
-    drawn && in_play(group, eye)
-}
-
-/// Whether any piece of `group` could be in its band seen from `eye`, in the
-/// building's frame, with the slack that keeps a group from switching every
-/// frame.
-fn in_play(group: &Group, eye: Vec3) -> bool {
-    let slack = if group.enabled { LATE } else { EARLY };
-    let nearest = eye.clamp(group.low, group.high).distance(eye);
-    let farthest = (eye - group.low)
-        .abs()
-        .max((eye - group.high).abs())
-        .length();
-    farthest + slack >= group.near && nearest - slack < group.far
-}
-
-/// Takes groups out of play and brings them back as the observer moves, and
-/// as the settlement goes far and near ([`should_play`]).
-///
-/// A group comes back with its `Transform` and `Visibility` inserted again:
-/// while it was disabled no propagation reached it, and the render origin may
-/// have moved, so what it had is stale; inserting them marks both changed.
-/// A piece's own `Visibility` is `Inherited`, so marked changed it takes its
-/// root's again, shown on the frame the city goes near (see [`install`] for
-/// why that is the same frame).
-///
-/// Every piece of a far city is disabled, and ashlar-bevy's reload of a
-/// modified file despawns only the children its default-filtered query sees,
-/// so a hot reload would leave the disabled set behind to come back beside
-/// the new one. The game enables no file watcher and reloads nothing, so
-/// nothing reaches that path until ashlar's query allows `Disabled`.
-///
-/// It also takes a group's shadow away past the cascades buildings cast
-/// into and gives it back as the observer comes near ([`casts`]), in or out
-/// of play: a group's members carry `NotShadowCaster` exactly while it does
-/// not cast.
-#[allow(
-    clippy::too_many_arguments,
-    reason = "a Bevy system's parameters are its dependencies"
-)]
-fn stream_pieces(
-    mut commands: Commands,
-    mut groups: ResMut<Groups>,
-    observers: Res<Observers>,
-    origin: Res<RenderOrigin>,
-    present: Res<Present>,
-    sky: Option<Res<strata::atmosphere::SkySettings>>,
-    suns: Query<&CascadeShadowConfig, With<strata::atmosphere::Sun>>,
-    cameras: ShadowCameras,
-    roots: Query<&GlobalTransform, With<SettlementBuilding>>,
-    pieces: Query<(&Transform, &Visibility), Allow<Disabled>>,
-) {
-    let Some(eye) = observers.primary else {
-        return;
-    };
-    let eye = origin.to_render(eye);
-    // The cascades are fitted to the camera's frustum, which trails the
-    // observer and may be wider than the default.
-    let (camera, slack) = shadow_view(&cameras).unwrap_or((eye, CASTER_VIEW_SLACK));
-    let limit = caster_limit(building_reach(sky.as_deref(), &suns), slack);
-    let drawn: HashSet<Entity> = present
-        .buildings
-        .iter()
-        .filter(|((s, _), _)| present.drawn.contains(s))
-        .map(|(_, root)| *root)
-        .collect();
-    let groups = &mut *groups;
-    // A building that left took its pieces with it.
-    let before = groups.groups.len();
-    groups.groups.retain(|g| roots.contains(g.root));
-    if groups.groups.len() != before {
-        groups.index = groups
-            .groups
-            .iter()
-            .enumerate()
-            .map(|(i, g)| (g.key, i))
-            .collect();
-    }
-    let mut frames: HashMap<Entity, (Vec3, Vec3)> = HashMap::new();
-    for group in &mut groups.groups {
-        let Some((local, local_camera)) = frames.get(&group.root).copied().or_else(|| {
-            let to_local = roots.get(group.root).ok()?.affine().inverse();
-            let local = (
-                to_local.transform_point3(eye),
-                to_local.transform_point3(camera),
-            );
-            frames.insert(group.root, local);
-            Some(local)
-        }) else {
-            continue;
-        };
-        let cast = casts(group, local_camera, limit);
-        if cast != group.casts {
-            group.casts = cast;
-            for &member in &group.members {
-                if cast {
-                    commands.entity(member).try_remove::<NotShadowCaster>();
-                } else {
-                    commands.entity(member).try_insert(NotShadowCaster);
-                }
-            }
-        }
-        let wanted = should_play(drawn.contains(&group.root), group, local);
-        if wanted == group.enabled {
-            continue;
-        }
-        group.enabled = wanted;
-        for &member in &group.members {
-            if wanted {
-                if let Ok((transform, visibility)) = pieces.get(member) {
-                    commands
-                        .entity(member)
-                        .try_remove::<Disabled>()
-                        .try_insert((*transform, *visibility));
-                }
-            } else {
-                commands.entity(member).try_insert(Disabled);
-            }
-        }
     }
 }
 
@@ -1590,6 +1274,9 @@ fn clear(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::pieces::{
+        CASTER_HYSTERESIS, Group, casts, group_key, in_play, should_play, view_slack,
+    };
     use bevy::ecs::system::RunSystemOnce;
 
     fn group(near: f32, far: f32, enabled: bool) -> Group {

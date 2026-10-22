@@ -1,0 +1,50 @@
+[package]
+name = "veyra-sim"
+description = "The game's rules on the fixed tick over strata-app: the inboxes, consume systems, request order and plugins over veyra-rules (combat, progression, items, crafting, surveying, the ride, factions, quests). The non-render Bevy crates only."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[features]
+# The shipped combat tables (and the progression files) compiled in, for tests
+# and tools. The game and the server install them from disk.
+shipped-data = ["strata-registry/shipped-data", "veyra-rules/shipped-data"]
+
+[dependencies]
+strata-core = { workspace = true }
+strata-app = { workspace = true }
+strata-registry = { workspace = true }
+# The plain rules; the modules here are their adapters.
+veyra-rules = { workspace = true }
+# The loader builds the world source here so the server and the client get
+# the same one; nothing above the sim constructs a world.
+strata-worldgen = { workspace = true }
+veyra-world = { workspace = true }
+# Settlement layouts, as the content step writes them.
+ron = { workspace = true }
+# No rendering, no windowing: this crate runs under MinimalPlugins on a
+# dedicated server. `bevy_state` for `AppState`; the rest is the umbrella's
+# always-on set (ecs, app, math, time, transform, tasks). `Transform` comes
+# from bevy_transform, which is not a render crate: the WorldPosition sync
+# writes it here so the render crates above never compute a position.
+bevy = { workspace = true, features = ["std", "bevy_state"] }
+tracing = { workspace = true }
+# What crosses the wire derives serde here, where the types live, so the
+# replication adapter above needs no wire copies of them.
+serde = { workspace = true }
+strata-flora = { workspace = true }
+thiserror = { workspace = true }
+# Item stacks, inventories and the click rules, which the sim replays on
+# the truth. No Bevy in it, and already in the graph under strata-registry.
+slotted-model = { workspace = true }
+
+[dev-dependencies]
+# Tests read the shipped data compiled in; the shipped binaries read it from disk.
+strata-registry = { workspace = true, features = ["shipped-data"] }
+# The rules' test helpers (the shipped registries, a stocked bench) that the adapters' tests share.
+veyra-rules = { workspace = true, features = ["test-support"] }
+
+[lints]
+workspace = true

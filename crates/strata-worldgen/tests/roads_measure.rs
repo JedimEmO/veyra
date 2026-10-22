@@ -506,7 +506,7 @@ fn probe_steep() {
 }
 
 /// What the game's startup bake (every mass within 128 km of the origin,
-/// `strata_sim::PrepareWater`) takes with the roads, on 16 threads.
+/// `veyra_sim::PrepareWater`) takes with the roads, on 16 threads.
 #[test]
 #[ignore = "a probe: release, by hand"]
 fn probe_startup() {

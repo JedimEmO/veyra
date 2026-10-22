@@ -1,5 +1,5 @@
 //! The page's query string as a command line (ticket 0013): `?at=camp&fresh`
-//! is `game --at camp --fresh`, so the web build parses the same [`Cli`] as a
+//! is `game --at camp --fresh`, so the web build parses the same `Cli` as a
 //! native run and no flag needs a second spelling.
 
 /// The arguments a query string stands for, program name first. A key alone is

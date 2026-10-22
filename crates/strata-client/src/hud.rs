@@ -45,9 +45,9 @@ use slotted::ui::{
     NineAnchor, Padding, Tags, TextOpts, TextRole, UiNodeDef,
 };
 use strata_net::{NetRole, NetStatus};
-use strata_sim::{Observers, RenderOrigin, TimeOfDay};
 use strata_stream::LoadedRegions;
 use strata_terrain::TerrainStats;
+use veyra_sim::{Observers, RenderOrigin, TimeOfDay};
 
 use crate::stats::FrameStats;
 

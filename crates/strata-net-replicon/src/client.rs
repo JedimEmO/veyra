@@ -55,13 +55,13 @@ use bevy_replicon::prelude::{
 use bevy_replicon_renet::netcode::{ClientAuthentication, NetcodeClientTransport};
 use bevy_replicon_renet::renet::ConnectionConfig;
 use bevy_replicon_renet::{RenetChannelsExt, RenetClient};
-use strata_core::WorldPos;
-use strata_net::NetStatus;
-use strata_physics::CharacterController;
-use strata_sim::{
+use strata_app::{
     DayLength, DayStart, LocalPlayer, Player, PlayerCommand, PlayerId, SimClock, WorldObserver,
     WorldPosition, WorldSeed,
 };
+use strata_core::WorldPos;
+use strata_net::NetStatus;
+use strata_physics::CharacterController;
 
 use crate::protocol::{
     AppliedInput, PlayerIntentEvent, Predicted, ReplicatedClock, ServerPosition, Welcome,

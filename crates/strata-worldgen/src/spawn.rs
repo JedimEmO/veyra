@@ -61,7 +61,7 @@ fn square_ring(ring: i64) -> impl Iterator<Item = (i64, i64)> {
 mod tests {
     use super::*;
     use crate::Sample;
-    use strata_registry::BiomeId;
+    use strata_data::BiomeId;
 
     /// Land east of `x = 1000`, sea everywhere else.
     struct Shore;

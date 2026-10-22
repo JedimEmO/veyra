@@ -69,6 +69,17 @@ struct CloudParams {
     // read's offset in its own repeats in yz, the base's bulge as a share of
     // the height in w.
     relief: vec4<f32>,
+    // The sky's share of the light on a deck in xyz, the body's optical
+    // depth multiplier in w (assets/look/clouds.ron, light).
+    sky: vec4<f32>,
+    // The albedo's tint on a face turned up, in xyz.
+    top: vec4<f32>,
+    // The albedo's tint on a base seen from below, in xyz.
+    base: vec4<f32>,
+    // The finer read that frays the edge: how far it moves the density in
+    // x, its frequency over the image's in y, the share of that it keeps in
+    // a group's middle in z.
+    fray: vec4<f32>,
 }
 
 @group(#{MATERIAL_BIND_GROUP}) @binding(0) var<uniform> clouds: CloudParams;
@@ -79,19 +90,12 @@ struct CloudParams {
 const IMAGE_SIZE: f32 = 512.0;
 // A cloud's albedo over pi: what a lit cloud returns per unit of light.
 const ALBEDO_OVER_PI: f32 = 0.27;
-// The sky's light on the cloud as a share of the light's own, at a high
-// light; blue, as the sky is.
-const SKY_SHARE: vec3<f32> = vec3<f32>(0.10, 0.14, 0.22);
 // The ground's albedo as the base sees it, a mix of grass, rock and sand;
 // what the sunlit land bounces up onto a deck's underside.
 const GROUND_ALBEDO: vec3<f32> = vec3<f32>(0.16, 0.15, 0.11);
 // The share of that bounce that reaches a base: some of the land under a
 // deck is in its shadow.
 const BOUNCE: f32 = 0.6;
-// The finer read that frays the cloud's edge: its frequency over the
-// image's and how far it moves the density.
-const DETAIL_FREQUENCY: f32 = 7.0;
-const DETAIL_AMOUNT: f32 = 0.08;
 // The finest the shape reads go: mip 3 is 94 m a texel at the default
 // 6 km tile, so the shading follows a cloud's mass, not its noise, and a
 // big cloud darkens smoothly towards its middle.
@@ -117,11 +121,9 @@ const MULTIPLE: f32 = 0.2;
 // The optical depth of the cloud lying just towards the light, at full
 // thickness: the face's self-shadow.
 const TOWARD_TAU: f32 = 5.0;
-// The body's optical depth top to bottom at a heart, over the alpha's:
-// the alpha says how much sky a cloud hides, this how much light gets
-// through it, and a heart a kilometre across is darker than its edge
-// lets on.
-const BODY: f32 = 3.0;
+// The body's optical depth top to bottom at a heart, over the alpha's, is
+// clouds.sky.w (the look's `body`): the alpha says how much sky a cloud
+// hides, this how much light gets through it.
 // How much the heaps inside a body darken the light through it: the full
 // image's density over the coarse reads' mean, a heap's core over the
 // trough beside it, a few hundred metres across.
@@ -248,14 +250,14 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
     let detail = textureSampleBias(
         density_texture,
         density_sampler,
-        uv * DETAIL_FREQUENCY + vec2<f32>(0.31, 0.67) + clouds.relief.yz,
+        uv * clouds.fray.y + vec2<f32>(0.31, 0.67) + clouds.relief.yz,
         bias,
     ).r;
 
     let base = texel.r * gate;
     let ramp = clouds.shape.y * mix(clouds.edge.x, 1.0, group);
     // The finer read frays the edge, less so in a group's full middle.
-    let density = base + (detail - 0.5) * DETAIL_AMOUNT * mix(1.0, 0.5, group);
+    let density = base + (detail - 0.5) * clouds.fray.x * mix(1.0, clouds.fray.z, group);
     let excess = density - threshold;
     let grown = smoothstep(0.0, ramp, excess);
     // How far inside the edge, in tiles: the density over the threshold over
@@ -320,7 +322,7 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
     let shaded = saturate(sunward * gate - threshold) / max(ramp, 1e-3);
     let other = mix(0.5, 1.0, exp(-1.5 * shaded));
     // The body's optical depth top to bottom.
-    let tau_body = clouds.depth.y * clouds.depth.w * mass * BODY;
+    let tau_body = clouds.depth.y * clouds.depth.w * mass * clouds.sky.w;
     // The heaps in the body: a core denser than its surroundings passes
     // less light, the trough between two heaps more.
     let billow = saturate(1.0 - BILLOW * (texel.r - (c0 + c1 + c2) / 3.0) * gate / span
@@ -352,13 +354,14 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
         let direct = reaching * other * (reflected + (1.0 - lit) * (through + lining));
         // The sky over the deck, on a top or through a base; the sunlit
         // ground under it, on a base only.
-        let sky_light = directional.color.rgb * SKY_SHARE * saturate(mu * 1.5 + 0.1);
+        let sky_light = directional.color.rgb * clouds.sky.xyz * saturate(mu * 1.5 + 0.1);
         let sky = sky_light * select(0.6 + 0.4 * n.y, mix(1.0, 0.4, mass), side < 0.0);
         let ground = directional.color.rgb * transmittance(ground_r, mu) * saturate(mu)
             * GROUND_ALBEDO * (BOUNCE * select(0.0, 1.0, side < 0.0));
         light += direct + sky + ground;
     }
-    let radiance = light * ALBEDO_OVER_PI * view_bindings::view.exposure;
+    let tint = select(clouds.top.xyz, clouds.base.xyz, side < 0.0);
+    let radiance = light * tint * ALBEDO_OVER_PI * view_bindings::view.exposure;
 
     let air = view_transmittance(camera, p, v);
     let seen = alpha * dot(air, vec3<f32>(1.0 / 3.0));

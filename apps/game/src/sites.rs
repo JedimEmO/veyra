@@ -151,6 +151,7 @@ fn stream_sites(
         let entity = commands
             .spawn((
                 Name::new(format!("{site}/{file}")),
+                crate::pieces::Streamed,
                 SiteBuilding {
                     site,
                     file: file.clone(),

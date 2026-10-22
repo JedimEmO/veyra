@@ -27,10 +27,10 @@ use avian3d::prelude::{Collider, Position, RigidBody, Rotation};
 use bevy::ecs::prelude::*;
 use bevy::math::{Quat, Vec3};
 use bevy::transform::components::Transform;
+use strata_app::{Registries, RenderOrigin, TreeLibraryRes, WorldPosition};
 use strata_core::{RegionCoord, Seed, WorldPos};
 use strata_flora::{FloraTable, HeightGrid, PlantId, place_on_grid_with_source};
 use strata_registry::FloraId;
-use strata_sim::{Registries, RenderOrigin, TreeLibraryRes, WorldPosition};
 use strata_worldgen::{Sample, WorldSource};
 
 /// The species table placement reads, shared by every task. Built from the

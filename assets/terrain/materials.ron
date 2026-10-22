@@ -11,16 +11,23 @@
     // Living cover takes the ground's palette (ticket 0006): the colour
     // shapes and its biome's hue near. The rest keep their own colour.
     (id: "strata:grass", texture_set: "grass", tiling_m: 8.0, palette: true),
-    (id: "strata:forest_floor", texture_set: "forest_floor", tiling_m: 6.0, palette: true),
-    (id: "strata:sand", texture_set: "sand", tiling_m: 12.0),
+    // `grain` is the share of the baked detail's contrast a layer keeps
+    // (the look's `ground_grain`, 0.7, where it is left out): the loose
+    // ground whose photographic marks fight the painted look at eye height
+    // keeps less. Gravel repeats every 6 m, so a pebble reads a half larger and the road stops looking stone by stone.
+    (id: "strata:forest_floor", texture_set: "forest_floor", tiling_m: 6.0, palette: true, grain: Some(0.4)),
+    (id: "strata:sand", texture_set: "sand", tiling_m: 12.0, grain: Some(0.5)),
     (id: "strata:rock", texture_set: "rock", tiling_m: 8.0),
     (id: "strata:snow", texture_set: "snow", tiling_m: 10.0),
-    (id: "strata:gravel", texture_set: "gravel", tiling_m: 4.0),
+    (id: "strata:gravel", texture_set: "gravel", tiling_m: 6.0, grain: Some(0.4)),
     // Port Serein's ground: the terraces' lanes, the quay apron and the
     // gardens. The two pavings are laid in courses, which the stochastic
     // read would turn on end, so they are read plainly.
     (id: "strata:setts", texture_set: "setts", tiling_m: 4.0, patterned: true),
-    (id: "strata:flagstones", texture_set: "flagstones", tiling_m: 8.0, patterned: true),
+    // `laid` is the flagstones graph's course layout (`veyra_materials::terrain::city`,
+    // 13 courses of 9 stones, joints moved up to 0.2 of a stone), and `tone` the
+    // value each flag takes of its own on top of the baked colour, either way.
+    (id: "strata:flagstones", texture_set: "flagstones", tiling_m: 8.0, patterned: true, laid: Some((rows: 13, stones: 9, joint: 0.2, tone: 0.28))),
     (id: "strata:soil", texture_set: "soil", tiling_m: 6.0),
     // The provinces' bare faces (ticket 0004, step 3). Karst's limestone is
     // `strata:rock` above. Granite has no grain and is read like the ground;

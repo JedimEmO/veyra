@@ -173,9 +173,9 @@ use bevy::state::condition::in_state;
 use bevy::tasks::{AsyncComputeTaskPool, Task, TaskPool, block_on, poll_once};
 use bevy::transform::TransformSystems;
 use bevy::transform::components::{GlobalTransform, Transform};
+use strata_app::{AppState, Observers, WorldSourceRes};
 use strata_core::RegionCoord;
 use strata_core::platform::time::Instant;
-use strata_sim::{AppState, Observers, WorldSourceRes};
 use strata_stream::{Region, RegionUnload, distance_to_region};
 use strata_worldgen::{Sample, WorldSource};
 

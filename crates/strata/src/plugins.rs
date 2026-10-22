@@ -25,7 +25,7 @@ impl StrataPlugins {
     }
 }
 
-/// `SimPlugin`, `StreamPlugin`, `PhysicsPlugin`, then `NetPlugin`, which
+/// `SimPlugin`, `StreamPlugin`, `PhysicsPlugin`, `VeyraPhysicsPlugin`, then `NetPlugin`, which
 /// only records that the process is `NetRole::Standalone` unless an
 /// adapter (`ReplicationPlugin`, behind `net-replicon`) says otherwise.
 ///
@@ -39,9 +39,10 @@ pub struct HeadlessPlugins;
 impl PluginGroup for HeadlessPlugins {
     fn build(self) -> PluginGroupBuilder {
         PluginGroupBuilder::start::<Self>()
-            .add(strata_sim::SimPlugin)
+            .add(veyra_sim::SimPlugin)
             .add(strata_stream::StreamPlugin)
             .add(strata_physics::PhysicsPlugin)
+            .add(veyra_physics::VeyraPhysicsPlugin)
             .add(strata_net::NetPlugin)
     }
 }
@@ -75,7 +76,7 @@ mod smoke {
     use super::*;
     use bevy::app::App;
     use bevy::state::state::State;
-    use strata_sim::AppState;
+    use veyra_sim::AppState;
 
     #[test]
     fn headless_reaches_the_world() {

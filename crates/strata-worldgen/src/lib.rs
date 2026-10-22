@@ -29,9 +29,7 @@
 //! input it cannot hash for itself.
 
 pub mod crossings;
-pub mod deposits;
 pub mod erosion;
-pub mod factions;
 pub mod geology;
 pub mod hydrology;
 pub mod measure;
@@ -46,8 +44,6 @@ pub mod spawn;
 mod strata;
 pub mod version;
 
-pub use deposits::{Deposit, DepositField, DepositId};
-pub use factions::{Faction, FactionId, FactionMap, Holding, Territory};
 pub use geology::{ProvinceField, ProvinceMix, ProvinceRule};
 pub use params::WorldParams;
 pub use procedural::{Classification, Climate, Continent, ProceduralWorld, Terms};
@@ -56,7 +52,7 @@ pub use settlement::{
     GroundKind, LayoutBuilding, LayoutLight, LayoutPlant, SettlementLayout, Site,
 };
 pub use spawn::find_land_near;
-use strata_registry::{BiomeId, ProvinceId};
+use strata_data::{BiomeId, ProvinceId};
 pub use version::{GENERATOR_VERSION, world_version};
 
 /// What the world is at one point.

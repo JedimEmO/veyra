@@ -17,13 +17,13 @@ use strata_core::{Rng, WorldPos};
 use strata_physics::avian3d::prelude::{Collider, RigidBody};
 use strata_physics::{CharacterController, PhysicsPlugin};
 use strata_registry::item::Fitted;
-use strata_sim::ability::{Bar, BarRequest, Place, SlotKind};
-use strata_sim::combat::{
+use strata_stream::StreamPlugin;
+use veyra_rules::combat::{
     Action, BlasterBolt, CombatImpact, CombatSet, Combatant, GuardOutcome, Weapon,
 };
-use strata_sim::combat_curves::MeleeCurves;
-use strata_sim::{Player, SimClock, SimPlugin, SimSet, SimTick, WorldPosition};
-use strata_stream::StreamPlugin;
+use veyra_rules::combat_curves::MeleeCurves;
+use veyra_sim::ability::{Bar, BarRequest, Place, SlotKind};
+use veyra_sim::{Player, SimClock, SimPlugin, SimSet, SimTick, WorldPosition};
 
 use crate::policy::{Driver, Policy, PressAbilities};
 
@@ -97,7 +97,7 @@ pub struct Side {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub with: Vec<Side>,
     /// The tier the side's opponents are scaled by, as the game's camps
-    /// are (`strata_sim::combat_tiers::opponent_pools`); 0 reads
+    /// are (`veyra_rules::combat_tiers::opponent_pools`); 0 reads
     /// `opponents.ron` as written. A player's pools are never scaled.
     #[serde(default, skip_serializing_if = "is_zero")]
     pub tier: u8,
@@ -431,6 +431,7 @@ fn app() -> App {
         SimPlugin,
         StreamPlugin,
         PhysicsPlugin,
+        veyra_physics::VeyraPhysicsPlugin,
     ));
     app.insert_resource(Time::<Fixed>::from_hz(HZ));
     // The sim's own clock at the same rate, as the game's combat study
@@ -447,7 +448,7 @@ fn app() -> App {
         SimTick,
         crate::policy::drive
             .in_set(SimSet::Input)
-            .before(strata_sim::player::consume_player_intents),
+            .before(veyra_sim::player::consume_player_intents),
     );
     // After the return cut has begun, so a tick's actions are read once
     // the sim has settled them.
@@ -456,7 +457,7 @@ fn app() -> App {
         crate::policy::press_abilities
             .in_set(SimSet::Input)
             .after(crate::policy::drive)
-            .before(strata_sim::player::consume_player_intents),
+            .before(veyra_sim::player::consume_player_intents),
     );
     app.add_systems(
         SimTick,
@@ -487,7 +488,7 @@ fn app() -> App {
 /// An ability that is no row, does not work with the side's weapon, is named
 /// twice or finds no free place.
 fn build_bar(side: &Side) -> anyhow::Result<Bar> {
-    let tables = strata_sim::combat_tables::current();
+    let tables = veyra_rules::combat_tables::current();
     let known: BTreeSet<String> = side.abilities.iter().cloned().collect();
     let mut bar = Bar::default();
     for id in &side.abilities {
@@ -505,7 +506,7 @@ fn build_bar(side: &Side) -> anyhow::Result<Bar> {
                 .find(|place| bar.get(*place).is_none()),
         }
         .ok_or_else(|| anyhow::anyhow!("`{id}` finds no free place on the bar"))?;
-        strata_sim::ability::change(
+        veyra_sim::ability::change(
             &tables.abilities,
             &known,
             &mut bar,
@@ -540,9 +541,9 @@ pub fn check_abilities(matchup: &Matchup) -> anyhow::Result<()> {
     reason = "one build of a combatant per profile, each a few lines"
 )]
 fn spawn(app: &mut App, side: &Side, team: u8, at: WorldPos, yaw: f32, seed: u64) -> Entity {
-    let tables = strata_sim::combat_tables::current();
+    let tables = veyra_rules::combat_tables::current();
     let opponents = &tables.opponents;
-    let pools = strata_sim::combat_tiers::opponent_pools(side.tier);
+    let pools = veyra_rules::combat_tiers::opponent_pools(side.tier);
     let fitted = if side.boxes.is_empty() {
         None
     } else {
@@ -605,9 +606,9 @@ fn spawn(app: &mut App, side: &Side, team: u8, at: WorldPos, yaw: f32, seed: u64
             // Built as the game builds them: the pools first, then the
             // sheet of `opponents.ron` fitted over the tables.
             let (name, kind) = match side.profile {
-                Profile::Marksman => ("marksman", strata_sim::combat_ai::OpponentKind::Marksman),
-                Profile::Duelist => ("duelist", strata_sim::combat_ai::OpponentKind::Duelist),
-                _ => ("bulwark", strata_sim::combat_ai::OpponentKind::Bulwark),
+                Profile::Marksman => ("marksman", veyra_rules::combat_ai::OpponentKind::Marksman),
+                Profile::Duelist => ("duelist", veyra_rules::combat_ai::OpponentKind::Duelist),
+                _ => ("bulwark", veyra_rules::combat_ai::OpponentKind::Bulwark),
             };
             let mut actor = Combatant::on_team(team, pools.health);
             actor.shield = pools.shield;
@@ -665,7 +666,7 @@ fn spawn(app: &mut App, side: &Side, team: u8, at: WorldPos, yaw: f32, seed: u64
     // share a seed, so they draw alike.
     actor.shot_salt = seed;
     actor.facing = yaw;
-    let intent = strata_sim::PlayerIntent {
+    let intent = veyra_sim::PlayerIntent {
         yaw,
         ..Default::default()
     };
@@ -847,7 +848,7 @@ mod tests {
                 chain: true,
                 heavy_every: 0,
                 cooldown: 0.,
-                reach: strata_sim::combat_tables::with_melee(|melee| melee.reach_m(Weapon::Blade)),
+                reach: veyra_rules::combat_tables::with_melee(|melee| melee.reach_m(Weapon::Blade)),
                 parry: false,
                 reaction: 0.,
                 sprint,
@@ -896,13 +897,13 @@ mod tests {
         // charge, so two shots in the first four seconds.
         let shipped = run(&matchup, 1, 4.);
         assert_eq!(shipped.sides[1].shots, 2, "{shipped:?}");
-        let mut quick = strata_sim::combat_tables::CombatTables::shipped();
+        let mut quick = veyra_rules::combat_tables::CombatTables::shipped();
         quick.opponents.sentry.charge = 0.1;
         quick.opponents.sentry.recover = 0.1;
         quick.opponents.sentry.cooldown = 0.1;
-        strata_sim::combat_tables::install(quick);
+        veyra_rules::combat_tables::install(quick);
         let quicker = run(&matchup, 1, 4.);
-        strata_sim::combat_tables::install(strata_sim::combat_tables::CombatTables::shipped());
+        veyra_rules::combat_tables::install(veyra_rules::combat_tables::CombatTables::shipped());
         assert!(
             quicker.sides[1].shots > shipped.sides[1].shots * 3,
             "{quicker:?}"

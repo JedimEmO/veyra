@@ -26,12 +26,12 @@ use bevy_replicon::shared::backend::connected_client::NetworkId;
 use bevy_replicon_renet::netcode::{NetcodeServerTransport, ServerAuthentication, ServerConfig};
 use bevy_replicon_renet::renet::ConnectionConfig;
 use bevy_replicon_renet::{RenetChannelsExt, RenetServer};
-use strata_net::NetStatus;
-use strata_physics::CharacterController;
-use strata_sim::{
+use strata_app::{
     DayLength, DayStart, Player, PlayerId, PlayerIntent, SimClock, WorldPosition, WorldSeed,
     WorldSourceRes,
 };
+use strata_net::NetStatus;
+use strata_physics::CharacterController;
 use strata_stream::StreamConfig;
 use strata_worldgen::find_land_near;
 

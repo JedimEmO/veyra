@@ -118,7 +118,7 @@ impl WorldSource for Dry<'_> {
 fn tiles<W: WorldSource + Sync>(w: &W) -> Vec<measure::ProvinceTiles> {
     let registries = common::registries();
     let mountains = registries
-        .biome_id(&strata_registry::Namespaced::parse("strata:mountains").expect("valid"))
+        .biome_id(&strata_data::Namespaced::parse("strata:mountains").expect("valid"))
         .expect("ships");
     common::sweep(|| {
         measure::province_tiles(
@@ -395,11 +395,11 @@ fn elong([a, b, c]: [f64; 3]) -> f64 {
 fn probe_folded() {
     let registries = common::registries();
     let mountains = registries
-        .biome_id(&strata_registry::Namespaced::parse("strata:mountains").expect("valid"))
+        .biome_id(&strata_data::Namespaced::parse("strata:mountains").expect("valid"))
         .expect("ships");
     for name in ["strata:folded", "strata:basalt", "strata:sandstone"] {
         let folded = registries
-            .province_id(&strata_registry::Namespaced::parse(name).expect("valid"))
+            .province_id(&strata_data::Namespaced::parse(name).expect("valid"))
             .expect("ships");
         let w = world();
         let tile_m = measure::TILE_M;

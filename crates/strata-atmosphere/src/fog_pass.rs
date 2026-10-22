@@ -136,7 +136,7 @@ use bevy::shader::Shader;
 use bevy::transform::components::Transform;
 use std::collections::HashMap;
 use std::sync::Arc;
-use strata_sim::{RenderOrigin, WorldSourceRes};
+use strata_app::{RenderOrigin, WorldSourceRes};
 use strata_weather::Weather;
 
 /// The shader, loaded from disk like the terrain's.
@@ -1014,11 +1014,11 @@ mod tests {
             }
         }
         let mut app = App::new();
-        app.add_plugins((bevy::time::TimePlugin, strata_sim::SimPlugin))
+        app.add_plugins((bevy::time::TimePlugin, strata_app::AppPlugin))
             .insert_resource(GroundFog::default())
             .insert_resource(RenderLook::default())
             .insert_resource(WorldSourceRes(Arc::new(Flat)))
-            .insert_resource(strata_sim::WorldSeed(strata_core::Seed(3)))
+            .insert_resource(strata_app::WorldSeed(strata_core::Seed(3)))
             .add_systems(Update, (update_clipmap.run_if(fog_drawn), update_uniforms));
         let camera = app.world_mut().spawn((SkyCamera, Msaa::Sample4)).id();
         app.update();
@@ -1213,7 +1213,7 @@ mod tests {
     #[test]
     fn a_look_without_ground_fog_takes_the_uniform_away() {
         let mut app = App::new();
-        app.add_plugins((bevy::time::TimePlugin, strata_sim::SimPlugin))
+        app.add_plugins((bevy::time::TimePlugin, strata_app::AppPlugin))
             .insert_resource(GroundFog::default())
             .insert_resource(RenderLook::default())
             .add_systems(Update, update_uniforms);

@@ -61,6 +61,8 @@ pub const TREE_SHADER_PATH: &str = "shaders/foliage.wgsl";
 pub const TREE_PREPASS_SHADER_PATH: &str = "shaders/foliage_prepass.wgsl";
 /// The vertex contract and the bend, shared by both.
 pub const TREE_COMMON_SHADER_PATH: &str = "shaders/foliage_common.wgsl";
+/// The crown grouping's rim, shared by the near and far tree shaders.
+pub const CANOPY_SHADER_PATH: &str = "shaders/canopy.wgsl";
 
 /// The asset source the content step's output is mounted as.
 pub const GENERATED_SOURCE: &str = "generated";
@@ -70,18 +72,6 @@ pub const MATERIAL_LIBRARY: &str = "materials/library.materials.ron";
 /// The share of a level switch's distance its crossfade spans, as
 /// `AshlarPlugin` crossfades a building's levels.
 pub const CROSSFADE: f32 = 0.1;
-
-/// What a leaf card's baked colour is multiplied by, in linear light. The
-/// graphs paint foliage at the albedo a real leaf has, about 0.07 linear
-/// green, which under the stylised grass and sky reads as black holes in the
-/// landscape; the look wants crowns a step brighter than the ground they
-/// shade, as painted foliage is. Applied here, to the near levels and the
-/// far pictures alike, so the review sheets stay physical and the lift is
-/// one number to tune.
-pub const LEAF_LIFT: f32 = 2.4;
-
-/// The same for bark, which stands in its own crown's shade.
-pub const BARK_LIFT: f32 = 1.5;
 
 /// Floats per pivot in a variant's table: `[x, y, z, parent] [axis, length]
 /// [base_radius, frequency_hz, stiffness, 0]`.
@@ -100,15 +90,28 @@ pub fn shade_attribute() -> MeshVertexAttribute {
     ashlar_bevy::attribute("shade", VertexFormat::Float32x4)
 }
 
-/// The extension half of [`TreeMaterial`]: the shared wind and one
-/// variant's pivots.
+/// The extension half of [`TreeMaterial`]: the shared wind and the one
+/// pivot atlas, so a material is no longer tied to a variant and every tree
+/// of a bark or leaf set batches together.
+///
+/// Bindless where the adapter has binding arrays: the materials of a slab then
+/// share one bind group and Bevy batches draws across them whatever their
+/// bark and leaf maps, which is what collapses the batch sets. Without them
+/// (the browser) Bevy binds each material plainly and the shader reads the
+/// same two buffers at the plain bindings. The slab is held to 128 materials,
+/// since each of its binding arrays is that long and a species' bark and
+/// leaves come to a few dozen; the numbers start at 50 and the table is at
+/// 100, clear of `StandardMaterial`'s own (0 to 30, and its arrays at 1 to 10).
 #[derive(Asset, AsBindGroup, TypePath, Debug, Clone)]
+#[bindless(limit(128), index_table(range(50..52), binding(100)))]
 pub struct TreeWind {
     /// The wind, one `WindParams`, shared with the grass.
-    #[storage(100, read_only, buffer)]
+    #[storage(50, read_only, buffer, binding_array(101))]
     pub wind: Buffer,
-    /// The variant's pivot table, [`PIVOT_FLOATS`] a pivot.
-    #[storage(101, read_only, buffer)]
+    /// Every variant's pivot table, [`PIVOT_FLOATS`] a pivot, after
+    /// [`PIVOT_SLOTS`] header rows that say where each table starts; the
+    /// mesh tag's third byte names a variant's slot.
+    #[storage(51, read_only, buffer, binding_array(102))]
     pub pivots: Buffer,
 }
 
@@ -186,6 +189,9 @@ pub struct TreeVariantAssets {
     /// This variant's height over the one the species' impostor was baked
     /// from, so the one picture stands as tall as each variant.
     pub impostor_scale: f32,
+    /// Where the variant's pivot table is in the [`PivotAtlas`], the third
+    /// byte of its pieces' mesh tag.
+    pub pivot_slot: u8,
 }
 
 /// A species' far picture: the one material all its batches share.
@@ -340,15 +346,74 @@ fn understory_range(form: &str) -> VisibilityRange {
     }
 }
 
-/// A pivot table as a storage buffer.
-#[must_use]
-pub fn pivot_buffer(device: &RenderDevice, pivots: &[f32]) -> Buffer {
-    let bytes: Vec<u8> = pivots.iter().flat_map(|v| v.to_le_bytes()).collect();
-    device.create_buffer_with_data(&BufferInitDescriptor {
-        label: Some("tree pivots"),
-        contents: &bytes,
-        usage: BufferUsages::STORAGE,
-    })
+/// How many pivot tables the atlas can name: the slot is a byte of the mesh
+/// tag, the one the shader never read for trees (the spawn time's).
+pub const PIVOT_SLOTS: usize = 256;
+
+/// Every variant's pivot table in one buffer, so the pivots are no longer a
+/// per-variant material binding (review 2026-10-16, F3). The first
+/// [`PIVOT_SLOTS`] rows (a `vec4` each) hold, in their `x` as `u32` bits, the
+/// row where that slot's table starts; the tables follow, three rows a pivot.
+#[derive(Default)]
+pub struct PivotAtlas {
+    rows: Vec<f32>,
+    slots: Vec<u32>,
+    seen: BTreeMap<Vec<u32>, u8>,
+    overflowed: bool,
+}
+
+impl PivotAtlas {
+    /// The slot of `table`, added unless an identical one is already there.
+    /// Past [`PIVOT_SLOTS`] distinct tables the last slot is shared and a
+    /// warning is logged once.
+    pub fn add(&mut self, table: &[f32]) -> u8 {
+        let key: Vec<u32> = table.iter().map(|v| v.to_bits()).collect();
+        if let Some(&slot) = self.seen.get(&key) {
+            return slot;
+        }
+        let Ok(slot) = u8::try_from(self.slots.len()) else {
+            if !self.overflowed {
+                warn!("more than {PIVOT_SLOTS} distinct pivot tables; later plants share the last");
+                self.overflowed = true;
+            }
+            return u8::MAX;
+        };
+        // Row units: header first, then this table; a table is whole rows.
+        let start = PIVOT_SLOTS + self.rows.len() / 4;
+        self.slots.push(u32::try_from(start).unwrap_or(0));
+        self.rows.extend_from_slice(table);
+        while !self.rows.len().is_multiple_of(4) {
+            self.rows.push(0.0);
+        }
+        self.seen.insert(key, slot);
+        slot
+    }
+
+    /// The buffer's bytes: the header, then the tables.
+    fn bytes(&self) -> Vec<u8> {
+        let mut bytes = Vec::with_capacity((PIVOT_SLOTS * 4 + self.rows.len()) * 4);
+        for slot in 0..PIVOT_SLOTS {
+            // A whole-number float, not the row's bits: a small integer's bits
+            // are a denormal, which a driver may flush to zero on load, and a
+            // float is exact to 2^24 rows.
+            #[allow(clippy::cast_precision_loss, reason = "rows stay far under 2^24")]
+            let start = self.slots.get(slot).copied().unwrap_or(0) as f32;
+            bytes.extend_from_slice(&start.to_le_bytes());
+            bytes.extend_from_slice(&[0; 12]);
+        }
+        bytes.extend(self.rows.iter().flat_map(|v| v.to_le_bytes()));
+        bytes
+    }
+
+    /// The buffer the materials bind.
+    #[must_use]
+    pub fn buffer(&self, device: &RenderDevice) -> Buffer {
+        device.create_buffer_with_data(&BufferInitDescriptor {
+            label: Some("tree pivots"),
+            contents: &self.bytes(),
+            usage: BufferUsages::STORAGE,
+        })
+    }
 }
 
 /// An understory mesh in the tree contract: the generator's streams with
@@ -423,6 +488,8 @@ pub struct TreeLoading {
 }
 
 struct UnderstorySpecies {
+    /// The registry id, which keys the species' materials.
+    id: u32,
     form: String,
     bark: String,
     /// Per variant: bark and leaf streams of level 0, and the height.
@@ -489,6 +556,7 @@ impl TreeLoading {
                 understory.push((
                     species.id,
                     UnderstorySpecies {
+                        id: species.id.0,
                         form: species.tree.form.clone(),
                         bark: species.tree.bark.clone(),
                         variants,
@@ -503,6 +571,43 @@ impl TreeLoading {
             looks,
             warned: false,
         }
+    }
+
+    /// Every variant's slot in `atlas`, baked species then understory; a
+    /// baked species with a prop that failed has `None`.
+    fn pivot_slots(
+        &self,
+        props: &Assets<PropAsset>,
+        atlas: &mut PivotAtlas,
+    ) -> (Vec<Option<Vec<u8>>>, Vec<Vec<u8>>) {
+        let baked = self
+            .baked
+            .iter()
+            .map(|(_, variants)| {
+                variants
+                    .iter()
+                    .map(|(handle, height)| {
+                        let asset = props.get(handle)?;
+                        Some(atlas.add(&baked_pivots(&asset.prop, *height)))
+                    })
+                    .collect()
+            })
+            .collect();
+        let understory = self
+            .understory
+            .iter()
+            .map(|(_, species)| {
+                species
+                    .variants
+                    .iter()
+                    .map(|(bark, leaves, height)| {
+                        let reference = if bark.is_empty() { leaves } else { bark };
+                        atlas.add(&understory_pivots(reference, *height))
+                    })
+                    .collect()
+            })
+            .collect();
+        (baked, understory)
     }
 
     /// The assets, once every prop and the material library have loaded or
@@ -549,17 +654,34 @@ impl TreeLoading {
         let mut installed = TreeAssets {
             species: vec![None; species_count],
         };
-        for (id, variants) in &self.baked {
+        // Every table first: the one buffer has to exist before any material
+        // holds it, and a species whose prop failed adds none.
+        let mut atlas = PivotAtlas::default();
+        let (baked_slots, understory_slots) = self.pivot_slots(props, &mut atlas);
+        let pivots = atlas.buffer(device);
+        let mut cache = MaterialCache::new();
+        for ((id, variants), slots) in self.baked.iter().zip(baked_slots) {
             let look = self.looks.get(&id.0).copied();
+            let Some(slots) = slots else {
+                warn!(
+                    species = id.0,
+                    "a baked tree species did not load; it is not drawn"
+                );
+                continue;
+            };
             if let Some(species) = baked_species(
                 variants,
+                &slots,
                 look,
-                wind,
-                device,
+                &Buffers {
+                    wind,
+                    pivots: &pivots,
+                },
                 props,
                 meshes,
                 &mut dressed,
                 materials,
+                &mut cache,
                 batches,
                 fades,
             ) {
@@ -571,20 +693,81 @@ impl TreeLoading {
                 );
             }
         }
-        for (id, species) in &self.understory {
+        for ((id, species), slots) in self.understory.iter().zip(&understory_slots) {
             let look = self.looks.get(&id.0).copied();
             installed.species[id.0 as usize] = Some(understory_species(
                 species,
+                slots,
                 look,
-                wind,
-                device,
+                &Buffers {
+                    wind,
+                    pivots: &pivots,
+                },
                 meshes,
                 &mut dressed,
                 materials,
+                &mut cache,
             ));
         }
         Some(installed)
     }
+}
+
+/// The buffers every tree material binds: the same two for all of them.
+struct Buffers<'a> {
+    wind: &'a Buffer,
+    pivots: &'a Buffer,
+}
+
+impl Buffers<'_> {
+    fn extension(&self) -> TreeWind {
+        TreeWind {
+            wind: self.wind.clone(),
+            pivots: self.pivots.clone(),
+        }
+    }
+}
+
+/// Materials made so far, by the library key and, for leaves, the species'
+/// look: with the pivots in one buffer a material no longer belongs to a
+/// variant, so equal ones are one asset and one batch set.
+type MaterialCache = BTreeMap<(String, [u32; 6]), Handle<TreeMaterial>>;
+
+fn look_bits(look: Option<Look>) -> [u32; 6] {
+    look.map_or([0; 6], |l| {
+        [
+            l.lush[0].to_bits(),
+            l.lush[1].to_bits(),
+            l.lush[2].to_bits(),
+            l.emissive[0].to_bits(),
+            l.emissive[1].to_bits(),
+            l.emissive[2].to_bits(),
+        ]
+    })
+}
+
+/// A baked variant's pivot table, or the one pivot a table-less prop bends
+/// about.
+fn baked_pivots(prop: &ashlar_bevy::ashlar::prop::Prop, height: f32) -> Vec<f32> {
+    prop.tables.get("pivots").map_or_else(
+        || {
+            vec![
+                0.0,
+                0.0,
+                0.0,
+                -1.0,
+                0.0,
+                1.0,
+                0.0,
+                height.max(1.0),
+                0.1,
+                0.5,
+                1.0e4,
+                0.0,
+            ]
+        },
+        Clone::clone,
+    )
 }
 
 /// Standard materials from the library's keys, each created once.
@@ -629,18 +812,6 @@ fn plain(leaves: bool, look: Option<Look>) -> StandardMaterial {
     }
 }
 
-/// `material` with its base colour multiplied by `lift`, in linear light.
-fn lifted(mut material: StandardMaterial, lift: f32) -> StandardMaterial {
-    let c = material.base_color.to_linear();
-    material.base_color = Color::LinearRgba(LinearRgba::new(
-        c.red * lift,
-        c.green * lift,
-        c.blue * lift,
-        c.alpha,
-    ));
-    material
-}
-
 fn with_emissive(mut material: StandardMaterial, look: Option<Look>) -> StandardMaterial {
     if let Some(look) = look
         && look.emissive.iter().any(|&c| c > 0.0)
@@ -658,43 +829,23 @@ fn with_emissive(mut material: StandardMaterial, look: Option<Look>) -> Standard
 )]
 fn baked_species(
     variants: &[(Handle<PropAsset>, f32)],
+    slots: &[u8],
     look: Option<Look>,
-    wind: &Buffer,
-    device: &RenderDevice,
+    buffers: &Buffers<'_>,
     props: &Assets<PropAsset>,
     meshes: &Assets<Mesh>,
     dressed: &mut Dresser<'_>,
     materials: &mut Assets<TreeMaterial>,
+    cache: &mut MaterialCache,
     batches: &mut Assets<ImpostorBatchMaterial>,
     fades: &TreeFades,
 ) -> Option<TreeSpecies> {
     let first_height = variants.first()?.1.max(0.01);
     let mut out = Vec::with_capacity(variants.len());
     let mut impostor = None;
-    for (handle, height) in variants {
+    for ((handle, height), &pivot_slot) in variants.iter().zip(slots) {
         let asset = props.get(handle)?;
         let prop = &asset.prop;
-        let pivots = prop.tables.get("pivots").map_or_else(
-            || {
-                vec![
-                    0.0,
-                    0.0,
-                    0.0,
-                    -1.0,
-                    0.0,
-                    1.0,
-                    0.0,
-                    height.max(1.0),
-                    0.1,
-                    0.5,
-                    1.0e4,
-                    0.0,
-                ]
-            },
-            Clone::clone,
-        );
-        let pivots = pivot_buffer(device, &pivots);
-        let mut by_key: BTreeMap<String, Handle<TreeMaterial>> = BTreeMap::new();
         let mut levels = Vec::new();
         for (index, level) in prop.levels.iter().enumerate() {
             if let Some(atlas) = &level.impostor {
@@ -713,33 +864,30 @@ fn baked_species(
                 .iter()
                 .zip(asset.meshes.get(index)?)
                 .map(|(piece, mesh)| {
-                    let material = by_key
-                        .entry(piece.material.clone())
+                    let leaves = piece.material.contains("leaves");
+                    // Only a leaf set reads the species' look, so bark and
+                    // the rest are shared by every species that names them.
+                    let key = (
+                        piece.material.clone(),
+                        if leaves { look_bits(look) } else { [0; 6] },
+                    );
+                    let material = cache
+                        .entry(key)
                         .or_insert_with(|| {
-                            let leaves = piece.material.contains("leaves");
                             let base = dressed
                                 .get(&piece.material)
                                 .unwrap_or_else(|| plain(leaves, look));
-                            // Painted maps are lifted; a plain surface coloured by
-                            // its vertices (a flower) is already the colour it is.
-                            let lift = if leaves {
-                                LEAF_LIFT
-                            } else if piece.material.starts_with("flora:bark") {
-                                BARK_LIFT
-                            } else {
-                                1.0
-                            };
-                            let base = lifted(base, lift);
+                            // The baked maps are already at the value budget
+                            // (tools/content remaps the graphs), so the near
+                            // levels and the impostors share one colour with
+                            // no multiply here.
                             materials.add(TreeMaterial {
                                 base: if leaves {
                                     with_emissive(base, look)
                                 } else {
                                     base
                                 },
-                                extension: TreeWind {
-                                    wind: wind.clone(),
-                                    pivots: pivots.clone(),
-                                },
+                                extension: buffers.extension(),
                             })
                         })
                         .clone();
@@ -759,6 +907,7 @@ fn baked_species(
         out.push(TreeVariantAssets {
             levels,
             impostor_scale: height / first_height,
+            pivot_slot,
         });
     }
     // The picture was baked from the first variant; it takes over where
@@ -779,7 +928,7 @@ fn baked_species(
         );
         Some(SpeciesImpostor {
             material: batches.add(ImpostorBatchMaterial {
-                base: with_emissive(lifted(base_material(0.4), LEAF_LIFT), look),
+                base: with_emissive(base_material(0.4), look),
                 extension: ImpostorBatch {
                     uniform: ImpostorBatchUniform::new(layout, handover, fades.far),
                     albedo,
@@ -797,14 +946,19 @@ fn baked_species(
     })
 }
 
+#[allow(
+    clippy::too_many_arguments,
+    reason = "one species' render assets and the shared caches"
+)]
 fn understory_species(
     species: &UnderstorySpecies,
+    slots: &[u8],
     look: Option<Look>,
-    wind: &Buffer,
-    device: &RenderDevice,
+    buffers: &Buffers<'_>,
     meshes: &mut Assets<Mesh>,
     dressed: &mut Dresser<'_>,
     materials: &mut Assets<TreeMaterial>,
+    cache: &mut MaterialCache,
 ) -> TreeSpecies {
     let small = matches!(species.form.as_str(), "flower" | "fern");
     let lush = look.map_or([0.1, 0.25, 0.05], |l| l.lush);
@@ -821,7 +975,7 @@ fn understory_species(
     } else {
         dressed
             .get(&format!("flora:bark-{}", species.bark))
-            .map_or_else(|| plain(false, look), |m| lifted(m, BARK_LIFT))
+            .unwrap_or_else(|| plain(false, look))
     };
     let leaf_base = if small {
         StandardMaterial {
@@ -835,28 +989,35 @@ fn understory_species(
     } else {
         dressed
             .get("flora:leaves-shrub")
-            .map_or_else(|| plain(true, look), |m| lifted(m, LEAF_LIFT))
+            .unwrap_or_else(|| plain(true, look))
     };
     let leaf_base = with_emissive(leaf_base, look);
     let range = understory_range(&species.form);
     let variants = species
         .variants
         .iter()
-        .map(|(bark, leaves, height)| {
-            let reference = if bark.is_empty() { leaves } else { bark };
-            let pivots = pivot_buffer(device, &understory_pivots(reference, *height));
+        .zip(slots)
+        .map(|((bark, leaves, _), &pivot_slot)| {
             let mut pieces = Vec::new();
-            for (streams, base) in [(bark, &bark_base), (leaves, &leaf_base)] {
+            for (which, (streams, base)) in [(bark, &bark_base), (leaves, &leaf_base)]
+                .into_iter()
+                .enumerate()
+            {
                 if streams.is_empty() {
                     continue;
                 }
-                let material = materials.add(TreeMaterial {
-                    base: base.clone(),
-                    extension: TreeWind {
-                        wind: wind.clone(),
-                        pivots: pivots.clone(),
-                    },
-                });
+                // One material a species and half, as the species' variants
+                // differ only in mesh and pivots.
+                let key = (format!("understory:{}:{which}", species.id), [0; 6]);
+                let material = cache
+                    .entry(key)
+                    .or_insert_with(|| {
+                        materials.add(TreeMaterial {
+                            base: base.clone(),
+                            extension: buffers.extension(),
+                        })
+                    })
+                    .clone();
                 let mesh = understory_mesh(streams);
                 pieces.push(TreePiece {
                     aabb: mesh.compute_aabb(),
@@ -880,6 +1041,7 @@ fn understory_species(
             TreeVariantAssets {
                 levels,
                 impostor_scale: 1.0,
+                pivot_slot,
             }
         })
         .collect();
@@ -913,7 +1075,6 @@ pub fn spawn_tree_level(
     level: usize,
     plant: &Plant,
     local: Vec3,
-    spawn_tag: u32,
 ) -> Vec<Entity> {
     let Some(species) = assets.get(plant.species) else {
         return Vec::new();
@@ -931,10 +1092,11 @@ pub fn spawn_tree_level(
         .with_rotation(Quat::from_rotation_y(plant.yaw * core::f32::consts::TAU))
         .with_scale(Vec3::splat(plant.scale));
     // The low half a per-tree hash the shader turns into a tint and a sway
-    // phase; the high half the spawn time, but for the top byte, which is
-    // what the crowns around it take of its sky (lighting plan phase 3a),
-    // stored so that a tag without it reads as open.
-    let tag = plant_tint(plant) | (spawn_tag & 0x00ff_0000) | plant_shade(plant);
+    // phase; the third byte the variant's slot in the pivot atlas (the trees
+    // never read a spawn time); the top byte what the crowns around it take
+    // of its sky (lighting plan phase 3a), stored so that a tag without it
+    // reads as open.
+    let tag = plant_tint(plant) | (u32::from(variant.pivot_slot) << 16) | plant_shade(plant);
     let mut entities = Vec::with_capacity(meshes.pieces.len());
     for piece in &meshes.pieces {
         let mut e = parent.spawn((
@@ -1017,6 +1179,37 @@ mod tests {
     }
 
     #[test]
+    fn the_pivot_atlas_finds_each_table_by_its_slot_and_stores_a_repeat_once() {
+        let mut atlas = PivotAtlas::default();
+        let first: Vec<f32> = (0..12_u8).map(f32::from).collect();
+        let second: Vec<f32> = (0..24_u8).map(|i| 100.0 + f32::from(i)).collect();
+        let (a, b) = (atlas.add(&first), atlas.add(&second));
+        assert_eq!((a, b), (0, 1));
+        assert_eq!(atlas.add(&first), a, "an equal table is the same slot");
+        let bytes = atlas.bytes();
+        let word = |i: usize| {
+            let mut w = [0; 4];
+            w.copy_from_slice(&bytes[i * 4..i * 4 + 4]);
+            u32::from_le_bytes(w)
+        };
+        // A header row is four words; the shader reads its x as the row where
+        // the table starts, a whole-number float, and a row is four floats.
+        for (slot, table) in [(a, &first), (b, &second)] {
+            #[allow(
+                clippy::cast_sign_loss,
+                clippy::cast_possible_truncation,
+                reason = "a whole number"
+            )]
+            let row = f32::from_bits(word(usize::from(slot) * 4)) as usize;
+            assert!(row >= PIVOT_SLOTS, "tables follow the header");
+            for (i, v) in table.iter().enumerate() {
+                assert_eq!(word(row * 4 + i), v.to_bits(), "slot {slot} float {i}");
+            }
+        }
+        assert_eq!(bytes.len(), (PIVOT_SLOTS * 4 + 3 * PIVOT_FLOATS) * 4);
+    }
+
+    #[test]
     fn an_understory_plant_bends_about_one_pivot_at_its_root() {
         let pivots = understory_pivots(&streams(), 1.2);
         assert_eq!(pivots.len(), PIVOT_FLOATS);
@@ -1072,6 +1265,7 @@ mod tests {
                         shadows: true,
                     }],
                     impostor_scale: 1.0,
+                    pivot_slot: 0,
                 }],
                 impostor: None,
             })],
@@ -1095,7 +1289,7 @@ mod tests {
         world
             .run_system_once(move |mut commands: Commands| {
                 commands.spawn_empty().with_children(|parent| {
-                    spawn_tree_level(parent, &assets, 0, &plant, Vec3::new(3.0, 0.0, 4.0), 0);
+                    spawn_tree_level(parent, &assets, 0, &plant, Vec3::new(3.0, 0.0, 4.0));
                 });
             })
             .expect("spawn system");

@@ -47,7 +47,7 @@ fn the_mountains_keep_their_distance_from_the_city() {
     let registries = common::registries();
     let world = common::world(42);
     let mountains = registries
-        .biome_id(&strata_registry::Namespaced::parse("strata:mountains").expect("valid"))
+        .biome_id(&strata_data::Namespaced::parse("strata:mountains").expect("valid"))
         .expect("ships");
     let step = 250.0;
     // A count of steps; exact.
@@ -191,7 +191,7 @@ fn the_city_is_in_the_middle_of_the_temperate_windows() {
     let t = world.climate(CITY.0, CITY.1, &continent).temperature;
     for name in ["strata:plains", "strata:forest"] {
         let id = registries
-            .biome_id(&strata_registry::Namespaced::parse(name).expect("valid"))
+            .biome_id(&strata_data::Namespaced::parse(name).expect("valid"))
             .expect("ships");
         let def = registries.biomes.get(id).expect("frozen");
         let (lo, hi) = (

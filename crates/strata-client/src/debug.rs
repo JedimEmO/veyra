@@ -17,7 +17,7 @@ use bevy::input::ButtonInput;
 use bevy::input::keyboard::KeyCode;
 use bevy::pbr::wireframe::{WireframeConfig, WireframePlugin};
 use bevy::time::Time;
-use strata_sim::DayStart;
+use veyra_sim::DayStart;
 
 /// Toggles the wireframe.
 pub const WIREFRAME_KEY: KeyCode = KeyCode::F4;

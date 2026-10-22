@@ -46,7 +46,7 @@ use bevy::render::render_resource::{
 };
 use bevy::render::renderer::{RenderDevice, RenderQueue};
 use bevy::tasks::{AsyncComputeTaskPool, Task, TaskPool, block_on, poll_once};
-use strata_sim::{Observers, WorldSeed, WorldSourceRes};
+use strata_app::{Observers, WorldSeed, WorldSourceRes};
 use strata_weather::{BasinTile, FogField, FogSample, TILE_M, TileCoord, Weather};
 
 /// How far the observer may move from a level's centre, as a share of the

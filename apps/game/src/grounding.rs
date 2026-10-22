@@ -13,7 +13,8 @@
 //! review, which moved the plain by metres: the flat site keeps its place
 //! with 4 mm to spare, and the flattest within a kilometre reads 0.036).
 use anyhow::{Context, Result, ensure};
-use ashlar::{BakedBuilding, ConvexSolid, Grounding, fit_ground};
+use ashlar::collision_file::{self, CollisionFile};
+use ashlar::{ConvexSolid, Grounding, fit_ground};
 use ashlar_bevy::prelude::{AshlarBuilding, MaterialLibraryAsset};
 use bevy::prelude::*;
 use strata::physics::{
@@ -114,22 +115,17 @@ pub(super) fn prepare(cli: &mut super::Cli) -> Result<Prepared> {
     })
 }
 
-/// The building's collision proxies, placed per instance, from level 0 of its
-/// baked file: the same solids its pieces were meshed from (ashlar ADR 0002).
+/// The building's collision proxies, placed per instance, from the file the
+/// content step writes beside its baked building: the same solids its pieces
+/// were meshed from (ashlar ADR 0002), without parsing a render file.
 fn baked_collision(files: &super::Files, path: &str) -> Result<Vec<ConvexSolid>> {
+    let path = collision_file::path_for(path);
     let bytes = files
-        .read(path)
+        .read(&path)
         .map_err(|error| anyhow::anyhow!("{error}"))
         .with_context(|| format!("reading {path}; run `just content` first"))?;
-    let baked = BakedBuilding::read(&bytes).with_context(|| format!("reading {path}"))?;
-    let level = baked
-        .level(0)
-        .with_context(|| format!("{path} has no levels"))?;
-    Ok(level
-        .colliders()
-        .into_iter()
-        .map(|placed| placed.solid)
-        .collect())
+    let file = CollisionFile::read(&bytes).with_context(|| format!("reading {path}"))?;
+    Ok(file.into_solids())
 }
 
 pub(super) fn install(app: &mut App, prepared: Prepared) {
@@ -271,6 +267,13 @@ mod tests {
             let path = root.path().join(style.baked());
             std::fs::create_dir_all(path.parent().expect("a relative file"))
                 .expect("a writable scratch directory");
+            std::fs::write(
+                collision_file::path_for(path.to_str().expect("a UTF-8 path")),
+                CollisionFile::from_baked(&baked)
+                    .expect("a level zero")
+                    .write(),
+            )
+            .expect("a writable scratch directory");
             std::fs::write(path, baked.write().expect("a bake that serialises"))
                 .expect("a writable scratch directory");
         }

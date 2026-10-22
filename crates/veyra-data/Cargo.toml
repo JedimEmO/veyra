@@ -1,0 +1,35 @@
+[package]
+name = "veyra-data"
+description = "Veyra's data schemas on slotted-registry: items, schematics, progression, resources, buyers, quests, factions, encounters, loot, vehicles and the art index, loaded over the world half from strata-data. No Bevy."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[features]
+# The shipped progression files compiled in (`SkillGraph::shipped` and friends),
+# for tests and tools. The game and the server read the same files from disk.
+shipped-data = []
+
+[dependencies]
+# `std-fs` is on for `DirSource`, the plain `std::fs` adapter `load_from_dir`
+# reads through; the loader itself only speaks the `AssetSource` port so a
+# pack layer can replace the directory later.
+slotted-registry = { workspace = true, features = ["std-fs"] }
+slotted-model = { workspace = true }
+strata-data = { workspace = true }
+# The tick rate alone: the factory's dial is seconds in the file and whole
+# ticks in the sim, and a second that is no whole number of ticks is refused
+# here, at load.
+strata-core = { workspace = true }
+serde = { workspace = true }
+ron = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+
+[lints]
+workspace = true

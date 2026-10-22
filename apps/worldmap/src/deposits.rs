@@ -23,7 +23,7 @@
 
 use image::{ImageBuffer, Rgb};
 use strata_registry::{Attribute, ResourceSet, ResourceTypeId};
-use strata_worldgen::{Deposit, DepositField};
+use veyra_world::{Deposit, DepositField};
 
 use crate::rivers::Square;
 use crate::sites::Canvas;

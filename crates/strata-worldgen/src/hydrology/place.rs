@@ -42,7 +42,7 @@
 //! seed 42 within 3 000 km of the origin reaches the cap.
 
 use strata_core::Rng;
-use strata_registry::{BiomeId, Facing, ProvinceId, SiteFeature, SiteTerm};
+use strata_data::{BiomeId, Facing, ProvinceId, SiteFeature, SiteTerm};
 
 use super::field::parallel_rows;
 use super::mass::{Domain, NEIGHBOURS};

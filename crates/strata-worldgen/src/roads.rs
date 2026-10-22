@@ -17,7 +17,7 @@
 //! into the world's version through the canaries.
 
 use serde::{Deserialize, Serialize};
-pub use strata_registry::RoadClass;
+pub use strata_data::RoadClass;
 
 use crate::hydrology::NodeMap;
 use crate::sites::SiteId;

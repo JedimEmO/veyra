@@ -1,0 +1,49 @@
+[package]
+name = "veyra-game"
+description = "The game's headless half: the household and its file, the questline's people, the camps and posts, the props' placement and the hostiles' making, over the sim and the headless facade. Linked by the game and the server; no renderer, window or UI."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[features]
+# The fixtures the household's tests share (`test_support`), for the game
+# binary's tests to use as well.
+test-support = ["dep:ashlar"]
+
+[dependencies]
+# The headless facade, whose paths (`strata::sim`, `strata::registry`,
+# `strata::physics`) this crate is written against. A path dependency rather
+# than the workspace's: an inherited dependency cannot turn the defaults off,
+# and the defaults are the client. `just server-check` asserts this crate's
+# graph holds no renderer.
+strata = { path = "../strata", default-features = false, features = ["headless"] }
+strata-core = { workspace = true }
+veyra-sim = { workspace = true }
+# The English the household words a refusal, a cache and a fall with.
+veyra-words = { workspace = true }
+# `App`, the schedules and `bevy_state` for the states; the rest is the
+# umbrella's always-on set. No window, no assets, no render.
+bevy = { workspace = true, features = ["std", "bevy_state"] }
+tracing = { workspace = true }
+# The household file.
+serde = { workspace = true }
+ron = { workspace = true }
+# A baked building's collision proxies, for the fixtures the tests share (Bevy-free).
+ashlar = { workspace = true, optional = true }
+
+[dev-dependencies]
+# The integration tests under `tests/` use the fixtures the feature exposes.
+veyra-game = { path = ".", features = ["test-support"] }
+# Tests read the shipped data compiled in; the shipped binaries read it from disk.
+veyra-sim = { workspace = true, features = ["shipped-data"] }
+tempfile.workspace = true
+# The city's walkability audit reads the baked buildings' solids and the tree
+# library, and writes its picture.
+ashlar.workspace = true
+strata-flora.workspace = true
+image.workspace = true
+
+[lints]
+workspace = true

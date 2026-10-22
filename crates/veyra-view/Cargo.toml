@@ -1,0 +1,70 @@
+[package]
+name = "veyra-view"
+description = "Veyra's combat view over the engine client: the combat camera, HUD, nameplates, floating text, character art, effects, audio, the scope and the bike on screen. Bevy with a window."
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[features]
+default = ["ui"]
+# The slotted half: the combat HUD, the action bar, the nameplates and the
+# floating text. Mirrors strata-client's `ui`, which it turns on.
+ui = [
+    "strata-client/ui",
+    "dep:slotted",
+    "bevy/bevy_ui",
+    "bevy/bevy_ui_render",
+    "bevy/bevy_text",
+    "bevy/bevy_input_focus",
+    "bevy/bevy_ui_widgets",
+    "bevy/default_font",
+]
+
+[dependencies]
+strata-core = { workspace = true }
+strata-registry = { workspace = true }
+# The engine client: the orbit camera, the input, the UI scaffolding and the
+# state this crate and the screens share (`strata_client::view`).
+strata-client = { workspace = true }
+# The screen framework and Veyra's screens: the typefaces, the words, the
+# progress toasts and the weapon models this view draws with. Siblings of the
+# engine client, never over it.
+strata-ui = { workspace = true }
+veyra-ui = { workspace = true }
+veyra-sim = { workspace = true }
+veyra-physics = { workspace = true }
+strata-physics = { workspace = true }
+# The terrain and atmosphere markers the character art keeps clear of.
+strata-terrain = { workspace = true }
+strata-atmosphere = { workspace = true }
+strata-stream = { workspace = true }
+# The baked bike and weapon pieces in the hand are props over a material
+# library of their own. Featureless, as the foliage crate takes it: no kernel.
+ashlar-bevy = { workspace = true }
+bevy = { workspace = true, features = [
+    "std",
+    "bevy_state",
+    "bevy_window",
+    "bevy_asset",
+    "bevy_mesh",
+    "bevy_camera",
+    "bevy_pbr",
+    "bevy_gltf",
+    "bevy_animation",
+    "bevy_scene",
+    "bevy_audio",
+    "vorbis",
+] }
+tracing = { workspace = true }
+slotted = { workspace = true, optional = true, features = ["ui", "menu"] }
+
+[dev-dependencies]
+# Tests read the shipped data compiled in; the shipped binaries read it from disk.
+veyra-sim = { workspace = true, features = ["shipped-data"] }
+slotted-test = { workspace = true, features = ["menu"] }
+strata-worldgen = { workspace = true }
+
+[lints]
+workspace = true

@@ -11,7 +11,7 @@ pub const SIM_TICK_HZ: f64 = 20.0;
 /// A tick count rather than a float of seconds so two machines that have
 /// run the same number of steps agree bit for bit, which is the property a
 /// replicated fixed-step simulation rests on. Seconds are derived, never
-/// stored. `strata-sim` wraps this in a resource and advances it once per
+/// stored. `veyra-sim` wraps this in a resource and advances it once per
 /// fixed step; here it is a plain value so headless tests and later the
 /// server's persistence can use it without Bevy.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]

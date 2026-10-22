@@ -85,7 +85,7 @@ pub fn class_for(trees: usize) -> Option<usize> {
 }
 
 /// The uniform block the shader reads.
-#[derive(Clone, Copy, Debug, Default, PartialEq, ShaderType)]
+#[derive(Clone, Copy, Debug, PartialEq, ShaderType)]
 pub struct ImpostorBatchUniform {
     /// Frames across, its reciprocal, texels across a frame, and one for a
     /// hemispherical grid.
@@ -94,11 +94,28 @@ pub struct ImpostorBatchUniform {
     pub sphere: Vec4,
     /// The alpha cutoff, the parallax strength, how much the trees' sky
     /// term darkens the sky's fill (`FoliageSky`, lighting plan phase 3a),
-    /// and one unused.
+    /// and the canopy's rim strength (`CanopyLook::rim`).
     pub shading: Vec4,
     /// Metres from a tree's root: fade in from, fade in to, fade out from,
     /// fade out to.
     pub fade: Vec4,
+    /// The shade's colour in `xyz`, a luminance-one multiplier on the
+    /// indirect diffuse (`FoliageSky::shade_tint`, visual.md F4).
+    pub shade: Vec4,
+}
+
+impl Default for ImpostorBatchUniform {
+    /// A zero shade row would black the indirect diffuse until the sync
+    /// system ran, so the default is the neutral tint.
+    fn default() -> Self {
+        Self {
+            grid: Vec4::ZERO,
+            sphere: Vec4::ZERO,
+            shading: Vec4::ZERO,
+            fade: Vec4::ZERO,
+            shade: Vec4::ONE,
+        }
+    }
 }
 
 impl ImpostorBatchUniform {
@@ -121,6 +138,7 @@ impl ImpostorBatchUniform {
             sphere: Vec3::from_array(layout.centre).extend(layout.radius),
             shading: Vec4::new(CUTOFF, 1.0, 1.0, 0.0),
             fade: Vec4::new(fade_in.0, fade_in.1, fade_out.0, fade_out.1),
+            shade: Vec4::ONE,
         }
     }
 }
@@ -151,22 +169,34 @@ impl MaterialExtension for ImpostorBatch {}
 
 /// The extension half of [`FarTreeMaterial`]: one species' atlas and the
 /// shared buffer of every far tree, shared by all its batches.
+///
+/// Bindless where the adapter has binding arrays, so the species' materials
+/// share a bind group and their batches stop being one set a species; the
+/// browser binds each plainly. The numbers are clear of `StandardMaterial`'s,
+/// as [`TreeWind`](crate::TreeWind)'s are, and the slab is 128 materials.
 #[derive(Asset, AsBindGroup, TypePath, Debug, Clone)]
+#[data(50, ImpostorBatchUniform, binding_array(101))]
+#[bindless(limit(128), index_table(range(50..55), binding(100)))]
 pub struct FarTrees {
     /// The layout, the fades and the sky term's strength.
-    #[uniform(100)]
     pub uniform: ImpostorBatchUniform,
     /// The albedo atlas: sRGB colour, straight alpha.
-    #[texture(101)]
-    #[sampler(102)]
+    #[texture(51)]
+    #[sampler(52)]
     pub albedo: Handle<Image>,
     /// The normal and depth atlas.
-    #[texture(103)]
+    #[texture(53)]
     pub normal_depth: Handle<Image>,
     /// Every far tree of every species, [`RECORD_BYTES`] each; a batch reads
     /// the range its `MeshTag` starts.
-    #[storage(104, read_only, buffer)]
+    #[storage(54, read_only, buffer, binding_array(102))]
     pub trees: Buffer,
+}
+
+impl From<&FarTrees> for ImpostorBatchUniform {
+    fn from(trees: &FarTrees) -> Self {
+        trees.uniform
+    }
 }
 
 /// Every far tree of one species.

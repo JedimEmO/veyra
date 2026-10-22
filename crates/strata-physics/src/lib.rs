@@ -1,9 +1,12 @@
 //! Physics: `avian3d` stepped inside the simulation tick, the ground as a
 //! heightfield collider per region, and the character that walks on it.
 //!
-//! This crate sits above the sim and the streamer and below the render
-//! crates: a dedicated server runs it, so the collider is the authoritative
-//! ground and the terrain mesh is only a picture of it (PLAN Phase 4a).
+//! This crate sits above the engine core (`strata-app`) and the streamer and
+//! below the render crates: a dedicated server runs it, so the collider is the
+//! authoritative ground and the terrain mesh is only a picture of it (PLAN
+//! Phase 4a). It links no game rule: bolts, blades and the hoverbike motor are
+//! `veyra-physics`, which a character opts into with
+//! [`character::ExternalMotor`].
 //!
 //! # One clock
 //!
@@ -46,13 +49,12 @@
 //! next tick's sync would have done it too, one frame late.
 //!
 //! [`PhysicsSchedule`]: avian3d::schedule::PhysicsSchedule
-//! [`SimTick`]: strata_sim::SimTick
-//! [`SimSet::Step`]: strata_sim::SimSet::Step
-//! [`RenderOrigin`]: strata_sim::RenderOrigin
-//! [`WorldPosition`]: strata_sim::WorldPosition
+//! [`SimTick`]: strata_app::SimTick
+//! [`SimSet::Step`]: strata_app::SimSet::Step
+//! [`RenderOrigin`]: strata_app::RenderOrigin
+//! [`WorldPosition`]: strata_app::WorldPosition
 
 pub mod character;
-pub mod combat;
 pub mod crossings;
 pub mod flora;
 pub mod grounding;
@@ -71,7 +73,7 @@ use avian3d::prelude::{PhysicsPlugins, PhysicsSystems};
 use bevy::app::{App, Plugin, PluginGroup, PostUpdate, Update};
 use bevy::ecs::schedule::{IntoScheduleConfigs, SystemSet};
 use bevy::state::condition::in_state;
-use strata_sim::{AppState, OriginSet, SimSet, SimTick};
+use strata_app::{AppState, OriginSet, SimSet, SimTick};
 use strata_stream::StreamSet;
 
 pub use character::{CharacterController, WaterAt};
@@ -155,9 +157,7 @@ impl Plugin for PhysicsPlugin {
             .configure_sets(
                 SimTick,
                 (
-                    PhysicsSet::Sync
-                        .in_set(PhysicsSystems::First)
-                        .after(strata_sim::combat::CombatSet::Decide),
+                    PhysicsSet::Sync.in_set(PhysicsSystems::First),
                     (PhysicsSet::Character, PhysicsSet::Writeback)
                         .chain()
                         .in_set(PhysicsSystems::Last),
@@ -175,10 +175,6 @@ impl Plugin for PhysicsPlugin {
                     (character::step_characters, character::sync_characters)
                         .chain()
                         .in_set(PhysicsSet::Character),
-                    (combat::advance_bolts, combat::resolve_attacks)
-                        .chain()
-                        .after(PhysicsSet::Character)
-                        .before(PhysicsSet::Writeback),
                     sync::physics_to_world.in_set(PhysicsSet::Writeback),
                 ),
             )
@@ -228,7 +224,7 @@ mod smoke {
         app.add_plugins((
             bevy::app::TaskPoolPlugin::default(),
             bevy::time::TimePlugin,
-            strata_sim::SimPlugin,
+            strata_app::AppPlugin,
             strata_stream::StreamPlugin,
             PhysicsPlugin,
         ));

@@ -214,7 +214,7 @@ fn log(b: &mut Builder, lod: usize) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use strata_registry::MetreRange;
+    use strata_data::MetreRange;
 
     #[test]
     fn all_small_variants_have_rooted_finite_bounds() {

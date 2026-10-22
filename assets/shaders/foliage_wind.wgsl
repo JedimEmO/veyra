@@ -22,6 +22,19 @@ struct FoliageWind {
     // How much sunlight comes through a blade of grass seen against the
     // sun and rims its edges, 0 to 2 (lighting plan phase 5b).
     grass_rim: f32,
+    // The shade's colour, a luminance-one multiplier on the indirect
+    // diffuse (visual.md F4); three floats to keep the struct's alignment.
+    shade_r: f32,
+    shade_g: f32,
+    shade_b: f32,
+    // The crown's grouping (visual.md F5, `assets/look/canopy.ron`): the
+    // core's multiplier per colour lane, the clump lift and the rim's
+    // strength, which trees read.
+    canopy_r: f32,
+    canopy_g: f32,
+    canopy_b: f32,
+    canopy_lift: f32,
+    canopy_rim: f32,
 }
 
 fn hash_cell(p: vec2<i32>) -> f32 {

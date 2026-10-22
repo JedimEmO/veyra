@@ -13,6 +13,8 @@
     mesh_view_bindings::view,
     view_transformations::position_world_to_clip,
 }
+#import strata::canopy::canopy_rim
+#import bevy_render::bindless::{bindless_samplers_filtering, bindless_textures_2d}
 #ifdef PREPASS_PIPELINE
 #import bevy_pbr::prepass_io
 #ifdef MOTION_VECTOR_PREPASS
@@ -34,17 +36,14 @@ struct TreeImpostor {
     // the bounding sphere's centre in the prop's frame, and its radius.
     sphere: vec4<f32>,
     // alpha cutoff, parallax strength, the sky term's strength (lighting
-    // plan phase 3a), one unused.
+    // plan phase 3a), the canopy rim's strength.
     shading: vec4<f32>,
     // fade in from, fade in to, fade out from, fade out to: metres from the
     // tree's root, as Bevy's visibility ranges measure them.
     fade: vec4<f32>,
+    // the shade's colour in xyz (visual.md F4), a multiplier on the indirect diffuse.
+    shade: vec4<f32>,
 };
-@group(#{MATERIAL_BIND_GROUP}) @binding(100) var<uniform> impostor: TreeImpostor;
-@group(#{MATERIAL_BIND_GROUP}) @binding(101) var impostor_albedo: texture_2d<f32>;
-@group(#{MATERIAL_BIND_GROUP}) @binding(102) var impostor_sampler: sampler;
-@group(#{MATERIAL_BIND_GROUP}) @binding(103) var impostor_normal_depth: texture_2d<f32>;
-
 // Mirrors strata_foliage::impostor::record_bytes: 32 bytes. An empty slot
 // has no scale.
 struct FarTreeRecord {
@@ -55,7 +54,92 @@ struct FarTreeRecord {
     // number; one unused.
     b: vec4<f32>,
 };
-@group(#{MATERIAL_BIND_GROUP}) @binding(104) var<storage, read> far_trees: array<FarTreeRecord>;
+
+// A species' material is bindless where the adapter has binding arrays, so
+// all the species' materials share one bind group and the far trees batch
+// across them; the table's row (`index_table(range(50..55))` of `FarTrees`)
+// says where this draw's description, atlas and the shared record buffer
+// sit. Without them the same four are bound plainly. Either way the
+// description is copied into `impostor` once per stage, so the rest of the
+// shader reads it as it always did.
+var<private> impostor: TreeImpostor;
+
+#ifdef BINDLESS
+
+struct FarTreeIndices {
+    data: u32,
+    albedo_texture: u32,
+    albedo_sampler: u32,
+    normal_depth_texture: u32,
+    trees: u32,
+}
+
+struct FarTreeBuffer {
+    rows: array<FarTreeRecord>,
+}
+
+@group(#{MATERIAL_BIND_GROUP}) @binding(100) var<storage> far_indices: array<FarTreeIndices>;
+@group(#{MATERIAL_BIND_GROUP}) @binding(101) var<storage> far_data: array<TreeImpostor>;
+@group(#{MATERIAL_BIND_GROUP}) @binding(102) var<storage, read> far_buffers: binding_array<FarTreeBuffer>;
+
+var<private> far_slot: u32;
+
+fn tree_begin(instance_index: u32) {
+    far_slot = mesh[instance_index].material_and_lightmap_bind_group_slot & 0xffffu;
+    impostor = far_data[far_indices[far_slot].data];
+}
+
+fn sample_albedo(uv: vec2<f32>, dx: vec2<f32>, dy: vec2<f32>) -> vec4<f32> {
+    return textureSampleGrad(
+        bindless_textures_2d[far_indices[far_slot].albedo_texture],
+        bindless_samplers_filtering[far_indices[far_slot].albedo_sampler],
+        uv, dx, dy);
+}
+
+fn sample_normal_depth(uv: vec2<f32>, dx: vec2<f32>, dy: vec2<f32>) -> vec4<f32> {
+    return textureSampleGrad(
+        bindless_textures_2d[far_indices[far_slot].normal_depth_texture],
+        bindless_samplers_filtering[far_indices[far_slot].albedo_sampler],
+        uv, dx, dy);
+}
+
+fn far_tree_count() -> u32 {
+    return arrayLength(&far_buffers[far_indices[far_slot].trees].rows);
+}
+
+fn far_tree(index: u32) -> FarTreeRecord {
+    return far_buffers[far_indices[far_slot].trees].rows[index];
+}
+
+#else   // BINDLESS
+
+@group(#{MATERIAL_BIND_GROUP}) @binding(50) var<uniform> impostor_uniform: TreeImpostor;
+@group(#{MATERIAL_BIND_GROUP}) @binding(51) var impostor_albedo: texture_2d<f32>;
+@group(#{MATERIAL_BIND_GROUP}) @binding(52) var impostor_sampler: sampler;
+@group(#{MATERIAL_BIND_GROUP}) @binding(53) var impostor_normal_depth: texture_2d<f32>;
+@group(#{MATERIAL_BIND_GROUP}) @binding(54) var<storage, read> far_trees: array<FarTreeRecord>;
+
+fn tree_begin(instance_index: u32) {
+    impostor = impostor_uniform;
+}
+
+fn sample_albedo(uv: vec2<f32>, dx: vec2<f32>, dy: vec2<f32>) -> vec4<f32> {
+    return textureSampleGrad(impostor_albedo, impostor_sampler, uv, dx, dy);
+}
+
+fn sample_normal_depth(uv: vec2<f32>, dx: vec2<f32>, dy: vec2<f32>) -> vec4<f32> {
+    return textureSampleGrad(impostor_normal_depth, impostor_sampler, uv, dx, dy);
+}
+
+fn far_tree_count() -> u32 {
+    return arrayLength(&far_trees);
+}
+
+fn far_tree(index: u32) -> FarTreeRecord {
+    return far_trees[index];
+}
+
+#endif  // BINDLESS
 
 const POLE: f32 = 0.999;
 const PARALLAX_STEPS: u32 = 2u;
@@ -255,13 +339,13 @@ fn read_frame(frame: vec2<f32>, weight: f32, point: vec3<f32>, ray: vec3<f32>, s
     let dy = grads.zw;
     var uv = frame_uv(point - ray * (along / denominator), basis);
     for (var step = 0u; step < steps; step++) {
-        let depth = textureSampleGrad(impostor_normal_depth, impostor_sampler, atlas_uv(frame, uv), dx, dy).a;
+        let depth = sample_normal_depth(atlas_uv(frame, uv), dx, dy).a;
         let height = impostor.sphere.w * (1.0 - 2.0 * depth) * impostor.shading.y;
         uv = frame_uv(point + ray * ((height - along) / denominator), basis);
     }
     let atlas = atlas_uv(frame, uv);
-    let albedo = textureSampleGrad(impostor_albedo, impostor_sampler, atlas, dx, dy);
-    let normal = textureSampleGrad(impostor_normal_depth, impostor_sampler, atlas, dx, dy).xyz * 2.0 - 1.0;
+    let albedo = sample_albedo(atlas, dx, dy);
+    let normal = sample_normal_depth(atlas, dx, dy).xyz * 2.0 - 1.0;
     let inside = all(uv >= vec2(0.0)) && all(uv <= vec2(1.0));
     let coverage = select(0.0, albedo.a, inside) * weight;
     return Seen(vec4(albedo.rgb * coverage, coverage), normal * coverage);
@@ -350,12 +434,13 @@ fn unpack(in: Varying) -> Placed {
 @vertex
 fn vertex(vertex: Vertex) -> Varying {
     var out: Varying;
+    tree_begin(vertex.instance_index);
     // The slot this corner belongs to, in the range the entity's tag starts.
     let local_index = vertex.vertex_index - mesh[vertex.instance_index].first_vertex_index;
     let index = mesh_functions::get_tag(vertex.instance_index) + local_index / 4u;
     var record = FarTreeRecord(vec4(0.0), vec4(0.0));
-    if index < arrayLength(&far_trees) {
-        record = far_trees[index];
+    if index < far_tree_count() {
+        record = far_tree(index);
     }
     if record.a.w <= 0.0 {
         // An empty slot past the batch's trees.
@@ -417,6 +502,7 @@ fn tint_of(tint: f32) -> vec3<f32> {
 #ifdef PREPASS_FRAGMENT
 @fragment
 fn fragment(in: Varying) -> prepass_io::FragmentOutput {
+    tree_begin(in.instance);
     let seen = read_impostor(in.world.xyz, unpack(in), in.frames, in.weights);
     apply_dither(in.clip, in.dither);
     if seen.albedo.a < impostor.shading.x {
@@ -437,6 +523,7 @@ fn fragment(in: Varying) -> prepass_io::FragmentOutput {
 #else
 @fragment
 fn fragment(in: Varying) {
+    tree_begin(in.instance);
     let seen = read_impostor(in.world.xyz, unpack(in), in.frames, in.weights);
     apply_dither(in.clip, in.dither);
     if seen.albedo.a < impostor.shading.x {
@@ -447,6 +534,7 @@ fn fragment(in: Varying) {
 #else
 @fragment
 fn fragment(in: Varying) -> FragmentOutput {
+    tree_begin(in.instance);
     let seen = read_impostor(in.world.xyz, unpack(in), in.frames, in.weights);
     apply_dither(in.clip, in.dither);
     if seen.albedo.a < impostor.shading.x {
@@ -467,11 +555,14 @@ fn fragment(in: Varying) -> FragmentOutput {
     let crown_sky = 1.0 - f32((u32(in.tint) >> 16u) & 0xffu) / 255.0;
     let up = clamp(0.5 + (in.world.y - in.sphere.y) / max(2.0 * impostor.sphere.w * in.sphere.w, 1e-3), 0.0, 1.0);
     let sky_occlusion = mix(1.0, max(mix(crown_sky, 1.0, 0.6 * up), 0.25), impostor.shading.z);
-    pbr_input.diffuse_occlusion = pbr_input.diffuse_occlusion * sky_occlusion;
+    pbr_input.diffuse_occlusion = pbr_input.diffuse_occlusion * sky_occlusion * impostor.shade.xyz;
     pbr_input.specular_occlusion = pbr_input.specular_occlusion * sky_occlusion;
     var out: FragmentOutput;
     if (pbr_input.material.flags & STANDARD_MATERIAL_FLAGS_UNLIT_BIT) == 0u {
         out.color = apply_pbr_lighting(pbr_input);
+        // Sun through the outer leaves (visual.md F5): the picture carries
+        // no crown depth, so the openness is the near shader's mid value.
+        out.color = vec4<f32>(out.color.rgb + canopy_rim(pbr_input.V, pbr_input.material.base_color.rgb, 0.75 * sky_occlusion, impostor.shading.w), out.color.a);
     } else {
         out.color = pbr_input.material.base_color;
     }

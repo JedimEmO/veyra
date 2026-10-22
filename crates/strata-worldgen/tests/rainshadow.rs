@@ -187,7 +187,7 @@ fn cover_is_patchy_inside_one_forest() {
     let registries = common::registries();
     let world = common::world(42);
     let forest = registries
-        .biome_id(&strata_registry::Namespaced::parse("strata:forest").expect("valid"))
+        .biome_id(&strata_data::Namespaced::parse("strata:forest").expect("valid"))
         .expect("ships");
     // Any forest point will do; the first one a coarse sweep finds keeps the
     // test from depending on a hand-picked coordinate surviving a retune.

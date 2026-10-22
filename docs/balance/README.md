@@ -26,12 +26,12 @@ the summary to stderr, so a bare redirect captures only the bouts. A bout
 is a function of its seed and the tables, so two sweeps of the same cell
 are the same rows, and a difference between two cells is the table change
 and nothing else. The tables the sweep varies are `assets/combat/*.ron`;
-they are compiled into `strata-sim` as well as read from disk, so an
+they are compiled into `veyra-sim` as well as read from disk, so an
 edit there rebuilds the sim, the physics and the harness before the run
 (about a minute in release), and the game too.
 
 The game's opponents are in the sweep: the sentry and the rusher presets
-run `strata_sim::combat_ai`, the AI `game --combat` runs, on the
+run `veyra_sim::combat_ai`, the AI `game --combat` runs, on the
 installed `opponents.ron` row, so `opponents.sentry.charge=0.1,0.65`
 moves the harness's sentry as it would move the game's.
 
@@ -48,7 +48,7 @@ A side of a matchup can be on a sheet: `--boxes` (side `a`) and
 `assets/progression/trees.ron`, `blade:cuts-1,blade:footwork-2` or
 `blade.cuts.1,blade.footwork.2`, and a `Side` in a grid spec takes the
 same list as `boxes`. The bout fits the sheet to the combatant at spawn
-through the merge the game runs (`strata_sim::progression::apply`), so
+through the merge the game runs (`veyra_sim::progression::apply`), so
 a boxed side has the fitted rows and pools and may do only what its boxes
 open; a side with no boxes is unfitted and free to do everything, which
 keeps every older preset and band as it was. A list that is no sheet (a

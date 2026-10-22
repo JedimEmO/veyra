@@ -15,5 +15,6 @@
     ground: (0.34, 0.46, 0.22),
     // The woodland's green-gold: warm light, green leaves and shade
     // opened a little so the canopy does not go to mud.
-    grade: (temperature: 0.004, tint: -0.012, saturation: 1.06, lift: 0.002),
+    // Shade colour (visual.md F4): Lavender shade under the canopy: the painted reference lays violet-blue into the leaf shade where the sky is the only light, so red and blue rise over green. Luminance-normalised, so it moves hue and never brightness.
+    grade: (temperature: 0.004, tint: -0.012, saturation: 1.06, lift: 0.002, shade: (1.00, 0.86, 1.20)),
 )

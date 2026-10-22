@@ -28,14 +28,14 @@ use ashlar::LodPolicy;
 use bevy::app::App;
 use bevy::ecs::prelude::Entity;
 use bevy::time::TimeUpdateStrategy;
+use strata_app::crossings::{NearCrossing, NearCrossings, ProceduralCrossing};
+use strata_app::{
+    AppPlugin, GeneratedRoot, LocalPlayer, Player, PlayerIntent, ScriptedIntent, WorldPosition,
+    WorldSourceRes,
+};
 use strata_core::{Seed, WorldPos};
 use strata_physics::crossings::CrossingCollider;
 use strata_physics::{CharacterController, PhysicsPlugin};
-use strata_sim::crossings::{NearCrossing, NearCrossings, ProceduralCrossing};
-use strata_sim::{
-    GeneratedRoot, LocalPlayer, Player, PlayerIntent, ScriptedIntent, SimPlugin, WorldPosition,
-    WorldSourceRes,
-};
 use strata_stream::{StreamConfig, StreamPlugin};
 use strata_worldgen::crossings::{
     BridgeClass, CrossingKit, DeckEnd, HeadwallFile, PierFile, place_crossing,
@@ -105,7 +105,7 @@ fn world_round(at: [f64; 2]) -> Arc<ProceduralWorld> {
     let registries =
         strata_registry::load_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets"))
             .unwrap();
-    let world = ProceduralWorld::with_params(Seed(42), &registries, strata_sim::world_params());
+    let world = ProceduralWorld::with_params(Seed(42), &registries, strata_app::world_params());
     world.prepare_water_on(at[0], at[1], 3_000.0, 4);
     Arc::new(world)
 }
@@ -142,6 +142,13 @@ fn app_at(world: &Arc<ProceduralWorld>, crossing: ProceduralCrossing, name: &str
         .unwrap();
         let path = root.join(&piece.file);
         std::fs::create_dir_all(path.parent().unwrap()).unwrap();
+        std::fs::write(
+            ashlar::collision_file::path_for(path.to_str().unwrap()),
+            ashlar::collision_file::CollisionFile::from_baked(&baked)
+                .unwrap()
+                .write(),
+        )
+        .unwrap();
         std::fs::write(path, baked.write().unwrap()).unwrap();
     }
     let mut app = App::new();
@@ -155,7 +162,7 @@ fn app_at(world: &Arc<ProceduralWorld>, crossing: ProceduralCrossing, name: &str
     app.add_plugins((
         bevy::app::TaskPoolPlugin::default(),
         bevy::time::TimePlugin,
-        SimPlugin,
+        AppPlugin,
         StreamPlugin,
         PhysicsPlugin,
     ));
@@ -227,7 +234,7 @@ fn wait_for_bodies(app: &mut App, at: [f64; 2]) {
     let observer = app
         .world_mut()
         .spawn((
-            strata_sim::WorldObserver,
+            strata_app::WorldObserver,
             WorldPosition::new(at[0], 0.0, at[1]),
         ))
         .id();
@@ -460,7 +467,7 @@ impl WorldSource for Flat {
 /// again; the crossing's other pieces collide as they would.
 #[test]
 fn a_missing_file_collides_nothing() {
-    use strata_sim::crossings::{CrossingId, PlacedPiece};
+    use strata_app::crossings::{CrossingId, PlacedPiece};
     use strata_worldgen::roads::Crossing;
     let root =
         std::env::temp_dir().join(format!("strata-crossings-missing-{}", std::process::id()));
@@ -473,6 +480,13 @@ fn a_missing_file_collides_nothing() {
     .unwrap();
     std::fs::create_dir_all(root.join("crossings")).unwrap();
     std::fs::write(root.join("crossings/stone.ashlar"), baked.write().unwrap()).unwrap();
+    std::fs::write(
+        root.join("crossings/stone.collision"),
+        ashlar::collision_file::CollisionFile::from_baked(&baked)
+            .unwrap()
+            .write(),
+    )
+    .unwrap();
     let piece = |file: &str, x: f64| PlacedPiece {
         file: file.to_owned(),
         at: [x, 10.12, 0.0],
@@ -510,7 +524,7 @@ fn a_missing_file_collides_nothing() {
     app.add_plugins((
         bevy::app::TaskPoolPlugin::default(),
         bevy::time::TimePlugin,
-        SimPlugin,
+        AppPlugin,
         StreamPlugin,
         PhysicsPlugin,
     ));
@@ -532,8 +546,8 @@ fn a_missing_file_collides_nothing() {
     app.finish();
     app.cleanup();
     app.world_mut().spawn((
-        strata_sim::WorldObserver,
-        strata_sim::PrimaryObserver,
+        strata_app::WorldObserver,
+        strata_app::PrimaryObserver,
         WorldPosition::new(0.0, 12.0, 0.0),
     ));
     let count = |app: &mut App| {

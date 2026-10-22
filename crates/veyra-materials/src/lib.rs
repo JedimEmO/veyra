@@ -10,8 +10,10 @@ use std::collections::BTreeMap;
 
 use ashlar::{Alpha, Bake, MaterialDefinition, MaterialLibrary, ParamValue, Surface};
 use ashlar_material::{MaterialGraphLibrary, stdlib};
+use palette::param as linear;
 
 pub mod flora;
+pub mod palette;
 pub mod rocks;
 pub mod terrain;
 
@@ -139,7 +141,7 @@ pub const TERRAIN: [(&str, f32); 14] = [
     ("forest_floor", 6.0),
     ("grass", 8.0),
     ("granite", 8.0),
-    ("gravel", 4.0),
+    ("gravel", 6.0),
     ("rock", 8.0),
     ("sand", 12.0),
     ("sandstone", 8.0),
@@ -341,18 +343,6 @@ pub fn crossings() -> MaterialLibrary {
     }
 }
 
-/// A graph colour parameter from an sRGB colour: graphs work in linear light,
-/// and these colours were picked by eye as sRGB multipliers.
-fn linear(srgb: [f32; 3]) -> ParamValue {
-    ParamValue::Color(srgb.map(|c| {
-        if c <= 0.04045 {
-            c / 12.92
-        } else {
-            ((c + 0.055) / 1.055).powf(2.4)
-        }
-    }))
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -540,13 +530,5 @@ mod tests {
                 );
             }
         }
-    }
-
-    #[test]
-    fn colours_are_linearised() {
-        let ParamValue::Color([r, _, _]) = linear([0.5, 0.0, 1.0]) else {
-            unreachable!();
-        };
-        assert!((r - 0.214).abs() < 1e-3, "{r}");
     }
 }

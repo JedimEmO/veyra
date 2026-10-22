@@ -6,10 +6,10 @@
 mod common;
 
 use strata_core::{RegionCoord, Seed};
+use strata_data::{FloraId, Namespaced, WorldDefs};
 use strata_flora::{FloraTable, Plant, PlantId, SKY_FLOOR, place_cell, sky_terms};
-use strata_registry::{FloraId, GameRegistries, Namespaced};
 
-fn id(registries: &GameRegistries, name: &str) -> FloraId {
+fn id(registries: &WorldDefs, name: &str) -> FloraId {
     registries
         .flora_id(&Namespaced::parse(name).expect("valid"))
         .expect("a shipped species")
@@ -89,7 +89,7 @@ fn a_forest_shades_its_floor_and_its_grass_the_same_on_every_call() {
     assert!(
         a.grass
             .iter()
-            .all(|g| usize::from(g.palette()) < strata_registry::flora::MAX_GRASS_SPECIES)
+            .all(|g| usize::from(g.palette()) < strata_data::flora::MAX_GRASS_SPECIES)
     );
     assert!(a.grass.iter().all(|g| g.crown_sky() >= SKY_FLOOR));
 }

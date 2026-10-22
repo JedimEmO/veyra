@@ -38,10 +38,10 @@ use bevy::time::{Real, Time};
 use strata_atmosphere::diagnostics::{BatchSets, RenderCounts, SUN_SHADOWS_SPAN};
 use strata_foliage::FoliageStats;
 use strata_physics::{TerrainCollider, TerrainColliderStats, TreeCollider};
-use strata_sim::{Observers, RenderOrigin};
 use strata_stream::LoadedRegions;
 use strata_terrain::TerrainStats;
 use tracing::info;
+use veyra_sim::{Observers, RenderOrigin};
 
 use crate::flight::MotionHold;
 

@@ -10,7 +10,7 @@
 use bevy::ecs::prelude::*;
 use bevy::math::DVec3;
 use bevy::time::Time;
-use strata_sim::{WorldPosition, WorldSourceRes};
+use veyra_sim::{WorldPosition, WorldSourceRes};
 
 use crate::flycam::FlyCam;
 

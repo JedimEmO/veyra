@@ -36,7 +36,7 @@
 //! and gathers them back in order: the result does not depend on how many
 //! cores ran it.
 
-use strata_registry::{BiomeId, ProvinceId};
+use strata_data::{BiomeId, ProvinceId};
 
 use crate::WorldSource;
 

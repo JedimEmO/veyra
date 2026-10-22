@@ -17,7 +17,7 @@ use bevy::pbr::{MeshMaterial3d, StandardMaterial};
 use bevy::time::{Fixed, Time};
 use bevy::transform::components::Transform;
 use strata_physics::CharacterController;
-use strata_sim::{Player, PlayerIntent, PreviousWorldPosition, RenderOrigin, WorldPosition};
+use veyra_sim::{Player, PlayerIntent, PreviousWorldPosition, RenderOrigin, WorldPosition};
 
 /// The mesh entity of a player.
 #[derive(Component, Debug, Clone, Copy, PartialEq, Eq)]
@@ -34,7 +34,7 @@ pub fn spawn_player_visuals(
     materials: Option<ResMut<Assets<StandardMaterial>>>,
     players: Query<
         (Entity, &CharacterController),
-        (Added<Player>, Without<strata_sim::combat::Combatant>),
+        (Added<Player>, Without<veyra_sim::combat::Combatant>),
     >,
 ) {
     let (Some(mut meshes), Some(mut materials)) = (meshes, materials) else {

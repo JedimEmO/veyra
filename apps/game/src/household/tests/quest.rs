@@ -154,9 +154,9 @@ fn the_questline_is_walked_to_each_ending() {
 fn the_terminal_raises_recruited_and_switched() {
     use bevy::ecs::message::Messages;
     use bevy::ecs::system::RunSystemOnce;
-    use strata::client::ui::bench::{BenchOutcome, BenchRequest};
     use strata::sim::combat::CombatIntent;
     use strata::sim::quests::QuestEvent;
+    use veyra_ui::bench::{BenchOutcome, BenchRequest};
     let registries = shipped();
     let household = Household::starting(&registries, &Grants::default());
     let recruit = household.recruits.first().unwrap().name.clone();
@@ -191,7 +191,7 @@ fn the_terminal_raises_recruited_and_switched() {
             .resource_mut::<Messages<BenchRequest>>()
             .write(request);
         world
-            .run_system_once(super::super::bench::answer_bench)
+            .run_system_once(veyra_game::household::answer_bench)
             .unwrap();
         world.resource_mut::<Messages<BenchRequest>>().clear();
         world
@@ -275,14 +275,14 @@ fn the_arrival_is_open_quay_paving() {
                 env!("CARGO_MANIFEST_DIR"),
                 building.file
             );
-            let baked = ashlar::BakedBuilding::read(&std::fs::read(&file).unwrap()).unwrap();
+            let proxies = super::placed_proxies(std::path::Path::new(&file));
             let origin = settlements.0[0].to_world(building.position);
             #[allow(clippy::cast_possible_truncation, reason = "a yaw in radians")]
             let turn = Quat::from_rotation_y(settlements.0[0].world_yaw(building.yaw) as f32);
-            for placed in baked.level(0).unwrap().colliders() {
+            for (_, _, vertices) in proxies {
                 let mut low = [f64::MAX; 3];
                 let mut high = [f64::MIN; 3];
-                for vertex in &placed.solid.vertices {
+                for vertex in &vertices {
                     #[allow(clippy::cast_possible_truncation, reason = "metres near the origin")]
                     let turned =
                         turn * Vec3::new(vertex.x as f32, vertex.y as f32, vertex.z as f32);
